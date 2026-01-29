@@ -7,7 +7,7 @@ use OneToMany\AI\Contract\Action\Prompt\CompilePromptActionInterface;
 use OneToMany\AI\Exception\InvalidArgumentException;
 use OneToMany\AI\Request\Prompt\CompilePromptRequest;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 final class CompilePromptActionTest extends TestCase
 {
@@ -16,28 +16,6 @@ final class CompilePromptActionTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Compiling the prompt for the model "mock" failed because the contents are empty.');
 
-        $this->createAction()->act(new CompilePromptRequest('mock', 'mock', []));
-    }
-
-    private function createAction(): CompilePromptActionInterface
-    {
-        $normalizer = new class implements NormalizerInterface {
-            public function normalize(mixed $data, ?string $format = null, array $context = []): null
-            {
-                return null;
-            }
-
-            public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
-            {
-                return false;
-            }
-
-            public function getSupportedTypes(?string $format): array
-            {
-                return [];
-            }
-        };
-
-        return new CompilePromptAction($normalizer);
+        new CompilePromptAction(new ObjectNormalizer())->act(new CompilePromptRequest('mock', 'mock', []));
     }
 }
