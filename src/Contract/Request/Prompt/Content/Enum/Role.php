@@ -8,7 +8,7 @@ enum Role: string
     case System = 'system';
 
     /**
-     * @return non-empty-string
+     * @return 'System'|'User'
      */
     public function getName(): string
     {
@@ -16,7 +16,7 @@ enum Role: string
     }
 
     /**
-     * @return non-empty-string
+     * @return 'system'|'user'
      */
     public function getValue(): string
     {

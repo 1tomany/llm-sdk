@@ -28,12 +28,12 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
      * @return array{
      *   systemInstruction?: array{
      *     parts: non-empty-list<GeminiPromptInputText>,
-     *     role: 'system',
+     *     role: non-empty-lowercase-string
      *   },
      *   contents: list<
      *     array{
      *       parts: non-empty-list<GeminiPromptInputText|GeminiPromptFileUri>,
-     *       role: 'user',
+     *       role: non-empty-lowercase-string,
      *     },
      *   >,
      *   generationConfig?: array{
@@ -72,7 +72,6 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
             }
 
             if ($content instanceof CachedFile) {
-                if ($content->getRole()->isUser()) {
                 $requestContent['contents'][] = [
                     'parts' => [
                         [
@@ -83,7 +82,6 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
                     ],
                     'role' => $content->getRole()->getValue(),
                 ];
-                }
             }
 
             if ($content instanceof JsonSchema) {
