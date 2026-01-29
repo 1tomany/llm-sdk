@@ -19,6 +19,22 @@ use function in_array;
  *   type: 'input_text',
  *   text: non-empty-string,
  * }
+ * @phpstan-type OpenAiPrompt array{
+ *   input?: non-empty-list<
+ *     array{
+ *       content: non-empty-list<OpenAiPromptFileUri|OpenAiPromptInputText>,
+ *       role: 'system'|'user',
+ *     },
+ *   >,
+ *   text?: array{
+ *     format: array{
+ *       type: 'json_schema',
+ *       name: non-empty-lowercase-string,
+ *       schema: array<string, mixed>,
+ *       strict: bool,
+ *     },
+ *   },
+ * }
  */
 final readonly class PromptNormalizer implements NormalizerInterface
 {
@@ -27,22 +43,7 @@ final readonly class PromptNormalizer implements NormalizerInterface
      *
      * @param CompilePromptRequestInterface $data
      *
-     * @return array{
-     *   input?: non-empty-list<
-     *     array{
-     *       content: non-empty-list<OpenAiPromptFileUri|OpenAiPromptInputText>,
-     *       role: 'system'|'user',
-     *     },
-     *   >,
-     *   text?: array{
-     *     format: array{
-     *       type: 'json_schema',
-     *       name: non-empty-lowercase-string,
-     *       schema: array<string, mixed>,
-     *       strict: bool,
-     *     },
-     *   },
-     * }
+     * @return OpenAiPrompt
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
