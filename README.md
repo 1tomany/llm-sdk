@@ -1,4 +1,4 @@
-# AI Library for PHP
+# AI and LLM Library for PHP
 
 This library provides a single, unified, framework-independent library for integration with many popular AI platforms and large language models.
 
@@ -12,9 +12,9 @@ This library provides a single, unified, framework-independent library for integ
 
 | Feature           | Gemini | Mock | OpenAI |
 | ----------------- | :----: | :--: | :----: |
-| Caching files     |   ✅   |  ✅  |   ✅   |
-| Compiling prompts |   ✅   |  ✅  |   ✅   |
-| Sending prompts   |   ✅   |  ✅  |   ❌   |
+| Caching files     |   Y    |  Y   |   Y    |
+| Compiling prompts |   Y    |  Y   |   Y    |
+| Sending prompts   |   Y    |  Y   |   N    |
 
 ## Credits
 
