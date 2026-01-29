@@ -10,6 +10,8 @@ use OneToMany\AI\Response\Prompt\CompiledPromptResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+use function sprintf;
+
 final readonly class CompilePromptAction implements CompilePromptActionInterface
 {
     public function __construct(private NormalizerInterface $normalizer)
@@ -22,12 +24,12 @@ final readonly class CompilePromptAction implements CompilePromptActionInterface
     public function act(CompilePromptRequestInterface $request): CompiledPromptResponseInterface
     {
         try {
-            /** @var array<string, mixed> $requestContent */
-            $requestContent = $this->normalizer->normalize($request);
+            /** @var array<string, mixed> $compiledRequest */
+            $compiledRequest = $this->normalizer->normalize($request);
         } catch (SerializerExceptionInterface $e) {
-            throw new RuntimeException('Compiling the prompt failed.', previous: $e);
+            throw new RuntimeException(sprintf('Compiling the prompt for the model "%s" failed.', $request->getModel()), previous: $e);
         }
 
-        return new CompiledPromptResponse($request->getVendor(), $request->getModel(), $requestContent);
+        return new CompiledPromptResponse($request->getVendor(), $request->getModel(), $compiledRequest);
     }
 }
