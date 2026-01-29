@@ -11,18 +11,18 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use function in_array;
 
 /**
- * @phpstan-type OpenAiPromptFileUri array{
+ * @phpstan-type OpenAiContentFileUri array{
  *   type: 'input_file',
  *   file_id: non-empty-string,
  * }
- * @phpstan-type OpenAiPromptInputText array{
+ * @phpstan-type OpenAiContentInputText array{
  *   type: 'input_text',
  *   text: non-empty-string,
  * }
  * @phpstan-type OpenAiPrompt array{
  *   input?: non-empty-list<
  *     array{
- *       content: non-empty-list<OpenAiPromptFileUri|OpenAiPromptInputText>,
+ *       content: non-empty-list<OpenAiContentFileUri|OpenAiContentInputText>,
  *       role: 'system'|'user',
  *     },
  *   >,

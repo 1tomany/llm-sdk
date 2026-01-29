@@ -11,18 +11,21 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use function in_array;
 
 /**
- * @phpstan-type MockPromptFileUri array{
+ * @phpstan-type MockContentFileUri array{
  *   fileUri: non-empty-string,
  *   format: non-empty-lowercase-string,
  * }
- * @phpstan-type MockPromptInputText array{
+ * @phpstan-type MockContentInputText array{
  *   text: non-empty-string,
  *   role: non-empty-string,
  * }
- * @phpstan-type MockPromptJsonSchema array{
+ * @phpstan-type MockContentJsonSchema array{
  *   name: non-empty-string,
  *   schema: array<string, mixed>,
  *   format: non-empty-lowercase-string,
+ * }
+ * @phpstan-type MockPrompt array{
+ *   contents: list<MockContentFileUri|MockContentInputText|MockContentJsonSchema>,
  * }
  */
 final readonly class PromptNormalizer implements NormalizerInterface
@@ -32,7 +35,7 @@ final readonly class PromptNormalizer implements NormalizerInterface
      *
      * @param CompilePromptRequestInterface $data
      *
-     * @return array{contents: list<MockPromptFileUri|MockPromptInputText|MockPromptJsonSchema>}
+     * @return MockPrompt
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
