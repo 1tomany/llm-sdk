@@ -4,7 +4,6 @@ namespace OneToMany\AI\Request\Prompt;
 
 use OneToMany\AI\Contract\Request\Prompt\CompilePromptRequestInterface;
 use OneToMany\AI\Contract\Request\Prompt\Content\ContentInterface;
-use OneToMany\AI\Exception\InvalidArgumentException;
 
 final class CompilePromptRequest implements CompilePromptRequestInterface
 {
@@ -12,17 +11,12 @@ final class CompilePromptRequest implements CompilePromptRequestInterface
      * @param non-empty-lowercase-string $vendor
      * @param non-empty-lowercase-string $model
      * @param list<ContentInterface> $contents
-     *
-     * @throws InvalidArgumentException the contents are empty
      */
     public function __construct(
         private readonly string $vendor,
         private readonly string $model,
-        private array $contents,
+        private array $contents = [],
     ) {
-        if ([] === $contents) {
-            throw new InvalidArgumentException('The contents cannot be empty.');
-        }
     }
 
     /**
