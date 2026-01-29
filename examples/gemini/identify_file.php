@@ -130,7 +130,7 @@ try {
     printf("Runtime: %sms\n", $dispatchedPromptResponse->getRuntime());
 
     if (null !== $output = $dispatchedPromptResponse->getOutput()) {
-        printf("Output: %s\n", json_encode(json_decode($output, true))); // @phpstan-ignore-line
+        printf("Output: %s\n", json_encode(json_decode($output, true)));
     }
 
     printf("%s\n", str_repeat('-', 60));
