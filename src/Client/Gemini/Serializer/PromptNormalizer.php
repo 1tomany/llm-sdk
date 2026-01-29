@@ -11,13 +11,29 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use function in_array;
 
 /**
- * @phpstan-type GeminiPromptFileUri array{
+ * @phpstan-type GeminiContentFileUri array{
  *   fileData: array{
  *     fileUri: non-empty-string,
  *   },
  * }
- * @phpstan-type GeminiPromptInputText array{
+ * @phpstan-type GeminiContentInputText array{
  *   text: non-empty-string,
+ * }
+ * @phpstan-type GeminiPrompt array{
+ *   systemInstruction?: array{
+ *     parts: non-empty-list<GeminiContentInputText>,
+ *     role: 'system',
+ *   },
+ *   contents: list<
+ *     array{
+ *       parts: non-empty-list<GeminiContentInputText|GeminiContentFileUri>,
+ *       role: 'user'|'system',
+ *     },
+ *   >,
+ *   generationConfig?: array{
+ *     responseJsonSchema: array<string, mixed>,
+ *     responseMimeType: non-empty-lowercase-string,
+ *   },
  * }
  */
 final readonly class PromptNormalizer implements NormalizerInterface
@@ -27,22 +43,7 @@ final readonly class PromptNormalizer implements NormalizerInterface
      *
      * @param CompilePromptRequestInterface $data
      *
-     * @return array{
-     *   systemInstruction?: array{
-     *     parts: non-empty-list<GeminiPromptInputText>,
-     *     role: 'system',
-     *   },
-     *   contents: list<
-     *     array{
-     *       parts: non-empty-list<GeminiPromptInputText|GeminiPromptFileUri>,
-     *       role: 'user'|'system',
-     *     },
-     *   >,
-     *   generationConfig?: array{
-     *     responseJsonSchema: array<string, mixed>,
-     *     responseMimeType: non-empty-lowercase-string,
-     *   },
-     * }
+     * @return GeminiPrompt
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
