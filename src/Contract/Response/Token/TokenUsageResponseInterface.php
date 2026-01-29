@@ -5,12 +5,12 @@ namespace OneToMany\AI\Contract\Response\Token;
 interface TokenUsageResponseInterface
 {
     /**
-     * @var non-negative-int
+     * @return non-negative-int
      */
-    public int $promptTokens { get; }
+    public function getPromptTokens(): int;
 
     /**
-     * @var non-negative-int
+     * @return non-negative-int
      */
-    public int $outputTokens { get; }
+    public function getOutputTokens(): int;
 }
