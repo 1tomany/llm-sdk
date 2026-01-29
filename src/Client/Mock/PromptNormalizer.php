@@ -3,6 +3,7 @@
 namespace OneToMany\AI\Client\Mock;
 
 use OneToMany\AI\Contract\Client\PromptNormalizerInterface;
+use OneToMany\AI\Contract\Request\Prompt\CompilePromptRequestInterface;
 use OneToMany\AI\Request\Prompt\Content\CachedFile;
 use OneToMany\AI\Request\Prompt\Content\InputText;
 use OneToMany\AI\Request\Prompt\Content\JsonSchema;
@@ -10,16 +11,18 @@ use OneToMany\AI\Request\Prompt\Content\JsonSchema;
 use function in_array;
 
 /**
- * @phpstan-type TypeMockPromptFileUri array{
+ * @phpstan-type MockPromptFileUri array{
  *   fileUri: non-empty-string,
+ *   format: non-empty-lowercase-string,
  * }
- * @phpstan-type TypeMockPromptSchema array{
+ * @phpstan-type MockPromptJsonSchema array{
  *   name: non-empty-string,
  *   schema: array<string, mixed>,
+ *   format: non-empty-lowercase-string,
  * }
- * @phpstan-type TypeMockPromptText array{
- *   role: non-empty-string,
+ * @phpstan-type MockPromptInputText array{
  *   text: non-empty-string,
+ *   role: non-empty-string,
  * }
  */
 final readonly class PromptNormalizer implements PromptNormalizerInterface
@@ -29,7 +32,7 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
     }
 
     /**
-     * @return array{contents: list<TypeMockPromptText|TypeMockPromptFileUri|TypeMockPromptSchema>}
+     * @return array{contents: list<MockPromptInputText|MockPromptFileUri|MockPromptJsonSchema>}
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
@@ -46,13 +49,15 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
             if ($content instanceof CachedFile) {
                 $requestContent['contents'][] = [
                     'fileUri' => $content->getUri(),
+                    'format' => $content->getFormat(),
                 ];
             }
 
             if ($content instanceof JsonSchema) {
                 $requestContent['schema'] = [
-                    'name' => $content->name,
-                    'schema' => $content->schema,
+                    'name' => $content->getName(),
+                    'schema' => $content->getSchema(),
+                    'format' => $content->getFormat(),
                 ];
             }
         }
