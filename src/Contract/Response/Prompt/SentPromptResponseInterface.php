@@ -5,32 +5,37 @@ namespace OneToMany\AI\Contract\Response\Prompt;
 interface SentPromptResponseInterface
 {
     /**
-     * @var non-empty-lowercase-string
+     * @return array<string, mixed>
      */
-    public string $model { get; }
+    public function __invoke(): array;
 
     /**
-     * @var non-empty-string
+     * @return non-empty-lowercase-string
      */
-    public string $uri { get; }
+    public function getVendor(): string;
 
     /**
-     * @var ?non-empty-string
+     * @return non-empty-lowercase-string
      */
-    public ?string $text { get; }
+    public function getModel(): string;
 
     /**
-     * @var array<string, mixed>
+     * @return non-empty-string
      */
-    public array $response { get; }
+    public function getUri();
 
     /**
-     * @var non-negative-int|float
+     * @return ?non-empty-string
      */
-    public int|float $runtime { get; }
+    public function getOutput(): ?string;
 
     /**
      * @return array<string, mixed>
      */
-    public function __invoke(): array;
+    public function getResponse(): array;
+
+    /**
+     * @return non-negative-int|float
+     */
+    public function getRuntime(): int|float;
 }
