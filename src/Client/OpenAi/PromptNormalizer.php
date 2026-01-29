@@ -8,7 +8,7 @@ use OneToMany\AI\Request\Prompt\Content\CachedFile;
 use OneToMany\AI\Request\Prompt\Content\InputText;
 use OneToMany\AI\Request\Prompt\Content\JsonSchema;
 
-use function str_starts_with;
+use function in_array;
 
 /**
  * @phpstan-type OpenAiPromptFileUri array{
@@ -26,9 +26,19 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
      * @see OneToMany\AI\Contract\Client\PromptNormalizerInterface
      *
      * @return array{
-     *   input?: non-empty-list<array{content: non-empty-list<OpenAiPromptFileUri|OpenAiPromptInputText>, role: 'system'|'user'}>,
+     *   input?: non-empty-list<
+     *     array{
+     *       content: non-empty-list<OpenAiPromptFileUri|OpenAiPromptInputText>,
+     *       role: 'system'|'user',
+     *     },
+     *   >,
      *   text?: array{
-     *     format: array{type: 'json_schema', name: non-empty-lowercase-string, schema: array<string, mixed>, strict: bool},
+     *     format: array{
+     *       type: 'json_schema',
+     *       name: non-empty-lowercase-string,
+     *       schema: array<string, mixed>,
+     *       strict: bool,
+     *     },
      *   },
      * }
      */
@@ -83,7 +93,7 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
      */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return $data instanceof CompilePromptRequestInterface && str_starts_with($data->getModel(), 'gpt');
+        return $data instanceof CompilePromptRequestInterface && in_array($data->getVendor(), ['openai']);
     }
 
     /**
