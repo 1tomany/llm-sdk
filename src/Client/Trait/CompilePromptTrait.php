@@ -10,6 +10,9 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExcep
 
 trait CompilePromptTrait
 {
+    /**
+     * @see OneToMany\AI\Contract\Client\PromptClientInterface
+     */
     public function compile(CompilePromptRequestInterface $request): CompiledPromptResponseInterface
     {
         try {

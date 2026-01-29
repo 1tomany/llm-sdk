@@ -4,10 +4,15 @@ namespace OneToMany\AI\Tests\Action\Prompt;
 
 use OneToMany\AI\Action\Prompt\CompilePromptAction;
 use OneToMany\AI\Exception\InvalidArgumentException;
+use OneToMany\AI\Factory\ClientContainer;
+use OneToMany\AI\Factory\PromptClientFactory;
 use OneToMany\AI\Request\Prompt\CompilePromptRequest;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
+#[Group('UnitTests')]
+#[Group('ActionTests')]
+#[Group('PromptTests')]
 final class CompilePromptActionTest extends TestCase
 {
     public function testCompilingPromptRequiresNonEmptyContents(): void
@@ -15,6 +20,6 @@ final class CompilePromptActionTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Compiling the prompt for the model "mock" failed because the contents are empty.');
 
-        new CompilePromptAction(new ObjectNormalizer())->act(new CompilePromptRequest('mock', 'mock', []));
+        new CompilePromptAction(new PromptClientFactory(new ClientContainer()))->act(new CompilePromptRequest('mock', 'mock', []));
     }
 }
