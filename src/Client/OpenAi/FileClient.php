@@ -65,7 +65,7 @@ final readonly class FileClient implements FileClientInterface
         } catch (HttpClientTransportExceptionInterface $e) {
             throw new ConnectingToHostFailedException($url, $e);
         } catch (HttpClientDecodingExceptionInterface|SerializerExceptionInterface $e) {
-            throw new DecodingResponseContentFailedException(sprintf('Caching the file "%s"', $request->name), $e);
+            throw new DecodingResponseContentFailedException(sprintf('Caching the file "%s"', $request->getName()), $e);
         }
 
         return new CachedFileResponse($request->getVendor(), $file->id, $file->filename, $file->purpose, $file->getExpiresAt());

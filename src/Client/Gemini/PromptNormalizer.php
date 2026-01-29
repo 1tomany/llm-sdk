@@ -46,7 +46,7 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
     {
         $requestContent = ['contents' => []];
 
-        foreach ($data->contents as $content) {
+        foreach ($data->getContents() as $content) {
             if ($content instanceof InputText) {
                 if ($content->getRole()->isSystem()) {
                     $requestContent['systemInstruction'] = [

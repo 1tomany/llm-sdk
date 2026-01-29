@@ -20,10 +20,10 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
         $requestContent = [
-            'model' => $data->model,
+            'model' => $data->getModel(),
         ];
 
-        foreach ($data->contents as $content) {
+        foreach ($data->getContents() as $content) {
             if ($content instanceof InputText) {
                 $requestContent['input'][] = [
                     'content' => [
