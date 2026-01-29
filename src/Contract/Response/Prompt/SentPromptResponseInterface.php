@@ -22,7 +22,7 @@ interface SentPromptResponseInterface
     /**
      * @return non-empty-string
      */
-    public function getUri();
+    public function getUri(): string;
 
     /**
      * @return ?non-empty-string
