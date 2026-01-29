@@ -15,7 +15,7 @@ interface SendPromptRequestInterface
     public function getModel(): string;
 
     /**
-     * @var array<string, mixed>
+     * @return array<string, mixed>
      */
     public function getRequest(): array;
 }
