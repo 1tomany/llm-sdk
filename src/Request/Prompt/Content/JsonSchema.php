@@ -17,9 +17,9 @@ final readonly class JsonSchema implements ContentInterface
      * @param non-empty-lowercase-string $format
      */
     public function __construct(
-        public string $name,
-        public array $schema,
-        public string $format = 'application/json',
+        private string $name,
+        private array $schema,
+        private string $format = 'application/json',
     ) {
     }
 
@@ -40,6 +40,30 @@ final readonly class JsonSchema implements ContentInterface
         }
 
         return new self(strtolower($name), $schema);
+    }
+
+    /**
+     * @return non-empty-lowercase-string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getSchema(): array
+    {
+        return $this->schema;
+    }
+
+    /**
+     * @return non-empty-lowercase-string
+     */
+    public function getFormat(): string
+    {
+        return $this->format;
     }
 
     /**

@@ -14,8 +14,8 @@ final readonly class InputText implements ContentInterface
      * @param non-empty-string $text
      */
     public function __construct(
-        public string $text,
-        public Role $role = Role::User,
+        private string $text,
+        private Role $role = Role::User,
     ) {
     }
 
@@ -36,6 +36,14 @@ final readonly class InputText implements ContentInterface
     public static function system(?string $text): self
     {
         return self::create($text, Role::System);
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getText(): string
+    {
+        return $this->text;
     }
 
     /**

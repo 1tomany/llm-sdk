@@ -16,8 +16,8 @@ final readonly class CachedFile implements ContentInterface
      * @param non-empty-lowercase-string $format
      */
     public function __construct(
-        public string $uri,
-        public string $format,
+        private string $uri,
+        private string $format,
     ) {
     }
 
@@ -28,6 +28,22 @@ final readonly class CachedFile implements ContentInterface
         }
 
         return new self($uri, strtolower(trim($format ?? '') ?: 'application/octet-stream'));
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getUri(): string
+    {
+        return $this->uri;
+    }
+
+    /**
+     * @return non-empty-lowercase-string
+     */
+    public function getFormat(): string
+    {
+        return $this->format;
     }
 
     /**
