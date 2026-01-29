@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Prompt\Vendor\Model\Client\OpenAi;
+namespace OneToMany\AI\Client\OpenAi;
 
-use App\Prompt\Vendor\Model\Contract\Client\PromptNormalizerInterface;
-use App\Prompt\Vendor\Model\Contract\Request\Prompt\CompilePromptRequestInterface;
-use App\Prompt\Vendor\Model\Prompt\PromptContentFile;
-use App\Prompt\Vendor\Model\Prompt\PromptContentSchema;
-use App\Prompt\Vendor\Model\Prompt\PromptContentText;
+use OneToMany\AI\Contract\Client\PromptNormalizerInterface;
+use OneToMany\AI\Contract\Request\Prompt\CompilePromptRequestInterface;
+use OneToMany\AI\Request\Prompt\Content\CachedFile;
+use OneToMany\AI\Request\Prompt\Content\InputText;
+use OneToMany\AI\Request\Prompt\Content\JsonSchema;
 
 use function str_starts_with;
 
 final readonly class PromptNormalizer implements PromptNormalizerInterface
 {
     /**
-     * @see App\Prompt\Vendor\Model\Contract\Client\PromptNormalizerInterface
+     * @see OneToMany\AI\Contract\Client\PromptNormalizerInterface
      *
      * @return array<non-empty-string, mixed>
      */
@@ -24,51 +24,37 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
         ];
 
         foreach ($data->contents as $content) {
-            if ($content instanceof PromptContentText) {
-                if ($content->role->isSystem()) {
-                    $requestContent['input'][] = [
-                        'content' => [
-                            [
-                                'type' => 'input_text',
-                                'text' => $content->text,
-                            ],
+            if ($content instanceof InputText) {
+                $requestContent['input'][] = [
+                    'content' => [
+                        [
+                            'type' => 'input_text',
+                            'text' => $content->getText(),
                         ],
-                        'role' => 'system',
-                    ];
-                }
-
-                if ($content->role->isUser()) {
-                    $requestContent['input'][] = [
-                        'content' => [
-                            [
-                                'type' => 'input_text',
-                                'text' => $content->text,
-                            ],
-                        ],
-                        'role' => 'user',
-                    ];
-                }
+                    ],
+                    'role' => $content->getRole()->getValue(),
+                ];
             }
 
-            if ($content instanceof PromptContentFile) {
+            if ($content instanceof CachedFile) {
                 $requestContent['input'][] = [
                     'content' => [
                         [
                             'type' => 'input_file',
-                            'file_id' => $content->uri,
+                            'file_id' => $content->getUri(),
                         ],
                     ],
-                    'role' => 'user',
+                    'role' => $content->getRole()->getValue(),
                 ];
             }
 
-            if ($content instanceof PromptContentSchema) {
+            if ($content instanceof JsonSchema) {
                 $requestContent['text'] = [
                     'format' => [
                         'type' => 'json_schema',
-                        'name' => $content->name,
-                        'schema' => $content->schema,
-                        'strict' => true,
+                        'name' => $content->getName(),
+                        'schema' => $content->getSchema(),
+                        'strict' => $content->isStrict(),
                     ],
                 ];
             }
@@ -78,15 +64,15 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
     }
 
     /**
-     * @see App\Prompt\Vendor\Model\Contract\Client\PromptNormalizerInterface
+     * @see OneToMany\AI\Contract\Client\PromptNormalizerInterface
      */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return $data instanceof CompilePromptRequestInterface && str_starts_with($data->model, 'gpt');
+        return $data instanceof CompilePromptRequestInterface && str_starts_with($data->getModel(), 'gpt');
     }
 
     /**
-     * @see App\Prompt\Vendor\Model\Contract\Client\PromptNormalizerInterface
+     * @see OneToMany\AI\Contract\Client\PromptNormalizerInterface
      */
     public function getSupportedTypes(?string $format): array
     {

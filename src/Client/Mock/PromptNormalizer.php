@@ -74,7 +74,7 @@ final readonly class PromptNormalizer implements PromptNormalizerInterface
      */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return $data instanceof CompilePromptRequestInterface && in_array($data->vendor, ['mock']);
+        return $data instanceof CompilePromptRequestInterface && in_array($data->getVendor(), ['mock']);
     }
 
     /**

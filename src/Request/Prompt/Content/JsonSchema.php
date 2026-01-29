@@ -20,6 +20,7 @@ final readonly class JsonSchema implements ContentInterface
         private string $name,
         private array $schema,
         private string $format = 'application/json',
+        private bool $isStrict = true,
     ) {
     }
 
@@ -64,6 +65,11 @@ final readonly class JsonSchema implements ContentInterface
     public function getFormat(): string
     {
         return $this->format;
+    }
+
+    public function isStrict(): bool
+    {
+        return $this->isStrict;
     }
 
     /**
