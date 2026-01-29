@@ -2,7 +2,6 @@
 
 namespace OneToMany\AI\Tests\Action\Prompt;
 
-use ArrayObject;
 use OneToMany\AI\Action\Prompt\CompilePromptAction;
 use OneToMany\AI\Contract\Action\Prompt\CompilePromptActionInterface;
 use OneToMany\AI\Exception\InvalidArgumentException;
@@ -22,8 +21,7 @@ final class CompilePromptActionTest extends TestCase
 
     private function createAction(): CompilePromptActionInterface
     {
-        $normalizer = new class implements NormalizerInterface
-        {
+        $normalizer = new class implements NormalizerInterface {
             public function normalize(mixed $data, ?string $format = null, array $context = []): null
             {
                 throw new \RuntimeException('Not implemented!');
