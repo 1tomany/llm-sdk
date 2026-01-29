@@ -4,9 +4,9 @@ namespace OneToMany\AI\Tests\Action\Prompt;
 
 use OneToMany\AI\Action\Prompt\CompilePromptAction;
 use OneToMany\AI\Exception\InvalidArgumentException;
-use OneToMany\AI\Factory\ClientContainer;
 use OneToMany\AI\Factory\PromptClientFactory;
 use OneToMany\AI\Request\Prompt\CompilePromptRequest;
+use OneToMany\AI\Tests\Factory\ClientContainer;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\AI\Factory;
+namespace OneToMany\AI\Tests\Factory;
 
 use OneToMany\AI\Contract\Client\FileClientInterface;
 use OneToMany\AI\Contract\Client\PromptClientInterface;
