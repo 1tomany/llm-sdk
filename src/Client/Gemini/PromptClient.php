@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Prompt\Vendor\Model\Client\Gemini;
+namespace OneToMany\AI\Client\Gemini;
 
-use App\Prompt\Vendor\Model\Client\Exception\ConnectingToHostFailedException;
-use App\Prompt\Vendor\Model\Client\Exception\DecodingResponseContentFailedException;
-use App\Prompt\Vendor\Model\Client\Gemini\Type\Content\GenerateContentResponse;
-use App\Prompt\Vendor\Model\Client\Gemini\Type\Error\Status;
-use App\Prompt\Vendor\Model\Contract\Client\PromptClientInterface;
-use App\Prompt\Vendor\Model\Contract\Request\Prompt\SendPromptRequestInterface;
-use App\Prompt\Vendor\Model\Contract\Response\Prompt\SentPromptResponseInterface;
-use App\Prompt\Vendor\Model\Exception\RuntimeException;
-use App\Prompt\Vendor\Model\Response\Prompt\SentPromptResponse;
+use OneToMany\AI\Client\Exception\ConnectingToHostFailedException;
+use OneToMany\AI\Client\Exception\DecodingResponseContentFailedException;
+use OneToMany\AI\Client\Gemini\Type\Content\GenerateContentResponse;
+use OneToMany\AI\Client\Gemini\Type\Error\Status;
+use OneToMany\AI\Contract\Client\PromptClientInterface;
+use OneToMany\AI\Contract\Request\Prompt\SendPromptRequestInterface;
+use OneToMany\AI\Contract\Response\Prompt\SentPromptResponseInterface;
+use OneToMany\AI\Exception\RuntimeException;
+use OneToMany\AI\Response\Prompt\SentPromptResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
@@ -29,16 +29,19 @@ final readonly class PromptClient implements PromptClientInterface
     ) {
     }
 
+    /**
+     * @see OneToMany\AI\Contract\Client\PromptClientInterface
+     */
     public function send(SendPromptRequestInterface $request): SentPromptResponseInterface
     {
         $timer = new Stopwatch(true)->start('send');
 
         try {
-            $url = $this->generateUrl($request->model);
+            $url = $this->generateUrl($request->getModel());
 
             // Generate a signed URL to upload the file to
             $response = $this->httpClient->request('POST', $url, [
-                'json' => $request->request,
+                'json' => $request->getRequest(),
             ]);
 
             /** @var array<string, mixed> $responseContent */
@@ -59,7 +62,7 @@ final readonly class PromptClient implements PromptClientInterface
             throw new DecodingResponseContentFailedException('Sending the prompt', $e);
         }
 
-        return new SentPromptResponse($request->model, $generateContentResponse->responseId, $generateContentResponse->getOutput(), $responseContent, $timer->stop()->getDuration());
+        return new SentPromptResponse($request->getVendor(), $request->getModel(), $generateContentResponse->responseId, $generateContentResponse->getOutput(), $responseContent, $timer->stop()->getDuration());
     }
 
     /**
