@@ -14,5 +14,6 @@ final readonly class Options implements ContentInterface
      */
     public function __construct(public array $options)
     {
+        $this->role = Role::User;
     }
 }
