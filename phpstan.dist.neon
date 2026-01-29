@@ -2,6 +2,6 @@ parameters:
     level: max
 
     paths:
-        # - ./examples/
+        - ./examples/
         - ./src/
         - ./tests/
