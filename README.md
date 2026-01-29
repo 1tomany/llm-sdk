@@ -8,7 +8,7 @@ This library provides a single, unified, framework-independent library for integ
 
 ### Platform feature support
 | Feature     | Gemini | Mock | OpenAI |
-| ----------- | ----------- |
+| ----------- | ----------- | ----------- | ----------- |
 | Uploading files | ✅ | ✅ | ✅ |
 
 ## Credits
