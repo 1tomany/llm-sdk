@@ -4,17 +4,8 @@ use OneToMany\AI\Client\Gemini\FileClient;
 use OneToMany\AI\Contract\Exception\ExceptionInterface as AiExceptionInterface;
 use OneToMany\AI\Request\File\CacheFileRequest;
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\PropertyInfo\Extractor\ConstructorExtractor;
-use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
-use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
-use Symfony\Component\Serializer\Serializer;
 
-require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../bootstrap.php';
 
 $keyVar = 'GEMINI_API_KEY';
 
@@ -35,6 +26,7 @@ if (!is_file($path) || !is_readable($path)) {
     exit(1);
 }
 
+// Construct the Symfony HTTP Client
 $httpClient = HttpClient::create([
     'headers' => [
         'accept' => 'application/json',
@@ -42,29 +34,18 @@ $httpClient = HttpClient::create([
     ],
 ]);
 
-$propertyInfoExtractor = new PropertyInfoExtractor([], [
-    new ConstructorExtractor([new PhpDocExtractor()]),
-]);
-
-$serializer = new Serializer(
-    normalizers: [
-        new ArrayDenormalizer(),
-        new BackedEnumNormalizer(),
-        new DateTimeNormalizer(),
-        new UnwrappingDenormalizer(),
-
-        // This normalizer must come last to ensure the UnwrappingDenormalizer can be used
-        new ObjectNormalizer(propertyInfoExtractor: $propertyInfoExtractor),
-    ],
-);
-
+// Construct the Gemini file client
 $fileClient = new FileClient($httpClient, $serializer);
 
 try {
+    // Cache the file with Gemini
     $cachedFile = $fileClient->cache(CacheFileRequest::create('gemini', $path));
 } catch (AiExceptionInterface $e) {
-    printf("[ERROR] %s\n", $e->getPrevious()->getMessage());
+    printf("[ERROR] %s\n", $e->getMessage());
     exit(1);
 }
 
-print_r($cachedFile);
+printf("Vendor:    %s\n", $cachedFile->getVendor());
+printf("URI:       %s\n", $cachedFile->getUri());
+printf("Name:      %s\n", $cachedFile->getName());
+printf("ExpiresAt: %s\n", $cachedFile->getExpiresAt()?->format('c'));
