@@ -22,4 +22,6 @@ interface CompilePromptRequestInterface
     public function getContents(): array;
 
     public function addContent(ContentInterface $content): static;
+
+    public function hasContents(): bool;
 }

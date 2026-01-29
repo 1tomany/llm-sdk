@@ -52,4 +52,12 @@ final class CompilePromptRequest implements CompilePromptRequestInterface
 
         return $this;
     }
+
+    /**
+     * @see OneToMany\AI\Contract\Request\Prompt\CompilePromptRequestInterface
+     */
+    public function hasContents(): bool
+    {
+        return [] !== $this->contents;
+    }
 }
