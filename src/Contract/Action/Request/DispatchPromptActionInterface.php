@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\AI\Contract\Action\Prompt;
+namespace OneToMany\AI\Contract\Action\Request;
 
 use OneToMany\AI\Contract\Request\Prompt\DispatchPromptRequestInterface;
 use OneToMany\AI\Contract\Response\Prompt\DispatchedPromptResponseInterface;

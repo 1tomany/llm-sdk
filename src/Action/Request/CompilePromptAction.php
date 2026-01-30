@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\AI\Action\Prompt;
+namespace OneToMany\AI\Action\Request;
 
-use OneToMany\AI\Contract\Action\Prompt\CompilePromptActionInterface;
+use OneToMany\AI\Contract\Action\Request\CompilePromptActionInterface;
 use OneToMany\AI\Contract\Request\Prompt\CompilePromptRequestInterface;
 use OneToMany\AI\Contract\Response\Prompt\CompiledPromptResponseInterface;
 use OneToMany\AI\Exception\InvalidArgumentException;
@@ -17,7 +17,7 @@ final readonly class CompilePromptAction implements CompilePromptActionInterface
     }
 
     /**
-     * @see OneToMany\AI\Contract\Action\Prompt\CompilePromptActionInterface
+     * @see OneToMany\AI\Contract\Action\Request\CompilePromptActionInterface
      */
     public function act(CompilePromptRequestInterface $request): CompiledPromptResponseInterface
     {

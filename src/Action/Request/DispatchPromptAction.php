@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\AI\Action\Prompt;
+namespace OneToMany\AI\Action\Request;
 
-use OneToMany\AI\Contract\Action\Prompt\DispatchPromptActionInterface;
+use OneToMany\AI\Contract\Action\Request\DispatchPromptActionInterface;
 use OneToMany\AI\Contract\Request\Prompt\DispatchPromptRequestInterface;
 use OneToMany\AI\Contract\Response\Prompt\DispatchedPromptResponseInterface;
 use OneToMany\AI\Factory\PromptClientFactory;
@@ -14,7 +14,7 @@ final readonly class DispatchPromptAction implements DispatchPromptActionInterfa
     }
 
     /**
-     * @see OneToMany\AI\Contract\Action\Prompt\DispatchPromptActionInterface
+     * @see OneToMany\AI\Contract\Action\Request\DispatchPromptActionInterface
      */
     public function act(DispatchPromptRequestInterface $request): DispatchedPromptResponseInterface
     {
