@@ -14,7 +14,6 @@ use OneToMany\AI\Response\Query\ExecuteResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
-use function in_array;
 use function sprintf;
 
 final readonly class QueryClient extends BaseClient implements QueryClientInterface

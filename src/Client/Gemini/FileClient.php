@@ -12,7 +12,6 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 
 use function ceil;
 use function fread;
-use function in_array;
 use function sprintf;
 use function strlen;
 
