@@ -4,7 +4,9 @@ namespace OneToMany\AI\Client\Gemini;
 
 use OneToMany\AI\Contract\Client\FileClientInterface;
 use OneToMany\AI\Exception\RuntimeException;
+use OneToMany\AI\Request\File\DeleteRequest;
 use OneToMany\AI\Request\File\UploadRequest;
+use OneToMany\AI\Response\File\DeleteResponse;
 use OneToMany\AI\Response\File\UploadResponse;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
@@ -112,5 +114,13 @@ final readonly class FileClient extends GeminiClient implements FileClientInterf
         }
 
         return new UploadResponse($request->getModel(), $file['file']['uri'], $file['file']['name'], null, new \DateTimeImmutable($file['file']['expirationTime']));
+    }
+
+    /**
+     * @see OneToMany\AI\Contract\Client\FileClientInterface
+     */
+    public function delete(DeleteRequest $request): DeleteResponse
+    {
+        throw new RuntimeException('Not implemented!');
     }
 }
