@@ -1,15 +1,9 @@
 <?php
 
 use OneToMany\AI\Client\Gemini\FileClient;
-use OneToMany\AI\Client\Gemini\PromptClient;
 use OneToMany\AI\Client\Gemini\QueryClient;
 use OneToMany\AI\Contract\Exception\ExceptionInterface as AiExceptionInterface;
 use OneToMany\AI\Request\File\UploadRequest;
-use OneToMany\AI\Request\Prompt\CompilePromptRequest;
-use OneToMany\AI\Request\Prompt\Content\CachedFile;
-use OneToMany\AI\Request\Prompt\Content\InputText;
-use OneToMany\AI\Request\Prompt\Content\JsonSchema;
-use OneToMany\AI\Request\Prompt\DispatchPromptRequest;
 use OneToMany\AI\Request\Query\CompileRequest;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -29,6 +23,10 @@ if (!$path || !is_file($path) || !is_readable($path)) {
     exit(1);
 }
 
+if (!$format = mime_content_type($path)) {
+    $format = 'application/octet-string';
+}
+
 // Construct the HTTP Client
 $httpClient = HttpClient::create([
     'headers' => [
@@ -46,9 +44,7 @@ try {
         'model' => 'gemini-2.5-flash',
     ]);
 
-    $uploadRequest->atPath($path)->withFormat(...[ // @phpstan-ignore-line
-        'format' => mime_content_type($path),
-    ]);
+    $uploadRequest->atPath($path)->withFormat($format);
 
     // Upload the file to Gemini with the FileClient
     $response = $fileClient->upload($uploadRequest);
