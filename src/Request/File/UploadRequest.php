@@ -9,7 +9,10 @@ use function basename;
 use function fclose;
 use function filesize;
 use function fopen;
+use function is_file;
+use function is_readable;
 use function is_resource;
+use function mime_content_type;
 use function sprintf;
 use function strtolower;
 use function trim;
@@ -54,6 +57,10 @@ class UploadRequest extends BaseRequest
     public function atPath(?string $path): static
     {
         $this->path = trim($path ?? '') ?: null;
+
+        if ($this->path && is_file($this->path) && is_readable($this->path)) {
+            $this->withFormat(mime_content_type($this->path) ?: $this->format);
+        }
 
         return $this;
     }
