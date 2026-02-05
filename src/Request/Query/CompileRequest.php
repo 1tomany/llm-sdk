@@ -4,44 +4,19 @@ namespace OneToMany\AI\Request\Query;
 
 use OneToMany\AI\Contract\Request\Query\Component\ComponentInterface;
 use OneToMany\AI\Contract\Request\Query\Component\Enum\Role;
+use OneToMany\AI\Request\BaseRequest;
 use OneToMany\AI\Request\Query\Component\FileUriComponent;
 use OneToMany\AI\Request\Query\Component\SchemaComponent;
 use OneToMany\AI\Request\Query\Component\TextComponent;
 
-use function strtolower;
 use function trim;
 
-class CompileRequest
+class CompileRequest extends BaseRequest
 {
-    /**
-     * @var non-empty-lowercase-string
-     */
-    private string $model;
-
     /**
      * @var list<ComponentInterface>
      */
     private array $components = [];
-
-    public function __construct(string $model = 'mock')
-    {
-        $this->forModel($model);
-    }
-
-    public function forModel(string $model): static
-    {
-        $this->model = strtolower(trim($model)) ?: $this->model;
-
-        return $this;
-    }
-
-    /**
-     * @return non-empty-lowercase-string
-     */
-    public function getModel(): string
-    {
-        return $this->model;
-    }
 
     /**
      * @param ?non-empty-string $fileUri

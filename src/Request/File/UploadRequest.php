@@ -3,6 +3,7 @@
 namespace OneToMany\AI\Request\File;
 
 use OneToMany\AI\Exception\RuntimeException;
+use OneToMany\AI\Request\BaseRequest;
 
 use function basename;
 use function fclose;
@@ -13,13 +14,8 @@ use function sprintf;
 use function strtolower;
 use function trim;
 
-class UploadRequest
+class UploadRequest extends BaseRequest
 {
-    /**
-     * @var non-empty-lowercase-string
-     */
-    private string $model;
-
     /**
      * @var ?non-empty-string
      */
@@ -50,29 +46,9 @@ class UploadRequest
      */
     private mixed $fileHandle = null;
 
-    public function __construct(string $model = 'mock')
-    {
-        $this->forModel($model);
-    }
-
     public function __destruct()
     {
         $this->closeFileHandle();
-    }
-
-    public function forModel(string $model): static
-    {
-        $this->model = strtolower(trim($model)) ?: $this->model;
-
-        return $this;
-    }
-
-    /**
-     * @return non-empty-lowercase-string
-     */
-    public function getModel(): string
-    {
-        return $this->model;
     }
 
     public function atPath(?string $path): static

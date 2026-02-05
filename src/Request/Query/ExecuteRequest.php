@@ -2,47 +2,22 @@
 
 namespace OneToMany\AI\Request\Query;
 
+use OneToMany\AI\Request\BaseRequest;
+
 use function strtolower;
 use function trim;
 
-class ExecuteRequest
+class ExecuteRequest extends BaseRequest
 {
-    /**
-     * @var non-empty-lowercase-string
-     */
-    private string $model;
-
     /**
      * @var non-empty-string
      */
-    private string $url;
+    private string $url = 'mock';
 
     /**
      * @var array<string, mixed>
      */
     private array $request = [];
-
-    public function __construct(
-        string $model = 'mock',
-        string $url = 'mock',
-    ) {
-        $this->forModel($model)->withUrl($url);
-    }
-
-    public function forModel(string $model): static
-    {
-        $this->model = strtolower(trim($model)) ?: $this->model;
-
-        return $this;
-    }
-
-    /**
-     * @return non-empty-lowercase-string
-     */
-    public function getModel(): string
-    {
-        return $this->model;
-    }
 
     public function withUrl(?string $url): static
     {
