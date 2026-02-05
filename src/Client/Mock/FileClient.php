@@ -1,17 +1,17 @@
 <?php
 
-namespace App\File\Vendor\AI\Client\Mock;
+namespace OneToMany\AI\Client\Mock;
 
-use App\File\Vendor\AI\Contract\Client\FileClientInterface;
-use App\File\Vendor\AI\Request\File\UploadRequest;
-use App\File\Vendor\AI\Response\File\UploadResponse;
+use OneToMany\AI\Contract\Client\FileClientInterface;
+use OneToMany\AI\Request\File\UploadRequest;
+use OneToMany\AI\Response\File\UploadResponse;
 
 use function in_array;
 
 final readonly class FileClient extends BaseClient implements FileClientInterface
 {
     /**
-     * @see App\File\Vendor\AI\Contract\Client\FileClientInterface
+     * @see OneToMany\AI\Contract\Client\FileClientInterface
      */
     public function upload(UploadRequest $request): UploadResponse
     {
@@ -19,7 +19,7 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
     }
 
     /**
-     * @see App\File\Vendor\AI\Contract\Client\ModelClientInterface
+     * @see OneToMany\AI\Contract\Client\ModelClientInterface
      */
     public function supportsRequest(object $request): bool
     {

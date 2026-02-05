@@ -1,15 +1,15 @@
 <?php
 
-namespace App\File\Vendor\AI\Client\Mock;
+namespace OneToMany\AI\Client\Mock;
 
-use App\File\Vendor\AI\Contract\Client\QueryClientInterface;
-use App\File\Vendor\AI\Request\Query\CompileRequest;
-use App\File\Vendor\AI\Request\Query\Component\FileUriComponent;
-use App\File\Vendor\AI\Request\Query\Component\SchemaComponent;
-use App\File\Vendor\AI\Request\Query\Component\TextComponent;
-use App\File\Vendor\AI\Request\Query\ExecuteRequest;
-use App\File\Vendor\AI\Response\Query\CompileResponse;
-use App\File\Vendor\AI\Response\Query\ExecuteResponse;
+use OneToMany\AI\Contract\Client\QueryClientInterface;
+use OneToMany\AI\Request\Query\CompileRequest;
+use OneToMany\AI\Request\Query\Component\FileUriComponent;
+use OneToMany\AI\Request\Query\Component\SchemaComponent;
+use OneToMany\AI\Request\Query\Component\TextComponent;
+use OneToMany\AI\Request\Query\ExecuteRequest;
+use OneToMany\AI\Response\Query\CompileResponse;
+use OneToMany\AI\Response\Query\ExecuteResponse;
 
 use function in_array;
 use function json_encode;
@@ -18,7 +18,7 @@ use function random_int;
 final readonly class QueryClient extends BaseClient implements QueryClientInterface
 {
     /**
-     * @see App\File\Vendor\AI\Contract\Client\QueryClientInterface
+     * @see OneToMany\AI\Contract\Client\QueryClientInterface
      */
     public function compile(CompileRequest $request): CompileResponse
     {
@@ -53,7 +53,7 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
     }
 
     /**
-     * @see App\File\Vendor\AI\Contract\Client\QueryClientInterface
+     * @see OneToMany\AI\Contract\Client\QueryClientInterface
      */
     public function execute(ExecuteRequest $request): ExecuteResponse
     {
@@ -66,7 +66,7 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
     }
 
     /**
-     * @see App\File\Vendor\AI\Contract\Client\ModelClientInterface
+     * @see OneToMany\AI\Contract\Client\ModelClientInterface
      */
     public function supportsRequest(object $request): bool
     {

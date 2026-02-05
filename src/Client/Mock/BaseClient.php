@@ -1,8 +1,8 @@
 <?php
 
-namespace App\File\Vendor\AI\Client\Mock;
+namespace OneToMany\AI\Client\Mock;
 
-use App\File\Vendor\AI\Client\Mock\Trait\GenerateUriTrait;
+use OneToMany\AI\Client\Mock\Trait\GenerateUriTrait;
 
 abstract readonly class BaseClient
 {
