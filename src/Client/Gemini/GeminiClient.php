@@ -5,9 +5,7 @@ namespace OneToMany\AI\Client\Gemini;
 use OneToMany\AI\Client\Gemini\Type\Error\ErrorType;
 use OneToMany\AI\Client\ModelClient;
 use OneToMany\AI\Client\Trait\SupportsModelTrait;
-use OneToMany\AI\Exception\RuntimeException;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface as HttpClientHttpExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -78,19 +76,5 @@ abstract readonly class GeminiClient extends ModelClient
         }
 
         return new ErrorType($error['error']['code'], $error['error']['message'], $error['error']['status']);
-    }
-
-    /**
-     * @throws RuntimeException connecting to the server failed
-     * @throws RuntimeException the server returned invalid JSON
-     * @throws RuntimeException the server returned a 4xx or 5xx response
-     */
-    protected function handleHttpException(HttpClientExceptionInterface $exception): never
-    {
-        if ($exception instanceof HttpClientHttpExceptionInterface) {
-            throw new RuntimeException($this->decodeErrorResponse($exception->getResponse())->getMessage(), $exception->getResponse()->getStatusCode(), $exception);
-        }
-
-        throw new RuntimeException($exception->getMessage(), previous: $exception);
     }
 }

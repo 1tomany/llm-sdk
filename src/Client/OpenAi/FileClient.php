@@ -49,7 +49,7 @@ final readonly class FileClient extends OpenAiClient implements FileClientInterf
 
             // $file = $this->denormalizer->denormalize($responseContent, File::class);
         } catch (HttpClientExceptionInterface $e) {
-            // $this->handleHttpException($e);
+            $this->handleHttpException($e);
         }
 
         return new UploadResponse($request->getModel(), $file['id'], $file['filename'], $file['purpose'], null !== $file['expires_at'] ? \DateTimeImmutable::createFromTimestamp($file['expires_at']) : null);
