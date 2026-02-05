@@ -16,14 +16,17 @@ final readonly class ErrorType
     ) {
     }
 
+    /**
+     * Removes extra spaces after periods that Gemini adds.
+     */
     public function getMessage(): string
     {
         return implode(' ', array_filter(explode(' ', $this->message)));
     }
 
     /**
-     * Removes any trailing periods so the message can be
-     * concatenated with the message from another exception.
+     * Removes any trailing periods so this message
+     * can be used in the message of another exception.
      */
     public function getInlineMessage(): string
     {
