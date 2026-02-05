@@ -2,22 +2,27 @@
 
 namespace OneToMany\AI\Client\Mock;
 
-use OneToMany\AI\Client\Mock\Trait\GenerateUriTrait;
 use OneToMany\AI\Contract\Client\FileClientInterface;
-use OneToMany\AI\Contract\Request\File\CacheFileRequestInterface;
-use OneToMany\AI\Contract\Response\File\CachedFileResponseInterface;
-use OneToMany\AI\Response\File\CachedFileResponse;
+use OneToMany\AI\Request\File\DeleteRequest;
+use OneToMany\AI\Request\File\UploadRequest;
+use OneToMany\AI\Response\File\DeleteResponse;
+use OneToMany\AI\Response\File\UploadResponse;
 
-final readonly class FileClient implements FileClientInterface
+final readonly class FileClient extends MockClient implements FileClientInterface
 {
-    use GenerateUriTrait;
-
-    public function __construct()
+    /**
+     * @see OneToMany\AI\Contract\Client\FileClientInterface
+     */
+    public function upload(UploadRequest $request): UploadResponse
     {
+        return new UploadResponse($request->getModel(), $this->generateResponseId('file'));
     }
 
-    public function cache(CacheFileRequestInterface $request): CachedFileResponseInterface
+    /**
+     * @see OneToMany\AI\Contract\Client\FileClientInterface
+     */
+    public function delete(DeleteRequest $request): DeleteResponse
     {
-        return new CachedFileResponse($request->getVendor(), $this->generateUri('file'), null, $request->getFormat());
+        return new DeleteResponse($request->getModel(), $request->getUri());
     }
 }

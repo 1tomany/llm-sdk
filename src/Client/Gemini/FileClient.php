@@ -2,46 +2,51 @@
 
 namespace OneToMany\AI\Client\Gemini;
 
-use OneToMany\AI\Client\Exception\ConnectingToHostFailedException;
-use OneToMany\AI\Client\Exception\DecodingResponseContentFailedException;
-use OneToMany\AI\Client\Gemini\Type\Error\Error;
-use OneToMany\AI\Client\Gemini\Type\File\File;
 use OneToMany\AI\Contract\Client\FileClientInterface;
-use OneToMany\AI\Contract\Request\File\CacheFileRequestInterface;
-use OneToMany\AI\Contract\Response\File\CachedFileResponseInterface;
 use OneToMany\AI\Exception\RuntimeException;
-use OneToMany\AI\Response\File\CachedFileResponse;
-use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface as HttpClientDecodingExceptionInterface;
+use OneToMany\AI\Request\File\DeleteRequest;
+use OneToMany\AI\Request\File\UploadRequest;
+use OneToMany\AI\Response\File\DeleteResponse;
+use OneToMany\AI\Response\File\UploadResponse;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface as HttpClientTransportExceptionInterface;
 
 use function ceil;
 use function fread;
 use function sprintf;
 use function strlen;
 
-final readonly class FileClient extends BaseClient implements FileClientInterface
+final readonly class FileClient extends GeminiClient implements FileClientInterface
 {
     /**
-     * Files are uploaded in 8MB chunks.
+     * @see OneToMany\AI\Contract\Client\FileClientInterface
+     *
+     * @throws RuntimeException an empty file is uploaded
+     * @throws RuntimeException a signed URL is not generated
+     * @throws RuntimeException uploading a file chunk fails
      */
-    public const int FILE_CHUNK_BYTES = 8 * 1024 * 1024;
-
-    /**
-     * The header that contains the signed upload URL.
-     */
-    public const string UPLOAD_URL_HEADER = 'x-goog-upload-url';
-
-    public function cache(CacheFileRequestInterface $request): CachedFileResponseInterface
+    public function upload(UploadRequest $request): UploadResponse
     {
-        $url = $this->generateUrl();
+        // Files are uploaded in 8MB chunks
+        $uploadChunkByteCount = 8 * 1024 * 1024;
+
+        // Ensure the file can be opened and read before
+        // doing anything that requires an HTTP request
+        $fileHandle = $request->openFileHandle();
+
+        // Calculate the total number of chunks needed to upload the entire file
+        $uploadChunkCount = (int) ceil($request->getSize() / $uploadChunkByteCount);
+
+        if (0 === $uploadChunkCount || 0 === $request->getSize()) {
+            throw new RuntimeException('Empty files cannot be uploaded.');
+        }
 
         try {
             // Generate a signed URL to upload the file to
+            $url = $this->generateUrl('/upload/v1beta/files');
+
             $response = $this->httpClient->request('POST', $url, [
                 'headers' => [
+                    'x-goog-api-key' => $this->apiKey,
                     'x-goog-upload-command' => 'start',
                     'x-goog-upload-protocol' => 'resumable',
                     'x-goog-upload-header-content-type' => $request->getFormat(),
@@ -54,66 +59,68 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
                 ],
             ]);
 
-            $responseHeaders = $response->getHeaders(false);
-
-            if (!isset($responseHeaders[self::UPLOAD_URL_HEADER])) {
-                throw new RuntimeException(new Error($response->getContent(false))->message);
+            if (200 !== $statusCode = $response->getStatusCode()) {
+                throw new RuntimeException(sprintf('Generating the signed URL failed: %s.', $this->decodeErrorResponse($response)->getInlineMessage()), $statusCode);
             }
 
             /** @var non-empty-string $uploadUrl */
-            $uploadUrl = $responseHeaders[self::UPLOAD_URL_HEADER][0];
-        } catch (HttpClientExceptionInterface $e) {
-            throw new ConnectingToHostFailedException($url, $e);
-        }
+            $uploadUrl = $response->getHeaders(true)['x-goog-upload-url'][0];
 
-        try {
             // Counters to track progress
             $uploadChunk = $uploadOffset = 0;
 
-            // The total number of chunks needed to complete the upload
-            $uploadChunkCount = (int) ceil($request->getSize() / self::FILE_CHUNK_BYTES);
-
-            // Open the file to read it
-            $fileHandle = $request->open();
-
-            while ($fileChunk = fread($fileHandle, self::FILE_CHUNK_BYTES)) {
+            while ($fileChunk = fread($fileHandle, $uploadChunkByteCount)) {
                 // Determine the command to let the server know if we're done uploading or not
                 $uploadCommand = (++$uploadChunk >= $uploadChunkCount) ? 'upload, finalize' : 'upload';
 
                 $response = $this->httpClient->request('POST', $uploadUrl, [
                     'headers' => [
                         'content-length' => $request->getSize(),
+                        'x-goog-api-key' => $this->apiKey,
                         'x-goog-upload-offset' => $uploadOffset,
                         'x-goog-upload-command' => $uploadCommand,
                     ],
                     'body' => $fileChunk,
                 ]);
 
-                if (200 !== $response->getStatusCode()) {
-                    throw new RuntimeException(sprintf('Caching the file "%s" failed because chunk %d of %d was rejected by the server.', $request->getName(), $uploadChunk, $uploadChunkCount), $response->getStatusCode(), new RuntimeException($response->getContent(false)));
+                if (200 !== $statusCode = $response->getStatusCode()) {
+                    throw new RuntimeException(sprintf('Chunk %d of %d was rejected by the server: %s.', $uploadChunk, $uploadChunkCount, $this->decodeErrorResponse($response)->getInlineMessage()), $statusCode);
                 }
 
-                // Can't always assume the chunk was an even 8MB
+                // Don't assume the chunk was an even 8MB
                 $uploadOffset = $uploadOffset + strlen($fileChunk);
             }
 
-            $file = $this->normalizer->denormalize($response->toArray(false), File::class, null, [
-                UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
-            ]);
-        } catch (HttpClientTransportExceptionInterface $e) {
-            throw new ConnectingToHostFailedException($uploadUrl, $e);
-        } catch (HttpClientDecodingExceptionInterface|SerializerExceptionInterface $e) {
-            throw new DecodingResponseContentFailedException(sprintf('Caching the file "%s"', $request->getName()), $e);
+            /**
+             * @var array{
+             *   file: array{
+             *     name: non-empty-string,
+             *     displayName: non-empty-string,
+             *     mimeType: non-empty-lowercase-string,
+             *     sizeBytes: numeric-string,
+             *     createTime: non-empty-string,
+             *     updateTime: non-empty-string,
+             *     expirationTime: non-empty-string,
+             *     sha256Hash: non-empty-string,
+             *     uri: non-empty-string,
+             *     state: non-empty-uppercase-string,
+             *     source: non-empty-uppercase-string,
+             *   },
+             * } $file
+             */
+            $file = $response->toArray(true);
+        } catch (HttpClientExceptionInterface $e) {
+            $this->handleHttpException($e);
         }
 
-        return new CachedFileResponse($request->getVendor(), $file->uri, $file->name, $request->getFormat(), null, $file->expirationTime);
+        return new UploadResponse($request->getModel(), $file['file']['uri'], $file['file']['name'], null, new \DateTimeImmutable($file['file']['expirationTime']));
     }
 
     /**
-     * @return non-empty-string
+     * @see OneToMany\AI\Contract\Client\FileClientInterface
      */
-    private function generateUrl(): string
+    public function delete(DeleteRequest $request): DeleteResponse
     {
-        return 'https://generativelanguage.googleapis.com/upload/v1beta/files';
+        throw new RuntimeException('Not implemented!');
     }
 }

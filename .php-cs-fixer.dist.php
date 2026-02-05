@@ -8,7 +8,7 @@ $finder = new Finder();
 
 $finder->in([
     './',
-    './examples/',
+    './examples',
     './src/',
     './tests/',
 ]);
