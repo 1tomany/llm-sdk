@@ -10,6 +10,7 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+use function implode;
 use function ltrim;
 use function sprintf;
 
@@ -55,13 +56,13 @@ abstract readonly class OpenAiClient
     }
 
     /**
-     * @param non-empty-string $path
+     * @param non-empty-string $paths
      *
      * @return non-empty-string
      */
-    protected function generateUrl(string $path): string
+    protected function generateUrl(string ...$paths): string
     {
-        return sprintf('https://api.openai.com/v1/%s', ltrim($path, '/'));
+        return sprintf('https://api.openai.com/v1/%s', ltrim(implode('/', $paths), '/'));
     }
 
     protected function decodeErrorResponse(ResponseInterface $response): ErrorTypeInterface
