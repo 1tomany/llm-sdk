@@ -3,6 +3,7 @@
 namespace OneToMany\AI\Client\OpenAi;
 
 use OneToMany\AI\Client\OpenAi\Type\Response\Enum\FileType;
+use OneToMany\AI\Client\OpenAi\Type\Response\ResponseType;
 use OneToMany\AI\Contract\Client\QueryClientInterface;
 use OneToMany\AI\Exception\RuntimeException;
 use OneToMany\AI\Request\Query\CompileRequest;
@@ -102,48 +103,25 @@ final readonly class QueryClient extends OpenAiClient implements QueryClientInte
             ]);
 
             /**
-             * @var array{
-             *   id: non-empty-string,
-             *   object: 'response',
-             *   created_at: non-negative-int,
-             *   status: 'completed'|'failed'|'in_progress'|'cancelled'|'queued'|'incomplete',
-             *   completed_at?: non-negative-int,
-             *   error: ?array{
-             *     code: non-empty-string,
-             *     message: non-empty-string,
-             *   },
-             *   incomplete_details: ?array{
-             *     reason: non-empty-string,
-             *   },
-             *   max_output_tokens: ?non-negative-int,
-             *   model: non-empty-lowercase-string,
-             *   output?: non-empty-list<OpenAiOutputMessage|OpenAiOutputReasoning>,
-             *   usage: array{
-             *     input_tokens: non-negative-int,
-             *     input_tokens_details?: array{
-             *       cached_tokens: non-negative-int,
-             *     },
-             *     output_tokens: non-negative-int,
-             *     output_tokens_details?: array{
-             *       reasoning_tokens: non-negative-int,
-             *     },
-             *     total_tokens: non-negative-int,
-             *   },
-             * } $output
+             * @var array<string, mixed> $responseContent
              */
-            $output = $response->toArray(true);
+            $responseContent = $response->toArray(true);
         } catch (HttpClientExceptionInterface $e) {
             $this->handleHttpException($e);
+        } finally {
+            $timer->stop();
         }
 
-        if (isset($output['error'])) {
-            throw new RuntimeException($output['error']['message']);
-        }
+        $output = $this->serializer->denormalize($responseContent, ResponseType::class);
 
-        if (!isset($output['output'])) {
-            throw new RuntimeException('The query failed to generate any output.');
-        }
+        // if (isset($output['error'])) {
+        //     throw new RuntimeException($output['error']['message']);
+        // }
 
-        return new ExecuteResponse($request->getModel(), $output['id'], '', $output, $timer->stop()->getDuration());
+        // if (!isset($output['output'])) {
+        //     throw new RuntimeException('The query failed to generate any output.');
+        // }
+
+        return new ExecuteResponse($request->getModel(), $output->id, $output->getOutput(), $responseContent, $timer->getDuration());
     }
 }
