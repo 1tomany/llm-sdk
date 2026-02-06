@@ -25,23 +25,23 @@ enum Type: string
 
     /**
      * @return 'ApplyPatchCall'
-     *   |'ApplyPatchCallOutput'
-     *   |'CodeInterpreterCall'
-     *   |'Compaction'
-     *   |'ComputerCall'
-     *   |'CustomToolCall'
-     *   |'FileSearchCall'
-     *   |'FunctionCall'
-     *   |'ImageGenerationCall'
-     *   |'LocalShellCall'
-     *   |'McpApprovalRequest'
-     *   |'McpCall'
-     *   |'McpListTools'
-     *   |'Message'
-     *   |'Reasoning'
-     *   |'ShellCall'
-     *   |'ShellCallOutput'
-     *   |'WebSearchCall'
+     *                          |'ApplyPatchCallOutput'
+     *                          |'CodeInterpreterCall'
+     *                          |'Compaction'
+     *                          |'ComputerCall'
+     *                          |'CustomToolCall'
+     *                          |'FileSearchCall'
+     *                          |'FunctionCall'
+     *                          |'ImageGenerationCall'
+     *                          |'LocalShellCall'
+     *                          |'McpApprovalRequest'
+     *                          |'McpCall'
+     *                          |'McpListTools'
+     *                          |'Message'
+     *                          |'Reasoning'
+     *                          |'ShellCall'
+     *                          |'ShellCallOutput'
+     *                          |'WebSearchCall'
      */
     public function getName(): string
     {
@@ -49,24 +49,7 @@ enum Type: string
     }
 
     /**
-     * @return 'apply_patch_call'
-     *   |'apply_patch_call_output'
-     *   |'code_interpreter_call'
-     *   |'compaction'
-     *   |'computer_call'
-     *   |'custom_tool_call'
-     *   |'file_search_call'
-     *   |'function_call'
-     *   |'image_generation_call'
-     *   |'local_shell_call'
-     *   |'mcp_approval_request'
-     *   |'mcp_call'
-     *   |'mcp_list_tools'
-     *   |'message'
-     *   |'reasoning'
-     *   |'shell_call'
-     *   |'shell_call_output'
-     *   |'web_search_call'
+     * @return 'apply_patch_call'|'apply_patch_call_output'|'code_interpreter_call'|'compaction'|'computer_call'|'custom_tool_call'|'file_search_call'|'function_call'|'image_generation_call'|'local_shell_call'|'mcp_approval_request'|'mcp_call'|'mcp_list_tools'|'message'|'reasoning'|'shell_call'|'shell_call_output'|'web_search_call'
      */
     public function getValue(): string
     {
