@@ -9,7 +9,7 @@ use function explode;
 use function implode;
 use function rtrim;
 
-final readonly class ErrorType implements ErrorInterface
+final readonly class Error implements ErrorInterface
 {
     public function __construct(
         public int $code,

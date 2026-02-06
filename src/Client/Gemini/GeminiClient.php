@@ -2,7 +2,7 @@
 
 namespace OneToMany\AI\Client\Gemini;
 
-use OneToMany\AI\Client\Gemini\Type\Error\ErrorType;
+use OneToMany\AI\Client\Gemini\Type\Error\Error;
 use OneToMany\AI\Client\Trait\HttpExceptionTrait;
 use OneToMany\AI\Client\Trait\SupportsModelTrait;
 use OneToMany\AI\Contract\Client\Type\Error\ErrorInterface;
@@ -76,11 +76,11 @@ abstract readonly class GeminiClient
     protected function decodeErrorResponse(ResponseInterface $response): ErrorInterface
     {
         try {
-            $error = $this->serializer->denormalize($response->toArray(false), ErrorType::class, null, [
+            $error = $this->serializer->denormalize($response->toArray(false), Error::class, null, [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
             ]);
         } catch (HttpClientExceptionInterface $e) {
-            $error = new ErrorType($response->getStatusCode(), $e instanceof HttpClientDecodingExceptionInterface ? $e->getMessage() : $response->getContent(false));
+            $error = new Error($response->getStatusCode(), $e instanceof HttpClientDecodingExceptionInterface ? $e->getMessage() : $response->getContent(false));
         } catch (SerializerExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
         }
