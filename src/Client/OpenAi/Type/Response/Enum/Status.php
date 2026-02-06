@@ -28,4 +28,12 @@ enum Status: string
     {
         return $this->value;
     }
+
+    /**
+     * @phpstan-assert-if-true self::Completed $this
+     */
+    public function isCompleted(): bool
+    {
+        return $this === self::Completed;
+    }
 }

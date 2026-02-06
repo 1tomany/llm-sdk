@@ -7,6 +7,7 @@ use OneToMany\AI\Client\OpenAi\Type\Response\Enum\Status;
 use OneToMany\AI\Client\OpenAi\Type\Response\Output\Content\OutputTextType;
 use OneToMany\AI\Client\OpenAi\Type\Response\Output\Enum\Type;
 use OneToMany\AI\Exception\InvalidArgumentException;
+use OneToMany\AI\Exception\RuntimeException;
 
 use function array_map;
 use function implode;
@@ -17,14 +18,14 @@ final readonly class OutputType
 {
     /**
      * @param non-empty-string $id
-     * @param ?non-empty-list<OutputTextType> $content
+     * @param ?list<OutputTextType> $content
      */
     public function __construct(
-        public Type $type,
         public string $id,
-        public Status $status,
-        public Role $role,
+        public Type $type,
+        public ?Status $status = null,
         public ?array $content = null,
+        public ?Role $role = null,
     ) {
         if ($type->isMessage() && empty($content)) {
             throw new InvalidArgumentException(sprintf('The content must be a non-empty-list when the type is "%s".', Type::Message->getValue()));
@@ -36,10 +37,14 @@ final readonly class OutputType
      */
     public function getOutput(): ?string
     {
-        if (null !== $this->content) {
-            return trim(implode('', array_map(fn ($c) => (string) $c->text, $this->content))) ?: null;
+        if (!$this->content) {
+            return null;
         }
 
-        return null;
+        if ($this->type->isMessage() && $this->status?->isCompleted()) {
+            $output = implode('', array_map(fn ($c) => (string) $c->text, $this->content));
+        }
+
+        return trim($output ?? '') ?: null;
     }
 }

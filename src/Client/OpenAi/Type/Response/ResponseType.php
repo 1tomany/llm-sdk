@@ -19,7 +19,7 @@ final readonly class ResponseType
      * @param non-negative-int $created_at
      * @param ?non-negative-int $completed_at
      * @param non-empty-lowercase-string $model
-     * @param ?non-empty-list<OutputType> $output
+     * @param ?list<OutputType> $output
      */
     public function __construct(
         public string $id,
@@ -29,7 +29,7 @@ final readonly class ResponseType
         public ?int $completed_at,
         public ?ErrorType $error,
         public string $model,
-        public ?array $output,
+        public ?array $output = null,
     ) {
     }
 
@@ -38,12 +38,10 @@ final readonly class ResponseType
      */
     public function getOutput(): string
     {
-        $output = null;
-
-        if (null !== $this->output) {
-            $output = trim(implode('', array_map(fn ($o) => $o->getOutput(), $this->output)));
+        if (null !== $this->output && [] !== $this->output) {
+            $output = implode('', array_map(fn ($o) => $o->getOutput(), $this->output));
         }
 
-        return $output ?: throw new RuntimeException('The query failed to generate any output.');
+        return trim($output ?? '') ?: throw new RuntimeException(\sprintf('The model "%s" failed to generate any output.', $this->model));
     }
 }
