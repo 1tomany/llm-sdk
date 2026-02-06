@@ -2,6 +2,8 @@
 
 namespace OneToMany\AI\Client\OpenAi\Type\Response\Enum;
 
+use function stripos;
+
 enum FileType: string
 {
     case InputFile = 'input_file';
@@ -9,7 +11,7 @@ enum FileType: string
 
     public static function create(string $format): self
     {
-        return 0 === \stripos($format, 'image/') ? self::InputImage : self::InputFile;
+        return 0 === stripos($format, 'image/') ? self::InputImage : self::InputFile;
     }
 
     /**

@@ -10,7 +10,6 @@ final readonly class ResponseType
         public string $id,
         public string $object,
         public Status $status,
-    )
-    {
+    ) {
     }
 }

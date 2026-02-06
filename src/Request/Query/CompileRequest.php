@@ -9,8 +9,6 @@ use OneToMany\AI\Request\Query\Component\FileUriComponent;
 use OneToMany\AI\Request\Query\Component\SchemaComponent;
 use OneToMany\AI\Request\Query\Component\TextComponent;
 
-use function trim;
-
 class CompileRequest extends BaseRequest
 {
     /**

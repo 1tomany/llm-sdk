@@ -5,6 +5,8 @@ namespace OneToMany\AI\Request\Query\Component;
 use OneToMany\AI\Contract\Request\Query\Component\ComponentInterface;
 use OneToMany\AI\Contract\Request\Query\Component\Enum\Role;
 
+use function str_starts_with;
+
 final readonly class FileUriComponent implements ComponentInterface
 {
     /**
@@ -35,7 +37,7 @@ final readonly class FileUriComponent implements ComponentInterface
 
     public function isImage(): bool
     {
-        return \str_starts_with($this->getFormat(), 'image/');
+        return str_starts_with($this->getFormat(), 'image/');
     }
 
     /**
