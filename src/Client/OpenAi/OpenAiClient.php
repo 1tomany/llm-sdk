@@ -37,6 +37,14 @@ abstract readonly class OpenAiClient
     }
 
     /**
+     * @return non-empty-string
+     */
+    public function getApiKey(): string
+    {
+        return $this->apiKey;
+    }
+
+    /**
      * @see OneToMany\AI\Contract\Client\ClientInterface
      *
      * @return non-empty-list<non-empty-lowercase-string>

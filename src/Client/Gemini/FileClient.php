@@ -2,12 +2,14 @@
 
 namespace OneToMany\AI\Client\Gemini;
 
+use OneToMany\AI\Client\Gemini\File\File;
 use OneToMany\AI\Contract\Client\FileClientInterface;
 use OneToMany\AI\Exception\RuntimeException;
 use OneToMany\AI\Request\File\DeleteRequest;
 use OneToMany\AI\Request\File\UploadRequest;
 use OneToMany\AI\Response\File\DeleteResponse;
 use OneToMany\AI\Response\File\UploadResponse;
+use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
 use function ceil;
@@ -46,7 +48,7 @@ final readonly class FileClient extends GeminiClient implements FileClientInterf
 
             $response = $this->httpClient->request('POST', $url, [
                 'headers' => [
-                    'x-goog-api-key' => $this->apiKey,
+                    'x-goog-api-key' => $this->getApiKey(),
                     'x-goog-upload-command' => 'start',
                     'x-goog-upload-protocol' => 'resumable',
                     'x-goog-upload-header-content-type' => $request->getFormat(),
@@ -59,8 +61,8 @@ final readonly class FileClient extends GeminiClient implements FileClientInterf
                 ],
             ]);
 
-            if (200 !== $statusCode = $response->getStatusCode()) {
-                throw new RuntimeException(sprintf('Generating the signed URL failed: %s.', $this->decodeErrorResponse($response)->getInlineMessage()), $statusCode);
+            if (200 !== $response->getStatusCode()) {
+                throw new RuntimeException(sprintf('Generating the signed URL failed: %s.', $this->decodeErrorResponse($response)->getInlineMessage()), $response->getStatusCode());
             }
 
             /** @var non-empty-string $uploadUrl */
@@ -76,44 +78,29 @@ final readonly class FileClient extends GeminiClient implements FileClientInterf
                 $response = $this->httpClient->request('POST', $uploadUrl, [
                     'headers' => [
                         'content-length' => $request->getSize(),
-                        'x-goog-api-key' => $this->apiKey,
+                        'x-goog-api-key' => $this->getApiKey(),
                         'x-goog-upload-offset' => $uploadOffset,
                         'x-goog-upload-command' => $uploadCommand,
                     ],
                     'body' => $fileChunk,
                 ]);
 
-                if (200 !== $statusCode = $response->getStatusCode()) {
-                    throw new RuntimeException(sprintf('Chunk %d of %d was rejected by the server: %s.', $uploadChunk, $uploadChunkCount, $this->decodeErrorResponse($response)->getInlineMessage()), $statusCode);
+                if (200 !== $response->getStatusCode()) {
+                    throw new RuntimeException(sprintf('Chunk %d of %d was rejected by the server: %s.', $uploadChunk, $uploadChunkCount, $this->decodeErrorResponse($response)->getInlineMessage()), $response->getStatusCode());
                 }
 
                 // Don't assume the chunk was an even 8MB
                 $uploadOffset = $uploadOffset + strlen($fileChunk);
             }
 
-            /**
-             * @var array{
-             *   file: array{
-             *     name: non-empty-string,
-             *     displayName: non-empty-string,
-             *     mimeType: non-empty-lowercase-string,
-             *     sizeBytes: numeric-string,
-             *     createTime: non-empty-string,
-             *     updateTime: non-empty-string,
-             *     expirationTime: non-empty-string,
-             *     sha256Hash: non-empty-string,
-             *     uri: non-empty-string,
-             *     state: non-empty-uppercase-string,
-             *     source: non-empty-uppercase-string,
-             *   },
-             * } $file
-             */
-            $file = $response->toArray(true);
+            $file = $this->serializer->denormalize($response->toArray(true), File::class, null, [
+                UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
+            ]);
         } catch (HttpClientExceptionInterface $e) {
             $this->handleHttpException($e);
         }
 
-        return new UploadResponse($request->getModel(), $file['file']['uri'], $file['file']['name'], null, new \DateTimeImmutable($file['file']['expirationTime']));
+        return new UploadResponse($request->getModel(), $file->uri, $file->name, null, $file->expirationTime);
     }
 
     /**

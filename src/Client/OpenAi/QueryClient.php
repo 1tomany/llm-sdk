@@ -87,7 +87,7 @@ final readonly class QueryClient extends OpenAiClient implements QueryClientInte
 
         try {
             $response = $this->httpClient->request('POST', $request->getUrl(), [
-                'auth_bearer' => $this->apiKey,
+                'auth_bearer' => $this->getApiKey(),
                 'json' => $request->getRequest(),
             ]);
 

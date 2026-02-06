@@ -25,7 +25,7 @@ final readonly class FileClient extends OpenAiClient implements FileClientInterf
             $purpose = Purpose::create($request->getPurpose());
 
             $response = $this->httpClient->request('POST', $url, [
-                'auth_bearer' => $this->apiKey,
+                'auth_bearer' => $this->getApiKey(),
                 'body' => [
                     'purpose' => $purpose->getValue(),
                     'file' => $request->openFileHandle(),
@@ -49,7 +49,7 @@ final readonly class FileClient extends OpenAiClient implements FileClientInterf
 
         try {
             $response = $this->httpClient->request('DELETE', $url, [
-                'auth_bearer' => $this->apiKey,
+                'auth_bearer' => $this->getApiKey(),
             ]);
 
             $deletedFile = $this->serializer->denormalize($response->toArray(true), DeletedFile::class);
