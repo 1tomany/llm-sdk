@@ -114,13 +114,9 @@ final readonly class QueryClient extends OpenAiClient implements QueryClientInte
 
         $output = $this->serializer->denormalize($responseContent, ResponseType::class);
 
-        // if (isset($output['error'])) {
-        //     throw new RuntimeException($output['error']['message']);
-        // }
-
-        // if (!isset($output['output'])) {
-        //     throw new RuntimeException('The query failed to generate any output.');
-        // }
+        if ($output->error) {
+            throw new RuntimeException($output->error->getMessage());
+        }
 
         return new ExecuteResponse($request->getModel(), $output->id, $output->getOutput(), $responseContent, $timer->getDuration());
     }
