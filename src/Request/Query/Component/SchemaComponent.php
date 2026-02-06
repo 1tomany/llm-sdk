@@ -8,18 +8,19 @@ use OneToMany\AI\Contract\Request\Query\Component\Enum\Role;
 final readonly class SchemaComponent implements ComponentInterface
 {
     /**
-     * @param ?non-empty-lowercase-string $name
      * @param array<string, mixed> $schema
+     * @param ?non-empty-string $name
      */
     public function __construct(
-        private ?string $name,
         private array $schema,
+        private ?string $name,
+        private bool $isStrict = true,
         private Role $role = Role::User,
     ) {
     }
 
     /**
-     * @return non-empty-lowercase-string
+     * @return non-empty-string
      */
     public function getName(): string
     {
@@ -40,6 +41,11 @@ final readonly class SchemaComponent implements ComponentInterface
     public function getFormat(): string
     {
         return 'application/json';
+    }
+
+    public function isStrict(): bool
+    {
+        return $this->isStrict;
     }
 
     /**

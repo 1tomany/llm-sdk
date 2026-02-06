@@ -19,35 +19,35 @@ class CompileRequest extends BaseRequest
     private array $components = [];
 
     /**
-     * @param ?non-empty-string $fileUri
+     * @param non-empty-string $fileUri
+     * @param non-empty-lowercase-string $format
      */
-    public function withFileUri(?string $fileUri): static
+    public function withFileUri(string $fileUri, string $format): static
     {
-        if (!empty($fileUri = trim($fileUri ?? ''))) {
-            $this->addComponent(new FileUriComponent($fileUri));
-        }
-
-        return $this;
+        return $this->addComponent(new FileUriComponent($fileUri, $format));
     }
 
     /**
      * @param array<string, mixed> $schema
+     * @param non-empty-string $name
      */
-    public function usingSchema(array $schema): static
+    public function usingSchema(array $schema, string $name = 'json_schema'): static
     {
-        return $this->addComponent(new SchemaComponent(null, $schema));
+        return $this->addComponent(new SchemaComponent($schema, $name));
     }
 
-    public function withText(?string $text, Role $role = Role::User): static
+    /**
+     * @param non-empty-string $text
+     */
+    public function withText(string $text, Role $role = Role::User): static
     {
-        if (!empty($text = trim($text ?? ''))) {
-            $this->addComponent(new TextComponent($text, $role));
-        }
-
-        return $this;
+        return $this->addComponent(new TextComponent($text, $role));
     }
 
-    public function withSystemText(?string $text): static
+    /**
+     * @param non-empty-string $text
+     */
+    public function withSystemText(string $text): static
     {
         return $this->withText($text, Role::System);
     }

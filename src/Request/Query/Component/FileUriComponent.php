@@ -9,10 +9,11 @@ final readonly class FileUriComponent implements ComponentInterface
 {
     /**
      * @param non-empty-string $uri
+     * @param non-empty-lowercase-string $format
      */
     public function __construct(
         private string $uri,
-        private Role $role = Role::User,
+        private string $format,
     ) {
     }
 
@@ -25,10 +26,18 @@ final readonly class FileUriComponent implements ComponentInterface
     }
 
     /**
+     * @return non-empty-lowercase-string
+     */
+    public function getFormat(): string
+    {
+        return $this->format;
+    }
+
+    /**
      * @see OneToMany\AI\Contract\Request\Query\Component\ComponentInterface
      */
     public function getRole(): Role
     {
-        return $this->role;
+        return Role::User;
     }
 }
