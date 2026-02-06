@@ -1,8 +1,6 @@
 <?php
 
-use OneToMany\AI\Client\OpenAi\FileClient;
-use OneToMany\AI\Client\OpenAi\QueryClient;
-use OneToMany\AI\Request\File\DeleteRequest;
+use OneToMany\AI\Client\Gemini\FileClient;
 use OneToMany\AI\Request\File\UploadRequest;
 use OneToMany\AI\Request\Query\CompileRequest;
 use Symfony\Component\HttpClient\HttpClient;
@@ -41,21 +39,21 @@ $serializer = new Serializer([
 
 $httpClient = HttpClient::create();
 
-$fileClient = new FileClient($serializer, $httpClient, getenv('OPENAI_API_KEY'));
-// $response = $fileClient->upload(new UploadRequest('gpt-5-nano')->atPath('/Users/vic/Downloads/furnace-label.jpg')->withFormat('image/jpeg')->withPurpose('user_data'));
-// print_r($response);
-try {
-    $fileClient->delete(new DeleteRequest('gpt-5-nano', 'file-VGQ1uhQ8ignfcBBUbVfxap'));
-} catch (Throwable $e) {
-    do {
-        printf("[%s]: %s\n", get_class($e), $e->getMessage());
-    } while ($e = $e->getPrevious());
-}
+$fileClient = new FileClient($serializer, $httpClient, getenv('GEMINI_API_KEY'));
+$response = $fileClient->upload(new UploadRequest('gemini-2.5-flash')->atPath('/Users/vic/Downloads/furnace-label.jpg')->withFormat('image/jpeg'));
+print_r($response);
+// try {
+//     $fileClient->delete(new DeleteRequest('gpt-5-nano', 'file-VGQ1uhQ8ignfcBBUbVfxap'));
+// } catch (Throwable $e) {
+//     do {
+//         printf("[%s]: %s\n", get_class($e), $e->getMessage());
+//     } while ($e = $e->getPrevious());
+// }
 exit;
 
-$queryClient = new QueryClient($serializer, $httpClient, getenv('OPENAI_API_KEY'));
+// $queryClient = new QueryClient($serializer, $httpClient, getenv('OPENAI_API_KEY'));
 
-$compileRequest = new CompileRequest('gpt-5-nano')->withText('Who was the first president of the United States of America?');
-$response = $queryClient->execute($queryClient->compile($compileRequest)->toExecuteRequest());
+// $compileRequest = new CompileRequest('gpt-5-nano')->withText('Who was the first president of the United States of America?');
+// $response = $queryClient->execute($queryClient->compile($compileRequest)->toExecuteRequest());
 
 // print_r($response);

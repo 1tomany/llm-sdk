@@ -9,7 +9,6 @@ final readonly class File
 {
     /**
      * @param non-empty-string $name
-     * @param non-empty-string $displayName
      * @param non-empty-lowercase-string $mimeType
      * @param numeric-string $sizeBytes
      * @param non-empty-string $sha256Hash
@@ -17,7 +16,6 @@ final readonly class File
      */
     public function __construct(
         public string $name,
-        public string $displayName,
         public string $mimeType,
         public string $sizeBytes,
         public \DateTimeImmutable $createTime,
