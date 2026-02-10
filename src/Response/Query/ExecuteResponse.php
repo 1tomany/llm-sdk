@@ -26,6 +26,7 @@ final readonly class ExecuteResponse extends BaseResponse
         private string $output,
         private array $response,
         private int|float $runtime,
+        private UsageResponse $usage = new UsageResponse(),
     ) {
         parent::__construct($model);
     }
@@ -77,5 +78,10 @@ final readonly class ExecuteResponse extends BaseResponse
     public function getRuntime(): int
     {
         return max(0, (int) $this->runtime);
+    }
+
+    public function getUsage(): UsageResponse
+    {
+        return $this->usage;
     }
 }

@@ -36,7 +36,6 @@ $serializer = new Serializer([
     new ObjectNormalizer(propertyTypeExtractor: $typeExtractor),
 ]);
 
-//
 $httpClient = HttpClient::create([
     'timeout' => 120.0,
 ]);
