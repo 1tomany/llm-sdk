@@ -13,8 +13,6 @@ use OneToMany\AI\Response\Query\ExecuteResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
-use function sprintf;
-
 final readonly class QueryClient extends GeminiClient implements QueryClientInterface
 {
     /**
