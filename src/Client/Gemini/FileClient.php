@@ -108,6 +108,18 @@ final readonly class FileClient extends GeminiClient implements FileClientInterf
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        throw new RuntimeException('Not implemented!');
+        try {
+            $response = $this->httpClient->request('DELETE', $request->getUri(), [
+                'headers' => [
+                    'x-goog-api-key' => $this->getApiKey(),
+                ],
+            ]);
+
+            $response->getStatusCode();
+        } catch (HttpClientExceptionInterface $e) {
+            $this->handleHttpException($e);
+        }
+
+        return new DeleteResponse($request->getModel(), $request->getUri());
     }
 }

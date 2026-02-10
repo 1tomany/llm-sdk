@@ -2,6 +2,16 @@
 
 This library provides a single, unified, framework-independent library for integration with many popular AI platforms and large language models.
 
+## Installation
+
+Install the library using Composer:
+
+```shell
+composer require 1tomany/php-ai
+```
+
+**Note:** A [Symfony bundle](https://github.com/1tomany/php-ai-bundle) is available if you wish to integrate this library into your Symfony applications with autowiring and configuration support. 
+
 ## Supported platforms
 
 - Gemini
