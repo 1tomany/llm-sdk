@@ -4,8 +4,9 @@ namespace OneToMany\AI\Client\OpenAi\Type\Response;
 
 use OneToMany\AI\Client\OpenAi\Type\Response\Usage\InputTokensDetails;
 use OneToMany\AI\Client\OpenAi\Type\Response\Usage\OutputTokensDetails;
+use OneToMany\AI\Contract\Client\Type\Usage\UsageInterface;
 
-final readonly class Usage
+final readonly class Usage implements UsageInterface
 {
     /**
      * @param non-negative-int $input_tokens
@@ -22,7 +23,7 @@ final readonly class Usage
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\AI\Contract\Client\Type\Usage\UsageInterface
      */
     public function getInputTokens(): int
     {
@@ -30,7 +31,7 @@ final readonly class Usage
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\AI\Contract\Client\Type\Usage\UsageInterface
      */
     public function getCachedTokens(): int
     {
@@ -38,7 +39,7 @@ final readonly class Usage
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\AI\Contract\Client\Type\Usage\UsageInterface
      */
     public function getOutputTokens(): int
     {
