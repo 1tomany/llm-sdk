@@ -109,9 +109,11 @@ final readonly class QueryClient extends GeminiClient implements QueryClientInte
              *   >,
              *   usageMetadata: array{
              *     promptTokenCount?: non-negative-int,
+             *     cachedContentTokenCount?: non-negative-int,
              *     candidatesTokenCount?: non-negative-int,
-             *     totalTokenCount?: non-negative-int,
+             *     toolUsePromptTokenCount?: non-negative-int,
              *     thoughtsTokenCount?: non-negative-int,
+             *     totalTokenCount?: non-negative-int,
              *   },
              *   modelVersion: non-empty-lowercase-string,
              *   responseId: non-empty-string,
