@@ -3,13 +3,10 @@
 namespace OneToMany\AI\Action\File;
 
 use OneToMany\AI\Contract\Action\File\DeleteFileActionInterface;
-use OneToMany\AI\Contract\Action\File\UploadFileActionInterface;
 use OneToMany\AI\Contract\Client\FileClientInterface;
 use OneToMany\AI\Contract\Factory\ClientFactoryInterface;
 use OneToMany\AI\Request\File\DeleteRequest;
-use OneToMany\AI\Request\File\UploadRequest;
 use OneToMany\AI\Response\File\DeleteResponse;
-use OneToMany\AI\Response\File\UploadResponse;
 
 final readonly class DeleteFileAction implements DeleteFileActionInterface
 {
