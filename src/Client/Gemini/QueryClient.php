@@ -122,12 +122,12 @@ final readonly class QueryClient extends GeminiClient implements QueryClientInte
     }
 
     /**
-     * @param non-empty-string $model
+     * @param non-empty-string $paths
      *
      * @return non-empty-string
      */
-    protected function generateUrl(string $model): string
+    protected function generateUrl(string ...$paths): string
     {
-        return parent::generateUrl(sprintf('/v1beta/models/%s:generateContent', $model));
+        return parent::generateUrl(...['/v1beta/models/%s:generateContent', ...$paths]);
     }
 }
