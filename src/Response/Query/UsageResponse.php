@@ -40,6 +40,9 @@ final readonly class UsageResponse
         return $this->outputTokens;
     }
 
+    /**
+     * @return non-negative-int
+     */
     public function getTotalTokens(): int
     {
         return $this->inputTokens + $this->cachedTokens + $this->outputTokens;
