@@ -108,6 +108,17 @@ final readonly class QueryClient extends OpenAiClient implements QueryClientInte
             throw new RuntimeException($output->error->getMessage());
         }
 
-        return new ExecuteResponse($request->getModel(), $output->id, $output->getOutput(), $responseContent, $timer->getDuration(), new UsageResponse($output->usage->getInputTokens(), $output->usage->getCachedTokens(), $output->usage->getOutputTokens()));
+        return new ExecuteResponse(
+            $request->getModel(),
+            $output->id,
+            $output->getOutput(),
+            $responseContent,
+            $timer->getDuration(),
+            new UsageResponse(
+                $output->usage->getInputTokens(),
+                $output->usage->getCachedTokens(),
+                $output->usage->getOutputTokens(),
+            ),
+        );
     }
 }

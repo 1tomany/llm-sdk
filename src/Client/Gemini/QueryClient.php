@@ -134,7 +134,18 @@ final readonly class QueryClient extends GeminiClient implements QueryClientInte
             $usage = new UsageMetadata();
         }
 
-        return new ExecuteResponse($request->getModel(), $responseContent['responseId'], $responseContent['candidates'][0]['content']['parts'][0]['text'], $responseContent, $timer->getDuration(), new UsageResponse($usage->getInputTokens(), $usage->getCachedTokens(), $usage->getOutputTokens()));
+        return new ExecuteResponse(
+            $request->getModel(),
+            $responseContent['responseId'],
+            $responseContent['candidates'][0]['content']['parts'][0]['text'],
+            $responseContent,
+            $timer->getDuration(),
+            new UsageResponse(
+                $usage->getInputTokens(),
+                $usage->getCachedTokens(),
+                $usage->getOutputTokens(),
+            ),
+        );
     }
 
     /**
