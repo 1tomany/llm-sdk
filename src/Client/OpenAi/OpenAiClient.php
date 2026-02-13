@@ -9,9 +9,7 @@ use OneToMany\AI\Contract\Client\Type\Error\ErrorInterface;
 use OneToMany\AI\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface as HttpClientDecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -30,7 +28,7 @@ abstract readonly class OpenAiClient
      * @param non-empty-string $apiKey
      */
     public function __construct(
-        protected SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer,
+        protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
         #[\SensitiveParameter] protected string $apiKey,
     ) {
@@ -84,7 +82,7 @@ abstract readonly class OpenAiClient
     protected function decodeErrorResponse(ResponseInterface $response): ErrorInterface
     {
         try {
-            $error = $this->serializer->denormalize($response->toArray(false), Error::class, null, [
+            $error = $this->denormalizer->denormalize($response->toArray(false), Error::class, null, [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
             ]);
         } catch (HttpClientExceptionInterface $e) {

@@ -32,7 +32,7 @@ final readonly class FileClient extends OpenAiClient implements FileClientInterf
                 ],
             ]);
 
-            $file = $this->serializer->denormalize($response->toArray(true), File::class);
+            $file = $this->denormalizer->denormalize($response->toArray(true), File::class);
         } catch (HttpClientExceptionInterface $e) {
             $this->handleHttpException($e);
         }
@@ -52,7 +52,7 @@ final readonly class FileClient extends OpenAiClient implements FileClientInterf
                 'auth_bearer' => $this->getApiKey(),
             ]);
 
-            $deletedFile = $this->serializer->denormalize($response->toArray(true), DeletedFile::class);
+            $deletedFile = $this->denormalizer->denormalize($response->toArray(true), DeletedFile::class);
         } catch (HttpClientExceptionInterface $e) {
             $this->handleHttpException($e);
         }
