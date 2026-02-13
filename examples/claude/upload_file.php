@@ -15,7 +15,7 @@ $serializer = require __DIR__.'/../serializer.php';
 
 $filePath = $argv[1] ?? null;
 
-if (empty($filePath) || !is_file($filePath)) {
+if (!$filePath || !is_file($filePath)) {
     printf("Usage: php %s <file-path>\n", basename(__FILE__));
     exit(1);
 }
