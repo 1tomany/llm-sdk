@@ -41,7 +41,7 @@ $response = $fileClient->upload(...[
     'request' => $uploadRequest,
 ]);
 
-printf('File "%s" successfully uploaded with URI "%s".%s', basename($filePath), $response->getUri(), PHP_EOL);
+printf("File '%s' uploaded with URI '%s'.\n", basename($filePath), $response->getUri());
 
 // Create a request to delete the file
 $deleteRequest = new DeleteRequest(
@@ -52,4 +52,4 @@ $response = $fileClient->delete(...[
     'request' => $deleteRequest,
 ]);
 
-printf('File "%s" successfully deleted.%s', $response->getUri(), PHP_EOL);
+printf("File URI '%s' successfully deleted.\n", $response->getUri());
