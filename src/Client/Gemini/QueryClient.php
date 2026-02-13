@@ -127,7 +127,7 @@ final readonly class QueryClient extends GeminiClient implements QueryClientInte
         }
 
         try {
-            $usage = $this->serializer->denormalize($responseContent, UsageMetadata::class, null, [
+            $usage = $this->denormalizer->denormalize($responseContent, UsageMetadata::class, null, [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[usageMetadata]',
             ]);
         } catch (SerializerExceptionInterface) {

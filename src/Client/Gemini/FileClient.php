@@ -93,7 +93,7 @@ final readonly class FileClient extends GeminiClient implements FileClientInterf
                 $uploadOffset = $uploadOffset + strlen($fileChunk);
             }
 
-            $file = $this->serializer->denormalize($response->toArray(true), File::class, null, [
+            $file = $this->denormalizer->denormalize($response->toArray(true), File::class, null, [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
             ]);
         } catch (HttpClientExceptionInterface $e) {
