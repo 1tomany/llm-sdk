@@ -102,7 +102,7 @@ final readonly class QueryClient extends OpenAiClient implements QueryClientInte
             $timer->stop();
         }
 
-        $output = $this->serializer->denormalize($responseContent, Response::class);
+        $output = $this->denormalizer->denormalize($responseContent, Response::class);
 
         if (null !== $output->error) {
             throw new RuntimeException($output->error->getMessage());

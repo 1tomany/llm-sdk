@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\AI\Client\Gemini;
+namespace OneToMany\AI\Client\Claude;
 
 use OneToMany\AI\Client\Gemini\Type\Error\Error;
 use OneToMany\AI\Client\Trait\HttpExceptionTrait;
@@ -15,22 +15,25 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+use function array_merge_recursive;
 use function implode;
 use function ltrim;
 use function sprintf;
 
-abstract readonly class GeminiClient
+abstract readonly class ClaudeClient
 {
     use HttpExceptionTrait;
     use SupportsModelTrait;
 
     /**
      * @param non-empty-string $apiKey
+     * @param non-empty-string $apiVersion
      */
     public function __construct(
         protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
         #[\SensitiveParameter] protected string $apiKey,
+        protected string $apiVersion = '2023-06-01',
     ) {
     }
 
@@ -43,6 +46,14 @@ abstract readonly class GeminiClient
     }
 
     /**
+     * @return non-empty-string
+     */
+    public function getApiVersion(): string
+    {
+        return $this->apiVersion;
+    }
+
+    /**
      * @see OneToMany\AI\Contract\Client\ClientInterface
      *
      * @return non-empty-list<non-empty-lowercase-string>
@@ -50,13 +61,11 @@ abstract readonly class GeminiClient
     public function getSupportedModels(): array
     {
         return [
-            'gemini-3-pro-preview',
-            'gemini-3-flash-preview',
-            'gemini-2.5-pro',
-            'gemini-2.5-flash',
-            'gemini-2.5-flash-preview-09-2025',
-            'gemini-2.5-flash-lite',
-            'gemini-2.5-flash-lite-preview-09-2025',
+            'claude-opus-4-6',
+            'claude-sonnet-4-5',
+            'claude-sonnet-4-5-20250929',
+            'claude-haiku-4-5',
+            'claude-haiku-4-5-20251001',
         ];
     }
 
@@ -67,7 +76,24 @@ abstract readonly class GeminiClient
      */
     protected function generateUrl(string ...$paths): string
     {
-        return sprintf('https://generativelanguage.googleapis.com/%s', ltrim(implode('/', $paths), '/'));
+        return sprintf('https://api.anthropic.com/v1/%s', ltrim(implode('/', $paths), '/'));
+    }
+
+    /**
+     * @param 'GET'|'POST'|'PUT'|'DELETE' $method
+     * @param non-empty-string $url
+     * @param array<mixed> $options
+     */
+    protected function doRequest(string $method, string $url, array $options): ResponseInterface
+    {
+        $headers = [
+            'headers' => [
+                'x-api-key' => $this->getApiKey(),
+                'anthropic-version' => $this->getApiVersion(),
+            ],
+        ];
+
+        return $this->httpClient->request($method, $url, array_merge_recursive($headers, $options));
     }
 
     protected function decodeErrorResponse(ResponseInterface $response): ErrorInterface

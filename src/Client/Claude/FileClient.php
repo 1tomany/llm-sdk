@@ -1,18 +1,20 @@
 <?php
 
-namespace OneToMany\AI\Client\OpenAi;
+namespace OneToMany\AI\Client\Claude;
 
-use OneToMany\AI\Client\OpenAi\Type\File\DeletedFile;
-use OneToMany\AI\Client\OpenAi\Type\File\Enum\Purpose;
-use OneToMany\AI\Client\OpenAi\Type\File\File;
+use OneToMany\AI\Client\Claude\Type\File\DeletedFile;
+use OneToMany\AI\Client\Claude\Type\File\File;
 use OneToMany\AI\Contract\Client\FileClientInterface;
 use OneToMany\AI\Request\File\DeleteRequest;
 use OneToMany\AI\Request\File\UploadRequest;
 use OneToMany\AI\Response\File\DeleteResponse;
 use OneToMany\AI\Response\File\UploadResponse;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final readonly class FileClient extends OpenAiClient implements FileClientInterface
+use function array_merge_recursive;
+
+final readonly class FileClient extends ClaudeClient implements FileClientInterface
 {
     /**
      * @see OneToMany\AI\Contract\Client\FileClientInterface
@@ -22,12 +24,8 @@ final readonly class FileClient extends OpenAiClient implements FileClientInterf
         $url = $this->generateUrl('files');
 
         try {
-            $purpose = Purpose::create($request->getPurpose());
-
-            $response = $this->httpClient->request('POST', $url, [
-                'auth_bearer' => $this->getApiKey(),
+            $response = $this->doRequest('POST', $url, [
                 'body' => [
-                    'purpose' => $purpose->getValue(),
                     'file' => $request->openFileHandle(),
                 ],
             ]);
@@ -37,7 +35,7 @@ final readonly class FileClient extends OpenAiClient implements FileClientInterf
             $this->handleHttpException($e);
         }
 
-        return new UploadResponse($request->getModel(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
+        return new UploadResponse($request->getModel(), $file->id, $file->filename);
     }
 
     /**
@@ -48,15 +46,35 @@ final readonly class FileClient extends OpenAiClient implements FileClientInterf
         $url = $this->generateUrl('files', $request->getUri());
 
         try {
-            $response = $this->httpClient->request('DELETE', $url, [
-                'auth_bearer' => $this->getApiKey(),
-            ]);
-
-            $deletedFile = $this->denormalizer->denormalize($response->toArray(true), DeletedFile::class);
+            $deletedFile = $this->denormalizer->denormalize($this->doRequest('DELETE', $url)->toArray(true), DeletedFile::class);
         } catch (HttpClientExceptionInterface $e) {
             $this->handleHttpException($e);
         }
 
         return new DeleteResponse($request->getModel(), $deletedFile->id);
+    }
+
+    /**
+     * @param 'GET'|'POST'|'PUT'|'DELETE' $method
+     * @param non-empty-string $url
+     * @param array<mixed> $options
+     */
+    protected function doRequest(string $method, string $url, array $options = []): ResponseInterface
+    {
+        $headers = [
+            'headers' => [
+                'anthropic-beta' => $this->getBetaHeader(),
+            ],
+        ];
+
+        return parent::doRequest($method, $url, array_merge_recursive($headers, $options));
+    }
+
+    /**
+     * @return non-empty-lowercase-string
+     */
+    private function getBetaHeader(): string
+    {
+        return 'files-api-2025-04-14';
     }
 }
