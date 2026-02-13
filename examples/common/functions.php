@@ -17,6 +17,7 @@ function read_api_key(string $name): string
 
 /**
  * @param non-empty-lowercase-string $default
+ *
  * @return non-empty-lowercase-string
  */
 function read_model_name(string $default): string
