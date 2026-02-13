@@ -2,6 +2,7 @@
 
 namespace OneToMany\AI\Client\Claude;
 
+use OneToMany\AI\Client\Claude\Type\File\DeletedFile;
 use OneToMany\AI\Client\Claude\Type\File\File;
 use OneToMany\AI\Contract\Client\FileClientInterface;
 use OneToMany\AI\Exception\RuntimeException;
@@ -43,34 +44,32 @@ final readonly class FileClient extends ClaudeClient implements FileClientInterf
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        /*
         $url = $this->generateUrl('files', $request->getUri());
 
         try {
-            $response = $this->httpClient->request('DELETE', $url, [
-                'auth_bearer' => $this->getApiKey(),
-            ]);
-
-            $deletedFile = $this->denormalizer->denormalize($response->toArray(true), DeletedFile::class);
+            $deletedFile = $this->denormalizer->denormalize($this->doRequest('DELETE', $url)->toArray(true), DeletedFile::class);
         } catch (HttpClientExceptionInterface $e) {
             $this->handleHttpException($e);
         }
 
-        return new DeleteResponse($request->getModel(), $deletedFile->id);
-        */
 
-        throw new RuntimeException('Not implemented!');
+        return new DeleteResponse($request->getModel(), $deletedFile->id);
     }
 
-    protected function doRequest(string $method, string $uri, array $options): ResponseInterface
+    /**
+     * @param 'GET'|'POST'|'PUT'|'DELETE' $method
+     * @param non-empty-string $url
+     * @param array<mixed> $options
+     */
+    protected function doRequest(string $method, string $url, array $options = []): ResponseInterface
     {
-        $options = array_merge_recursive($options, [
+        $headers = [
             'headers' => [
-                'anthropic-beta' => 'files-api-2025-04-14',
+                'anthropic-beta' => $this->getBetaHeader(),
             ],
-        ]);
+        ];
 
-        return parent::doRequest($method, $uri, $options);
+        return parent::doRequest($method, $url, array_merge_recursive($headers, $options));
     }
 
     /**

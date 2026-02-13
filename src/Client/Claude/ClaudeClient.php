@@ -79,16 +79,21 @@ abstract readonly class ClaudeClient
         return sprintf('https://api.anthropic.com/v1/%s', ltrim(implode('/', $paths), '/'));
     }
 
+    /**
+     * @param 'GET'|'POST'|'PUT'|'DELETE' $method
+     * @param non-empty-string $url
+     * @param array<mixed> $options
+     */
     protected function doRequest(string $method, string $url, array $options): ResponseInterface
     {
-        $options = array_merge_recursive($options, [
+        $headers = [
             'headers' => [
                 'x-api-key' => $this->getApiKey(),
                 'anthropic-version' => $this->getApiVersion(),
             ],
-        ]);
+        ];
 
-        return $this->httpClient->request($method, $url, $options);
+        return $this->httpClient->request($method, $url, array_merge_recursive($headers, $options));
     }
 
     protected function decodeErrorResponse(ResponseInterface $response): ErrorInterface
