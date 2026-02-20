@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\AI\Clients\Client\OpenAi\Type\File;
+namespace OneToMany\AI\Clients\Client\OpenAI\Type\File;
 
-use OneToMany\AI\Clients\Client\OpenAi\Type\File\Enum\Purpose;
+use OneToMany\AI\Clients\Client\OpenAI\Type\File\Enum\Purpose;
 
 final readonly class File
 {

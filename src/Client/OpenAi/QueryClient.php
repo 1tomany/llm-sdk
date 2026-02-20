@@ -1,9 +1,9 @@
 <?php
 
-namespace OneToMany\AI\Clients\Client\OpenAi;
+namespace OneToMany\AI\Clients\Client\OpenAI;
 
-use OneToMany\AI\Clients\Client\OpenAi\Type\Response\Input\Enum\Type as InputType;
-use OneToMany\AI\Clients\Client\OpenAi\Type\Response\Response;
+use OneToMany\AI\Clients\Client\OpenAI\Type\Response\Input\Enum\Type as InputType;
+use OneToMany\AI\Clients\Client\OpenAI\Type\Response\Response;
 use OneToMany\AI\Clients\Contract\Client\QueryClientInterface;
 use OneToMany\AI\Clients\Exception\RuntimeException;
 use OneToMany\AI\Clients\Request\Query\CompileRequest;
@@ -17,7 +17,7 @@ use OneToMany\AI\Clients\Response\Query\UsageResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
-final readonly class QueryClient extends OpenAiClient implements QueryClientInterface
+final readonly class QueryClient extends BaseClient implements QueryClientInterface
 {
     /**
      * @see OneToMany\AI\Clients\Contract\Client\QueryClientInterface

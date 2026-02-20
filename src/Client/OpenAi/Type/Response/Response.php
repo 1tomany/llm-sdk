@@ -1,10 +1,10 @@
 <?php
 
-namespace OneToMany\AI\Clients\Client\OpenAi\Type\Response;
+namespace OneToMany\AI\Clients\Client\OpenAI\Type\Response;
 
-use OneToMany\AI\Clients\Client\OpenAi\Type\Error\Error;
-use OneToMany\AI\Clients\Client\OpenAi\Type\Response\Enum\Status;
-use OneToMany\AI\Clients\Client\OpenAi\Type\Response\Output\Output;
+use OneToMany\AI\Clients\Client\OpenAI\Type\Error\Error;
+use OneToMany\AI\Clients\Client\OpenAI\Type\Response\Enum\Status;
+use OneToMany\AI\Clients\Client\OpenAI\Type\Response\Output\Output;
 use OneToMany\AI\Clients\Exception\RuntimeException;
 
 use function array_map;

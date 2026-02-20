@@ -1,10 +1,10 @@
 <?php
 
-namespace OneToMany\AI\Clients\Client\OpenAi;
+namespace OneToMany\AI\Clients\Client\OpenAI;
 
-use OneToMany\AI\Clients\Client\OpenAi\Type\File\DeletedFile;
-use OneToMany\AI\Clients\Client\OpenAi\Type\File\Enum\Purpose;
-use OneToMany\AI\Clients\Client\OpenAi\Type\File\File;
+use OneToMany\AI\Clients\Client\OpenAI\Type\File\DeletedFile;
+use OneToMany\AI\Clients\Client\OpenAI\Type\File\Enum\Purpose;
+use OneToMany\AI\Clients\Client\OpenAI\Type\File\File;
 use OneToMany\AI\Clients\Contract\Client\FileClientInterface;
 use OneToMany\AI\Clients\Request\File\DeleteRequest;
 use OneToMany\AI\Clients\Request\File\UploadRequest;
@@ -12,7 +12,7 @@ use OneToMany\AI\Clients\Response\File\DeleteResponse;
 use OneToMany\AI\Clients\Response\File\UploadResponse;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
-final readonly class FileClient extends OpenAiClient implements FileClientInterface
+final readonly class FileClient extends BaseClient implements FileClientInterface
 {
     /**
      * @see OneToMany\AI\Clients\Contract\Client\FileClientInterface

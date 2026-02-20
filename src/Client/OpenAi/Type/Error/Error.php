@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\AI\Clients\Client\OpenAi\Type\Error;
+namespace OneToMany\AI\Clients\Client\OpenAI\Type\Error;
 
 use OneToMany\AI\Clients\Contract\Client\Type\Error\ErrorInterface;
 

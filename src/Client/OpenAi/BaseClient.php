@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\AI\Clients\Client\OpenAi;
+namespace OneToMany\AI\Clients\Client\OpenAI;
 
-use OneToMany\AI\Clients\Client\OpenAi\Type\Error\Error;
+use OneToMany\AI\Clients\Client\OpenAI\Type\Error\Error;
 use OneToMany\AI\Clients\Client\Trait\HttpExceptionTrait;
 use OneToMany\AI\Clients\Client\Trait\SupportsModelTrait;
 use OneToMany\AI\Clients\Contract\Client\Type\Error\ErrorInterface;
@@ -19,7 +19,7 @@ use function implode;
 use function ltrim;
 use function sprintf;
 
-abstract readonly class OpenAiClient
+abstract readonly class BaseClient
 {
     use HttpExceptionTrait;
     use SupportsModelTrait;
