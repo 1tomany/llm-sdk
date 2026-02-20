@@ -1,8 +1,8 @@
 <?php
 
-use OneToMany\AI\Client\Claude\FileClient;
-use OneToMany\AI\Request\File\DeleteRequest;
-use OneToMany\AI\Request\File\UploadRequest;
+use OneToMany\AI\Clients\Client\Claude\FileClient;
+use OneToMany\AI\Clients\Request\File\DeleteRequest;
+use OneToMany\AI\Clients\Request\File\UploadRequest;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
