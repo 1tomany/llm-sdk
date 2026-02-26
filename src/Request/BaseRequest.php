@@ -7,9 +7,6 @@ use function trim;
 
 abstract class BaseRequest
 {
-    /** @var non-empty-lowercase-string */
-    protected string $type = 'request';
-
     /**
      * @param non-empty-lowercase-string $model
      */
@@ -20,10 +17,7 @@ abstract class BaseRequest
     /**
      * @return non-empty-lowercase-string
      */
-    public function getType(): string
-    {
-        return $this->type;
-    }
+    abstract public function getRequestType(): string;
 
     public function forModel(string $model): static
     {

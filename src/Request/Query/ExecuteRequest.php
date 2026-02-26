@@ -18,6 +18,14 @@ class ExecuteRequest extends BaseRequest
      */
     private array $request = [];
 
+    /**
+     * @see OneToMany\LlmSdk\Request\BaseRequest
+     */
+    public function getRequestType(): string
+    {
+        return 'request.execute';
+    }
+
     public function withUrl(?string $url): static
     {
         $this->url = trim($url ?? '') ?: $this->url;

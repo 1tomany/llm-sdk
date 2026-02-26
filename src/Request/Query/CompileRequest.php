@@ -23,6 +23,14 @@ class CompileRequest extends BaseRequest
      */
     private array $components = [];
 
+    /**
+     * @see OneToMany\LlmSdk\Request\BaseRequest
+     */
+    public function getRequestType(): string
+    {
+        return 'request.compile';
+    }
+
     public function withBatchKey(?string $batchKey): static
     {
         $this->batchKey = trim($batchKey ?? '') ?: null;
