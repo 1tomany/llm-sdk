@@ -43,8 +43,8 @@ final readonly class FileClient extends GeminiClient implements FileClientInterf
         }
 
         try {
-            // Generate a signed URL to upload the file to
-            $url = $this->generateUrl('/upload/v1beta/files');
+            // Generate a signed URL to upload the file with
+            $url = sprintf('%s/%s', self::BASE_URI, 'upload/v1beta/files');
 
             $response = $this->httpClient->request('POST', $url, [
                 'headers' => [

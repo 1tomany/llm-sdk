@@ -15,14 +15,14 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-use function implode;
-use function ltrim;
 use function sprintf;
 
 abstract readonly class GeminiClient
 {
     use HttpExceptionTrait;
     use SupportsModelTrait;
+
+    public const string BASE_URI = 'https://generativelanguage.googleapis.com';
 
     /**
      * @param non-empty-string $apiKey
@@ -61,13 +61,14 @@ abstract readonly class GeminiClient
     }
 
     /**
-     * @param non-empty-string $paths
+     * @param non-empty-lowercase-string $model
+     * @param non-empty-string $action
      *
      * @return non-empty-string
      */
-    protected function generateUrl(string ...$paths): string
+    protected function generateUrl(string $model, string $action): string
     {
-        return sprintf('https://generativelanguage.googleapis.com/%s', ltrim(implode('/', $paths), '/'));
+        return sprintf('%s/v1beta/models/%s:%s', self::BASE_URI, $model, $action);
     }
 
     protected function decodeErrorResponse(ResponseInterface $response): ErrorInterface

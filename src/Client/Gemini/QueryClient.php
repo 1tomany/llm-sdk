@@ -17,8 +17,6 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
-use function vsprintf;
-
 final readonly class QueryClient extends GeminiClient implements QueryClientInterface
 {
     /**
@@ -73,7 +71,7 @@ final readonly class QueryClient extends GeminiClient implements QueryClientInte
             }
         }
 
-        return new CompileResponse($request->getModel(), $this->generateUrl($request->getModel()), $requestContent);
+        return new CompileResponse($request->getModel(), $this->generateUrl($request->getModel(), 'generateContent'), $requestContent);
     }
 
     /**
@@ -146,15 +144,5 @@ final readonly class QueryClient extends GeminiClient implements QueryClientInte
                 $usage->getOutputTokens(),
             ),
         );
-    }
-
-    /**
-     * @param non-empty-string $paths
-     *
-     * @return non-empty-string
-     */
-    protected function generateUrl(string ...$paths): string
-    {
-        return parent::generateUrl(vsprintf('/v1beta/models/%s:generateContent', $paths));
     }
 }
