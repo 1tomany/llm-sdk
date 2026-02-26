@@ -15,10 +15,10 @@ final readonly class Usage implements UsageInterface
      */
     public function __construct(
         public int $input_tokens = 0,
-        public InputTokensDetails $input_tokens_details = new InputTokensDetails(),
         public int $output_tokens = 0,
-        public OutputTokensDetails $output_tokens_details = new OutputTokensDetails(),
         public int $total_tokens = 0,
+        public InputTokensDetails $input_tokens_details = new InputTokensDetails(),
+        public OutputTokensDetails $output_tokens_details = new OutputTokensDetails(),
     ) {
     }
 
