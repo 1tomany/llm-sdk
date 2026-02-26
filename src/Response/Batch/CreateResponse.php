@@ -14,7 +14,7 @@ final readonly class CreateResponse extends BaseResponse
     public function __construct(
         string $model,
         private string $uri,
-        private ?string $fileUri,
+        private ?string $fileUri = null,
         private bool $isCompleted = false,
         private bool $isFailed = false,
         private bool $isCancelled = false,
