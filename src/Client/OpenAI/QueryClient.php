@@ -106,24 +106,17 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
             if (null !== $response->error) {
                 throw new RuntimeException($response->error->getMessage());
             }
-        } catch (SerializerExceptionInterface $e) {
-            throw new DecodingResponseContentFailedException($request, $e);
-        } finally {
-            $timer->stop();
-        }
 
-        return new ExecuteResponse(
-            $request->getModel(),
-            $response->id,
-            $response->getOutput(),
-            $data,
-            $timer->getDuration(),
-            new UsageResponse(
+            $usageResponse = new UsageResponse(
                 $response->usage->getInputTokens(),
                 $response->usage->getCachedTokens(),
                 $response->usage->getOutputTokens(),
-            ),
-        );
+            );
+        } catch (SerializerExceptionInterface $e) {
+            throw new DecodingResponseContentFailedException($request, $e);
+        }
+
+        return new ExecuteResponse($request->getModel(), $response->id, $response->getOutput(), $data, $timer->stop()->getDuration(), $usageResponse);
     }
 
     /**
