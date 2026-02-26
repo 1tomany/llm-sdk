@@ -84,7 +84,7 @@ final readonly class QueryClient extends GeminiClient implements QueryClientInte
         try {
             $response = $this->httpClient->request('POST', $request->getUrl(), [
                 'headers' => [
-                    'x-goog-api-key' => $this->apiKey,
+                    'x-goog-api-key' => $this->getApiKey(),
                 ],
                 'json' => $request->getRequest(),
             ]);
