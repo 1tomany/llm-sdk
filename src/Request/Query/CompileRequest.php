@@ -9,6 +9,8 @@ use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\Component\TextComponent;
 
+use function trim;
+
 class CompileRequest extends BaseRequest
 {
     /**
@@ -23,7 +25,7 @@ class CompileRequest extends BaseRequest
 
     public function withKey(?string $key): static
     {
-        $this->key = \trim($key ?? '') ?: null;
+        $this->key = trim($key ?? '') ?: null;
 
         return $this;
     }
