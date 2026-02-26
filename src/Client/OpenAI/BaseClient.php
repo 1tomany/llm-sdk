@@ -15,6 +15,7 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+use function array_merge_recursive;
 use function implode;
 use function ltrim;
 use function sprintf;
@@ -82,12 +83,13 @@ abstract readonly class BaseClient
     }
 
     /**
-     * @param 'GET'|'POST'|'PUT'|'DELETE' $method
-     * @param non-empty-string $url
      * @param array<mixed> $options
      */
-    protected function doRequest(string $method, string $url, array $options = []): ResponseInterface
-    {
+    protected function doRequest(
+        string $method,
+        string $url,
+        array $options = [],
+    ): ResponseInterface {
         $options = array_merge_recursive($options, [
             'auth_bearer' => $this->getApiKey(),
         ]);

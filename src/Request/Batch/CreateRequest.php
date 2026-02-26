@@ -8,25 +8,20 @@ use function trim;
 
 class CreateRequest extends BaseRequest
 {
-    /**
-     * @var ?non-empty-string
-     */
+    /** @var ?non-empty-string */
     private ?string $name = null;
 
-    /**
-     * @var ?non-empty-string
-     */
+    /** @var ?non-empty-string */
     private ?string $fileUri = null;
 
-    /**
-     * @var ?non-empty-string
-     */
+    /** @var ?non-empty-string */
     private ?string $fileName = null;
 
-    /**
-     * @var ?non-empty-string
-     */
-    private ?string $endpoint = null;
+    /** @var non-empty-string */
+    private string $endpoint = '/v1/responses';
+
+    /** @var non-empty-string */
+    private string $timeframe = '24h';
 
     public function withName(?string $name): static
     {
@@ -79,18 +74,19 @@ class CreateRequest extends BaseRequest
         return $this->fileName;
     }
 
-    public function withEndpoint(?string $endpoint): static
+    /**
+     * @return non-empty-string
+     */
+    public function getEndpoint(): string
     {
-        $this->endpoint = trim($endpoint ?? '') ?: null;
-
-        return $this;
+        return $this->endpoint;
     }
 
     /**
-     * @return ?non-empty-string
+     * @return non-empty-string
      */
-    public function getEndpoint(): ?string
+    public function getTimeframe(): string
     {
-        return $this->endpoint;
+        return $this->timeframe;
     }
 }
