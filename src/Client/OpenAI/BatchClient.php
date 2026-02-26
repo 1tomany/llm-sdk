@@ -31,7 +31,7 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
 
             $batch = $this->denormalizer->denormalize($data, Batch::class);
         } catch (SerializerExceptionInterface $e) {
-            throw new DecodingResponseContentFailedException($request->getRequestType(), $request->getModel(), $e);
+            throw new DecodingResponseContentFailedException($request, $e);
         }
 
         return new CreateResponse($request->getModel(), $batch->id, $batch->status->getValue(), $batch->output_file_id);
@@ -47,7 +47,7 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
         try {
             $batch = $this->denormalizer->denormalize($this->doRequest('GET', $url), Batch::class);
         } catch (SerializerExceptionInterface $e) {
-            throw new DecodingResponseContentFailedException('batch.read', $request->getModel(), $e);
+            throw new DecodingResponseContentFailedException($request, $e);
         }
 
         return new ReadResponse($request->getModel(), $batch->id, $batch->status->getValue(), $batch->output_file_id);

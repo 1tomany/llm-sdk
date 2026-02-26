@@ -85,7 +85,7 @@ abstract readonly class BaseClient
     /**
      * @param array<mixed> $options
      *
-     * @return array<mixed>
+     * @return list<array<string, mixed>>|array<string, mixed>
      */
     protected function doRequest(string $method, string $url, array $options = []): array
     {
@@ -94,6 +94,7 @@ abstract readonly class BaseClient
                 'auth_bearer' => $this->getApiKey(),
             ]);
 
+            /** @var list<array<string, mixed>>|array<string, mixed> $content */
             $content = $this->httpClient->request($method, $url, $options)->toArray(true);
         } catch (HttpClientExceptionInterface $e) {
             $this->handleHttpException($e);

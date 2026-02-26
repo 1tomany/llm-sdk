@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAI;
 
+use OneToMany\LlmSdk\Client\Exception\DecodingResponseContentFailedException;
 use OneToMany\LlmSdk\Client\OpenAI\Type\Response\Input\Enum\Type as InputType;
 use OneToMany\LlmSdk\Client\OpenAI\Type\Response\Response;
 use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
@@ -14,8 +15,8 @@ use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\UsageResponse;
+use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
 use function parse_url;
 
@@ -96,36 +97,31 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
         $timer = new Stopwatch(true)->start('execute');
 
         try {
-            $response = $this->doRequest('POST', $request->getUrl(), [
+            $data = $this->doRequest('POST', $request->getUrl(), [
                 'json' => $request->getRequest(),
             ]);
 
-            /**
-             * @var array<string, mixed> $responseContent
-             */
-            $responseContent = $response->toArray();
-        } catch (HttpClientExceptionInterface $e) {
-            $this->handleHttpException($e);
+            $response = $this->denormalizer->denormalize($data, Response::class);
+
+            if (null !== $response->error) {
+                throw new RuntimeException($response->error->getMessage());
+            }
+        } catch (SerializerExceptionInterface $e) {
+            throw new DecodingResponseContentFailedException($request, $e);
         } finally {
             $timer->stop();
         }
 
-        $output = $this->denormalizer->denormalize($responseContent, Response::class);
-
-        if (null !== $output->error) {
-            throw new RuntimeException($output->error->getMessage());
-        }
-
         return new ExecuteResponse(
             $request->getModel(),
-            $output->id,
-            $output->getOutput(),
-            $responseContent,
+            $response->id,
+            $response->getOutput(),
+            $data,
             $timer->getDuration(),
             new UsageResponse(
-                $output->usage->getInputTokens(),
-                $output->usage->getCachedTokens(),
-                $output->usage->getOutputTokens(),
+                $response->usage->getInputTokens(),
+                $response->usage->getCachedTokens(),
+                $response->usage->getOutputTokens(),
             ),
         );
     }
