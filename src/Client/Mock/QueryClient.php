@@ -60,8 +60,14 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
     {
         $id = $this->generateResponseId('query');
 
-        /** @var non-empty-string $output */
-        $output = json_encode(['tag' => $this->faker->word(), 'summary' => $this->faker->sentence(10)]);
+        /**
+         * @var non-empty-string $output
+         */
+        $output = json_encode([
+            'word1' => $this->faker->word(),
+            'word2' => $this->faker->word(),
+            'notes' => $this->faker->sentence(),
+        ]);
 
         return new ExecuteResponse($request->getModel(), $id, $output, ['id' => $id, 'output' => $output], random_int(100, 10000));
     }
