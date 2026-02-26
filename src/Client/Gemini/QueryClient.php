@@ -73,8 +73,11 @@ final readonly class QueryClient extends GeminiClient implements QueryClientInte
             }
         }
 
-        if ($key = $request->getBatchKey()) {
-            $requestContent = ['key' => $key, 'request' => $requestContent];
+        if ($request->getKey()) {
+            $requestContent = [
+                'key' => $request->getKey(),
+                'request' => $requestContent,
+            ];
         }
 
         return new CompileResponse($request->getModel(), $url, $requestContent);
