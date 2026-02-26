@@ -23,6 +23,14 @@ class CreateRequest extends BaseRequest
     /** @var non-empty-string */
     private string $timeframe = '24h';
 
+    /**
+     * @see OneToMany\LlmSdk\Request\BaseRequest
+     */
+    public function getRequestType(): string
+    {
+        return 'batch.create';
+    }
+
     public function withName(?string $name): static
     {
         $this->name = trim($name ?? '') ?: null;

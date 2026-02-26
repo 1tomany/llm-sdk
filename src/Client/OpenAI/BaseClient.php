@@ -84,17 +84,22 @@ abstract readonly class BaseClient
 
     /**
      * @param array<mixed> $options
+     *
+     * @return array<mixed>
      */
-    protected function doRequest(
-        string $method,
-        string $url,
-        array $options = [],
-    ): ResponseInterface {
-        $options = array_merge_recursive($options, [
-            'auth_bearer' => $this->getApiKey(),
-        ]);
+    protected function doRequest(string $method, string $url, array $options = []): array
+    {
+        try {
+            $options = array_merge_recursive($options, [
+                'auth_bearer' => $this->getApiKey(),
+            ]);
 
-        return $this->httpClient->request($method, $url, $options);
+            $content = $this->httpClient->request($method, $url, $options)->toArray(true);
+        } catch (HttpClientExceptionInterface $e) {
+            $this->handleHttpException($e);
+        }
+
+        return $content;
     }
 
     protected function decodeErrorResponse(ResponseInterface $response): ErrorInterface

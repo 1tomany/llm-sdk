@@ -2,13 +2,14 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAI;
 
+use OneToMany\LlmSdk\Client\Exception\DecodingResponseContentFailedException;
 use OneToMany\LlmSdk\Client\OpenAI\Type\Batch\Batch;
 use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
+use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 
 final readonly class BatchClient extends BaseClient implements BatchClientInterface
 {
@@ -20,7 +21,7 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
         $url = $this->generateUrl('batches');
 
         try {
-            $response = $this->doRequest('POST', $url, [
+            $data = $this->doRequest('POST', $url, [
                 'json' => [
                     'endpoint' => $request->getEndpoint(),
                     'input_file_id' => $request->getFileUri(),
@@ -28,9 +29,9 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
                 ],
             ]);
 
-            $batch = $this->denormalizer->denormalize($response->toArray(true), Batch::class);
-        } catch (HttpClientExceptionInterface $e) {
-            $this->handleHttpException($e);
+            $batch = $this->denormalizer->denormalize($data, Batch::class);
+        } catch (SerializerExceptionInterface $e) {
+            throw new DecodingResponseContentFailedException($request->getRequestType(), $request->getModel(), $e);
         }
 
         return new CreateResponse($request->getModel(), $batch->id, $batch->status->getValue(), $batch->output_file_id);
@@ -44,9 +45,9 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
         $url = $this->generateUrl('batches', $request->getUri());
 
         try {
-            $batch = $this->denormalizer->denormalize($this->doRequest('GET', $url)->toArray(true), Batch::class);
-        } catch (HttpClientExceptionInterface $e) {
-            $this->handleHttpException($e);
+            $batch = $this->denormalizer->denormalize($this->doRequest('GET', $url), Batch::class);
+        } catch (SerializerExceptionInterface $e) {
+            throw new DecodingResponseContentFailedException('batch.read', $request->getModel(), $e);
         }
 
         return new ReadResponse($request->getModel(), $batch->id, $batch->status->getValue(), $batch->output_file_id);

@@ -15,6 +15,14 @@ class DeleteRequest extends BaseRequest
     }
 
     /**
+     * @see OneToMany\LlmSdk\Request\BaseRequest
+     */
+    public function getRequestType(): string
+    {
+        return 'file.delete';
+    }
+
+    /**
      * @return non-empty-string
      */
     public function getUri(): string

@@ -19,39 +19,35 @@ use function trim;
 
 class UploadRequest extends BaseRequest
 {
-    /**
-     * @var ?non-empty-string
-     */
+    /** @var ?non-empty-string */
     private ?string $path = null;
 
-    /**
-     * @var ?non-empty-string
-     */
+    /** @var ?non-empty-string */
     private ?string $name = null;
 
-    /**
-     * @var ?non-negative-int
-     */
+    /** @var ?non-negative-int */
     private ?int $size = null;
 
-    /**
-     * @var ?non-empty-lowercase-string
-     */
+    /** @var ?non-empty-lowercase-string */
     private ?string $format = null;
 
-    /**
-     * @var ?non-empty-lowercase-string
-     */
+    /** @var ?non-empty-lowercase-string */
     private ?string $purpose = null;
 
-    /**
-     * @var ?resource
-     */
+    /** @var ?resource */
     private mixed $fileHandle = null;
 
     public function __destruct()
     {
         $this->closeFileHandle();
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Request\BaseRequest
+     */
+    public function getRequestType(): string
+    {
+        return 'file.upload';
     }
 
     public function atPath(?string $path): static

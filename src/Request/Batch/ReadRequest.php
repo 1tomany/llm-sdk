@@ -15,6 +15,14 @@ class ReadRequest extends BaseRequest
     }
 
     /**
+     * @see OneToMany\LlmSdk\Request\BaseRequest
+     */
+    public function getRequestType(): string
+    {
+        return 'batch.read';
+    }
+
+    /**
      * @return non-empty-string
      */
     public function getUri(): string

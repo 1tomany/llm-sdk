@@ -7,14 +7,22 @@ use function trim;
 
 abstract class BaseRequest
 {
-    /**
-     * @var non-empty-lowercase-string
-     */
-    private string $model;
+    /** @var non-empty-lowercase-string */
+    protected string $type = 'request';
 
-    public function __construct(string $model = 'mock')
+    /**
+     * @param non-empty-lowercase-string $model
+     */
+    public function __construct(private string $model = 'mock')
     {
-        $this->forModel($model);
+    }
+
+    /**
+     * @return non-empty-lowercase-string
+     */
+    public function getType(): string
+    {
+        return $this->type;
     }
 
     public function forModel(string $model): static
