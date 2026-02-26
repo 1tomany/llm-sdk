@@ -20,12 +20,12 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
         try {
             $requestContent = [
                 'completion_window' => '24h',
+                'endpoint' => '/v1/responses',
             ];
 
             $response = $this->httpClient->request('POST', $url, [
                 'auth_bearer' => $this->getApiKey(),
                 'json' => $requestContent + [
-                    'endpoint' => $request->getEndpoint(),
                     'input_file_id' => $request->getFileUri(),
                 ],
             ]);
@@ -35,6 +35,14 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
             $this->handleHttpException($e);
         }
 
-        return new CreateResponse($request->getModel(), $batch->id, $batch->status->isCompleted(), $batch->status->isFailed(), $batch->status->isCancelled(), $batch->status->isExpired());
+        return new CreateResponse(
+            $request->getModel(),
+            $batch->id,
+            $batch->output_file_id,
+            $batch->status->isCompleted(),
+            $batch->status->isFailed(),
+            $batch->status->isCancelled(),
+            $batch->status->isExpired(),
+        );
     }
 }

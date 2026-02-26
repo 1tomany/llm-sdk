@@ -25,6 +25,8 @@ abstract readonly class BaseClient
     use HttpExceptionTrait;
     use SupportsModelTrait;
 
+    public const string BASE_URI = 'https://api.anthropic.com/v1';
+
     /**
      * @param non-empty-string $apiKey
      * @param non-empty-string $apiVersion
@@ -76,7 +78,7 @@ abstract readonly class BaseClient
      */
     protected function generateUrl(string ...$paths): string
     {
-        return sprintf('https://api.anthropic.com/v1/%s', ltrim(implode('/', $paths), '/'));
+        return sprintf('%s/%s', self::BASE_URI, ltrim(implode('/', $paths), '/'));
     }
 
     /**

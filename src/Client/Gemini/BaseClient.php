@@ -50,6 +50,7 @@ abstract readonly class BaseClient
     public function getSupportedModels(): array
     {
         return [
+            'gemini-3.1-pro-preview',
             'gemini-3-pro-preview',
             'gemini-3-flash-preview',
             'gemini-2.5-pro',

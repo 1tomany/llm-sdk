@@ -9,11 +9,12 @@ final readonly class CreateResponse extends BaseResponse
     /**
      * @param non-empty-lowercase-string $model
      * @param non-empty-string $uri
+     * @param ?non-empty-string $fileUri
      */
     public function __construct(
         string $model,
         private string $uri,
-        // private string $fileUri,
+        private ?string $fileUri,
         private bool $isCompleted = false,
         private bool $isFailed = false,
         private bool $isCancelled = false,
@@ -28,6 +29,14 @@ final readonly class CreateResponse extends BaseResponse
     public function getUri(): string
     {
         return $this->uri;
+    }
+
+    /**
+     * @return ?non-empty-string
+     */
+    public function getFileUri(): ?string
+    {
+        return $this->fileUri;
     }
 
     public function isCompleted(): bool
