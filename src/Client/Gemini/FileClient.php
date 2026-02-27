@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Client\Gemini;
 
-use OneToMany\LlmSdk\Client\Exception\DecodingResponseContentFailedException;
 use OneToMany\LlmSdk\Client\Gemini\Type\File\File;
 use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
@@ -10,7 +9,6 @@ use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
-use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
@@ -66,9 +64,9 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
             $uploadUrl = $headers['x-goog-upload-url'][0];
 
             /** @var positive-int $uploadChunkSize */
-            $uploadChunkSize = (int)$headers['x-goog-upload-chunk-granularity'][0];
+            $uploadChunkSize = (int) $headers['x-goog-upload-chunk-granularity'][0];
 
-            // Calculate the total number of chunks needed to upload the file
+            // Calculate the number of chunks needed to upload the file
             $uploadChunkCount = (int) ceil($fileSize / $uploadChunkSize);
 
             // Counters to track progress
