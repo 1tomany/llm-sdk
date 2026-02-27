@@ -11,6 +11,7 @@ final readonly class Batch
         public string $name,
         public Metadata $metadata,
         public bool $done = false,
+        public ?Response $response = null,
     ) {
     }
 }

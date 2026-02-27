@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Client\Gemini;
 
+use OneToMany\LlmSdk\Client\Exception\DecodingResponseContentFailedException;
 use OneToMany\LlmSdk\Client\Gemini\Type\File\File;
 use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
@@ -11,6 +12,7 @@ use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
+use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 
 use function ceil;
 use function fread;
@@ -98,6 +100,8 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
             ]);
         } catch (HttpClientExceptionInterface $e) {
             $this->handleHttpException($e);
+        } catch (SerializerExceptionInterface $e) {
+            throw new DecodingResponseContentFailedException($request, $e);
         }
 
         return new UploadResponse($request->getModel(), $file->uri, $file->name, null, $file->expirationTime);
@@ -108,17 +112,7 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        try {
-            $response = $this->httpClient->request('DELETE', $request->getUri(), [
-                'headers' => [
-                    'x-goog-api-key' => $this->getApiKey(),
-                ],
-            ]);
-
-            $response->toArray(true); // Force the response to be handled
-        } catch (HttpClientExceptionInterface $e) {
-            $this->handleHttpException($e);
-        }
+        $this->doRequest('DELETE', $request->getUri());
 
         return new DeleteResponse($request->getModel(), $request->getUri());
     }

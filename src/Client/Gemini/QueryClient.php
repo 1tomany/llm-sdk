@@ -24,7 +24,7 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $url = $this->generateUrl($request->getModel(), 'generateContent');
+        $url = $this->generateModelUrl($request->getModel(), 'generateContent');
 
         $requestContent = [
             'contents' => [],

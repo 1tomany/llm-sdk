@@ -18,7 +18,7 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
      */
     public function create(CreateRequest $request): CreateResponse
     {
-        $url = $this->generateUrl($request->getModel(), 'batchGenerateContent');
+        $url = $this->generateModelUrl($request->getModel(), 'batchGenerateContent');
 
         try {
             $data = $this->doRequest('POST', $url, [
@@ -45,7 +45,7 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
      */
     public function read(ReadRequest $request): ReadResponse
     {
-        $url = $this->generateUrl($request->getUri());
+        $url = $this->generateUrl($this->getApiVersion(), $request->getUri());
 
         try {
             $batch = $this->denormalizer->denormalize($this->doRequest('GET', $url), Batch::class);
@@ -53,6 +53,6 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
             throw new DecodingResponseContentFailedException($request, $e);
         }
 
-        throw new \Exception('Not implemented');
+        return new ReadResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
     }
 }
