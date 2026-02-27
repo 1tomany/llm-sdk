@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAI;
 
+use OneToMany\LlmSdk\Client\Exception\DenormalizingResponseContentFailedException;
 use OneToMany\LlmSdk\Client\OpenAI\Type\Error\Error;
 use OneToMany\LlmSdk\Client\Trait\SupportsModelTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
@@ -81,17 +82,36 @@ abstract readonly class BaseClient
             $content = $response->toArray(false);
 
             if (!in_array($statusCode, [200, 201]) || isset($content['error'])) {
-                $error = $this->denormalizer->denormalize($content, Error::class, null, [
+                $error = $this->denormalize($content, Error::class, [
                     UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
                 ]);
 
                 throw new RuntimeException($error->getMessage(), $statusCode);
             }
-        } catch (HttpClientExceptionInterface|SerializerExceptionInterface $e) {
+        } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
         }
 
         return $content;
+    }
+
+    /**
+     * @template T of object
+     *
+     * @param class-string<T> $type
+     * @param array<string, mixed> $context
+     *
+     * @return T
+     */
+    protected function denormalize(mixed $content, string $type, array $context = []): object
+    {
+        try {
+            $object = $this->denormalizer->denormalize($content, $type, null, $context);
+        } catch (SerializerExceptionInterface $e) {
+            throw new DenormalizingResponseContentFailedException($e);
+        }
+
+        return $object;
     }
 
     /**

@@ -13,7 +13,6 @@ use OneToMany\LlmSdk\Request\Query\Component\TextComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
-use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 use function parse_url;
@@ -94,17 +93,11 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
     {
         $timer = new Stopwatch(true)->start('execute');
 
-        try {
-            $content = $this->doRequest('POST', $request->getUrl(), [
-                'json' => $request->getRequest(),
-            ]);
+        $content = $this->doRequest('POST', $request->getUrl(), [
+            'json' => $request->getRequest(),
+        ]);
 
-            $response = $this->denormalizer->denormalize($content, Response::class);
-        } catch (SerializerExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), previous: $e);
-        } finally {
-            $timer->stop();
-        }
+        $response = $this->denormalize($content, Response::class);
 
         if (null !== $response->error) {
             throw new RuntimeException($response->error->getMessage());

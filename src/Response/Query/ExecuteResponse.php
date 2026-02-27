@@ -17,7 +17,7 @@ final readonly class ExecuteResponse extends BaseResponse
      * @param non-empty-lowercase-string $model
      * @param non-empty-string $uri
      * @param non-empty-string $output
-     * @param list<array<string, mixed>>|array<string, mixed> $response
+     * @param array<int|string, mixed> $response
      * @param non-negative-int|float $runtime
      */
     public function __construct(
@@ -65,7 +65,7 @@ final readonly class ExecuteResponse extends BaseResponse
     }
 
     /**
-     * @return list<array<string, mixed>>|array<string, mixed>
+     * @return array<int|string, mixed>
      */
     public function getResponse(): array
     {
