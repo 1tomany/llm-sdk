@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Client\Claude;
 
-use OneToMany\LlmSdk\Client\Gemini\Type\Error\Error;
+use OneToMany\LlmSdk\Client\Claude\Type\Error\Error;
 use OneToMany\LlmSdk\Client\Trait\SupportsModelTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
