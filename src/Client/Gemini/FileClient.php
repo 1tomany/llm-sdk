@@ -90,7 +90,6 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
                     throw new RuntimeException(sprintf('Chunk %d of %d was rejected by the server.', $uploadChunk, $uploadChunkCount), $response->getStatusCode());
                 }
 
-                // Don't assume the chunk was an even 8MB
                 $uploadOffset = $uploadOffset + strlen($fileChunk);
             }
 
@@ -98,8 +97,7 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
                 UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
             ]);
         } catch (HttpClientExceptionInterface $e) {
-            throw new \RuntimeException('no good');
-            // $this->handleHttpException($e);
+            throw new RuntimeException($e->getMessage(), previous: $e);
         }
 
         return new UploadResponse($request->getModel(), $file->uri, $file->name, null, $file->expirationTime);
