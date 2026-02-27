@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAI;
 
-use OneToMany\LlmSdk\Client\Exception\DenormalizingResponseContentFailedException;
 use OneToMany\LlmSdk\Client\OpenAI\Type\Error\Error;
 use OneToMany\LlmSdk\Client\Trait\SupportsModelTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
@@ -108,7 +107,7 @@ abstract readonly class BaseClient
         try {
             $object = $this->denormalizer->denormalize($content, $type, null, $context);
         } catch (SerializerExceptionInterface $e) {
-            throw new DenormalizingResponseContentFailedException($e);
+            throw new RuntimeException($e->getMessage(), previous: $e);
         }
 
         return $object;

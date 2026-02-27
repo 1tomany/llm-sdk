@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAI;
 
-use OneToMany\LlmSdk\Client\Exception\DenormalizingResponseContentFailedException;
 use OneToMany\LlmSdk\Client\OpenAI\Type\File\DeletedFile;
 use OneToMany\LlmSdk\Client\OpenAI\Type\File\Enum\Purpose;
 use OneToMany\LlmSdk\Client\OpenAI\Type\File\File;
@@ -11,7 +10,6 @@ use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
-use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 
 final readonly class FileClient extends BaseClient implements FileClientInterface
 {
@@ -22,20 +20,16 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
     {
         $url = $this->generateUrl('files');
 
-        try {
-            $purpose = Purpose::create($request->getPurpose());
+        $purpose = Purpose::create($request->getPurpose());
 
-            $content = $this->doRequest('POST', $url, [
-                'body' => [
-                    'purpose' => $purpose->getValue(),
-                    'file' => $request->openFileHandle(),
-                ],
-            ]);
+        $content = $this->doRequest('POST', $url, [
+            'body' => [
+                'purpose' => $purpose->getValue(),
+                'file' => $request->openFileHandle(),
+            ],
+        ]);
 
-            $file = $this->denormalizer->denormalize($content, File::class);
-        } catch (SerializerExceptionInterface $e) {
-            throw new DenormalizingResponseContentFailedException($e);
-        }
+        $file = $this->denormalize($content, File::class);
 
         return new UploadResponse($request->getModel(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
     }
@@ -45,13 +39,9 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        $url = $this->generateUrl('files', $request->getUri());
+        $content = $this->doRequest('DELETE', $this->generateUrl('files', $request->getUri()));
 
-        try {
-            $deletedFile = $this->denormalizer->denormalize($this->doRequest('DELETE', $url), DeletedFile::class);
-        } catch (SerializerExceptionInterface $e) {
-            throw new DenormalizingResponseContentFailedException($e);
-        }
+        $deletedFile = $this->denormalize($content, DeletedFile::class);
 
         return new DeleteResponse($request->getModel(), $deletedFile->id);
     }
