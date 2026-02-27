@@ -3,9 +3,9 @@
 namespace OneToMany\LlmSdk\Client\Claude;
 
 use OneToMany\LlmSdk\Client\Claude\Type\Error\Error;
+use OneToMany\LlmSdk\Client\Trait\DenormalizerTrait;
 use OneToMany\LlmSdk\Client\Trait\SupportsModelTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
@@ -18,6 +18,7 @@ use function sprintf;
 
 abstract readonly class BaseClient
 {
+    use DenormalizerTrait;
     use SupportsModelTrait;
 
     public const string BASE_URI = 'https://api.anthropic.com/v1';
@@ -32,22 +33,6 @@ abstract readonly class BaseClient
         #[\SensitiveParameter] protected string $apiKey,
         protected string $apiVersion = '2023-06-01',
     ) {
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    public function getApiKey(): string
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    public function getApiVersion(): string
-    {
-        return $this->apiVersion;
     }
 
     /**
@@ -75,8 +60,8 @@ abstract readonly class BaseClient
     {
         $options = array_merge_recursive($options, [
             'headers' => [
-                'x-api-key' => $this->getApiKey(),
-                'anthropic-version' => $this->getApiVersion(),
+                'x-api-key' => $this->apiKey,
+                'anthropic-version' => $this->apiVersion,
             ],
         ]);
 
@@ -101,25 +86,6 @@ abstract readonly class BaseClient
         }
 
         return $content;
-    }
-
-    /**
-     * @template T of object
-     *
-     * @param class-string<T> $type
-     * @param array<string, mixed> $context
-     *
-     * @return T
-     */
-    protected function denormalize(mixed $content, string $type, array $context = []): object
-    {
-        try {
-            $object = $this->denormalizer->denormalize($content, $type, null, $context);
-        } catch (SerializerExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), previous: $e);
-        }
-
-        return $object;
     }
 
     /**

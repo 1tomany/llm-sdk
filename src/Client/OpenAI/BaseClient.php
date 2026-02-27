@@ -3,9 +3,9 @@
 namespace OneToMany\LlmSdk\Client\OpenAI;
 
 use OneToMany\LlmSdk\Client\OpenAI\Type\Error\Error;
+use OneToMany\LlmSdk\Client\Trait\DenormalizerTrait;
 use OneToMany\LlmSdk\Client\Trait\SupportsModelTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
@@ -18,6 +18,7 @@ use function sprintf;
 
 abstract readonly class BaseClient
 {
+    use DenormalizerTrait;
     use SupportsModelTrait;
 
     public const string BASE_URI = 'https://api.openai.com/v1';
@@ -91,25 +92,6 @@ abstract readonly class BaseClient
         }
 
         return $content;
-    }
-
-    /**
-     * @template T of object
-     *
-     * @param class-string<T> $type
-     * @param array<string, mixed> $context
-     *
-     * @return T
-     */
-    protected function denormalize(mixed $content, string $type, array $context = []): object
-    {
-        try {
-            $object = $this->denormalizer->denormalize($content, $type, null, $context);
-        } catch (SerializerExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), previous: $e);
-        }
-
-        return $object;
     }
 
     /**
