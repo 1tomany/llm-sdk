@@ -14,7 +14,7 @@ enum Status: string
     case Queued = 'queued';
 
     /**
-     * @return 'Calling'|'Cancelled'|'Completed'|'Failed'|'Incomplete'|'InProgress'|'Interpreting'|'Queued'
+     * @return non-empty-string
      */
     public function getName(): string
     {
@@ -22,7 +22,7 @@ enum Status: string
     }
 
     /**
-     * @return 'calling'|'cancelled'|'completed'|'failed'|'incomplete'|'in_progress'|'interpreting'|'queued'
+     * @return non-empty-lowercase-string
      */
     public function getValue(): string
     {

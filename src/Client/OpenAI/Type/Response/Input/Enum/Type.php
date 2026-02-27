@@ -10,7 +10,7 @@ enum Type: string
     case JsonSchema = 'json_schema';
 
     /**
-     * @return 'InputFile'|'InputImage'|'InputText'|'JsonSchema'
+     * @return non-empty-string
      */
     public function getName(): string
     {
@@ -18,7 +18,7 @@ enum Type: string
     }
 
     /**
-     * @return 'input_file'|'input_image'|'input_text'|'json_schema'
+     * @return non-empty-lowercase-string
      */
     public function getValue(): string
     {

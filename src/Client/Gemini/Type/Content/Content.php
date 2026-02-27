@@ -2,20 +2,15 @@
 
 namespace OneToMany\LlmSdk\Client\Gemini\Type\Content;
 
-use OneToMany\LlmSdk\Client\Gemini\Type\Content\Candidate\Candidate;
-
 final readonly class Content
 {
     /**
-     * @param list<Candidate> $candidates
-     * @param non-empty-lowercase-string $modelVersion
-     * @param non-empty-string $responseId
+     * @param non-empty-list<Part> $parts
      */
     public function __construct(
-        public array $candidates,
-        public UsageMetadata $usageMetadata,
-        public string $modelVersion,
-        public string $responseId,
-    ) {
+        public array $parts,
+        public string $role,
+    )
+    {
     }
 }

@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Client\Gemini;
 
+use OneToMany\LlmSdk\Client\Gemini\Type\Content\GenerateContentResponse;
 use OneToMany\LlmSdk\Client\Gemini\Type\Content\UsageMetadata;
 use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
@@ -81,9 +82,13 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
     {
         $timer = new Stopwatch(true)->start('execute');
 
-        $response = $this->doRequest('POST', $request->getUrl(), [
+        $content = $this->doRequest('POST', $request->getUrl(), [
             'json' => $request->getRequest(),
         ]);
+
+        $response = $this->denormalize($content, GenerateContentResponse::class);
+
+        // $generateContentResponse->candidates[0]->content->parts[0]->text;
 
         // try {
         //     $usage = $this->denormalizer->denormalize($responseContent, UsageMetadata::class, null, [
@@ -93,14 +98,7 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
         //     $usage = new UsageMetadata();
         // }
 
-        return new ExecuteResponse(
-            $request->getModel(),
-            $responseContent['responseId'],
-            $responseContent['candidates'][0]['content']['parts'][0]['text'],
-            $responseContent,
-            $timer->getDuration(),
-            $usage->toResponse(),
-        );
+        return new ExecuteResponse($request->getModel(), $response->responseId, $response->getOutput(), $content, $timer->getDuration(), $response->usageMetadata->toResponse());
     }
 
     /**

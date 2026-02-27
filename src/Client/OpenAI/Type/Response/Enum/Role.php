@@ -9,7 +9,7 @@ enum Role: string
     case User = 'user';
 
     /**
-     * @return 'Assistant'|'Developer'|'User'
+     * @return non-empty-string
      */
     public function getName(): string
     {
@@ -17,7 +17,7 @@ enum Role: string
     }
 
     /**
-     * @return 'assistant'|'developer'|'user'
+     * @return non-empty-lowercase-string
      */
     public function getValue(): string
     {
