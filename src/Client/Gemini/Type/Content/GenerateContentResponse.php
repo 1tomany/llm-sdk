@@ -28,6 +28,8 @@ final readonly class GenerateContentResponse
         $output = null;
 
         if ([] !== $this->candidates) {
+            print_r($this->candidates[0]->content->parts[0]); exit;
+
             $output = $this->candidates[0]->content->parts[0]->text;
         }
 
