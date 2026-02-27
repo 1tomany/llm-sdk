@@ -97,26 +97,22 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
         $timer = new Stopwatch(true)->start('execute');
 
         try {
-            $data = $this->doRequest('POST', $request->getUrl(), [
+            $content = $this->doRequest('POST', $request->getUrl(), [
                 'json' => $request->getRequest(),
             ]);
 
-            $response = $this->denormalizer->denormalize($data, Response::class);
-
-            if (null !== $response->error) {
-                throw new RuntimeException($response->error->getMessage());
-            }
-
-            $usageResponse = new UsageResponse(
-                $response->usage->getInputTokens(),
-                $response->usage->getCachedTokens(),
-                $response->usage->getOutputTokens(),
-            );
+            $response = $this->denormalizer->denormalize($content, Response::class);
         } catch (SerializerExceptionInterface $e) {
             throw new DecodingResponseContentFailedException($request, $e);
+        } finally {
+            $timer->stop();
         }
 
-        return new ExecuteResponse($request->getModel(), $response->id, $response->getOutput(), $data, $timer->stop()->getDuration(), $usageResponse);
+        if (null !== $response->error) {
+            throw new RuntimeException($response->error->getMessage());
+        }
+
+        return new ExecuteResponse($response->model, $response->id, $response->getOutput(), $content, $timer->getDuration(), $response->usage->toResponse());
     }
 
     /**

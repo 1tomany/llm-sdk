@@ -5,6 +5,7 @@ namespace OneToMany\LlmSdk\Client\OpenAI\Type\Usage;
 use OneToMany\LlmSdk\Client\OpenAI\Type\Usage\Details\InputTokensDetails;
 use OneToMany\LlmSdk\Client\OpenAI\Type\Usage\Details\OutputTokensDetails;
 use OneToMany\LlmSdk\Contract\Client\Type\Usage\UsageInterface;
+use OneToMany\LlmSdk\Response\Query\UsageResponse;
 
 final readonly class Usage implements UsageInterface
 {
@@ -44,5 +45,10 @@ final readonly class Usage implements UsageInterface
     public function getOutputTokens(): int
     {
         return $this->output_tokens;
+    }
+
+    public function toResponse(): UsageResponse
+    {
+        return new UsageResponse($this->input_tokens, $this->getCachedTokens(), $this->output_tokens);
     }
 }

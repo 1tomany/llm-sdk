@@ -69,16 +69,18 @@ abstract readonly class BaseClient
     }
 
     /**
-     * @param array<mixed> $options
+     * @param array<string, mixed> $options
      *
-     * @return list<array<string, mixed>>|array<string, mixed>
+     * @return array<mixed>
      */
     protected function doRequest(string $method, string $url, array $options = []): array
     {
+        $options = array_merge($options, [
+            'auth_bearer' => $this->apiKey,
+        ]);
+
         try {
-            $response = $this->httpClient->request($method, $url, array_merge($options, [
-                'auth_bearer' => $this->getApiKey(),
-            ]));
+            $response = $this->httpClient->request($method, $url, $options);
 
             /** @var int<100, 599> $statusCode */
             $statusCode = $response->getStatusCode();

@@ -21,7 +21,7 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
         $url = $this->generateUrl('batches');
 
         try {
-            $data = $this->doRequest('POST', $url, [
+            $content = $this->doRequest('POST', $url, [
                 'json' => [
                     'endpoint' => $request->getEndpoint(),
                     'input_file_id' => $request->getFileUri(),
@@ -29,7 +29,7 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
                 ],
             ]);
 
-            $batch = $this->denormalizer->denormalize($data, Batch::class);
+            $batch = $this->denormalizer->denormalize($content, Batch::class);
         } catch (SerializerExceptionInterface $e) {
             throw new DecodingResponseContentFailedException($request, $e);
         }
