@@ -86,8 +86,6 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
             'json' => $request->getRequest(),
         ]);
 
-        // print_r($content);
-
         $response = $this->denormalize($content, GenerateContentResponse::class);
 
         // var_dump($response->getOutput());
