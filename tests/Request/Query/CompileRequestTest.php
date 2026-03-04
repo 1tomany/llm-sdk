@@ -60,6 +60,8 @@ final class CompileRequestTest extends TestCase
             'required' => ['tag', 'summary'],
         ];
 
+        $this->assertNotEquals($schemaName, $schema['title']);
+
         $compileRequest->usingSchema($schema, $schemaName);
         $this->assertCount(1, $compileRequest->getComponents());
 
