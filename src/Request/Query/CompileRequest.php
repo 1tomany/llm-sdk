@@ -9,6 +9,7 @@ use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\Component\TextComponent;
 
+use function is_string;
 use function trim;
 
 class CompileRequest extends BaseRequest
@@ -66,7 +67,7 @@ class CompileRequest extends BaseRequest
     public function usingSchema(?array $schema, ?string $name = null): static
     {
         if (null !== $schema) {
-            if (!$name && \is_string($schema['title'] ?? null)) {
+            if (!$name && is_string($schema['title'] ?? null)) {
                 $name = trim($schema['title']);
             }
 
