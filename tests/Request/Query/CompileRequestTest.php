@@ -33,6 +33,21 @@ final class CompileRequestTest extends TestCase
         $this->assertEquals($schema['title'], $component->getName());
     }
 
+    public function testUsingSchemaSetsDefaultNameWhenTitleIsMissing(): void
+    {
+        $compileRequest = new CompileRequest();
+        $this->assertCount(0, $compileRequest->getComponents());
+
+        $compileRequest->usingSchema(['required' => ['id']]);
+        $this->assertCount(1, $compileRequest->getComponents());
+
+        $component = $compileRequest->getComponents()[0];
+        assert($component instanceof SchemaComponent);
+
+        $this->assertInstanceOf(SchemaComponent::class, $component);
+        $this->assertEquals('JsonSchema', $component->getName());
+    }
+
     public function testHasComponentsIsFalseWhenTheContentsAreEmpty(): void
     {
         $request = new CompileRequest();
@@ -43,8 +58,8 @@ final class CompileRequestTest extends TestCase
 
     public function testHasComponentsIsTrueWhenTheContentsAreNotEmpty(): void
     {
-        $request = new CompileRequest()->withText(...[
-            'text' => 'When was PHP first released?',
+        $request = new CompileRequest()->withPrompt(...[
+            'prompt' => 'When was PHP first released?',
         ]);
 
         $this->assertTrue($request->hasComponents());
