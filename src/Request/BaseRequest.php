@@ -14,11 +14,6 @@ abstract class BaseRequest
     {
     }
 
-    /**
-     * @return non-empty-lowercase-string
-     */
-    abstract public function getRequestType(): string;
-
     public function forModel(string $model): static
     {
         $this->model = strtolower(trim($model)) ?: $this->model;
