@@ -74,19 +74,19 @@ final class CompileRequestTest extends TestCase
 
     public function testHasComponentsIsFalseWhenTheContentsAreEmpty(): void
     {
-        $request = new CompileRequest();
+        $compileRequest = new CompileRequest();
 
-        $this->assertFalse($request->hasComponents());
-        $this->assertCount(0, $request->getComponents());
+        $this->assertFalse($compileRequest->hasComponents());
+        $this->assertCount(0, $compileRequest->getComponents());
     }
 
     public function testHasComponentsIsTrueWhenTheContentsAreNotEmpty(): void
     {
-        $request = new CompileRequest()->withPrompt(...[
+        $compileRequest = new CompileRequest()->withPrompt(...[
             'prompt' => 'When was PHP first released?',
         ]);
 
-        $this->assertTrue($request->hasComponents());
-        $this->assertCount(1, $request->getComponents());
+        $this->assertTrue($compileRequest->hasComponents());
+        $this->assertCount(1, $compileRequest->getComponents());
     }
 }
