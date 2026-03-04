@@ -50,7 +50,7 @@ final readonly class ExecuteResponse extends BaseResponse
     /**
      * @return list<array<string, mixed>>|array<string, mixed>
      *
-     * @throws RuntimeException the output is not valid JSON
+     * @throws RuntimeException when the output is not valid JSON
      */
     public function toRecord(): array
     {
