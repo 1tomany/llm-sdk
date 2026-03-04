@@ -79,6 +79,7 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
     {
         $timer = new Stopwatch(true)->start('execute');
 
+        /** @var array<string, mixed> $content */
         $content = $this->doRequest('POST', $request->getUrl(), [
             'json' => $request->getRequest(),
         ]);
