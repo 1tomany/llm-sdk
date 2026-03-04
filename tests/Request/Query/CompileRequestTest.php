@@ -48,6 +48,28 @@ final class CompileRequestTest extends TestCase
         $this->assertEquals('JsonSchema', $component->getName());
     }
 
+    public function testUsingSchemaWithName(): void
+    {
+        $compileRequest = new CompileRequest();
+        $this->assertCount(0, $compileRequest->getComponents());
+
+        $schemaName = 'Identity';
+
+        $schema = [
+            'title' => 'Identification',
+            'required' => ['tag', 'summary'],
+        ];
+
+        $compileRequest->usingSchema($schema, $schemaName);
+        $this->assertCount(1, $compileRequest->getComponents());
+
+        $component = $compileRequest->getComponents()[0];
+        assert($component instanceof SchemaComponent);
+
+        $this->assertInstanceOf(SchemaComponent::class, $component);
+        $this->assertEquals($schemaName, $component->getName());
+    }
+
     public function testHasComponentsIsFalseWhenTheContentsAreEmpty(): void
     {
         $request = new CompileRequest();
