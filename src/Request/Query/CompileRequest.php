@@ -108,7 +108,7 @@ class CompileRequest extends BaseRequest
     /**
      * @param ?non-empty-string $text
      *
-     * @deprecated since 0.3.2, use withInstructions() instead
+     * @deprecated since 0.3.3, use withInstructions() instead
      */
     public function withSystemText(?string $text): static
     {
