@@ -60,12 +60,20 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @param array<string, mixed> $schema
-     * @param non-empty-string $name
+     * @param ?array<string, mixed> $schema
+     * @param ?non-empty-string $name
      */
-    public function usingSchema(array $schema, string $name = 'json_schema'): static
+    public function usingSchema(?array $schema, ?string $name = null): static
     {
-        return $this->addComponent(new SchemaComponent($schema, $name));
+        if (null !== $schema) {
+            if (!$name && \is_string($schema['title'] ?? null)) {
+                $name = trim($schema['title']);
+            }
+
+            $this->addComponent(new SchemaComponent($schema, trim($name ?? '') ?: 'JsonSchema'));
+        }
+
+        return $this;
     }
 
     /**
