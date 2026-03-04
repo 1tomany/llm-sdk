@@ -90,7 +90,25 @@ class CompileRequest extends BaseRequest
     }
 
     /**
+     * @param ?non-empty-string $prompt
+     */
+    public function withPrompt(?string $prompt): static
+    {
+        return $this->withText($prompt, Role::User);
+    }
+
+    /**
+     * @param ?non-empty-string $instructions
+     */
+    public function withInstructions(?string $instructions): static
+    {
+        return $this->withText($instructions, Role::System);
+    }
+
+    /**
      * @param ?non-empty-string $text
+     *
+     * @deprecated since 0.3.2, use withInstructions() instead
      */
     public function withSystemText(?string $text): static
     {
