@@ -7,7 +7,7 @@ use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 use OneToMany\LlmSdk\Request\BaseRequest;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
-use OneToMany\LlmSdk\Request\Query\Component\TextComponent;
+use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 
 use function is_string;
 use function trim;
@@ -75,7 +75,7 @@ class CompileRequest extends BaseRequest
     public function withText(?string $text, Role $role = Role::User): static
     {
         if (null !== $text) {
-            $this->addComponent(new TextComponent($text, $role));
+            $this->addComponent(new PromptComponent($text, $role));
         }
 
         return $this;
