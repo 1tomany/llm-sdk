@@ -6,8 +6,8 @@ use OneToMany\LlmSdk\Contract\Request\Query\Component\ComponentInterface;
 use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 use OneToMany\LlmSdk\Request\BaseRequest;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
-use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
+use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 
 use function is_string;
 use function trim;
