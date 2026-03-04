@@ -5,8 +5,8 @@ namespace OneToMany\LlmSdk\Client\Mock;
 use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
+use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
-use OneToMany\LlmSdk\Request\Query\Component\TextComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
@@ -28,9 +28,9 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
         ];
 
         foreach ($request->getComponents() as $component) {
-            if ($component instanceof TextComponent) {
+            if ($component instanceof PromptComponent) {
                 $requestContent['contents'][] = [
-                    'text' => $component->getText(),
+                    'text' => $component->getPrompt(),
                     'role' => $component->getRole()->getValue(),
                 ];
             }

@@ -5,13 +5,13 @@ namespace OneToMany\LlmSdk\Request\Query\Component;
 use OneToMany\LlmSdk\Contract\Request\Query\Component\ComponentInterface;
 use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 
-final readonly class TextComponent implements ComponentInterface
+final readonly class PromptComponent implements ComponentInterface
 {
     /**
-     * @param non-empty-string $text
+     * @param non-empty-string $prompt
      */
     public function __construct(
-        private string $text,
+        private string $prompt,
         private Role $role = Role::User,
     ) {
     }
@@ -19,9 +19,9 @@ final readonly class TextComponent implements ComponentInterface
     /**
      * @return non-empty-string
      */
-    public function getText(): string
+    public function getPrompt(): string
     {
-        return $this->text;
+        return $this->prompt;
     }
 
     /**

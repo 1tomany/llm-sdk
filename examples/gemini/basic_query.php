@@ -25,8 +25,8 @@ $queryClient = new QueryClient($serializer, $httpClient, $apiKey);
 
 // First, compile the query: this isn't strictly necessary, but by doing so,
 // you can log or otherwise modify the request that will be sent to the LLM.
-$compileRequest = new CompileRequest($geminiModel)->withText(...[
-    'text' => 'Who invented the PHP programming language?',
+$compileRequest = new CompileRequest($geminiModel)->withPrompt(...[
+    'prompt' => 'Who invented the PHP programming language?',
 ]);
 
 $response = $queryClient->compile(...[

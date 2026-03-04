@@ -5,11 +5,12 @@ namespace OneToMany\LlmSdk\Request\Query\Component;
 use OneToMany\LlmSdk\Contract\Request\Query\Component\ComponentInterface;
 use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 
+use function trim;
+
 final readonly class SchemaComponent implements ComponentInterface
 {
     /**
      * @param array<string, mixed> $schema
-     * @param ?non-empty-string $name
      */
     public function __construct(
         private array $schema,
@@ -24,7 +25,7 @@ final readonly class SchemaComponent implements ComponentInterface
      */
     public function getName(): string
     {
-        return $this->name ?? 'json_schema';
+        return trim($this->name ?? '') ?: 'JsonSchema';
     }
 
     /**

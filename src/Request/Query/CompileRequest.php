@@ -6,9 +6,10 @@ use OneToMany\LlmSdk\Contract\Request\Query\Component\ComponentInterface;
 use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 use OneToMany\LlmSdk\Request\BaseRequest;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
+use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
-use OneToMany\LlmSdk\Request\Query\Component\TextComponent;
 
+use function is_string;
 use function trim;
 
 class CompileRequest extends BaseRequest
@@ -22,14 +23,6 @@ class CompileRequest extends BaseRequest
      * @var list<ComponentInterface>
      */
     private array $components = [];
-
-    /**
-     * @see OneToMany\LlmSdk\Request\BaseRequest
-     */
-    public function getRequestType(): string
-    {
-        return 'request.compile';
-    }
 
     public function withBatchKey(?string $batchKey): static
     {
@@ -60,21 +53,17 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @param array<string, mixed> $schema
-     * @param non-empty-string $name
+     * @param ?array<string, mixed> $schema
+     * @param ?non-empty-string $name
      */
-    public function usingSchema(array $schema, string $name = 'json_schema'): static
+    public function usingSchema(?array $schema, ?string $name = null): static
     {
-        return $this->addComponent(new SchemaComponent($schema, $name));
-    }
+        if (null !== $schema) {
+            if (!$name && is_string($schema['title'] ?? null)) {
+                $name = trim($schema['title']);
+            }
 
-    /**
-     * @param ?non-empty-string $text
-     */
-    public function withText(?string $text, Role $role = Role::User): static
-    {
-        if (null !== $text) {
-            $this->addComponent(new TextComponent($text, $role));
+            $this->addComponent(new SchemaComponent($schema, $name));
         }
 
         return $this;
@@ -82,10 +71,46 @@ class CompileRequest extends BaseRequest
 
     /**
      * @param ?non-empty-string $text
+     *
+     * @deprecated since 0.3.3, use withPrompt() instead
+     */
+    public function withText(?string $text, Role $role = Role::User): static
+    {
+        if (null !== $text) {
+            $this->addComponent(new PromptComponent($text, $role));
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ?non-empty-string $prompt
+     */
+    public function withPrompt(?string $prompt, Role $role = Role::User): static
+    {
+        if (null !== $prompt) {
+            $this->addComponent(new PromptComponent($prompt, $role));
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ?non-empty-string $instructions
+     */
+    public function withInstructions(?string $instructions): static
+    {
+        return $this->withPrompt($instructions, Role::System);
+    }
+
+    /**
+     * @param ?non-empty-string $text
+     *
+     * @deprecated since 0.3.3, use withInstructions() instead
      */
     public function withSystemText(?string $text): static
     {
-        return $this->withText($text, Role::System);
+        return $this->withPrompt($text, Role::System);
     }
 
     public function addComponent(ComponentInterface $component): static

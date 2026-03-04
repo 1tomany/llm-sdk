@@ -42,14 +42,6 @@ class UploadRequest extends BaseRequest
         $this->closeFileHandle();
     }
 
-    /**
-     * @see OneToMany\LlmSdk\Request\BaseRequest
-     */
-    public function getRequestType(): string
-    {
-        return 'file.upload';
-    }
-
     public function atPath(?string $path): static
     {
         $this->path = trim($path ?? '') ?: null;
