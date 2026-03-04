@@ -7,6 +7,8 @@ use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
+use function assert;
+
 #[Group('UnitTests')]
 #[Group('RequestTests')]
 #[Group('QueryTests')]
@@ -25,10 +27,10 @@ final class CompileRequestTest extends TestCase
         $this->assertCount(1, $compileRequest->getComponents());
 
         $component = $compileRequest->getComponents()[0];
-        \assert($component instanceof SchemaComponent);
+        assert($component instanceof SchemaComponent);
 
         $this->assertInstanceOf(SchemaComponent::class, $component);
-        $this->assertEquals('Identify', $component->getName());
+        $this->assertEquals($schema['title'], $component->getName());
     }
 
     public function testHasComponentsIsFalseWhenTheContentsAreEmpty(): void
