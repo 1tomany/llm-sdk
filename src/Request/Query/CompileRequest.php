@@ -63,7 +63,7 @@ class CompileRequest extends BaseRequest
                 $name = trim($schema['title']);
             }
 
-            $this->addComponent(new SchemaComponent($schema, trim($name ?? '') ?: 'JsonSchema'));
+            $this->addComponent(new SchemaComponent($schema, $name));
         }
 
         return $this;
@@ -71,6 +71,8 @@ class CompileRequest extends BaseRequest
 
     /**
      * @param ?non-empty-string $text
+     *
+     * @deprecated since 0.3.3, use withPrompt() instead
      */
     public function withText(?string $text, Role $role = Role::User): static
     {
@@ -84,9 +86,13 @@ class CompileRequest extends BaseRequest
     /**
      * @param ?non-empty-string $prompt
      */
-    public function withPrompt(?string $prompt): static
+    public function withPrompt(?string $prompt, Role $role = Role::User): static
     {
-        return $this->withText($prompt, Role::User);
+        if (null !== $prompt) {
+            $this->addComponent(new PromptComponent($prompt, $role));
+        }
+
+        return $this;
     }
 
     /**
@@ -94,7 +100,7 @@ class CompileRequest extends BaseRequest
      */
     public function withInstructions(?string $instructions): static
     {
-        return $this->withText($instructions, Role::System);
+        return $this->withPrompt($instructions, Role::System);
     }
 
     /**
@@ -104,7 +110,7 @@ class CompileRequest extends BaseRequest
      */
     public function withSystemText(?string $text): static
     {
-        return $this->withText($text, Role::System);
+        return $this->withPrompt($text, Role::System);
     }
 
     public function addComponent(ComponentInterface $component): static
