@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Tests\Action\Query;
 
 use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Factory\QueryClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use PHPUnit\Framework\Attributes\Group;

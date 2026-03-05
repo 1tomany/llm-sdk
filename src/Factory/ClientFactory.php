@@ -25,7 +25,7 @@ readonly class ClientFactory implements ClientFactoryInterface
     /**
      * @param non-empty-lowercase-string $model
      *
-     * @throws InvalidArgumentException when a client for the model `$model` is not registered
+     * @throws InvalidArgumentException when a client for the model is not registered
      */
     public function create(string $model): ClientInterface
     {
