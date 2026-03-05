@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Claude\Type\Error;
+namespace OneToMany\LlmSdk\Client\Anthropic\Type\Error;
 
 use OneToMany\LlmSdk\Contract\Client\Type\Error\ErrorInterface;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Claude;
+namespace OneToMany\LlmSdk\Client\Anthropic;
 
-use OneToMany\LlmSdk\Client\Claude\Type\File\DeletedFile;
-use OneToMany\LlmSdk\Client\Claude\Type\File\File;
+use OneToMany\LlmSdk\Client\Anthropic\Type\File\DeletedFile;
+use OneToMany\LlmSdk\Client\Anthropic\Type\File\File;
 use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;

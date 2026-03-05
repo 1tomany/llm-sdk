@@ -1,17 +1,17 @@
 <?php
 
-use OneToMany\LlmSdk\Client\Claude\FileClient;
+use OneToMany\LlmSdk\Client\Anthropic\FileClient;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-require_once __DIR__.'/../common/functions.php';
+require_once __DIR__.'/../../common/functions.php';
 
-$apiKey = read_api_key('CLAUDE_API_KEY');
+$apiKey = read_api_key('ANTHROPIC_API_KEY');
 
 /** @var DenormalizerInterface $serializer */
-$serializer = require __DIR__.'/../serializer.php';
+$serializer = require __DIR__.'/../../serializer.php';
 
 $filePath = $argv[1] ?? null;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Claude;
+namespace OneToMany\LlmSdk\Client\Anthropic;
 
 use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;

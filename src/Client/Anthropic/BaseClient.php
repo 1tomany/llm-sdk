@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Claude;
+namespace OneToMany\LlmSdk\Client\Anthropic;
 
-use OneToMany\LlmSdk\Client\Claude\Type\Error\Error;
+use OneToMany\LlmSdk\Client\Anthropic\Type\Error\Error;
 use OneToMany\LlmSdk\Client\Trait\DenormalizerTrait;
 use OneToMany\LlmSdk\Client\Trait\SupportsModelTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
