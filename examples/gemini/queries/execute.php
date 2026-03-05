@@ -6,12 +6,12 @@ use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-require_once __DIR__.'/../common/functions.php';
+require_once __DIR__.'/../../common/functions.php';
 
 $apiKey = read_api_key('GEMINI_API_KEY');
 
 /** @var DenormalizerInterface $serializer */
-$serializer = require __DIR__.'/../serializer.php';
+$serializer = require __DIR__.'/../../serializer.php';
 
 $httpClient = HttpClient::create([
     'timeout' => 120.0,
