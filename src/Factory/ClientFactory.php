@@ -13,7 +13,7 @@ use function sprintf;
  *
  * @implements ClientFactoryInterface<T>
  */
-final readonly class ClientFactory implements ClientFactoryInterface
+readonly class ClientFactory implements ClientFactoryInterface
 {
     /**
      * @param iterable<T> $clients
@@ -25,7 +25,7 @@ final readonly class ClientFactory implements ClientFactoryInterface
     /**
      * @param non-empty-lowercase-string $model
      *
-     * @throws InvalidArgumentException a client for the model `$model` is not registered
+     * @throws InvalidArgumentException when a client for the model `$model` is not registered
      */
     public function create(string $model): ClientInterface
     {

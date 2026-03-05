@@ -3,25 +3,21 @@
 namespace OneToMany\LlmSdk\Action\Query;
 
 use OneToMany\LlmSdk\Contract\Action\Query\CompileQueryActionInterface;
-use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
-use OneToMany\LlmSdk\Contract\Factory\ClientFactoryInterface;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Factory\QueryClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 
 final readonly class CompileQueryAction implements CompileQueryActionInterface
 {
-    /**
-     * @param ClientFactoryInterface<QueryClientInterface> $clientFactory
-     */
-    public function __construct(private ClientFactoryInterface $clientFactory)
+    public function __construct(private QueryClientFactory $clientFactory)
     {
     }
 
     /**
      * @see OneToMany\LlmSdk\Contract\Action\Query\CompileQueryActionInterface
      *
-     * @throws InvalidArgumentException the request does not have any components
+     * @throws InvalidArgumentException when the request does not have any components
      */
     public function act(CompileRequest $request): CompileResponse
     {
