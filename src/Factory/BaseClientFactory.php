@@ -6,8 +6,6 @@ use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Factory\ClientFactoryInterface;
 use OneToMany\LlmSdk\Factory\Exception\CreatingClientFailedModelNotSupportedException;
 
-use function sprintf;
-
 /**
  * @template T of ClientInterface
  *
