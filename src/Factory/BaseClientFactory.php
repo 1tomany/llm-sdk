@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Factory;
 
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Factory\ClientFactoryInterface;
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Factory\Exception\CreatingClientFailedModelNotSupportedException;
 
 use function sprintf;
 
@@ -25,7 +25,7 @@ abstract readonly class BaseClientFactory implements ClientFactoryInterface
     /**
      * @param non-empty-lowercase-string $model
      *
-     * @throws InvalidArgumentException when a client for the model is not registered
+     * @throws CreatingClientFailedModelNotSupportedException when a model is not supported by any clients
      */
     public function create(string $model): ClientInterface
     {
@@ -35,6 +35,6 @@ abstract readonly class BaseClientFactory implements ClientFactoryInterface
             }
         }
 
-        throw new InvalidArgumentException(sprintf('The model "%s" does not have a client registered.', $model));
+        throw new CreatingClientFailedModelNotSupportedException($model);
     }
 }
