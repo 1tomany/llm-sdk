@@ -13,7 +13,7 @@ use function sprintf;
  *
  * @implements ClientFactoryInterface<T>
  */
-readonly class ClientFactory implements ClientFactoryInterface
+abstract readonly class BaseClientFactory implements ClientFactoryInterface
 {
     /**
      * @param iterable<T> $clients

@@ -5,8 +5,8 @@ namespace OneToMany\LlmSdk\Factory;
 use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
 
 /**
- * @extends ClientFactory<FileClientInterface>
+ * @extends BaseClientFactory<FileClientInterface>
  */
-final readonly class FileClientFactory extends ClientFactory
+final readonly class FileClientFactory extends BaseClientFactory
 {
 }
