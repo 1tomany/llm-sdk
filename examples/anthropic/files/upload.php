@@ -25,17 +25,13 @@ $httpClient = HttpClient::create([
 ]);
 
 // Determine the Claude model to use
-$claudeModel = read_model_name('claude-opus-4-6');
+$model = read_model_name('claude-opus-4-6');
 
 // Create the client to upload and delete files
 $fileClient = new FileClient($serializer, $httpClient, $apiKey);
 
 // Create a request to upload a file
-$uploadRequest = new UploadRequest(...[
-    'model' => $claudeModel,
-]);
-
-$uploadRequest->atPath($filePath);
+$uploadRequest = new UploadRequest($model)->atPath($filePath);
 
 // Upload the file to Claude
 $response = $fileClient->upload(...[
@@ -45,9 +41,7 @@ $response = $fileClient->upload(...[
 printf("File '%s' uploaded with URI '%s'.\n", basename($filePath), $response->getUri());
 
 // Create a request to delete the file
-$deleteRequest = new DeleteRequest(
-    $claudeModel, $response->getUri(),
-);
+$deleteRequest = new DeleteRequest($model, $response->getUri());
 
 $response = $fileClient->delete(...[
     'request' => $deleteRequest,
