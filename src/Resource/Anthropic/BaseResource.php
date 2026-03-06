@@ -12,9 +12,9 @@ use function sprintf;
 
 abstract readonly class BaseResource extends AbstractResource
 {
-    protected function doRequest(string $method, string $url, array $options = []): string
+    protected function request(string $method, string $url, array $options = []): string
     {
-        return parent::doRequest($method, $this->generateUrl($url), $options + [
+        return parent::request($method, $this->generateUrl($url), $options + [
             'headers' => [
                 'x-api-key' => $this->apiKey,
                 'anthropic-version' => $this->apiVersion,

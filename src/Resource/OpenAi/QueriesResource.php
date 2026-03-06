@@ -93,11 +93,11 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
     {
         $timer = new Stopwatch(true)->start('execute');
 
-        $content = $this->doRequest('POST', $request->getUrl(), [
+        $content = $this->request('POST', $request->getUrl(), [
             'json' => $request->getRequest(),
         ]);
 
-        $response = $this->parseResponse($content, Response::class);
+        $response = $this->deserialize($content, Response::class);
 
         if (null !== $response->error) {
             throw new RuntimeException($response->error->message);

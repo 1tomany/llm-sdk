@@ -16,13 +16,13 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function upload(UploadRequest $request): UploadResponse
     {
-        $content = $this->doRequest('POST', 'files', [
+        $content = $this->request('POST', 'files', [
             'body' => [
                 'file' => $request->openFile(),
             ],
         ]);
 
-        $file = $this->parseResponse($content, File::class);
+        $file = $this->deserialize($content, File::class);
 
         return new UploadResponse($request->getModel(), $file->id, $file->filename);
     }
@@ -32,7 +32,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        $this->doRequest('DELETE', sprintf('files/%s', $request->getUri()));
+        $this->request('DELETE', sprintf('files/%s', $request->getUri()));
 
         return new DeleteResponse($request->getModel(), $request->getUri());
     }

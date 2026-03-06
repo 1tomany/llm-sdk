@@ -15,9 +15,9 @@ abstract readonly class BaseResource extends AbstractResource
     /**
      * @see OneToMany\LlmSdk\Resource\AbstractResource
      */
-    protected function doRequest(string $method, string $url, array $options = []): string
+    protected function request(string $method, string $url, array $options = []): string
     {
-        return parent::doRequest($method, $url, $options + ['auth_bearer' => $this->apiKey]);
+        return parent::request($method, $url, $options + ['auth_bearer' => $this->apiKey]);
     }
 
     /**
