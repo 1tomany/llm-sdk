@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Client\Anthropic;
 
-use OneToMany\LlmSdk\Client\Anthropic\Type\File\DeletedFile;
 use OneToMany\LlmSdk\Client\Anthropic\Type\File\File;
 use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
@@ -19,12 +18,8 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
      */
     public function upload(UploadRequest $request): UploadResponse
     {
-        $url = $this->generateUrl('files');
-
-        $content = $this->doRequest('POST', $url, [
-            'body' => [
-                'file' => $request->openFileHandle(),
-            ],
+        $content = $this->doRequest('POST', $this->generateUrl('files'), [
+            'body' => ['file' => $request->openFileHandle()],
         ]);
 
         $file = $this->denormalize($content, File::class);
@@ -37,11 +32,9 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        $content = $this->doRequest('DELETE', $this->generateUrl('files', $request->getUri()));
+        $this->doRequest('DELETE', $this->generateUrl('files', $request->getUri()));
 
-        $deletedFile = $this->denormalize($content, DeletedFile::class);
-
-        return new DeleteResponse($request->getModel(), $deletedFile->id);
+        return new DeleteResponse($request->getModel(), $request->getUri());
     }
 
     /**

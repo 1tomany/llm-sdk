@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAi;
 
-use OneToMany\LlmSdk\Client\OpenAi\Type\File\DeletedFile;
 use OneToMany\LlmSdk\Client\OpenAi\Type\File\Enum\Purpose;
 use OneToMany\LlmSdk\Client\OpenAi\Type\File\File;
 use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
@@ -18,11 +17,9 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
      */
     public function upload(UploadRequest $request): UploadResponse
     {
-        $url = $this->generateUrl('files');
-
         $purpose = Purpose::create($request->getPurpose());
 
-        $content = $this->doRequest('POST', $url, [
+        $content = $this->doRequest('POST', $this->generateUrl('files'), [
             'body' => [
                 'purpose' => $purpose->getValue(),
                 'file' => $request->openFileHandle(),
@@ -39,10 +36,8 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        $content = $this->doRequest('DELETE', $this->generateUrl('files', $request->getUri()));
+        $this->doRequest('DELETE', $this->generateUrl('files', $request->getUri()));
 
-        $deletedFile = $this->denormalize($content, DeletedFile::class);
-
-        return new DeleteResponse($request->getModel(), $deletedFile->id);
+        return new DeleteResponse($request->getModel(), $request->getUri());
     }
 }
