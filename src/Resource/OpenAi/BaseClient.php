@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\OpenAi;
+namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Client\Trait\DenormalizeTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;

@@ -6,6 +6,7 @@ use OneToMany\LlmSdk\Client\OpenAi\Type\Batch\Batch;
 use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
+use OneToMany\LlmSdk\Resource\OpenAi\BaseClient;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
