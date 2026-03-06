@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Anthropic\Type\Error;
+namespace OneToMany\LlmSdk\Resource\Anthropic\Type\Error;
 
 final readonly class Error
 {

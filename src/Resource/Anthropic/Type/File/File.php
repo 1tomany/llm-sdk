@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Anthropic\Type\File;
+namespace OneToMany\LlmSdk\Resource\Anthropic\Type\File;
 
 final readonly class File
 {

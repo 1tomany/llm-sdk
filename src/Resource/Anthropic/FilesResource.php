@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Anthropic;
 
-use OneToMany\LlmSdk\Client\Anthropic\Type\File\File;
+use OneToMany\LlmSdk\Resource\Anthropic\Type\File\File;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;

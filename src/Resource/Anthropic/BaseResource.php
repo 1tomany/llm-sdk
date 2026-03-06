@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Anthropic;
 
-use OneToMany\LlmSdk\Client\Anthropic\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\Anthropic\Type\Error\Error;
 use OneToMany\LlmSdk\Client\Trait\DenormalizeTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -38,11 +38,9 @@ abstract readonly class BaseResource
      */
     protected function doRequest(string $method, string $url, array $options = []): array
     {
-        $options = array_merge_recursive($options, [
-            'headers' => [
-                'x-api-key' => $this->apiKey,
-                'anthropic-version' => $this->apiVersion,
-            ],
+        $options = \array_merge_recursive($options, [
+            'x-api-key' => $this->apiKey,
+            'anthropic-version' => $this->apiVersion,
         ]);
 
         try {
