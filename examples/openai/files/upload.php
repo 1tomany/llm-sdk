@@ -1,6 +1,5 @@
 <?php
 
-use OneToMany\LlmSdk\Client\OpenAi\FileClient;
 use OneToMany\LlmSdk\Client\OpenAi\OpenAiClient;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
