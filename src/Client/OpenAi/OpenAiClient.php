@@ -2,27 +2,17 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAi;
 
-use OneToMany\LlmSdk\Contract\Client\ClientInterface;
+use OneToMany\LlmSdk\Client\BaseClient;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
+use OneToMany\LlmSdk\Exception\RuntimeException;
+use OneToMany\LlmSdk\Resource\OpenAi\BatchesResource;
 use OneToMany\LlmSdk\Resource\OpenAi\FilesResource;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use OneToMany\LlmSdk\Resource\OpenAi\QueriesResource;
 
-final class OpenAiClient implements ClientInterface
+final class OpenAiClient extends BaseClient
 {
-    private ?BatchesResourceInterface $batchClient = null;
-    private ?FilesResourceInterface $filesResource = null;
-    private ?QueriesResourceInterface $queryClient = null;
-
-    public function __construct(
-        private DenormalizerInterface $denormalizer,
-        private HttpClientInterface $httpClient,
-        #[\SensitiveParameter] private string $apiKey,
-    ) {
-    }
-
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      *
@@ -59,9 +49,10 @@ final class OpenAiClient implements ClientInterface
      */
     public function batches(): BatchesResourceInterface
     {
-        $this->batchClient ??= new BatchClient($this->denormalizer, $this->httpClient, $this->apiKey);
+        throw new RuntimeException('Not implemented!');
+        // $this->batches ??= new BatchesResource($this->denormalizer, $this->httpClient, $this->apiKey);
 
-        return $this->batchClient;
+        // return $this->batches;
     }
 
     /**
@@ -69,9 +60,9 @@ final class OpenAiClient implements ClientInterface
      */
     public function files(): FilesResourceInterface
     {
-        $this->filesResource ??= new FilesResource($this->denormalizer, $this->httpClient, $this->apiKey);
+        $this->files ??= new FilesResource($this->httpClient, $this->apiKey);
 
-        return $this->filesResource;
+        return $this->files;
     }
 
     /**
@@ -79,8 +70,9 @@ final class OpenAiClient implements ClientInterface
      */
     public function queries(): QueriesResourceInterface
     {
-        $this->queryClient ??= new QueryClient($this->denormalizer, $this->httpClient, $this->apiKey);
+        throw new RuntimeException('Not implemented!');
+        // $this->queries ??= new QueriesResource($this->denormalizer, $this->httpClient, $this->apiKey);
 
-        return $this->queryClient;
+        // return $this->queries;
     }
 }

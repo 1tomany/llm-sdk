@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\OpenAi;
+namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Input\Enum\Type as InputType;
 use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Response;
@@ -11,7 +11,6 @@ use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
-use OneToMany\LlmSdk\Resource\OpenAi\BaseResource;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -20,7 +19,7 @@ use function parse_url;
 
 use const PHP_URL_PATH;
 
-final readonly class QueryClient extends BaseResource implements QueriesResourceInterface
+final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface

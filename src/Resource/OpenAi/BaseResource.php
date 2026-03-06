@@ -14,10 +14,10 @@ use function sprintf;
 
 abstract readonly class BaseResource
 {
-    use DenormalizeTrait;
+    // use DenormalizeTrait;
 
     public function __construct(
-        protected DenormalizerInterface $denormalizer,
+        // protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
         #[\SensitiveParameter] protected string $apiKey,
     ) {
@@ -37,9 +37,6 @@ abstract readonly class BaseResource
 
             /** @var int<100, 599> $statusCode */
             $statusCode = $response->getStatusCode();
-
-            print_r($response);
-            exit;
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
         }

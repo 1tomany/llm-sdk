@@ -26,9 +26,10 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             ],
         ]);
 
-        $file = $this->denormalize($content, File::class);
+        throw new \RuntimeException('Not implemented!');
+        // $file = $this->denormalize($content, File::class);
 
-        return new UploadResponse($request->getModel(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
+        // return new UploadResponse($request->getModel(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
     }
 
     /**

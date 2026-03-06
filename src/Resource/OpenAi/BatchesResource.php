@@ -1,16 +1,15 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\OpenAi;
+namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Client\OpenAi\Type\Batch\Batch;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
-use OneToMany\LlmSdk\Resource\OpenAi\BaseResource;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
-final readonly class BatchClient extends BaseResource implements BatchesResourceInterface
+final readonly class BatchesResource extends BaseResource implements BatchesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
