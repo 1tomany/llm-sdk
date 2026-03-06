@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Gemini;
+namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Client\Gemini\Type\Content\GenerateContentResponse;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;

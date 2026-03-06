@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Gemini;
+namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Client\Gemini\Type\Batch\Batch;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
