@@ -63,11 +63,6 @@ abstract readonly class AbstractResource
         return $object;
     }
 
-    // /**
-    //  * @return array<mixed>
-    //  */
-    // abstract protected function buildAuthOptions(): array;
-
     /**
      * @param array<mixed> $content
      */

@@ -9,8 +9,6 @@ use OneToMany\LlmSdk\Resource\Anthropic\Type\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
-use function array_merge_recursive;
-
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     /**

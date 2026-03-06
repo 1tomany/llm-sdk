@@ -34,14 +34,6 @@ abstract readonly class CommonResource extends AbstractResource
         return $error->message;
     }
 
-
-
-
-
-
-
-
-
     /**
      * @return non-empty-string
      */
