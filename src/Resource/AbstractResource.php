@@ -38,7 +38,7 @@ abstract readonly class AbstractResource
             /** @var array<mixed> $content */
             $content = $response->toArray(false);
 
-            if ($statusCode >= 300 || $this->hasBodyError($content)) {
+            if ($statusCode >= 300) {
                 throw new RuntimeException($this->extractErrorMessage($content), $statusCode);
             }
         } catch (HttpClientExceptionInterface $e) {
@@ -65,14 +65,6 @@ abstract readonly class AbstractResource
         }
 
         return $object;
-    }
-
-    /**
-     * @param array<mixed> $content
-     */
-    protected function hasBodyError(array $content): bool
-    {
-        return isset($content['error']);
     }
 
     /**
