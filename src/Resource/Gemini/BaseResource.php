@@ -14,7 +14,7 @@ use function sprintf;
 abstract readonly class BaseResource extends AbstractResource
 {
     /**
-     * @param array<string, int|string>
+     * @param array<string, int|string> $headers
      *
      * @return array<string, int|string>
      */
