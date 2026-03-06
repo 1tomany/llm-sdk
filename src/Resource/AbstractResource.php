@@ -4,15 +4,15 @@ namespace OneToMany\LlmSdk\Resource;
 
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 abstract readonly class AbstractResource
 {
     public function __construct(
-        protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
+        protected SerializerInterface $serializer,
         protected string $apiKey,
         protected string $apiVersion,
     ) {
@@ -20,10 +20,8 @@ abstract readonly class AbstractResource
 
     /**
      * @param array<string, mixed> $options
-     *
-     * @return array<mixed>
      */
-    protected function doRequest(string $method, string $url, array $options = []): array
+    protected function doRequest(string $method, string $url, array $options = []): string
     {
         try {
             $response = $this->httpClient->request($method, $url, $options);
@@ -31,11 +29,12 @@ abstract readonly class AbstractResource
             /** @var int<100, 599> $statusCode */
             $statusCode = $response->getStatusCode();
 
-            /** @var array<mixed> $content */
-            $content = $response->toArray(false);
+            /** @var non-empty-string $content */
+            $content = $response->getContent(false);
 
             if ($statusCode >= 300) {
-                throw new RuntimeException($this->extractErrorMessage($content), $statusCode);
+                throw new RuntimeException('bad request', $statusCode);
+                // throw new RuntimeException($this->extractErrorMessage($content), $statusCode);
             }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
@@ -52,10 +51,10 @@ abstract readonly class AbstractResource
      *
      * @return T
      */
-    protected function denormalize(mixed $content, string $type, array $context = []): object
+    protected function parseResponse(string $content, string $type, array $context = []): object
     {
         try {
-            $object = $this->denormalizer->denormalize($content, $type, null, $context);
+            $object = $this->serializer->deserialize($content, $type, 'json', $context);
         } catch (SerializerExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
         }

@@ -15,7 +15,7 @@ abstract readonly class BaseResource extends AbstractResource
     /**
      * @see OneToMany\LlmSdk\Resource\AbstractResource
      */
-    protected function doRequest(string $method, string $url, array $options = []): array
+    protected function doRequest(string $method, string $url, array $options = []): string
     {
         return parent::doRequest($method, $url, $options + ['auth_bearer' => $this->apiKey]);
     }
@@ -27,11 +27,12 @@ abstract readonly class BaseResource extends AbstractResource
      */
     protected function extractErrorMessage(array $content): string
     {
-        $error = $this->denormalize($content, Error::class, [
-            UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
-        ]);
+        return 'bad error!';
+        // $error = $this->parseResponse($content, Error::class, [
+        //     UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
+        // ]);
 
-        return $error->message;
+        // return $error->message;
     }
 
     /**

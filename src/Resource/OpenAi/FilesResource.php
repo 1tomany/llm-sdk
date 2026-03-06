@@ -26,7 +26,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             ],
         ]);
 
-        $file = $this->denormalize($content, File::class);
+        $file = $this->parseResponse($content, File::class);
 
         return new UploadResponse($request->getModel(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
     }

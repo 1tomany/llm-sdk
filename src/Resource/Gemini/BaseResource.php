@@ -33,11 +33,12 @@ abstract readonly class BaseResource extends AbstractResource
      */
     protected function extractErrorMessage(array $content): string
     {
-        $error = $this->denormalize($content, Error::class, [
-            UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
-        ]);
+        return 'another bad thing happened';
+        // $error = $this->parseResponse($content, Error::class, [
+        //     UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
+        // ]);
 
-        return $error->getMessage();
+        // return $error->getMessage();
     }
 
     /**

@@ -12,7 +12,7 @@ use function sprintf;
 
 abstract readonly class BaseResource extends AbstractResource
 {
-    protected function doRequest(string $method, string $url, array $options = []): array
+    protected function doRequest(string $method, string $url, array $options = []): string
     {
         return parent::doRequest($method, $this->generateUrl($url), $options + [
             'headers' => [
@@ -45,11 +45,12 @@ abstract readonly class BaseResource extends AbstractResource
      */
     protected function extractErrorMessage(array $content): string
     {
-        $error = $this->denormalize($content, Error::class, [
-            UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
-        ]);
+        return 'bad request';
+        // $error = $this->parseResponse($content, Error::class, [
+        //     UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
+        // ]);
 
-        return $error->message;
+        // return $error->message;
     }
 
     /**

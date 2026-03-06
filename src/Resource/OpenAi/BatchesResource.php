@@ -26,7 +26,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
             ],
         ]);
 
-        $batch = $this->denormalize($content, Batch::class);
+        $batch = $this->parseResponse($content, Batch::class);
 
         return new CreateResponse($request->getModel(), $batch->id, $batch->status->getValue(), $batch->output_file_id);
     }
@@ -36,7 +36,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function read(ReadRequest $request): ReadResponse
     {
-        $batch = $this->denormalize($this->doRequest('GET', $this->generateUrl('batches', $request->getUri())), Batch::class);
+        $batch = $this->parseResponse($this->doRequest('GET', $this->generateUrl('batches', $request->getUri())), Batch::class);
 
         return new ReadResponse($request->getModel(), $batch->id, $batch->status->getValue(), $batch->output_file_id);
     }

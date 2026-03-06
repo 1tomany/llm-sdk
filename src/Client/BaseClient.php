@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 abstract class BaseClient implements ClientInterface
@@ -16,8 +16,8 @@ abstract class BaseClient implements ClientInterface
     protected ?QueriesResourceInterface $queries = null;
 
     public function __construct(
-        protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
+        protected SerializerInterface $serializer,
         protected string $apiKey,
         protected string $apiVersion,
     ) {

@@ -93,7 +93,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 $uploadOffset = $uploadOffset + strlen($fileChunk);
             }
 
-            $file = $this->denormalize($response->toArray(true), File::class, [
+            $file = $this->parseResponse($response->getContent(), File::class, [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
             ]);
         } catch (HttpClientExceptionInterface $e) {

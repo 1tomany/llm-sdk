@@ -40,7 +40,7 @@ final class AnthropicClient extends BaseClient
      */
     public function files(): FilesResourceInterface
     {
-        $this->files ??= new FilesResource($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
+        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->apiKey, $this->apiVersion);
 
         return $this->files;
     }
