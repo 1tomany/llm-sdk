@@ -3,16 +3,16 @@
 namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Client\Mock\Type\Batch\Status;
-use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
-final readonly class BatchesResource extends BaseResource implements BatchClientInterface
+final readonly class BatchesResource extends BaseResource implements BatchesResourceInterface
 {
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\BatchClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
     public function create(CreateRequest $request): CreateResponse
     {
@@ -20,7 +20,7 @@ final readonly class BatchesResource extends BaseResource implements BatchClient
     }
 
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\BatchClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
     public function read(ReadRequest $request): ReadResponse
     {

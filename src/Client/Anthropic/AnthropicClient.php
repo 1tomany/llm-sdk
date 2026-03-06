@@ -2,9 +2,9 @@
 
 namespace OneToMany\LlmSdk\Client\Anthropic;
 
-use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
-use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -45,7 +45,7 @@ final class AnthropicClient implements ClientInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
-    public function batches(): BatchClientInterface
+    public function batches(): BatchesResourceInterface
     {
         throw new RuntimeException('Not implemented!');
     }
@@ -63,7 +63,7 @@ final class AnthropicClient implements ClientInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
-    public function queries(): QueryClientInterface
+    public function queries(): QueriesResourceInterface
     {
         throw new RuntimeException('Not implemented!');
     }

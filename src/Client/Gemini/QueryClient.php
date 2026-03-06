@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Client\Gemini;
 
 use OneToMany\LlmSdk\Client\Gemini\Type\Content\GenerateContentResponse;
-use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
@@ -13,10 +13,10 @@ use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-final readonly class QueryClient extends BaseClient implements QueryClientInterface
+final readonly class QueryClient extends BaseClient implements QueriesResourceInterface
 {
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\QueryClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
     public function compile(CompileRequest $request): CompileResponse
     {
@@ -73,7 +73,7 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
     }
 
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\QueryClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
     public function execute(ExecuteRequest $request): ExecuteResponse
     {

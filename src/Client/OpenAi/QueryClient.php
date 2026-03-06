@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Client\OpenAi;
 
 use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Input\Enum\Type as InputType;
 use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Response;
-use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
@@ -20,10 +20,10 @@ use function parse_url;
 
 use const PHP_URL_PATH;
 
-final readonly class QueryClient extends BaseResource implements QueryClientInterface
+final readonly class QueryClient extends BaseResource implements QueriesResourceInterface
 {
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\QueryClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
     public function compile(CompileRequest $request): CompileResponse
     {
@@ -88,7 +88,7 @@ final readonly class QueryClient extends BaseResource implements QueryClientInte
     }
 
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\QueryClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
     public function execute(ExecuteRequest $request): ExecuteResponse
     {

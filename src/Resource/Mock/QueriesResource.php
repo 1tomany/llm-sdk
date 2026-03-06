@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Mock;
 
-use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
@@ -14,10 +14,17 @@ use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use function json_encode;
 use function random_int;
 
-final readonly class QueriesResource extends BaseResource implements QueryClientInterface
+final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
+    private \Faker\Generator $faker;
+
+    public function __construct()
+    {
+        $this->faker = \Faker\Factory::create();
+    }
+
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\QueryClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
     public function compile(CompileRequest $request): CompileResponse
     {
@@ -54,22 +61,22 @@ final readonly class QueriesResource extends BaseResource implements QueryClient
     }
 
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\QueryClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
     public function execute(ExecuteRequest $request): ExecuteResponse
     {
-        $faker = \Faker\Factory::create();
+        $id = $this->generateResponseId('query');
 
         /**
          * @var non-empty-string $output
          */
         $output = json_encode([
-            'word1' => $faker->word(),
-            'word2' => $faker->word(),
-            'notes' => $faker->sentence(),
+            'word1' => $this->faker->word(),
+            'word2' => $this->faker->word(),
+            'notes' => $this->faker->sentence(),
         ]);
 
-        return new ExecuteResponse($request->getModel(), $this->generateResponseId('query'), $output, ['output' => $output], random_int(100, 10000));
+        return new ExecuteResponse($request->getModel(), $id, $output, ['id' => $id, 'output' => $output], random_int(100, 10000));
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAi;
 
-use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
-use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Resource\OpenAi\FilesResource;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -12,9 +12,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class OpenAiClient implements ClientInterface
 {
-    private ?BatchClientInterface $batchClient = null;
+    private ?BatchesResourceInterface $batchClient = null;
     private ?FilesResourceInterface $filesResource = null;
-    private ?QueryClientInterface $queryClient = null;
+    private ?QueriesResourceInterface $queryClient = null;
 
     /**
      * @param non-empty-string $apiKey
@@ -60,7 +60,7 @@ final class OpenAiClient implements ClientInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
-    public function batches(): BatchClientInterface
+    public function batches(): BatchesResourceInterface
     {
         $this->batchClient ??= new BatchClient($this->denormalizer, $this->httpClient, $this->apiKey);
 
@@ -80,7 +80,7 @@ final class OpenAiClient implements ClientInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
-    public function queries(): QueryClientInterface
+    public function queries(): QueriesResourceInterface
     {
         $this->queryClient ??= new QueryClient($this->denormalizer, $this->httpClient, $this->apiKey);
 

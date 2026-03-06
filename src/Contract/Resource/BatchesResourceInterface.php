@@ -1,13 +1,13 @@
 <?php
 
-namespace OneToMany\LlmSdk\Contract\Client;
+namespace OneToMany\LlmSdk\Contract\Resource;
 
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
-interface BatchClientInterface
+interface BatchesResourceInterface
 {
     public function create(CreateRequest $request): CreateResponse;
 
