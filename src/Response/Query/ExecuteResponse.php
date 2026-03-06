@@ -13,14 +13,11 @@ use const JSON_THROW_ON_ERROR;
 
 final readonly class ExecuteResponse extends BaseResponse
 {
-    /**
-     * @param array<string, mixed> $response
-     */
     public function __construct(
         string $model,
         private string $uri,
         private string $output,
-        private array $response,
+        private string $response,
         private int|float $runtime,
         private UsageResponse $usage = new UsageResponse(),
     ) {
@@ -54,10 +51,7 @@ final readonly class ExecuteResponse extends BaseResponse
         return $record;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function getResponse(): array
+    public function getResponse(): string
     {
         return $this->response;
     }
