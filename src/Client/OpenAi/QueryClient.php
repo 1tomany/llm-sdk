@@ -101,7 +101,7 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
         $response = $this->denormalize($content, Response::class);
 
         if (null !== $response->error) {
-            throw new RuntimeException($response->error->getMessage());
+            throw new RuntimeException($response->error->message);
         }
 
         return new ExecuteResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), $response->usage->toResponse());
