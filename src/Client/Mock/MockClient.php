@@ -2,10 +2,10 @@
 
 namespace OneToMany\LlmSdk\Client\Mock;
 
-use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
-use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Resource\Mock\BatchesResource;
 use OneToMany\LlmSdk\Resource\Mock\FilesResource;
 use OneToMany\LlmSdk\Resource\Mock\QueriesResource;
