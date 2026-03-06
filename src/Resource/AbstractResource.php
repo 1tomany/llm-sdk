@@ -94,7 +94,6 @@ abstract readonly class AbstractResource
     }
 
     /**
-     * @param string $content
      * @param positive-int $statusCode
      *
      * @throws RuntimeException when the HTTP request was not successful
