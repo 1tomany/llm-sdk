@@ -2,11 +2,9 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAi;
 
-use OneToMany\LlmSdk\Client\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Client\Trait\DenormalizeTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -48,7 +46,7 @@ abstract readonly class BaseClient
             /** @var array<mixed> $content */
             $content = $response->toArray(false);
 
-            if ($statusCode >= 300) {
+            if ($statusCode >= 300 || isset($content['error'])) {
                 if (is_array($content['error'] ?? null)) {
                     if (is_string($content['error']['message'] ?? null)) {
                         throw new RuntimeException($content['error']['message'], $statusCode);
