@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
-use OneToMany\LlmSdk\Resource\OpenAi\BaseClient;
 use OneToMany\LlmSdk\Client\OpenAi\Type\File\Enum\Purpose;
 use OneToMany\LlmSdk\Client\OpenAi\Type\File\File;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
