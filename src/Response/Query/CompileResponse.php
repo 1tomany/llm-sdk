@@ -8,8 +8,6 @@ use OneToMany\LlmSdk\Response\BaseResponse;
 final readonly class CompileResponse extends BaseResponse
 {
     /**
-     * @param non-empty-lowercase-string $model
-     * @param non-empty-string $url
      * @param array<string, mixed> $request
      */
     public function __construct(
@@ -20,9 +18,6 @@ final readonly class CompileResponse extends BaseResponse
         parent::__construct($model);
     }
 
-    /**
-     * @return non-empty-string
-     */
     public function getUrl(): string
     {
         return $this->url;

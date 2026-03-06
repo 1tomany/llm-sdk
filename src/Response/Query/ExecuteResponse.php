@@ -14,11 +14,7 @@ use const JSON_THROW_ON_ERROR;
 final readonly class ExecuteResponse extends BaseResponse
 {
     /**
-     * @param non-empty-lowercase-string $model
-     * @param non-empty-string $uri
-     * @param non-empty-string $output
      * @param array<string, mixed> $response
-     * @param non-negative-int|float $runtime
      */
     public function __construct(
         string $model,
@@ -31,17 +27,11 @@ final readonly class ExecuteResponse extends BaseResponse
         parent::__construct($model);
     }
 
-    /**
-     * @return non-empty-string
-     */
     public function getUri(): string
     {
         return $this->uri;
     }
 
-    /**
-     * @return non-empty-string
-     */
     public function getOutput(): string
     {
         return $this->output;
