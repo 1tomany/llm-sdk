@@ -50,6 +50,14 @@ abstract readonly class AbstractResource
     /**
      * @param array<string, mixed> $options
      */
+    protected function doHttpGetRequest(string $url, array $options = []): string
+    {
+        return $this->doHttpRequest('GET', $url, $options);
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
     protected function doHttpPostRequest(string $url, array $options = []): string
     {
         return $this->doHttpRequest('POST', $url, $options);
