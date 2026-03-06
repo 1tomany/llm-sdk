@@ -11,14 +11,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class GeminiClient implements ClientInterface
 {
-    private ?BatchesResourceInterface $batchClient = null;
-    private ?FilesResourceInterface $fileClient = null;
-    private ?QueriesResourceInterface $queryClient = null;
+    private ?BatchesResourceInterface $batchesResource = null;
+    private ?FilesResourceInterface $filesResource = null;
+    private ?QueriesResourceInterface $queriesResource = null;
 
-    /**
-     * @param non-empty-string $apiKey
-     * @param non-empty-string $apiVersion
-     */
     public function __construct(
         private readonly DenormalizerInterface $denormalizer,
         private readonly HttpClientInterface $httpClient,
@@ -52,9 +48,9 @@ final class GeminiClient implements ClientInterface
      */
     public function batches(): BatchesResourceInterface
     {
-        $this->batchClient ??= new BatchClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
+        $this->batchesResource ??= new BatchClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
-        return $this->batchClient;
+        return $this->batchesResource;
     }
 
     /**
@@ -62,9 +58,9 @@ final class GeminiClient implements ClientInterface
      */
     public function files(): FilesResourceInterface
     {
-        $this->fileClient ??= new FileClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
+        $this->filesResource ??= new FileClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
-        return $this->fileClient;
+        return $this->filesResource;
     }
 
     /**
@@ -72,8 +68,8 @@ final class GeminiClient implements ClientInterface
      */
     public function queries(): QueriesResourceInterface
     {
-        $this->queryClient ??= new QueryClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
+        $this->queriesResource ??= new QueryClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
-        return $this->queryClient;
+        return $this->queriesResource;
     }
 }

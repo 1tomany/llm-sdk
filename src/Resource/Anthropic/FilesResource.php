@@ -42,8 +42,12 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     protected function doRequest(string $method, string $url, array $options = []): array
     {
-        return parent::doRequest($method, $url, $options + [
-            'headers' => ['anthropic-beta' => 'files-api-2025-04-14'],
+        $options = \array_merge_recursive($options, [
+            'headers' => [
+                'anthropic-beta' => 'files-api-2025-04-14',
+            ],
         ]);
+
+        return parent::doRequest($method, $url, $options);
     }
 }

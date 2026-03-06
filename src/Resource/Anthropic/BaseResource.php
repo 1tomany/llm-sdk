@@ -65,8 +65,6 @@ abstract readonly class BaseResource
     }
 
     /**
-     * @param non-empty-string $paths
-     *
      * @return non-empty-string
      */
     protected function generateUrl(string ...$paths): string

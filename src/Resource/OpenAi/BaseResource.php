@@ -16,9 +16,6 @@ abstract readonly class BaseResource
 {
     use DenormalizeTrait;
 
-    /**
-     * @param non-empty-string $apiKey
-     */
     public function __construct(
         protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
@@ -48,8 +45,6 @@ abstract readonly class BaseResource
     }
 
     /**
-     * @param non-empty-string $paths
-     *
      * @return non-empty-string
      */
     protected function generateUrl(string ...$paths): string

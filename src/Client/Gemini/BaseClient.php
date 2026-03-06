@@ -18,10 +18,6 @@ abstract readonly class BaseClient
 {
     use DenormalizeTrait;
 
-    /**
-     * @param non-empty-string $apiKey
-     * @param non-empty-string $apiVersion
-     */
     public function __construct(
         protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
@@ -67,8 +63,6 @@ abstract readonly class BaseClient
     }
 
     /**
-     * @param non-empty-string $paths
-     *
      * @return non-empty-string
      */
     protected function generateUrl(string ...$paths): string
@@ -77,9 +71,6 @@ abstract readonly class BaseClient
     }
 
     /**
-     * @param non-empty-lowercase-string $model
-     * @param non-empty-string $action
-     *
      * @return non-empty-string
      */
     protected function generateModelUrl(string $model, string $action): string

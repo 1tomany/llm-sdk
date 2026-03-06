@@ -16,9 +16,6 @@ final class OpenAiClient implements ClientInterface
     private ?FilesResourceInterface $filesResource = null;
     private ?QueriesResourceInterface $queryClient = null;
 
-    /**
-     * @param non-empty-string $apiKey
-     */
     public function __construct(
         private DenormalizerInterface $denormalizer,
         private HttpClientInterface $httpClient,
