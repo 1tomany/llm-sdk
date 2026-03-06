@@ -1,11 +1,14 @@
 <?php
 
-use OneToMany\LlmSdk\Contract\Factory\ClientFactoryInterface;
+use OneToMany\LlmSdk\Action\File\DeleteFileAction;
+use OneToMany\LlmSdk\Action\File\UploadFileAction;
+use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface;
+use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 
-/** @var ClientFactoryInterface $clientFactory */
-$clientFactory = require dirname(dirname(__DIR__)).'/bootstrap.php';
+/** @var ClientFactory $clientFactory */
+$clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
 if ($argc < 2) {
     printUsage();
@@ -17,36 +20,37 @@ if (!is_file($path)) {
     printUsage();
 }
 
-$model = $argv[2] ?? 'claude-opus-4.6';
+$model = strtolower($argv[2]);
 
-// Determine the Anthropic model to use
-// $model = read_model_name('claude-opus-4-6');
+try {
+    echo sprintf('Uploading the file "%s" to the model "%s".', basename($path), $model).PHP_EOL;
 
-// Create the client to upload and delete files
-// $anthropicClient = new AnthropicClient($serializer, HttpClient::create(), $apiKey);
+    // Create a request to upload the file
+    $uploadRequest = new UploadRequest($model)->atPath($path);
 
-// Create a request to upload a file
-$uploadRequest = new UploadRequest($model)->atPath($path);
+    // Upload the file to the LLM vendor
+    $response = new UploadFileAction($clientFactory)->act(...[
+        'request' => $uploadRequest,
+    ]);
 
-// Upload the file to Anthropic
-$response = $clientFactory->create($model)->files()->upload(...[
-    'request' => $uploadRequest,
-]);
+    printf("The file '%s' was successfully uploaded to the model '%s' with URI '%s'.\n", basename($path), $response->getModel(), $response->getUri());
 
-printf("File '%s' uploaded with URI '%s'.\n", basename($path), $response->getUri());
+    // Create a request to delete the file
+    $deleteRequest = new DeleteRequest($model, $response->getUri());
 
-// Create a request to delete the file
-$deleteRequest = new DeleteRequest($model, $response->getUri());
+    // Delete the file from the LLM vendor
+    $response = new DeleteFileAction($clientFactory)->act(...[
+        'request' => $deleteRequest,
+    ]);
 
-// Delete the file from Anthropic
-$response = $anthropicClient->files()->delete(...[
-    'request' => $deleteRequest,
-]);
-
-printf("File URI '%s' successfully deleted.\n", $response->getUri());
+    printf("The file '%s' was successfully deleted from the model '%s'.\n", basename($path), $response->getModel());
+} catch (ExceptionInterface $e) {
+    printf("[ERROR] %s\n", $e->getMessage());
+    exit(1);
+}
 
 function printUsage(): never
 {
-    printf("Usage: php %s <file> <model>\n", basename(__FILE__));
+    printf("Usage: php %s <path> <model>\n", basename(__FILE__));
     exit(1);
 }
