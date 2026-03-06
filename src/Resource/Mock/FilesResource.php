@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Mock;
+namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
@@ -8,7 +8,7 @@ use OneToMany\LlmSdk\Request\File\UploadRequest;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
-final readonly class FileClient extends BaseClient implements FilesResourceInterface
+final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface

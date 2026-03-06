@@ -9,12 +9,10 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function implode;
-use function is_array;
-use function is_string;
 use function ltrim;
 use function sprintf;
 
-abstract readonly class BaseClient
+abstract readonly class BaseResource
 {
     use DenormalizeTrait;
 
@@ -42,17 +40,6 @@ abstract readonly class BaseClient
 
             /** @var int<100, 599> $statusCode */
             $statusCode = $response->getStatusCode();
-
-            /** @var array<mixed> $content */
-            $content = $response->toArray(false);
-
-            if ($statusCode >= 300) {
-                if (is_array($content['error'] ?? null)) {
-                    $message = $content['error']['message'] ?? null;
-                }
-
-                throw new RuntimeException(is_string($message ?? null) ? $message : sprintf('OpenAI request to "%s %s" failed.', $method, $url), $statusCode);
-            }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
         }

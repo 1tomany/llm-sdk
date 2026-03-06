@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Mock;
+namespace OneToMany\LlmSdk\Resource\Mock;
 
 use function bin2hex;
 use function implode;
@@ -9,7 +9,7 @@ use function random_bytes;
 use function sprintf;
 use function strtolower;
 
-abstract readonly class BaseClient
+abstract readonly class BaseResource
 {
     public function __construct()
     {

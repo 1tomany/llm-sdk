@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Mock;
+namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Client\Mock\Type\Batch\Status;
 use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
@@ -9,7 +9,7 @@ use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
-final readonly class BatchClient extends BaseClient implements BatchClientInterface
+final readonly class BatchesResource extends BaseResource implements BatchClientInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Client\BatchClientInterface

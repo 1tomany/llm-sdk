@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Mock;
+namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
@@ -14,7 +14,7 @@ use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use function json_encode;
 use function random_int;
 
-final readonly class QueryClient extends BaseClient implements QueryClientInterface
+final readonly class QueriesResource extends BaseResource implements QueryClientInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Client\QueryClientInterface

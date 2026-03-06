@@ -6,12 +6,15 @@ use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
+use OneToMany\LlmSdk\Resource\Mock\BatchesResource;
+use OneToMany\LlmSdk\Resource\Mock\FilesResource;
+use OneToMany\LlmSdk\Resource\Mock\QueriesResource;
 
 final class MockClient implements ClientInterface
 {
-    private ?BatchClientInterface $batchClient = null;
-    private ?FilesResourceInterface $fileClient = null;
-    private ?QueryClientInterface $queryClient = null;
+    private ?BatchClientInterface $batchesResource = null;
+    private ?FilesResourceInterface $filesResource = null;
+    private ?QueryClientInterface $queriesResource = null;
 
     public function __construct()
     {
@@ -30,9 +33,9 @@ final class MockClient implements ClientInterface
      */
     public function batches(): BatchClientInterface
     {
-        $this->batchClient ??= new BatchClient();
+        $this->batchesResource ??= new BatchesResource();
 
-        return $this->batchClient;
+        return $this->batchesResource;
     }
 
     /**
@@ -40,9 +43,9 @@ final class MockClient implements ClientInterface
      */
     public function files(): FilesResourceInterface
     {
-        $this->fileClient ??= new FileClient();
+        $this->filesResource ??= new FilesResource();
 
-        return $this->fileClient;
+        return $this->filesResource;
     }
 
     /**
@@ -50,8 +53,8 @@ final class MockClient implements ClientInterface
      */
     public function queries(): QueryClientInterface
     {
-        $this->queryClient ??= new QueryClient();
+        $this->queriesResource ??= new QueriesResource();
 
-        return $this->queryClient;
+        return $this->queriesResource;
     }
 }

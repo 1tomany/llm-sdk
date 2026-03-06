@@ -6,11 +6,11 @@ use OneToMany\LlmSdk\Client\OpenAi\Type\Batch\Batch;
 use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
-use OneToMany\LlmSdk\Resource\OpenAi\BaseClient;
+use OneToMany\LlmSdk\Resource\OpenAi\BaseResource;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
-final readonly class BatchClient extends BaseClient implements BatchClientInterface
+final readonly class BatchClient extends BaseResource implements BatchClientInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Client\BatchClientInterface

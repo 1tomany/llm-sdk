@@ -11,7 +11,7 @@ use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
-use OneToMany\LlmSdk\Resource\OpenAi\BaseClient;
+use OneToMany\LlmSdk\Resource\OpenAi\BaseResource;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -20,7 +20,7 @@ use function parse_url;
 
 use const PHP_URL_PATH;
 
-final readonly class QueryClient extends BaseClient implements QueryClientInterface
+final readonly class QueryClient extends BaseResource implements QueryClientInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Client\QueryClientInterface
