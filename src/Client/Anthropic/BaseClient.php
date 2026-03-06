@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Client\Anthropic;
 
 use OneToMany\LlmSdk\Client\Anthropic\Type\Error\Error;
 use OneToMany\LlmSdk\Client\Trait\DenormalizerTrait;
-use OneToMany\LlmSdk\Client\Trait\SupportsModelTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
@@ -19,9 +18,6 @@ use function sprintf;
 abstract readonly class BaseClient
 {
     use DenormalizerTrait;
-    use SupportsModelTrait;
-
-    public const string BASE_URI = 'https://api.anthropic.com/v1';
 
     /**
      * @param non-empty-string $apiKey
@@ -33,22 +29,6 @@ abstract readonly class BaseClient
         #[\SensitiveParameter] protected string $apiKey,
         protected string $apiVersion = '2023-06-01',
     ) {
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
-     *
-     * @return non-empty-list<non-empty-lowercase-string>
-     */
-    public static function getModels(): array
-    {
-        return [
-            'claude-opus-4-6',
-            'claude-sonnet-4-5',
-            'claude-sonnet-4-5-20250929',
-            'claude-haiku-4-5',
-            'claude-haiku-4-5-20251001',
-        ];
     }
 
     /**
@@ -95,6 +75,6 @@ abstract readonly class BaseClient
      */
     protected function generateUrl(string ...$paths): string
     {
-        return sprintf('%s/%s', self::BASE_URI, ltrim(implode('/', $paths), '/'));
+        return sprintf('https://api.anthropic.com/v1/%s', ltrim(implode('/', $paths), '/'));
     }
 }
