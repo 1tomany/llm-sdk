@@ -4,15 +4,15 @@ namespace OneToMany\LlmSdk\Client\Gemini;
 
 use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
-use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
 use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class GeminiClient implements ClientInterface
 {
     private ?BatchClientInterface $batchClient = null;
-    private ?FileClientInterface $fileClient = null;
+    private ?FilesResourceInterface $fileClient = null;
     private ?QueryClientInterface $queryClient = null;
 
     /**
@@ -60,7 +60,7 @@ final class GeminiClient implements ClientInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
-    public function files(): FileClientInterface
+    public function files(): FilesResourceInterface
     {
         $this->fileClient ??= new FileClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 

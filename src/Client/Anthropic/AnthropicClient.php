@@ -4,15 +4,15 @@ namespace OneToMany\LlmSdk\Client\Anthropic;
 
 use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
-use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
 use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class AnthropicClient implements ClientInterface
 {
-    private ?FileClientInterface $fileClient = null;
+    private ?FilesResourceInterface $fileClient = null;
 
     /**
      * @param non-empty-string $apiKey
@@ -53,7 +53,7 @@ final class AnthropicClient implements ClientInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
-    public function files(): FileClientInterface
+    public function files(): FilesResourceInterface
     {
         $this->fileClient ??= new FileClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 

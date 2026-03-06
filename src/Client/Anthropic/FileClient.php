@@ -3,16 +3,16 @@
 namespace OneToMany\LlmSdk\Client\Anthropic;
 
 use OneToMany\LlmSdk\Client\Anthropic\Type\File\File;
-use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
-final readonly class FileClient extends BaseClient implements FileClientInterface
+final readonly class FileClient extends BaseClient implements FilesResourceInterface
 {
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\FileClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
     public function upload(UploadRequest $request): UploadResponse
     {
@@ -26,7 +26,7 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
     }
 
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\FileClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {

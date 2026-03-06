@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Client\Gemini;
 
 use OneToMany\LlmSdk\Client\Gemini\Type\File\File;
-use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
@@ -17,10 +17,10 @@ use function fread;
 use function sprintf;
 use function strlen;
 
-final readonly class FileClient extends BaseClient implements FileClientInterface
+final readonly class FileClient extends BaseClient implements FilesResourceInterface
 {
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\FileClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      *
      * @throws RuntimeException when an empty file is uploaded
      * @throws RuntimeException when a signed URL is not generated
@@ -104,7 +104,7 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
     }
 
     /**
-     * @see OneToMany\LlmSdk\Contract\Client\FileClientInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {

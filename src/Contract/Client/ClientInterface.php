@@ -2,6 +2,8 @@
 
 namespace OneToMany\LlmSdk\Contract\Client;
 
+use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
+
 interface ClientInterface
 {
     /**
@@ -11,7 +13,7 @@ interface ClientInterface
 
     public function batches(): BatchClientInterface;
 
-    public function files(): FileClientInterface;
+    public function files(): FilesResourceInterface;
 
     public function queries(): QueryClientInterface;
 }

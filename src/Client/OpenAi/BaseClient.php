@@ -11,6 +11,8 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function implode;
+use function is_array;
+use function is_string;
 use function ltrim;
 use function sprintf;
 
@@ -46,12 +48,19 @@ abstract readonly class BaseClient
             /** @var array<mixed> $content */
             $content = $response->toArray(false);
 
-            if ($statusCode >= 300 || isset($content['error'])) {
-                $error = $this->denormalize($content, Error::class, [
-                    UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
-                ]);
+            if ($statusCode >= 300) {
+                if (is_array($content['error'] ?? null)) {
+                    if (is_string($content['error']['message'] ?? null)) {
+                        throw new RuntimeException($content['error']['message'], $statusCode);
+                    }
+                }
 
-                throw new RuntimeException($error->message, $statusCode);
+                throw new RuntimeException('no good happen', $statusCode);
+                // $error = $this->denormalize($content, Error::class, [
+                //     UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
+                // ]);
+
+                // throw new RuntimeException($error->message, $statusCode);
             }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);

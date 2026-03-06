@@ -4,13 +4,13 @@ namespace OneToMany\LlmSdk\Client\Mock;
 
 use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
-use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
 use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
+use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 
 final class MockClient implements ClientInterface
 {
     private ?BatchClientInterface $batchClient = null;
-    private ?FileClientInterface $fileClient = null;
+    private ?FilesResourceInterface $fileClient = null;
     private ?QueryClientInterface $queryClient = null;
 
     public function __construct()
@@ -38,7 +38,7 @@ final class MockClient implements ClientInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
-    public function files(): FileClientInterface
+    public function files(): FilesResourceInterface
     {
         $this->fileClient ??= new FileClient();
 
