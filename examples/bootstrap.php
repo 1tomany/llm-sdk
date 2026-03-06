@@ -9,6 +9,8 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\PropertyInfo\Extractor\ConstructorExtractor;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -21,19 +23,27 @@ require_once __DIR__.'/functions.php';
 
 // Create the Symfony Serializer component
 $typeExtractor = new PropertyInfoExtractor([], [
-    new ConstructorExtractor([new PhpDocExtractor()]),
+    new ConstructorExtractor([
+        new PhpDocExtractor(),
+    ]),
 ]);
 
-$objectNormalizer = new ObjectNormalizer(...[
-    'propertyTypeExtractor' => $typeExtractor,
-]);
-
-$serializer = new Serializer([
+$normalizers = [
     new BackedEnumNormalizer(),
     new DateTimeNormalizer(),
     new ArrayDenormalizer(),
     new UnwrappingDenormalizer(),
-    $objectNormalizer,
+    new ObjectNormalizer(
+        null,
+        null,
+        null,
+        $typeExtractor,
+    ),
+];
+
+$serializer = new Serializer($normalizers, [
+    new JsonEncoder(),
+    new XmlEncoder(),
 ]);
 
 // Create the Symfony HTTP Client
