@@ -31,7 +31,7 @@ abstract readonly class BaseResource extends AbstractResource
      *
      * @param array<mixed> $content
      */
-    protected function extractErrorMessage(array $content): string
+    protected function handleHttpError(array $content): string
     {
         return 'another bad thing happened';
         // $error = $this->parseResponse($content, Error::class, [

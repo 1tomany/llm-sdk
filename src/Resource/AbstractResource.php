@@ -37,8 +37,7 @@ abstract readonly class AbstractResource
             $content = $response->getContent(false);
 
             if ($statusCode >= 300) {
-                throw new RuntimeException('bad request', $statusCode);
-                // throw new RuntimeException($this->extractErrorMessage($content), $statusCode);
+                $this->handleHttpError($content, $statusCode);
             }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
@@ -95,7 +94,10 @@ abstract readonly class AbstractResource
     }
 
     /**
-     * @param array<mixed> $content
+     * @param string $content
+     * @param positive-int $statusCode
+     *
+     * @throws RuntimeException when the HTTP request was not successful
      */
-    abstract protected function extractErrorMessage(array $content): string;
+    abstract protected function handleHttpError(string $content, int $statusCode): never;
 }

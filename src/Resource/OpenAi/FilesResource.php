@@ -24,7 +24,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             'auth_bearer' => $this->apiKey,
             'body' => [
                 'file' => $request->openFile(),
-                'purpose' => $purpose->getValue(),
+                // 'purpose' => $purpose->getValue(),
             ],
         ]);
 
