@@ -14,7 +14,7 @@ abstract readonly class AbstractResource
         protected HttpClientInterface $httpClient,
         protected SerializerInterface $serializer,
         protected string $apiKey,
-        protected ?string $apiVersion = null,
+        protected string $apiVersion,
     ) {
     }
 
