@@ -29,6 +29,8 @@ final class AnthropicClient extends BaseClient
 
     /**
      * @see OneToMany\LlmSdk\Client\BaseClient
+     *
+     * @return non-empty-string
      */
     public function getApiVersion(): string
     {

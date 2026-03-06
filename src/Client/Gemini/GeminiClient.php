@@ -34,6 +34,8 @@ final class GeminiClient extends BaseClient
 
     /**
      * @see OneToMany\LlmSdk\Client\BaseClient
+     *
+     * @return non-empty-string
      */
     public function getApiVersion(): string
     {

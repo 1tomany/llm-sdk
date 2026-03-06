@@ -45,6 +45,8 @@ final class OpenAiClient extends BaseClient
 
     /**
      * @see OneToMany\LlmSdk\Client\BaseClient
+     *
+     * @return non-empty-string
      */
     public function getApiVersion(): string
     {
