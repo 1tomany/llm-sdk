@@ -3,19 +3,22 @@
 namespace OneToMany\LlmSdk\Factory;
 
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Factory\Exception\CreatingClientFailedModelNotSupportedException;
 
 use function array_find;
 use function array_values;
 use function in_array;
 use function iterator_to_array;
+use function strtolower;
+use function trim;
 
 final class ClientFactory
 {
     /** @var list<ClientInterface> */
     private array $clients = [];
 
-    /** @var array<non-empty-lowercase-string, ClientInterface> */
+    /** @var array<string, ClientInterface> */
     private array $modelToClientMap = [];
 
     /**
@@ -40,12 +43,16 @@ final class ClientFactory
     }
 
     /**
-     * @param non-empty-lowercase-string $model
-     *
      * @throws CreatingClientFailedModelNotSupportedException when a model is not supported by any clients
      */
     public function create(string $model): ClientInterface
     {
+        $model = strtolower(trim($model));
+
+        if (empty($model)) {
+            throw new InvalidArgumentException('The model cannot be empty.');
+        }
+
         if (!isset($this->modelToClientMap[$model])) {
             $client = array_find($this->clients, fn ($c) => in_array($model, $c::getModels()));
 

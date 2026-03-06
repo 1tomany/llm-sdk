@@ -15,10 +15,6 @@ final class AnthropicClient implements ClientInterface
 {
     private ?FilesResourceInterface $filesResource = null;
 
-    /**
-     * @param non-empty-string $apiKey
-     * @param non-empty-string $apiVersion
-     */
     public function __construct(
         private DenormalizerInterface $denormalizer,
         private HttpClientInterface $httpClient,
