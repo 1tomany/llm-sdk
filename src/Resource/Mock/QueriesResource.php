@@ -67,14 +67,12 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
     {
         $id = $this->generateResponseId('query');
 
-        /**
-         * @var non-empty-string $output
-         */
-        $output = json_encode([
-            'word1' => $this->faker->word(),
-            'word2' => $this->faker->word(),
-            'notes' => $this->faker->sentence(),
-        ]);
+        if (isset($request->getRequest()['schema'])) {
+            /** @var non-empty-string $output */
+            $output = json_encode(['output' => $this->faker->sentence()]);
+        } else {
+            $output = $this->faker->sentence(20);
+        }
 
         return new ExecuteResponse($request->getModel(), $id, $output, ['id' => $id, 'output' => $output], random_int(100, 10000));
     }
