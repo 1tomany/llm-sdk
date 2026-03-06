@@ -19,9 +19,11 @@ final readonly class FilesResource extends BaseResource implements FilesResource
     {
         $purpose = Purpose::create($request->getPurpose());
 
-        $response = $this->doPostRequest('files', body: [
-            'file' => $request->openFile(),
-            'purpose' => $purpose->getValue(),
+        $this->doRequest('POST', $this->generateUrl('files'), [
+            'body' => [
+                'file' => $request->openFile(),
+                'purpose' => $purpose->getValue(),
+            ],
         ]);
 
         throw new \RuntimeException('Not implemented!');

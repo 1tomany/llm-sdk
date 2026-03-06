@@ -3,11 +3,9 @@
 namespace OneToMany\LlmSdk\Client\Gemini;
 
 use OneToMany\LlmSdk\Client\Gemini\Type\Error\Error;
-use OneToMany\LlmSdk\Client\Trait\DenormalizeTrait;
-use OneToMany\LlmSdk\Exception\RuntimeException;
+use OneToMany\LlmSdk\Client\Trait\HttpRequestTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function implode;
@@ -16,7 +14,7 @@ use function sprintf;
 
 abstract readonly class BaseClient
 {
-    use DenormalizeTrait;
+    use HttpRequestTrait;
 
     public function __construct(
         protected DenormalizerInterface $denormalizer,
@@ -27,39 +25,27 @@ abstract readonly class BaseClient
     }
 
     /**
-     * @param array<mixed> $options
-     *
      * @return array<mixed>
      */
-    protected function doRequest(string $method, string $url, array $options = []): array
+    protected function buildAuthOptions(): array
     {
-        $options = array_merge_recursive($options, [
+        return [
             'headers' => [
                 'x-goog-api-key' => $this->apiKey,
             ],
+        ];
+    }
+
+    /**
+     * @param array<mixed> $content
+     */
+    protected function extractErrorMessage(array $content, int $statusCode): string
+    {
+        $error = $this->denormalize($content, Error::class, [
+            UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
         ]);
 
-        try {
-            $response = $this->httpClient->request($method, $url, $options);
-
-            /** @var int<100, 599> $statusCode */
-            $statusCode = $response->getStatusCode();
-
-            /** @var array<mixed> $content */
-            $content = $response->toArray(false);
-
-            if ($statusCode >= 300 || isset($content['error'])) {
-                $error = $this->denormalize($content, Error::class, [
-                    UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
-                ]);
-
-                throw new RuntimeException($error->getMessage(), $statusCode);
-            }
-        } catch (HttpClientExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), previous: $e);
-        }
-
-        return $content;
+        return $error->getMessage();
     }
 
     /**

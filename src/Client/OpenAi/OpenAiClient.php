@@ -60,7 +60,7 @@ final class OpenAiClient extends BaseClient
      */
     public function files(): FilesResourceInterface
     {
-        $this->files ??= new FilesResource($this->httpClient, $this->apiKey);
+        $this->files ??= new FilesResource($this->denormalizer, $this->httpClient, $this->apiKey);
 
         return $this->files;
     }
