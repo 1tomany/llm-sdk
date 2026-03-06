@@ -20,6 +20,7 @@ abstract readonly class BaseResource
         protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
         protected string $apiKey,
+        protected string $apiVersion,
     ) {
     }
 
@@ -52,6 +53,6 @@ abstract readonly class BaseResource
      */
     protected function generateUrl(string ...$paths): string
     {
-        return sprintf('https://api.openai.com/v1/%s', ltrim(implode('/', $paths), '/'));
+        return sprintf('https://api.openai.com/%s/%s', $this->apiVersion, ltrim(implode('/', $paths), '/'));
     }
 }

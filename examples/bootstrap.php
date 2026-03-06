@@ -47,15 +47,15 @@ $clientFactory = new ClientFactory([
 ]);
 
 if (is_string($apiKey = getenv('ANTHROPIC_API_KEY'))) {
-    $clientFactory->addClient(new AnthropicClient($serializer, $httpClient, $apiKey));
+    $clientFactory->addClient(new AnthropicClient($serializer, $httpClient, $apiKey, '2023-06-01'));
 }
 
 if (is_string($apiKey = getenv('GEMINI_API_KEY'))) {
-    $clientFactory->addClient(new GeminiClient($serializer, $httpClient, $apiKey));
+    $clientFactory->addClient(new GeminiClient($serializer, $httpClient, $apiKey, 'v1beta'));
 }
 
 if (is_string($apiKey = getenv('OPENAI_API_KEY'))) {
-    $clientFactory->addClient(new OpenAiClient($serializer, $httpClient, $apiKey));
+    $clientFactory->addClient(new OpenAiClient($serializer, $httpClient, $apiKey, 'v1'));
 }
 
 return $clientFactory;

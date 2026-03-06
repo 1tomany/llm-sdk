@@ -12,8 +12,6 @@ use OneToMany\LlmSdk\Resource\OpenAi\QueriesResource;
 
 final class OpenAiClient extends BaseClient
 {
-    protected string $apiVersion = 'v1';
-
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      *
@@ -50,7 +48,7 @@ final class OpenAiClient extends BaseClient
      */
     public function batches(): BatchesResourceInterface
     {
-        $this->batches ??= new BatchesResource($this->denormalizer, $this->httpClient, $this->apiKey);
+        $this->batches ??= new BatchesResource($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
         return $this->batches;
     }
@@ -60,7 +58,7 @@ final class OpenAiClient extends BaseClient
      */
     public function files(): FilesResourceInterface
     {
-        $this->files ??= new FilesResource($this->denormalizer, $this->httpClient, $this->apiKey);
+        $this->files ??= new FilesResource($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
         return $this->files;
     }
@@ -70,7 +68,7 @@ final class OpenAiClient extends BaseClient
      */
     public function queries(): QueriesResourceInterface
     {
-        $this->queries ??= new QueriesResource($this->denormalizer, $this->httpClient, $this->apiKey);
+        $this->queries ??= new QueriesResource($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
         return $this->queries;
     }
