@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Mock;
 
-use OneToMany\LlmSdk\Client\Mock\Type\Batch\Status;
+use OneToMany\LlmSdk\Resource\Mock\Type\Batch\Status;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;

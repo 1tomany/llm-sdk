@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Mock\Type\Batch;
+namespace OneToMany\LlmSdk\Resource\Mock\Type\Batch;
 
 enum Status: string
 {
