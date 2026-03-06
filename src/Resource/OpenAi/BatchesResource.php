@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Client\OpenAi\Type\Batch\Batch;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
@@ -20,8 +21,11 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
     {
         $url = $this->generateUrl('batches');
 
-        $content = $this->doHttpPostRequest($url, [
+        $options = [
             'auth_header' => $this->getApiKey(),
+        ];
+
+        $content = $this->doHttpPostRequest($url, $options + [
             'json' => array_merge($request->getOptions(), [
                 'input_file_id' => $request->getFileUri(),
             ]),

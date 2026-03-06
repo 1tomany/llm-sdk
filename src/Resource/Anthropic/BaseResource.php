@@ -14,6 +14,17 @@ use function sprintf;
 abstract readonly class BaseResource extends AbstractResource
 {
     /**
+     * @return array<string>
+     */
+    protected function createHttpHeaders(): array
+    {
+        return [
+            'x-api-key' => $this->getApiKey(),
+            'anthropic-version' => $this->getApiVersion(),
+        ];
+    }
+
+    /**
      * @see OneToMany\LlmSdk\Resource\AbstractResource
      */
     protected function handleHttpError(string $content, int $statusCode): never

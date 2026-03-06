@@ -20,11 +20,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         $url = $this->generateUrl('files');
 
         $content = $this->doHttpPostRequest($url, [
-            'headers' => [
-                'x-api-key' => $this->apiKey,
-                'anthropic-version' => $this->apiVersion,
-                'anthropic-beta' => 'files-api-2025-04-14',
-            ],
+            'headers' => $this->createHttpHeaders(),
             'body' => [
                 'file' => $request->openFile(),
             ],
@@ -43,15 +39,21 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         $url = $this->generateUrl('files', $request->getUri());
 
         $content = $this->doHttpDeleteRequest($url, [
-            'headers' => [
-                'x-api-key' => $this->apiKey,
-                'anthropic-version' => $this->apiVersion,
-                'anthropic-beta' => 'files-api-2025-04-14',
-            ],
+            'headers' => $this->createHttpHeaders(),
         ]);
 
         $file = $this->doDeserialize($content, DeletedFile::class);
 
         return new DeleteResponse($request->getModel(), $file->id);
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Resource\Anthropic\BaseResource
+     */
+    protected function createHttpHeaders(): array
+    {
+        return \array_merge(parent::createHttpHeaders(), [
+            'anthropic-beta' => 'files-api-2025-04-14',
+        ]);
     }
 }
