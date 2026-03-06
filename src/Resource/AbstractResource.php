@@ -22,8 +22,11 @@ abstract readonly class AbstractResource
      * @param 'GET'|'POST'|'PUT'|'DELETE' $method
      * @param array<string, mixed> $options
      */
-    protected function doHttpRequest(string $method, string $url, array $options = []): string
-    {
+    protected function doHttpRequest(
+        string $method,
+        string $url,
+        array $options = [],
+    ): string {
         try {
             $response = $this->httpClient->request($method, $url, $options);
 
@@ -42,6 +45,22 @@ abstract readonly class AbstractResource
         }
 
         return $content;
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function doHttpPostRequest(string $url, array $options = []): string
+    {
+        return $this->doHttpRequest('POST', $url, $options);
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function doHttpDeleteRequest(string $url, array $options = []): string
+    {
+        return $this->doHttpRequest('DELETE', $url, $options);
     }
 
     /**
