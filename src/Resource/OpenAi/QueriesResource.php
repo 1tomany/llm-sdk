@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
+use OneToMany\LlmSdk\Client\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Input\Enum\Type as InputType;
 use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Response;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
@@ -13,6 +14,7 @@ use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
+use OneToMany\LlmSdk\Response\Query\UsageResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 use function parse_url;
@@ -93,17 +95,18 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
     {
         $timer = new Stopwatch(true)->start('execute');
 
-        $content = $this->doHttpRequest('POST', $request->getUrl(), [
+        $content = $this->doHttpPostRequest($request->getUrl(), [
+            'auth_bearer' => $this->apiKey,
             'json' => $request->getRequest(),
         ]);
 
         $response = $this->doDeserialize($content, Response::class);
 
-        if (null !== $response->error) {
+        if ($response->error instanceof Error) {
             throw new RuntimeException($response->error->message);
         }
 
-        return new ExecuteResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), $response->usage->toResponse());
+        return new ExecuteResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
     }
 
     /**
