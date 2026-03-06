@@ -1,15 +1,24 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Trait;
+namespace OneToMany\LlmSdk\Resource;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
+use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 
 use function array_merge_recursive;
 
-trait HttpRequestTrait
+abstract readonly class AbstractResource
 {
-    use DenormalizeTrait;
+    public function __construct(
+        protected DenormalizerInterface $denormalizer,
+        protected HttpClientInterface $httpClient,
+        protected string $apiKey,
+        protected string $apiVersion,
+    ) {
+    }
 
     /**
      * @param array<mixed> $options
@@ -37,6 +46,25 @@ trait HttpRequestTrait
         }
 
         return $content;
+    }
+
+    /**
+     * @template T of object
+     *
+     * @param class-string<T> $type
+     * @param array<string, mixed> $context
+     *
+     * @return T
+     */
+    protected function denormalize(mixed $content, string $type, array $context = []): object
+    {
+        try {
+            $object = $this->denormalizer->denormalize($content, $type, null, $context);
+        } catch (SerializerExceptionInterface $e) {
+            throw new RuntimeException($e->getMessage(), previous: $e);
+        }
+
+        return $object;
     }
 
     /**

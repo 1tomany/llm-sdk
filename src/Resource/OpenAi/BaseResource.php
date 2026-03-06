@@ -3,29 +3,17 @@
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Client\OpenAi\Type\Error\Error;
-use OneToMany\LlmSdk\Client\Trait\HttpRequestTrait;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use OneToMany\LlmSdk\Resource\AbstractResource;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function implode;
 use function ltrim;
 use function sprintf;
 
-abstract readonly class BaseResource
+abstract readonly class BaseResource extends AbstractResource
 {
-    use HttpRequestTrait;
-
-    public function __construct(
-        protected DenormalizerInterface $denormalizer,
-        protected HttpClientInterface $httpClient,
-        protected string $apiKey,
-        protected string $apiVersion,
-    ) {
-    }
-
     /**
-     * @see OneToMany\LlmSdk\Client\Trait\HttpRequestTrait
+     * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait
      *
      * @return array<mixed>
      */
@@ -35,7 +23,7 @@ abstract readonly class BaseResource
     }
 
     /**
-     * @see OneToMany\LlmSdk\Client\Trait\HttpRequestTrait
+     * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait
      *
      * @param array<mixed> $content
      */
