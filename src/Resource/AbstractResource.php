@@ -14,8 +14,18 @@ abstract readonly class AbstractResource
         protected HttpClientInterface $httpClient,
         protected SerializerInterface $serializer,
         protected string $apiKey,
-        protected string $apiVersion,
+        protected ?string $apiVersion = null,
     ) {
+    }
+
+    public function getApiKey(): string
+    {
+        return $this->apiKey;
+    }
+
+    public function getApiVersion(): ?string
+    {
+        return $this->apiVersion;
     }
 
     /**

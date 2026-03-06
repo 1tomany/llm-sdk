@@ -5,6 +5,7 @@ namespace OneToMany\LlmSdk\Resource\Anthropic;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
+use OneToMany\LlmSdk\Resource\Anthropic\Type\File\DeletedFile;
 use OneToMany\LlmSdk\Resource\Anthropic\Type\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
@@ -18,7 +19,12 @@ final readonly class FilesResource extends BaseResource implements FilesResource
     {
         $url = $this->generateUrl('files');
 
-        $content = $this->doHttpRequest('POST', $url, [
+        $content = $this->doHttpPostRequest($url, [
+            'headers' => [
+                'x-api-key' => $this->apiKey,
+                'anthropic-version' => $this->apiVersion,
+                'anthropic-beta' => 'files-api-2025-04-14',
+            ],
             'body' => [
                 'file' => $request->openFile(),
             ],
@@ -34,8 +40,18 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        $this->doHttpRequest('DELETE', $this->generateUrl('files', $request->getUri()));
+        $url = $this->generateUrl('files', $request->getUri());
 
-        return new DeleteResponse($request->getModel(), $request->getUri());
+        $content = $this->doHttpDeleteRequest($url, [
+            'headers' => [
+                'x-api-key' => $this->apiKey,
+                'anthropic-version' => $this->apiVersion,
+                'anthropic-beta' => 'files-api-2025-04-14',
+            ],
+        ]);
+
+        $file = $this->doDeserialize($content, DeletedFile::class);
+
+        return new DeleteResponse($request->getModel(), $file->id);
     }
 }

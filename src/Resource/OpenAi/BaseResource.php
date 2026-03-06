@@ -30,6 +30,6 @@ abstract readonly class BaseResource extends AbstractResource
      */
     protected function generateUrl(string ...$paths): string
     {
-        return sprintf('https://api.openai.com/%s/%s', $this->apiVersion, ltrim(implode('/', $paths), '/'));
+        return sprintf('https://api.openai.com/%s/%s', $this->getApiVersion(), ltrim(implode('/', $paths), '/'));
     }
 }

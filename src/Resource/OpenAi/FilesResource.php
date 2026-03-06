@@ -21,10 +21,10 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         $purpose = Purpose::create($request->getPurpose());
 
         $content = $this->doHttpPostRequest($this->generateUrl('files'), [
-            'auth_bearer' => $this->apiKey,
+            'auth_bearer' => $this->getApiKey(),
             'body' => [
                 'file' => $request->openFile(),
-                // 'purpose' => $purpose->getValue(),
+                'purpose' => $purpose->getValue(),
             ],
         ]);
 
@@ -41,7 +41,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         $url = $this->generateUrl('files', $request->getUri());
 
         $content = $this->doHttpDeleteRequest($url, [
-            'auth_bearer' => $this->apiKey,
+            'auth_bearer' => $this->getApiKey(),
         ]);
 
         $file = $this->doDeserialize($content, DeletedFile::class);

@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Anthropic;
 
+use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\AbstractResource;
 use OneToMany\LlmSdk\Resource\Anthropic\Type\Error\Error;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
@@ -12,45 +13,16 @@ use function sprintf;
 
 abstract readonly class BaseResource extends AbstractResource
 {
-    protected function doHttpRequest(string $method, string $url, array $options = []): string
-    {
-        return parent::doHttpRequest($method, $url, $options + [
-            'headers' => [
-                'x-api-key' => $this->apiKey,
-                'anthropic-version' => $this->apiVersion,
-                'anthropic-beta' => 'files-api-2025-04-14',
-            ],
-        ]);
-    }
-
-    // /**
-    //  * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait
-    //  *
-    //  * @return array<mixed>
-    //  */
-    // protected function buildAuthOptions(): array
-    // {
-    //     return [
-    //         'headers' => [
-    //             'x-api-key' => $this->apiKey,
-    //             'anthropic-version' => $this->apiVersion,
-    //         ],
-    //     ];
-    // }
-
     /**
-     * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait
-     *
-     * @param array<mixed> $content
+     * @see OneToMany\LlmSdk\Resource\AbstractResource
      */
-    protected function handleHttpError(array $content): string
+    protected function handleHttpError(string $content, int $statusCode): never
     {
-        return 'bad request';
-        // $error = $this->parseResponse($content, Error::class, [
-        //     UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
-        // ]);
+        $error = $this->doDeserialize($content, Error::class, context: [
+            UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
+        ]);
 
-        // return $error->message;
+        throw new RuntimeException($error->message, $statusCode);
     }
 
     /**
