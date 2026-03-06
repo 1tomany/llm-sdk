@@ -12,7 +12,7 @@ use function implode;
 use function ltrim;
 use function sprintf;
 
-abstract readonly class BaseClient
+abstract readonly class BaseResource
 {
     use HttpRequestTrait;
 

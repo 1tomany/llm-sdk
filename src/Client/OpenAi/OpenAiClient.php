@@ -12,6 +12,8 @@ use OneToMany\LlmSdk\Resource\OpenAi\QueriesResource;
 
 final class OpenAiClient extends BaseClient
 {
+    protected string $apiVersion = 'v1';
+
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      *

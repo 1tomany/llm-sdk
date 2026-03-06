@@ -11,7 +11,7 @@ use OneToMany\LlmSdk\Resource\Anthropic\FilesResource;
 
 final class AnthropicClient extends BaseClient
 {
-    private string $apiVersion = '2023-06-01';
+    protected string $apiVersion = '2023-06-01';
 
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface

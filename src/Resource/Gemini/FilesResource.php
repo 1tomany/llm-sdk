@@ -17,7 +17,7 @@ use function fread;
 use function sprintf;
 use function strlen;
 
-final readonly class FileClient extends BaseClient implements FilesResourceInterface
+final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface

@@ -6,13 +6,13 @@ use OneToMany\LlmSdk\Client\BaseClient;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
-use OneToMany\LlmSdk\Resource\Gemini\BatchClient;
-use OneToMany\LlmSdk\Resource\Gemini\FileClient;
-use OneToMany\LlmSdk\Resource\Gemini\QueryClient;
+use OneToMany\LlmSdk\Resource\Gemini\BatchesResource;
+use OneToMany\LlmSdk\Resource\Gemini\FilesResource;
+use OneToMany\LlmSdk\Resource\Gemini\QueriesResource;
 
 final class GeminiClient extends BaseClient
 {
-    private string $apiVersion = 'v1beta';
+    protected string $apiVersion = 'v1beta';
 
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
@@ -39,7 +39,7 @@ final class GeminiClient extends BaseClient
      */
     public function batches(): BatchesResourceInterface
     {
-        $this->batches ??= new BatchClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
+        $this->batches ??= new BatchesResource($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
         return $this->batches;
     }
@@ -49,7 +49,7 @@ final class GeminiClient extends BaseClient
      */
     public function files(): FilesResourceInterface
     {
-        $this->files ??= new FileClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
+        $this->files ??= new FilesResource($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
         return $this->files;
     }
@@ -59,7 +59,7 @@ final class GeminiClient extends BaseClient
      */
     public function queries(): QueriesResourceInterface
     {
-        $this->queries ??= new QueryClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
+        $this->queries ??= new QueriesResource($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
         return $this->queries;
     }

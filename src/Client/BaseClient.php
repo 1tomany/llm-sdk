@@ -19,6 +19,7 @@ abstract class BaseClient implements ClientInterface
         protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
         protected string $apiKey,
+        protected string $apiVersion = '',
     ) {
     }
 }

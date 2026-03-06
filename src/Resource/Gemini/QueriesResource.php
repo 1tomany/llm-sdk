@@ -13,7 +13,7 @@ use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-final readonly class QueryClient extends BaseClient implements QueriesResourceInterface
+final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
