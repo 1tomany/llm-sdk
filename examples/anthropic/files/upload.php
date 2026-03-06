@@ -1,7 +1,6 @@
 <?php
 
 use OneToMany\LlmSdk\Client\Anthropic\AnthropicClient;
-use OneToMany\LlmSdk\Client\Anthropic\FileClient;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 use Symfony\Component\HttpClient\HttpClient;
