@@ -21,16 +21,11 @@ if (!$filePath || !is_file($filePath)) {
     exit(1);
 }
 
-$httpClient = HttpClient::create([
-    'timeout' => 120.0,
-]);
-
 // Determine the OpenAI model to use
 $model = read_model_name('gpt-5-mini');
 
 // Create the client to upload and delete files
-$openAiClient = new OpenAiClient($serializer, $httpClient, $apiKey);
-// $fileClient = new FileClient($serializer, $httpClient, $apiKey);
+$openAiClient = new OpenAiClient($serializer, HttpClient::create(), $apiKey);
 
 // Create a request to upload a file
 $uploadRequest = new UploadRequest($model)->atPath($filePath)->withPurpose('user_data');

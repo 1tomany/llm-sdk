@@ -20,15 +20,11 @@ if (!$filePath || !is_file($filePath)) {
     exit(1);
 }
 
-$httpClient = HttpClient::create([
-    'timeout' => 120.0,
-]);
-
 // Determine the Anthropic model to use
 $model = read_model_name('claude-opus-4-6');
 
 // Create the client to upload and delete files
-$anthropicClient = new AnthropicClient($serializer, $httpClient, $apiKey);
+$anthropicClient = new AnthropicClient($serializer, HttpClient::create(), $apiKey);
 
 // Create a request to upload a file
 $uploadRequest = new UploadRequest($model)->atPath($filePath);
