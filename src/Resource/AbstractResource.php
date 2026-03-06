@@ -23,7 +23,7 @@ abstract readonly class AbstractResource
         return $this->apiKey;
     }
 
-    public function getApiVersion(): ?string
+    public function getApiVersion(): string
     {
         return $this->apiVersion;
     }

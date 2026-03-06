@@ -10,6 +10,8 @@ use OneToMany\LlmSdk\Resource\Anthropic\Type\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
+use function array_merge;
+
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     /**
@@ -52,7 +54,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     protected function createHttpHeaders(): array
     {
-        return \array_merge(parent::createHttpHeaders(), [
+        return array_merge(parent::createHttpHeaders(), [
             'anthropic-beta' => 'files-api-2025-04-14',
         ]);
     }
