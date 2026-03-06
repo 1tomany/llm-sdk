@@ -12,11 +12,6 @@ use OneToMany\LlmSdk\Resource\Anthropic\FilesResource;
 final class AnthropicClient extends BaseClient
 {
     /**
-     * @see OneToMany\LlmSdk\Client\BaseClient
-     */
-    protected ?string $apiVersion = '2023-06-01';
-
-    /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      *
      * @return non-empty-list<non-empty-lowercase-string>
@@ -33,6 +28,14 @@ final class AnthropicClient extends BaseClient
     }
 
     /**
+     * @see OneToMany\LlmSdk\Client\BaseClient
+     */
+    public function getApiVersion(): string
+    {
+        return parent::getApiVersion() ?? '2023-06-01';
+    }
+
+    /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
     public function batches(): BatchesResourceInterface
@@ -45,7 +48,7 @@ final class AnthropicClient extends BaseClient
      */
     public function files(): FilesResourceInterface
     {
-        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->apiKey, $this->apiVersion);
+        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->apiKey, $this->getApiVersion());
 
         return $this->files;
     }

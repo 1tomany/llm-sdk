@@ -17,6 +17,7 @@ abstract class BaseClient implements ClientInterface
 
     /**
      * @param non-empty-string $apiKey
+     * @param ?non-empty-string $apiVersion
      */
     public function __construct(
         protected HttpClientInterface $httpClient,
@@ -28,8 +29,16 @@ abstract class BaseClient implements ClientInterface
 
     public function setApiVersion(?string $apiVersion): static
     {
-        $this->apiVersion = $apiVersion;
+        $this->apiVersion = \trim($apiVersion ?? '') ?: null;
 
         return $this;
+    }
+
+    /**
+     * @return ?non-empty-string
+     */
+    public function getApiVersion(): ?string
+    {
+        return $this->apiVersion;
     }
 }

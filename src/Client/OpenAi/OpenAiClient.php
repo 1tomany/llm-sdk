@@ -13,11 +13,6 @@ use OneToMany\LlmSdk\Resource\OpenAi\QueriesResource;
 final class OpenAiClient extends BaseClient
 {
     /**
-     * @see OneToMany\LlmSdk\Client\BaseClient
-     */
-    protected ?string $apiVersion = 'v1';
-
-    /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      *
      * @return non-empty-list<non-empty-lowercase-string>
@@ -49,11 +44,19 @@ final class OpenAiClient extends BaseClient
     }
 
     /**
+     * @see OneToMany\LlmSdk\Client\BaseClient
+     */
+    public function getApiVersion(): string
+    {
+        return parent::getApiVersion() ?? 'v1';
+    }
+
+    /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
     public function batches(): BatchesResourceInterface
     {
-        $this->batches ??= new BatchesResource($this->httpClient, $this->serializer, $this->apiKey, $this->apiVersion);
+        $this->batches ??= new BatchesResource($this->httpClient, $this->serializer, $this->apiKey, $this->getApiVersion());
 
         return $this->batches;
     }
@@ -63,7 +66,7 @@ final class OpenAiClient extends BaseClient
      */
     public function files(): FilesResourceInterface
     {
-        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->apiKey, $this->apiVersion);
+        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->apiKey, $this->getApiVersion());
 
         return $this->files;
     }
@@ -73,7 +76,7 @@ final class OpenAiClient extends BaseClient
      */
     public function queries(): QueriesResourceInterface
     {
-        $this->queries ??= new QueriesResource($this->httpClient, $this->serializer, $this->apiKey, $this->apiVersion);
+        $this->queries ??= new QueriesResource($this->httpClient, $this->serializer, $this->apiKey, $this->getApiVersion());
 
         return $this->queries;
     }
