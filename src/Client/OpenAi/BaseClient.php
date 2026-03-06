@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Client\OpenAi;
 
 use OneToMany\LlmSdk\Client\OpenAi\Type\Error\Error;
-use OneToMany\LlmSdk\Client\Trait\DenormalizerTrait;
+use OneToMany\LlmSdk\Client\Trait\DenormalizeTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
@@ -16,7 +16,7 @@ use function sprintf;
 
 abstract readonly class BaseClient
 {
-    use DenormalizerTrait;
+    use DenormalizeTrait;
 
     /**
      * @param non-empty-string $apiKey

@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Client\Trait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 
-trait DenormalizerTrait
+trait DenormalizeTrait
 {
     /**
      * @template T of object
