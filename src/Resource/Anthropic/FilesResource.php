@@ -9,6 +9,8 @@ use OneToMany\LlmSdk\Resource\Anthropic\Type\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
+use function array_merge_recursive;
+
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     /**
@@ -42,7 +44,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     protected function doRequest(string $method, string $url, array $options = []): array
     {
-        $options = \array_merge_recursive($options, [
+        $options = array_merge_recursive($options, [
             'headers' => [
                 'anthropic-beta' => 'files-api-2025-04-14',
             ],

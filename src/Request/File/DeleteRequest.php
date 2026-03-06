@@ -9,8 +9,7 @@ class DeleteRequest extends BaseRequest
     public function __construct(
         string $model,
         private string $uri,
-    )
-    {
+    ) {
         parent::__construct($model);
     }
 

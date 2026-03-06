@@ -9,8 +9,7 @@ final readonly class DeleteResponse extends BaseResponse
     public function __construct(
         string $model,
         private string $uri,
-    )
-    {
+    ) {
         parent::__construct($model);
     }
 
