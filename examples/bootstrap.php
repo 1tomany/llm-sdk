@@ -61,12 +61,12 @@ if (!empty($apiKey = getenv('ANTHROPIC_API_KEY'))) {
     $clientFactory->addClient(new AnthropicClient($httpClient, $serializer, $apiKey));
 }
 
-if (is_string($apiKey = getenv('GEMINI_API_KEY'))) {
-    $clientFactory->addClient(new GeminiClient($httpClient, $serializer, $apiKey, 'v1beta'));
+if (!empty($apiKey = getenv('GEMINI_API_KEY'))) {
+    $clientFactory->addClient(new GeminiClient($httpClient, $serializer, $apiKey));
 }
 
-if (is_string($apiKey = getenv('OPENAI_API_KEY'))) {
-    $clientFactory->addClient(new OpenAiClient($httpClient, $serializer, $apiKey, 'v1'));
+if (!empty($apiKey = getenv('OPENAI_API_KEY'))) {
+    $clientFactory->addClient(new OpenAiClient($httpClient, $serializer, $apiKey));
 }
 
 return $clientFactory;

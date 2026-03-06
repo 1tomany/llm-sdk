@@ -14,7 +14,7 @@ use function sprintf;
 abstract readonly class BaseResource extends AbstractResource
 {
     /**
-     * @return array<string>
+     * @return array<string, ?string>
      */
     protected function buildHttpHeaders(): array
     {

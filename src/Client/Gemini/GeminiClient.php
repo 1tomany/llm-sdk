@@ -12,6 +12,9 @@ use OneToMany\LlmSdk\Resource\Gemini\QueriesResource;
 
 final class GeminiClient extends BaseClient
 {
+    /**
+     * @see OneToMany\LlmSdk\Client\BaseClient
+     */
     protected ?string $apiVersion = 'v1beta';
 
     /**

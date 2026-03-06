@@ -13,6 +13,11 @@ use OneToMany\LlmSdk\Resource\OpenAi\QueriesResource;
 final class OpenAiClient extends BaseClient
 {
     /**
+     * @see OneToMany\LlmSdk\Client\BaseClient
+     */
+    protected ?string $apiVersion = 'v1';
+
+    /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      *
      * @return non-empty-list<non-empty-lowercase-string>
