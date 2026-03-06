@@ -5,7 +5,10 @@ namespace OneToMany\LlmSdk\Factory;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Factory\Exception\CreatingClientFailedModelNotSupportedException;
 
+use function array_find;
+use function array_values;
 use function in_array;
+use function iterator_to_array;
 
 final class ClientFactory
 {
@@ -21,10 +24,10 @@ final class ClientFactory
     public function __construct(iterable $clients)
     {
         if ($clients instanceof \Traversable) {
-            $clients = \iterator_to_array($clients);
+            $clients = iterator_to_array($clients);
         }
 
-        $this->clients = \array_values($clients);
+        $this->clients = array_values($clients);
     }
 
     public function addClient(ClientInterface $client): static
@@ -44,7 +47,7 @@ final class ClientFactory
     public function create(string $model): ClientInterface
     {
         if (!isset($this->modelToClientMap[$model])) {
-            $client = \array_find($this->clients, fn ($c) => in_array($model, $c::getModels()));
+            $client = array_find($this->clients, fn ($c) => in_array($model, $c::getModels()));
 
             if (null === $client) {
                 throw new CreatingClientFailedModelNotSupportedException($model);
