@@ -1,6 +1,7 @@
 <?php
 
 use OneToMany\LlmSdk\Client\OpenAi\FileClient;
+use OneToMany\LlmSdk\Client\OpenAi\OpenAiClient;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 use Symfony\Component\HttpClient\HttpClient;
@@ -28,13 +29,14 @@ $httpClient = HttpClient::create([
 $model = read_model_name('gpt-5-mini');
 
 // Create the client to upload and delete files
-$fileClient = new FileClient($serializer, $httpClient, $apiKey);
+$openAiClient = new OpenAiClient($serializer, $httpClient, $apiKey);
+// $fileClient = new FileClient($serializer, $httpClient, $apiKey);
 
 // Create a request to upload a file
 $uploadRequest = new UploadRequest($model)->atPath($filePath)->withPurpose('user_data');
 
 // Upload the file to OpenAI
-$response = $fileClient->upload(...[
+$response = $openAiClient->files()->upload(...[
     'request' => $uploadRequest,
 ]);
 
@@ -44,7 +46,7 @@ printf("File '%s' uploaded with URI '%s'.\n", basename($filePath), $response->ge
 $deleteRequest = new DeleteRequest($model, $response->getUri());
 
 // Delete the file from OpenAI
-$response = $fileClient->delete(...[
+$response = $openAiClient->files()->delete(...[
     'request' => $deleteRequest,
 ]);
 

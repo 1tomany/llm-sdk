@@ -58,18 +58,18 @@ final readonly class QueryClient extends BaseClient implements QueryClientInterf
      */
     public function execute(ExecuteRequest $request): ExecuteResponse
     {
-        $id = $this->generateResponseId('query');
+        $faker = \Faker\Factory::create();
 
         /**
          * @var non-empty-string $output
          */
         $output = json_encode([
-            'word1' => $this->faker->word(),
-            'word2' => $this->faker->word(),
-            'notes' => $this->faker->sentence(),
+            'word1' => $faker->word(),
+            'word2' => $faker->word(),
+            'notes' => $faker->sentence(),
         ]);
 
-        return new ExecuteResponse($request->getModel(), $id, $output, ['id' => $id, 'output' => $output], random_int(100, 10000));
+        return new ExecuteResponse($request->getModel(), $this->generateResponseId('query'), $output, ['output' => $output], random_int(100, 10000));
     }
 
     /**

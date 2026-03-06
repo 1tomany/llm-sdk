@@ -3,14 +3,14 @@
 namespace OneToMany\LlmSdk\Action\Query;
 
 use OneToMany\LlmSdk\Contract\Action\Query\ExecuteQueryActionInterface;
-use OneToMany\LlmSdk\Factory\QueryClientFactory;
+use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 
 final readonly class ExecuteQueryAction implements ExecuteQueryActionInterface
 {
-    public function __construct(private QueryClientFactory $clientFactory)
+    public function __construct(private ClientFactory $clientFactory)
     {
     }
 
@@ -22,9 +22,9 @@ final readonly class ExecuteQueryAction implements ExecuteQueryActionInterface
         $client = $this->clientFactory->create($request->getModel());
 
         if ($request instanceof CompileRequest) {
-            $request = $client->compile($request)->toExecuteRequest();
+            $request = $client->queries()->compile($request)->toExecuteRequest();
         }
 
-        return $client->execute($request);
+        return $client->queries()->execute($request);
     }
 }

@@ -7,7 +7,7 @@ use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
-interface BatchClientInterface extends ClientInterface
+interface BatchClientInterface
 {
     public function create(CreateRequest $request): CreateResponse;
 

@@ -3,13 +3,13 @@
 namespace OneToMany\LlmSdk\Action\File;
 
 use OneToMany\LlmSdk\Contract\Action\File\UploadFileActionInterface;
-use OneToMany\LlmSdk\Factory\FileClientFactory;
+use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
 final readonly class UploadFileAction implements UploadFileActionInterface
 {
-    public function __construct(private FileClientFactory $clientFactory)
+    public function __construct(private ClientFactory $clientFactory)
     {
     }
 
@@ -18,6 +18,6 @@ final readonly class UploadFileAction implements UploadFileActionInterface
      */
     public function act(UploadRequest $request): UploadResponse
     {
-        return $this->clientFactory->create($request->getModel())->upload($request);
+        return $this->clientFactory->create($request->getModel())->files()->upload($request);
     }
 }

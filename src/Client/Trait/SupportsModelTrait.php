@@ -13,6 +13,6 @@ trait SupportsModelTrait
      */
     public function supportsModel(string $model): bool
     {
-        return in_array($model, $this->getSupportedModels());
+        return in_array($model, self::getModels());
     }
 }

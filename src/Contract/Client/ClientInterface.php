@@ -5,12 +5,13 @@ namespace OneToMany\LlmSdk\Contract\Client;
 interface ClientInterface
 {
     /**
-     * @param non-empty-lowercase-string $model
-     */
-    public function supportsModel(string $model): bool;
-
-    /**
      * @return non-empty-list<non-empty-lowercase-string>
      */
-    public function getSupportedModels(): array;
+    public static function getModels(): array;
+
+    public function batches(): BatchClientInterface;
+
+    public function files(): FileClientInterface;
+
+    public function queries(): QueryClientInterface;
 }

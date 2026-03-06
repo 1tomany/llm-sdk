@@ -7,7 +7,7 @@ use OneToMany\LlmSdk\Request\File\UploadRequest;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
-interface FileClientInterface extends ClientInterface
+interface FileClientInterface
 {
     public function upload(UploadRequest $request): UploadResponse;
 

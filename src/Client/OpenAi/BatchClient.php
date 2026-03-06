@@ -36,9 +36,7 @@ final readonly class BatchClient extends BaseClient implements BatchClientInterf
      */
     public function read(ReadRequest $request): ReadResponse
     {
-        $content = $this->doRequest('GET', $this->generateUrl('batches', $request->getUri()));
-
-        $batch = $this->denormalize($content, Batch::class);
+        $batch = $this->denormalize($this->doRequest('GET', $this->generateUrl('batches', $request->getUri())), Batch::class);
 
         return new ReadResponse($request->getModel(), $batch->id, $batch->status->getValue(), $batch->output_file_id);
     }

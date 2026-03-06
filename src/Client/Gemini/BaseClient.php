@@ -39,7 +39,7 @@ abstract readonly class BaseClient
      *
      * @return non-empty-list<non-empty-lowercase-string>
      */
-    public function getSupportedModels(): array
+    public static function getModels(): array
     {
         return [
             'gemini-3.1-pro-preview',

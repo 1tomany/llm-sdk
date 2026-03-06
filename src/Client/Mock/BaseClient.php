@@ -2,8 +2,6 @@
 
 namespace OneToMany\LlmSdk\Client\Mock;
 
-use OneToMany\LlmSdk\Client\Trait\SupportsModelTrait;
-
 use function bin2hex;
 use function implode;
 use function ltrim;
@@ -13,25 +11,8 @@ use function strtolower;
 
 abstract readonly class BaseClient
 {
-    use SupportsModelTrait;
-
-    protected \Faker\Generator $faker;
-
-    public const string BASE_URI = 'https://mock-llm.service/api';
-
     public function __construct()
     {
-        $this->faker = \Faker\Factory::create();
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
-     *
-     * @return non-empty-list<non-empty-lowercase-string>
-     */
-    public function getSupportedModels(): array
-    {
-        return ['mock'];
     }
 
     /**
@@ -52,6 +33,6 @@ abstract readonly class BaseClient
      */
     protected function generateUrl(string ...$paths): string
     {
-        return sprintf('%s/%s', self::BASE_URI, ltrim(implode('/', $paths), '/'));
+        return sprintf('https://mock-llm.service/api/%s', ltrim(implode('/', $paths), '/'));
     }
 }

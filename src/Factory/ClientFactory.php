@@ -3,18 +3,12 @@
 namespace OneToMany\LlmSdk\Factory;
 
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
-use OneToMany\LlmSdk\Contract\Factory\ClientFactoryInterface;
 use OneToMany\LlmSdk\Factory\Exception\CreatingClientFailedModelNotSupportedException;
 
-/**
- * @template T of ClientInterface
- *
- * @implements ClientFactoryInterface<T>
- */
-abstract readonly class BaseClientFactory implements ClientFactoryInterface
+final readonly class ClientFactory
 {
     /**
-     * @param iterable<T> $clients
+     * @param iterable<ClientInterface> $clients
      */
     public function __construct(private iterable $clients)
     {
@@ -28,6 +22,9 @@ abstract readonly class BaseClientFactory implements ClientFactoryInterface
     public function create(string $model): ClientInterface
     {
         foreach ($this->clients as $client) {
+            if (\in_array($model, $client::getModels())) {
+                return $client;
+            }
         }
 
         throw new CreatingClientFailedModelNotSupportedException($model);

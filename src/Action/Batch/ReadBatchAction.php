@@ -3,13 +3,13 @@
 namespace OneToMany\LlmSdk\Action\Batch;
 
 use OneToMany\LlmSdk\Contract\Action\Batch\ReadBatchActionInterface;
-use OneToMany\LlmSdk\Factory\BatchClientFactory;
+use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
 final readonly class ReadBatchAction implements ReadBatchActionInterface
 {
-    public function __construct(private BatchClientFactory $clientFactory)
+    public function __construct(private ClientFactory $clientFactory)
     {
     }
 
@@ -18,6 +18,6 @@ final readonly class ReadBatchAction implements ReadBatchActionInterface
      */
     public function act(ReadRequest $request): ReadResponse
     {
-        return $this->clientFactory->create($request->getModel())->read($request);
+        return $this->clientFactory->create($request->getModel())->batches()->read($request);
     }
 }

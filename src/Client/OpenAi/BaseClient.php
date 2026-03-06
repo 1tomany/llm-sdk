@@ -38,7 +38,7 @@ abstract readonly class BaseClient
      *
      * @return non-empty-list<non-empty-lowercase-string>
      */
-    public function getSupportedModels(): array
+    public static function getModels(): array
     {
         return [
             'gpt-5.4-pro',
