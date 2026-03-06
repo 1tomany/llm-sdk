@@ -7,7 +7,6 @@ use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Enum\Status;
 use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Output\Output;
 use OneToMany\LlmSdk\Client\OpenAi\Type\Usage\Usage;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Response\Query\UsageResponse;
 
 use function array_map;
 use function implode;
