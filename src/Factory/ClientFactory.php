@@ -7,13 +7,33 @@ use OneToMany\LlmSdk\Factory\Exception\CreatingClientFailedModelNotSupportedExce
 
 use function in_array;
 
-final readonly class ClientFactory
+final class ClientFactory
 {
+    /** @var list<ClientInterface> */
+    private array $clients = [];
+
+    /** @var array<non-empty-lowercase-string, ClientInterface> */
+    private array $modelToClientMap = [];
+
     /**
      * @param iterable<ClientInterface> $clients
      */
-    public function __construct(private iterable $clients)
+    public function __construct(iterable $clients)
     {
+        if ($clients instanceof \Traversable) {
+            $clients = \iterator_to_array($clients);
+        }
+
+        $this->clients = \array_values($clients);
+    }
+
+    public function addClient(ClientInterface $client): static
+    {
+        if (!in_array($client, $this->clients, true)) {
+            $this->clients[] = $client;
+        }
+
+        return $this;
     }
 
     /**
@@ -23,12 +43,16 @@ final readonly class ClientFactory
      */
     public function create(string $model): ClientInterface
     {
-        foreach ($this->clients as $client) {
-            if (in_array($model, $client::getModels())) {
-                return $client;
+        if (!isset($this->modelToClientMap[$model])) {
+            $client = \array_find($this->clients, fn ($c) => in_array($model, $c::getModels()));
+
+            if (null === $client) {
+                throw new CreatingClientFailedModelNotSupportedException($model);
             }
+
+            $this->modelToClientMap[$model] = $client;
         }
 
-        throw new CreatingClientFailedModelNotSupportedException($model);
+        return $this->modelToClientMap[$model];
     }
 }
