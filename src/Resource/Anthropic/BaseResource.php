@@ -3,11 +3,8 @@
 namespace OneToMany\LlmSdk\Resource\Anthropic;
 
 use OneToMany\LlmSdk\Resource\AbstractResource;
-use OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait;
 use OneToMany\LlmSdk\Resource\Anthropic\Type\Error\Error;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function implode;
 use function ltrim;

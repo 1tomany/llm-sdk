@@ -2,11 +2,11 @@
 
 namespace OneToMany\LlmSdk\Resource;
 
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function array_merge_recursive;
 
