@@ -2,26 +2,16 @@
 
 namespace OneToMany\LlmSdk\Client\Anthropic;
 
-use OneToMany\LlmSdk\Contract\Client\ClientInterface;
+use OneToMany\LlmSdk\Client\BaseClient;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Anthropic\FilesResource;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class AnthropicClient implements ClientInterface
+final class AnthropicClient extends BaseClient
 {
-    private ?FilesResourceInterface $filesResource = null;
-
-    public function __construct(
-        private DenormalizerInterface $denormalizer,
-        private HttpClientInterface $httpClient,
-        #[\SensitiveParameter] private string $apiKey,
-        private string $apiVersion = '2023-06-01',
-    ) {
-    }
+    private string $apiVersion = '2023-06-01';
 
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
@@ -39,6 +29,13 @@ final class AnthropicClient implements ClientInterface
         ];
     }
 
+    public function setApiVersion(string $apiVersion): static
+    {
+        $this->apiVersion = $apiVersion;
+
+        return $this;
+    }
+
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
@@ -52,9 +49,9 @@ final class AnthropicClient implements ClientInterface
      */
     public function files(): FilesResourceInterface
     {
-        $this->filesResource ??= new FilesResource($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
+        $this->files ??= new FilesResource($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
-        return $this->filesResource;
+        return $this->files;
     }
 
     /**
