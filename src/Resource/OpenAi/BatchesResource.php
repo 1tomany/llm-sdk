@@ -9,6 +9,8 @@ use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
+use function array_merge;
+
 final readonly class BatchesResource extends BaseResource implements BatchesResourceInterface
 {
     /**
@@ -20,7 +22,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
 
         $content = $this->doHttpPostRequest($url, [
             'auth_header' => $this->getApiKey(),
-            'json' => \array_merge($request->getOptions(), [
+            'json' => array_merge($request->getOptions(), [
                 'input_file_id' => $request->getFileUri(),
             ]),
         ]);
