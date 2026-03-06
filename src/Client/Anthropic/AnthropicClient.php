@@ -27,13 +27,6 @@ final class AnthropicClient extends BaseClient
         ];
     }
 
-    public function setApiVersion(string $apiVersion): static
-    {
-        $this->apiVersion = $apiVersion;
-
-        return $this;
-    }
-
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
