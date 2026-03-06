@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Anthropic;
+namespace OneToMany\LlmSdk\Resource\Anthropic;
 
 use OneToMany\LlmSdk\Client\Anthropic\Type\Error\Error;
 use OneToMany\LlmSdk\Client\Trait\DenormalizeTrait;
@@ -15,7 +15,7 @@ use function implode;
 use function ltrim;
 use function sprintf;
 
-abstract readonly class BaseClient
+abstract readonly class BaseResource
 {
     use DenormalizeTrait;
 
