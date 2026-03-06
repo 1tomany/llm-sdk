@@ -1,5 +1,6 @@
 <?php
 
+use OneToMany\LlmSdk\Client\Anthropic\AnthropicClient;
 use OneToMany\LlmSdk\Client\Anthropic\FileClient;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
@@ -28,13 +29,13 @@ $httpClient = HttpClient::create([
 $model = read_model_name('claude-opus-4-6');
 
 // Create the client to upload and delete files
-$fileClient = new FileClient($serializer, $httpClient, $apiKey);
+$anthropicClient = new AnthropicClient($serializer, $httpClient, $apiKey);
 
 // Create a request to upload a file
 $uploadRequest = new UploadRequest($model)->atPath($filePath);
 
 // Upload the file to Anthropic
-$response = $fileClient->upload(...[
+$response = $anthropicClient->files()->upload(...[
     'request' => $uploadRequest,
 ]);
 
@@ -44,7 +45,7 @@ printf("File '%s' uploaded with URI '%s'.\n", basename($filePath), $response->ge
 $deleteRequest = new DeleteRequest($model, $response->getUri());
 
 // Delete the file from Anthropic
-$response = $fileClient->delete(...[
+$response = $anthropicClient->files()->delete(...[
     'request' => $deleteRequest,
 ]);
 
