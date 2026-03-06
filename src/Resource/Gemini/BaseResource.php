@@ -46,7 +46,7 @@ abstract readonly class BaseResource extends AbstractResource
     /**
      * @return non-empty-string
      */
-    protected function generateUrl(?string ...$paths): string
+    protected function generateUrl(string ...$paths): string
     {
         return sprintf('https://generativelanguage.googleapis.com/%s', ltrim(implode('/', $paths), '/'));
     }
