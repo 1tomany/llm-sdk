@@ -21,6 +21,9 @@ final class Usage
     ) {
     }
 
+    /**
+     * @var non-negative-int
+     */
     public int $cached_tokens {
         get => $this->input_tokens_details->cached_tokens;
     }
