@@ -19,9 +19,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
         $url = $this->generateModelUrl($request->getModel(), 'batchGenerateContent');
 
         $content = $this->doHttpPostRequest($url, [
-            'headers' => [
-                'x-goog-api-key' => $this->getApiKey(),
-            ],
+            'headers' => $this->buildHttpHeaders(),
             'json' => [
                 'batch' => [
                     'displayName' => $request->getName(),

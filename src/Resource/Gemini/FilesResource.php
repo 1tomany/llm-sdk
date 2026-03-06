@@ -28,25 +28,20 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function upload(UploadRequest $request): UploadResponse
     {
-        // Ensure the file can be opened first
+        // Ensure the file can be opened
         $fileHandle = $request->openFile();
-
-        if (0 === $fileSize = $request->getSize()) {
-            throw new RuntimeException('Empty files cannot be uploaded.');
-        }
 
         try {
             // Generate a signed URL to upload the file with
-            $url = $this->generateUrl('upload', $this->apiVersion, 'files');
+            $url = $this->generateUrl('upload', $this->getApiVersion(), 'files');
 
             $response = $this->httpClient->request('POST', $url, [
-                'headers' => [
-                    'x-goog-api-key' => $this->apiKey,
+                'headers' => $this->buildHttpHeaders([
                     'x-goog-upload-command' => 'start',
                     'x-goog-upload-protocol' => 'resumable',
-                    'x-goog-upload-header-content-length' => $fileSize,
+                    'x-goog-upload-header-content-length' => $request->getSize(),
                     'x-goog-upload-header-content-type' => $request->getFormat(),
-                ],
+                ]),
                 'json' => [
                     'file' => [
                         'displayName' => $request->getName(),
@@ -67,7 +62,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             $uploadChunkSize = (int) $headers['x-goog-upload-chunk-granularity'][0];
 
             // Calculate the number of chunks needed to upload the file
-            $uploadChunkCount = (int) ceil($fileSize / $uploadChunkSize);
+            $uploadChunkCount = (int) ceil($request->getSize() / $uploadChunkSize);
 
             // Counters to track progress
             $uploadChunk = $uploadOffset = 0;
@@ -77,12 +72,11 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 $uploadCommand = (++$uploadChunk >= $uploadChunkCount) ? 'upload, finalize' : 'upload';
 
                 $response = $this->httpClient->request('POST', $uploadUrl, [
-                    'headers' => [
-                        'content-length' => $fileSize,
-                        'x-goog-api-key' => $this->apiKey,
+                    'headers' => $this->buildHttpHeaders([
+                        'content-length' => $request->getSize(),
                         'x-goog-upload-offset' => $uploadOffset,
                         'x-goog-upload-command' => $uploadCommand,
-                    ],
+                    ]),
                     'body' => $fileChunk,
                 ]);
 

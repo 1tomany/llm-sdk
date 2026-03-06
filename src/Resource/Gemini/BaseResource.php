@@ -14,13 +14,15 @@ use function sprintf;
 abstract readonly class BaseResource extends AbstractResource
 {
     /**
-     * @return array<string>
+     * @param array<string, int|string>
+     *
+     * @return array<string, int|string>
      */
-    protected function buildHttpHeaders(): array
+    protected function buildHttpHeaders(array $headers = []): array
     {
-        return [
+        return \array_merge_recursive($headers, [
             'x-goog-api-key' => $this->getApiKey(),
-        ];
+        ]);
     }
 
     /**
@@ -38,7 +40,7 @@ abstract readonly class BaseResource extends AbstractResource
     /**
      * @return non-empty-string
      */
-    protected function generateUrl(string ...$paths): string
+    protected function generateUrl(?string ...$paths): string
     {
         return sprintf('https://generativelanguage.googleapis.com/%s', ltrim(implode('/', $paths), '/'));
     }
@@ -48,6 +50,6 @@ abstract readonly class BaseResource extends AbstractResource
      */
     protected function generateModelUrl(string $model, string $action): string
     {
-        return $this->generateUrl($this->apiVersion, 'models', sprintf('%s:%s', $model, $action));
+        return $this->generateUrl($this->getApiVersion(), 'models', sprintf('%s:%s', $model, $action));
     }
 }
