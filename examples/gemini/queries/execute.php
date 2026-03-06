@@ -1,6 +1,6 @@
 <?php
 
-use OneToMany\LlmSdk\Client\Gemini\QueryClient;
+use OneToMany\LlmSdk\Client\Gemini\GeminiClient;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use Symfony\Component\HttpClient\HttpClient;
@@ -13,15 +13,11 @@ $apiKey = read_api_key('GEMINI_API_KEY');
 /** @var DenormalizerInterface $serializer */
 $serializer = require __DIR__.'/../../serializer.php';
 
-$httpClient = HttpClient::create([
-    'timeout' => 120.0,
-]);
-
 // Determine the Gemini model to use
 $model = read_model_name('gemini-2.5-flash');
 
 // Create a client that will be used to compile and send queries
-$queryClient = new QueryClient($serializer, $httpClient, $apiKey);
+$geminiClient = new GeminiClient($serializer, HttpClient::create(), $apiKey);
 
 // First, compile the query: this is not strictly necessary,
 // but you can inspect the request that will be sent to the LLM
@@ -29,7 +25,7 @@ $compileRequest = new CompileRequest($model)->withPrompt(...[
     'prompt' => 'Who invented the PHP programming language?',
 ]);
 
-$response = $queryClient->compile(...[
+$response = $geminiClient->queries()->compile(...[
     'request' => $compileRequest,
 ]);
 
@@ -43,7 +39,7 @@ $executeRequest = new ExecuteRequest($model)->withUrl($response->getUrl())->with
 //     $executeRequest = $response->toExecuteRequest();
 
 // Send the request to Gemini
-$response = $queryClient->execute(...[
+$response = $geminiClient->queries()->execute(...[
     'request' => $executeRequest,
 ]);
 
