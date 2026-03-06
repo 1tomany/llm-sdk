@@ -8,8 +8,6 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-use function array_merge_recursive;
-
 abstract readonly class AbstractResource
 {
     public function __construct(
@@ -21,14 +19,12 @@ abstract readonly class AbstractResource
     }
 
     /**
-     * @param array<mixed> $options
+     * @param array<string, mixed> $options
      *
      * @return array<mixed>
      */
     protected function doRequest(string $method, string $url, array $options = []): array
     {
-        $options = array_merge_recursive($options, $this->buildAuthOptions());
-
         try {
             $response = $this->httpClient->request($method, $url, $options);
 
@@ -67,10 +63,10 @@ abstract readonly class AbstractResource
         return $object;
     }
 
-    /**
-     * @return array<mixed>
-     */
-    abstract protected function buildAuthOptions(): array;
+    // /**
+    //  * @return array<mixed>
+    //  */
+    // abstract protected function buildAuthOptions(): array;
 
     /**
      * @param array<mixed> $content

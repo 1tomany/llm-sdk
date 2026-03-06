@@ -12,20 +12,30 @@ use function sprintf;
 
 abstract readonly class BaseResource extends AbstractResource
 {
-    /**
-     * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait
-     *
-     * @return array<mixed>
-     */
-    protected function buildAuthOptions(): array
+    protected function doRequest(string $method, string $url, array $options = []): array
     {
-        return [
+        return parent::doRequest($method, $this->generateUrl($url), $options + [
             'headers' => [
                 'x-api-key' => $this->apiKey,
                 'anthropic-version' => $this->apiVersion,
             ],
-        ];
+        ]);
     }
+
+    // /**
+    //  * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait
+    //  *
+    //  * @return array<mixed>
+    //  */
+    // protected function buildAuthOptions(): array
+    // {
+    //     return [
+    //         'headers' => [
+    //             'x-api-key' => $this->apiKey,
+    //             'anthropic-version' => $this->apiVersion,
+    //         ],
+    //     ];
+    // }
 
     /**
      * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait

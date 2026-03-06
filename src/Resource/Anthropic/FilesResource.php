@@ -18,8 +18,10 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function upload(UploadRequest $request): UploadResponse
     {
-        $content = $this->doRequest('POST', $this->generateUrl('files'), [
-            'body' => ['file' => $request->openFile()],
+        $content = $this->doRequest('POST', 'files', [
+            'body' => [
+                'file' => $request->openFile(),
+            ],
         ]);
 
         $file = $this->denormalize($content, File::class);
@@ -32,24 +34,8 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        $this->doRequest('DELETE', $this->generateUrl('files', $request->getUri()));
+        $this->doRequest('DELETE', sprintf('files/%s', $request->getUri()));
 
         return new DeleteResponse($request->getModel(), $request->getUri());
-    }
-
-    /**
-     * @param array<mixed> $options
-     *
-     * @return array<mixed>
-     */
-    protected function doRequest(string $method, string $url, array $options = []): array
-    {
-        $options = array_merge_recursive($options, [
-            'headers' => [
-                'anthropic-beta' => 'files-api-2025-04-14',
-            ],
-        ]);
-
-        return parent::doRequest($method, $url, $options);
     }
 }

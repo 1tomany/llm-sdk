@@ -10,16 +10,16 @@ use function implode;
 use function ltrim;
 use function sprintf;
 
-abstract readonly class BaseResource extends AbstractResource
+abstract readonly class OpenAiResource extends AbstractResource
 {
     /**
-     * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait
+     * @param array<string, mixed> $options
      *
      * @return array<mixed>
      */
-    protected function buildAuthOptions(): array
+    protected function doRequest(string $method, string $url, array $options = []): array
     {
-        return ['auth_bearer' => $this->apiKey];
+        return parent::doRequest($method, $url, $options + ['auth_bearer' => $this->apiKey]);
     }
 
     /**
@@ -35,6 +35,14 @@ abstract readonly class BaseResource extends AbstractResource
 
         return $error->message;
     }
+
+
+
+
+
+
+
+
 
     /**
      * @return non-empty-string
