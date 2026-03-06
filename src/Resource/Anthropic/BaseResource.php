@@ -25,6 +25,8 @@ abstract readonly class BaseResource
     }
 
     /**
+     * @see OneToMany\LlmSdk\Client\Trait\HttpRequestTrait
+     *
      * @return array<mixed>
      */
     protected function buildAuthOptions(): array
@@ -38,9 +40,11 @@ abstract readonly class BaseResource
     }
 
     /**
+     * @see OneToMany\LlmSdk\Client\Trait\HttpRequestTrait
+     *
      * @param array<mixed> $content
      */
-    protected function extractErrorMessage(array $content, int $statusCode): string
+    protected function extractErrorMessage(array $content): string
     {
         $error = $this->denormalize($content, Error::class, [
             UnwrappingDenormalizer::UNWRAP_PATH => '[error]',

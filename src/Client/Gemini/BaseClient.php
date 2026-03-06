@@ -19,12 +19,14 @@ abstract readonly class BaseClient
     public function __construct(
         protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
-        #[\SensitiveParameter] protected string $apiKey,
+        protected string $apiKey,
         protected string $apiVersion,
     ) {
     }
 
     /**
+     * @see OneToMany\LlmSdk\Client\Trait\HttpRequestTrait
+     *
      * @return array<mixed>
      */
     protected function buildAuthOptions(): array
@@ -37,9 +39,11 @@ abstract readonly class BaseClient
     }
 
     /**
+     * @see OneToMany\LlmSdk\Client\Trait\HttpRequestTrait
+     *
      * @param array<mixed> $content
      */
-    protected function extractErrorMessage(array $content, int $statusCode): string
+    protected function extractErrorMessage(array $content): string
     {
         $error = $this->denormalize($content, Error::class, [
             UnwrappingDenormalizer::UNWRAP_PATH => '[error]',

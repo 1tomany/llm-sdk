@@ -6,7 +6,6 @@ use OneToMany\LlmSdk\Client\BaseClient;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\OpenAi\BatchesResource;
 use OneToMany\LlmSdk\Resource\OpenAi\FilesResource;
 use OneToMany\LlmSdk\Resource\OpenAi\QueriesResource;

@@ -30,13 +30,13 @@ trait HttpRequestTrait
             $content = $response->toArray(false);
 
             if ($statusCode >= 300 || $this->hasBodyError($content)) {
-                throw new RuntimeException($this->extractErrorMessage($content, $statusCode), $statusCode);
+                throw new RuntimeException($this->extractErrorMessage($content), $statusCode);
             }
-
-            return $content;
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
         }
+
+        return $content;
     }
 
     /**
@@ -55,5 +55,5 @@ trait HttpRequestTrait
     /**
      * @param array<mixed> $content
      */
-    abstract protected function extractErrorMessage(array $content, int $statusCode): string;
+    abstract protected function extractErrorMessage(array $content): string;
 }
