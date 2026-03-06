@@ -15,10 +15,14 @@ use function trim;
 
 final class ClientFactory
 {
-    /** @var list<ClientInterface> */
+    /**
+     * @var list<ClientInterface>
+     */
     private array $clients = [];
 
-    /** @var array<string, ClientInterface> */
+    /**
+     * @var array<string, ClientInterface>
+     */
     private array $modelToClientMap = [];
 
     /**
@@ -54,9 +58,7 @@ final class ClientFactory
         }
 
         if (!isset($this->modelToClientMap[$model])) {
-            $client = array_find($this->clients, fn ($c) => in_array($model, $c::getModels()));
-
-            if (null === $client) {
+            if (null === $client = $this->findClient($model)) {
                 throw new CreatingClientFailedModelNotSupportedException($model);
             }
 
@@ -64,5 +66,10 @@ final class ClientFactory
         }
 
         return $this->modelToClientMap[$model];
+    }
+
+    private function findClient(string $model): ?ClientInterface
+    {
+        return array_find($this->clients, fn ($c) => in_array($model, $c::getModels()));
     }
 }

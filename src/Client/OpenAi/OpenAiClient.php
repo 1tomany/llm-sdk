@@ -49,10 +49,9 @@ final class OpenAiClient extends BaseClient
      */
     public function batches(): BatchesResourceInterface
     {
-        throw new RuntimeException('Not implemented!');
-        // $this->batches ??= new BatchesResource($this->denormalizer, $this->httpClient, $this->apiKey);
+        $this->batches ??= new BatchesResource($this->denormalizer, $this->httpClient, $this->apiKey);
 
-        // return $this->batches;
+        return $this->batches;
     }
 
     /**
@@ -70,9 +69,8 @@ final class OpenAiClient extends BaseClient
      */
     public function queries(): QueriesResourceInterface
     {
-        throw new RuntimeException('Not implemented!');
-        // $this->queries ??= new QueriesResource($this->denormalizer, $this->httpClient, $this->apiKey);
+        $this->queries ??= new QueriesResource($this->denormalizer, $this->httpClient, $this->apiKey);
 
-        // return $this->queries;
+        return $this->queries;
     }
 }
