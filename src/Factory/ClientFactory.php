@@ -5,6 +5,8 @@ namespace OneToMany\LlmSdk\Factory;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Factory\Exception\CreatingClientFailedModelNotSupportedException;
 
+use function in_array;
+
 final readonly class ClientFactory
 {
     /**
@@ -22,7 +24,7 @@ final readonly class ClientFactory
     public function create(string $model): ClientInterface
     {
         foreach ($this->clients as $client) {
-            if (\in_array($model, $client::getModels())) {
+            if (in_array($model, $client::getModels())) {
                 return $client;
             }
         }

@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Client\OpenAi;
 
 use OneToMany\LlmSdk\Client\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Client\Trait\DenormalizerTrait;
-use OneToMany\LlmSdk\Client\Trait\SupportsModelTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
@@ -19,9 +18,6 @@ use function sprintf;
 abstract readonly class BaseClient
 {
     use DenormalizerTrait;
-    use SupportsModelTrait;
-
-    public const string BASE_URI = 'https://api.openai.com/v1';
 
     /**
      * @param non-empty-string $apiKey
@@ -31,37 +27,6 @@ abstract readonly class BaseClient
         protected HttpClientInterface $httpClient,
         #[\SensitiveParameter] protected string $apiKey,
     ) {
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
-     *
-     * @return non-empty-list<non-empty-lowercase-string>
-     */
-    public static function getModels(): array
-    {
-        return [
-            'gpt-5.4-pro',
-            'gpt-5.4-pro-2026-03-05',
-            'gpt-5.4',
-            'gpt-5.4-2026-03-05',
-            'gpt-5.2-pro',
-            'gpt-5.2-pro-2025-12-11',
-            'gpt-5.2',
-            'gpt-5.2-2025-12-11',
-            'gpt-5.1',
-            'gpt-5.1-2025-11-13',
-            'gpt-5-pro',
-            'gpt-5-pro-2025-10-06',
-            'gpt-5',
-            'gpt-5-2025-08-07',
-            'gpt-5-mini',
-            'gpt-5-mini-2025-08-07',
-            'gpt-5-nano',
-            'gpt-5-nano-2025-08-07',
-            'gpt-4.1',
-            'gpt-4.1-2025-04-14',
-        ];
     }
 
     /**
@@ -105,6 +70,6 @@ abstract readonly class BaseClient
      */
     protected function generateUrl(string ...$paths): string
     {
-        return sprintf('%s/%s', self::BASE_URI, ltrim(implode('/', $paths), '/'));
+        return sprintf('https://api.openai.com/v1/%s', ltrim(implode('/', $paths), '/'));
     }
 }

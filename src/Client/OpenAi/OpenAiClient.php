@@ -2,13 +2,18 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAi;
 
+use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
+use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
+use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class OpenAiClient
+final class OpenAiClient implements ClientInterface
 {
+    private ?BatchClientInterface $batchClient = null;
     private ?FileClientInterface $fileClient = null;
+    private ?QueryClientInterface $queryClient = null;
 
     /**
      * @param non-empty-string $apiKey
@@ -20,12 +25,64 @@ final class OpenAiClient
     ) {
     }
 
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     *
+     * @return non-empty-list<non-empty-lowercase-string>
+     */
+    public static function getModels(): array
+    {
+        return [
+            'gpt-5.4-pro',
+            'gpt-5.4-pro-2026-03-05',
+            'gpt-5.4',
+            'gpt-5.4-2026-03-05',
+            'gpt-5.2-pro',
+            'gpt-5.2-pro-2025-12-11',
+            'gpt-5.2',
+            'gpt-5.2-2025-12-11',
+            'gpt-5.1',
+            'gpt-5.1-2025-11-13',
+            'gpt-5-pro',
+            'gpt-5-pro-2025-10-06',
+            'gpt-5',
+            'gpt-5-2025-08-07',
+            'gpt-5-mini',
+            'gpt-5-mini-2025-08-07',
+            'gpt-5-nano',
+            'gpt-5-nano-2025-08-07',
+            'gpt-4.1',
+            'gpt-4.1-2025-04-14',
+        ];
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
+    public function batches(): BatchClientInterface
+    {
+        $this->batchClient ??= new BatchClient($this->denormalizer, $this->httpClient, $this->apiKey);
+
+        return $this->batchClient;
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
     public function files(): FileClientInterface
     {
-        if (null === $this->fileClient) {
-            $this->fileClient = new FileClient($this->denormalizer, $this->httpClient, $this->apiKey);
-        }
+        $this->fileClient ??= new FileClient($this->denormalizer, $this->httpClient, $this->apiKey);
 
         return $this->fileClient;
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
+    public function queries(): QueryClientInterface
+    {
+        $this->queryClient ??= new QueryClient($this->denormalizer, $this->httpClient, $this->apiKey);
+
+        return $this->queryClient;
     }
 }
