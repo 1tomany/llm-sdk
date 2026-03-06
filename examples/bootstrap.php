@@ -40,6 +40,17 @@ $httpClient = HttpClient::create([
     'timeout' => 60.0,
 ]);
 
+function successMessage(string $message, string ...$values): void
+{
+    printf("%s\n", vsprintf($message, $values));
+}
+
+function errorMessage(string $message, string ...$values): never
+{
+    printf("[ERROR] %s\n", vsprintf($message, $values));
+    exit(1);
+}
+
 // Create each client that has an API key
 $clientFactory = new ClientFactory([
     new MockClient(),

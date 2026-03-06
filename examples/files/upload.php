@@ -2,7 +2,7 @@
 
 use OneToMany\LlmSdk\Action\File\DeleteFileAction;
 use OneToMany\LlmSdk\Action\File\UploadFileAction;
-use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface;
+use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
@@ -14,26 +14,28 @@ if ($argc < 2) {
     printUsage();
 }
 
-$path = trim($argv[1]);
+$filePath = trim($argv[1]);
 
-if (!is_file($path)) {
+if (!is_file($filePath)) {
     printUsage();
 }
 
 $model = strtolower($argv[2]);
 
 try {
-    echo sprintf('Uploading the file "%s" to the model "%s".', basename($path), $model).PHP_EOL;
+    $fileName = basename($filePath);
+
+    successMessage('Uploading the file "%s" to the model "%s".', $fileName, $model);
 
     // Create a request to upload the file
-    $uploadRequest = new UploadRequest($model)->atPath($path);
+    $uploadRequest = new UploadRequest($model)->atPath($filePath);
 
     // Upload the file to the LLM vendor
     $response = new UploadFileAction($clientFactory)->act(...[
         'request' => $uploadRequest,
     ]);
 
-    printf("The file '%s' was successfully uploaded to the model '%s' with URI '%s'.\n", basename($path), $response->getModel(), $response->getUri());
+    successMessage('The file "%s" was successfully uploaded to the model "%s" with URI "%s"', $fileName, $response->getModel(), $response->getUri());
 
     // Create a request to delete the file
     $deleteRequest = new DeleteRequest($model, $response->getUri());
@@ -43,10 +45,9 @@ try {
         'request' => $deleteRequest,
     ]);
 
-    printf("The file '%s' was successfully deleted from the model '%s'.\n", basename($path), $response->getModel());
-} catch (ExceptionInterface $e) {
-    printf("[ERROR] %s\n", $e->getMessage());
-    exit(1);
+    successMessage('The file "%s" was successfully deleted from the model "%s"', $fileName, $response->getModel());
+} catch (LlmSdkExceptionInterface $e) {
+    errorMessage($e->getMessage());
 }
 
 function printUsage(): never
