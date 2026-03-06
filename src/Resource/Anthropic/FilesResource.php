@@ -18,13 +18,13 @@ final readonly class FilesResource extends BaseResource implements FilesResource
     {
         $url = $this->generateUrl('files');
 
-        $content = $this->request('POST', $url, [
+        $content = $this->doHttpRequest('POST', $url, [
             'body' => [
                 'file' => $request->openFile(),
             ],
         ]);
 
-        $file = $this->deserialize($content, File::class);
+        $file = $this->doDeserialize($content, File::class);
 
         return new UploadResponse($request->getModel(), $file->id, $file->filename);
     }
@@ -34,7 +34,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        $this->request('DELETE', $this->generateUrl('files', $request->getUri()));
+        $this->doHttpRequest('DELETE', $this->generateUrl('files', $request->getUri()));
 
         return new DeleteResponse($request->getModel(), $request->getUri());
     }

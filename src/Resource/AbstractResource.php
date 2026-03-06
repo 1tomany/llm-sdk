@@ -22,7 +22,7 @@ abstract readonly class AbstractResource
      * @param 'GET'|'POST'|'PUT'|'DELETE' $method
      * @param array<string, mixed> $options
      */
-    protected function request(string $method, string $url, array $options = []): string
+    protected function doHttpRequest(string $method, string $url, array $options = []): string
     {
         try {
             $response = $this->httpClient->request($method, $url, $options);
@@ -52,8 +52,12 @@ abstract readonly class AbstractResource
      *
      * @return T
      */
-    protected function deserialize(string $content, string $type, string $format = 'json', array $context = []): object
-    {
+    protected function doDeserialize(
+        string $content,
+        string $type,
+        string $format = 'json',
+        array $context = [],
+    ): object {
         try {
             $object = $this->serializer->deserialize($content, $type, $format, $context);
         } catch (SerializerExceptionInterface $e) {

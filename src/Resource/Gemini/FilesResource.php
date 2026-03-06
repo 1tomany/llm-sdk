@@ -93,7 +93,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 $uploadOffset = $uploadOffset + strlen($fileChunk);
             }
 
-            $file = $this->deserialize($response->getContent(), File::class, context: [
+            $file = $this->doDeserialize($response->getContent(), File::class, context: [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
             ]);
         } catch (HttpClientExceptionInterface $e) {
@@ -108,7 +108,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        $this->request('DELETE', $request->getUri());
+        $this->doHttpRequest('DELETE', $request->getUri());
 
         return new DeleteResponse($request->getModel(), $request->getUri());
     }
