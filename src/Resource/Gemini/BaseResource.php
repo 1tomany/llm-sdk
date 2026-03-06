@@ -3,6 +3,7 @@
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Client\Gemini\Type\Error\Error;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\AbstractResource;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 
@@ -27,18 +28,15 @@ abstract readonly class BaseResource extends AbstractResource
     }
 
     /**
-     * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait
-     *
-     * @param array<mixed> $content
+     * @see OneToMany\LlmSdk\Resource\AbstractResource
      */
-    protected function handleHttpError(array $content): string
+    protected function handleHttpError(string $content, int $statusCode): never
     {
-        return 'another bad thing happened';
-        // $error = $this->parseResponse($content, Error::class, [
-        //     UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
-        // ]);
+        $error = $this->doDeserialize($content, Error::class, context: [
+            UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
+        ]);
 
-        // return $error->getMessage();
+        throw new RuntimeException($error->getMessage(), $statusCode);
     }
 
     /**

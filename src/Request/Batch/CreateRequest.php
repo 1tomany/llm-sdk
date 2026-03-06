@@ -8,20 +8,14 @@ use function trim;
 
 class CreateRequest extends BaseRequest
 {
-    /** @var ?non-empty-string */
     private ?string $name = null;
-
-    /** @var ?non-empty-string */
     private ?string $fileUri = null;
-
-    /** @var ?non-empty-string */
     private ?string $fileName = null;
 
-    /** @var non-empty-string */
-    private string $endpoint = '/v1/responses';
-
-    /** @var non-empty-string */
-    private string $timeframe = '24h';
+    /**
+     * @var array<string, ?scalar>
+     */
+    private array $options = [];
 
     public function withName(?string $name): static
     {
@@ -30,17 +24,11 @@ class CreateRequest extends BaseRequest
         return $this;
     }
 
-    /**
-     * @return ?non-empty-string
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param ?non-empty-string $fileUri
-     */
     public function withFileUri(?string $fileUri): static
     {
         $this->fileUri = trim($fileUri ?? '') ?: null;
@@ -48,17 +36,11 @@ class CreateRequest extends BaseRequest
         return $this;
     }
 
-    /**
-     * @return ?non-empty-string
-     */
     public function getFileUri(): ?string
     {
         return $this->fileUri;
     }
 
-    /**
-     * @param ?non-empty-string $fileName
-     */
     public function withFileName(?string $fileName): static
     {
         $this->fileName = trim($fileName ?? '') ?: null;
@@ -66,27 +48,26 @@ class CreateRequest extends BaseRequest
         return $this;
     }
 
-    /**
-     * @return ?non-empty-string
-     */
     public function getFileName(): ?string
     {
         return $this->fileName;
     }
 
     /**
-     * @return non-empty-string
+     * @param array<string, ?scalar> $options
      */
-    public function getEndpoint(): string
+    public function withOptions(array $options): static
     {
-        return $this->endpoint;
+        $this->options = $options;
+
+        return $this;
     }
 
     /**
-     * @return non-empty-string
+     * @return array<string, ?scalar>
      */
-    public function getTimeframe(): string
+    public function getOptions(): array
     {
-        return $this->timeframe;
+        return $this->options;
     }
 }

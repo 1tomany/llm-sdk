@@ -11,6 +11,7 @@ use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
+use OneToMany\LlmSdk\Response\Query\UsageResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
@@ -79,13 +80,16 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
     {
         $timer = new Stopwatch(true)->start('execute');
 
-        $content = $this->doHttpRequest('POST', $request->getUrl(), [
+        $content = $this->doHttpPostRequest($request->getUrl(), [
+            'headers' => [
+                'x-goog-api-key' => $this->getApiKey(),
+            ],
             'json' => $request->getRequest(),
         ]);
 
         $response = $this->doDeserialize($content, GenerateContentResponse::class);
 
-        return new ExecuteResponse($request->getModel(), $response->responseId, $response->getOutput(), $content, $timer->getDuration(), $response->usageMetadata->toResponse());
+        return new ExecuteResponse($request->getModel(), $response->responseId, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usageMetadata->promptTokenCount, $response->usageMetadata->cachedContentTokenCount, $response->usageMetadata->outputTokenCount));
     }
 
     /**
