@@ -21,6 +21,7 @@ final class AnthropicClient implements ClientInterface
         private DenormalizerInterface $denormalizer,
         private HttpClientInterface $httpClient,
         #[\SensitiveParameter] private string $apiKey,
+        private string $apiVersion = '2023-06-01',
     ) {
     }
 
@@ -53,7 +54,7 @@ final class AnthropicClient implements ClientInterface
      */
     public function files(): FileClientInterface
     {
-        $this->fileClient ??= new FileClient($this->denormalizer, $this->httpClient, $this->apiKey);
+        $this->fileClient ??= new FileClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
         return $this->fileClient;
     }

@@ -19,15 +19,11 @@ abstract readonly class BaseClient
 {
     use DenormalizerTrait;
 
-    /**
-     * @param non-empty-string $apiKey
-     * @param non-empty-string $apiVersion
-     */
     public function __construct(
         protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
         #[\SensitiveParameter] protected string $apiKey,
-        protected string $apiVersion = '2023-06-01',
+        protected string $apiVersion,
     ) {
     }
 
@@ -59,7 +55,7 @@ abstract readonly class BaseClient
                     UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
                 ]);
 
-                throw new RuntimeException($error->getMessage(), $statusCode);
+                throw new RuntimeException($error->message, $statusCode);
             }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);

@@ -51,12 +51,8 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
      */
     protected function doRequest(string $method, string $url, array $options = []): array
     {
-        $options = array_merge_recursive($options, [
-            'headers' => [
-                'anthropic-beta' => 'files-api-2025-04-14',
-            ],
+        return parent::doRequest($method, $url, $options + [
+            'headers' => ['anthropic-beta' => 'files-api-2025-04-14'],
         ]);
-
-        return parent::doRequest($method, $url, $options);
     }
 }

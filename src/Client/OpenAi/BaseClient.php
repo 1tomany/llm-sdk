@@ -10,7 +10,6 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-use function array_merge;
 use function implode;
 use function ltrim;
 use function sprintf;
@@ -36,12 +35,10 @@ abstract readonly class BaseClient
      */
     protected function doRequest(string $method, string $url, array $options = []): array
     {
-        $options = array_merge($options, [
-            'auth_bearer' => $this->apiKey,
-        ]);
-
         try {
-            $response = $this->httpClient->request($method, $url, $options);
+            $response = $this->httpClient->request($method, $url, $options + [
+                'auth_bearer' => $this->apiKey,
+            ]);
 
             /** @var int<100, 599> $statusCode */
             $statusCode = $response->getStatusCode();
@@ -54,7 +51,7 @@ abstract readonly class BaseClient
                     UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
                 ]);
 
-                throw new RuntimeException($error->getMessage(), $statusCode);
+                throw new RuntimeException($error->message, $statusCode);
             }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
