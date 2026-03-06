@@ -19,6 +19,10 @@ abstract readonly class BaseClient
 {
     use DenormalizerTrait;
 
+    /**
+     * @param non-empty-string $apiKey
+     * @param non-empty-string $apiVersion
+     */
     public function __construct(
         protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,

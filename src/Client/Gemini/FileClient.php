@@ -22,9 +22,9 @@ final readonly class FileClient extends BaseClient implements FileClientInterfac
     /**
      * @see OneToMany\LlmSdk\Contract\Client\FileClientInterface
      *
-     * @throws RuntimeException an empty file is uploaded
-     * @throws RuntimeException a signed URL is not generated
-     * @throws RuntimeException uploading a file chunk fails
+     * @throws RuntimeException when an empty file is uploaded
+     * @throws RuntimeException when a signed URL is not generated
+     * @throws RuntimeException when uploading a file chunk fails
      */
     public function upload(UploadRequest $request): UploadResponse
     {

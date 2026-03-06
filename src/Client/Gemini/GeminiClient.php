@@ -3,16 +3,17 @@
 namespace OneToMany\LlmSdk\Client\Gemini;
 
 use OneToMany\LlmSdk\Contract\Client\BatchClientInterface;
+use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Client\FileClientInterface;
+use OneToMany\LlmSdk\Contract\Client\QueryClientInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class GeminiClient
+final class GeminiClient implements ClientInterface
 {
     private ?BatchClientInterface $batchClient = null;
     private ?FileClientInterface $fileClient = null;
-
-    // public const string BASE_URI = 'https://generativelanguage.googleapis.com';
+    private ?QueryClientInterface $queryClient = null;
 
     /**
      * @param non-empty-string $apiKey
@@ -26,21 +27,53 @@ final class GeminiClient
     ) {
     }
 
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     *
+     * @return non-empty-list<non-empty-lowercase-string>
+     */
+    public static function getModels(): array
+    {
+        return [
+            'gemini-3.1-pro-preview',
+            'gemini-3.1-flash-lite-preview',
+            'gemini-3-pro-preview',
+            'gemini-3-flash-preview',
+            'gemini-2.5-pro',
+            'gemini-2.5-flash',
+            'gemini-2.5-flash-preview-09-2025',
+            'gemini-2.5-flash-lite',
+            'gemini-2.5-flash-lite-preview-09-2025',
+        ];
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
     public function batches(): BatchClientInterface
     {
-        if (null === $this->batchClient) {
-            $this->batchClient = new BatchClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
-        }
+        $this->batchClient ??= new BatchClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
         return $this->batchClient;
     }
 
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
     public function files(): FileClientInterface
     {
-        if (null === $this->fileClient) {
-            $this->fileClient = new FileClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
-        }
+        $this->fileClient ??= new FileClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
 
         return $this->fileClient;
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
+    public function queries(): QueryClientInterface
+    {
+        $this->queryClient ??= new QueryClient($this->denormalizer, $this->httpClient, $this->apiKey, $this->apiVersion);
+
+        return $this->queryClient;
     }
 }

@@ -16,6 +16,7 @@ final class AnthropicClient implements ClientInterface
 
     /**
      * @param non-empty-string $apiKey
+     * @param non-empty-string $apiVersion
      */
     public function __construct(
         private DenormalizerInterface $denormalizer,

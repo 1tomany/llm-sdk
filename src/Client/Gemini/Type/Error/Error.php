@@ -2,14 +2,11 @@
 
 namespace OneToMany\LlmSdk\Client\Gemini\Type\Error;
 
-use OneToMany\LlmSdk\Contract\Client\Type\Error\ErrorInterface;
-
 use function array_filter;
 use function explode;
 use function implode;
-use function rtrim;
 
-final readonly class Error implements ErrorInterface
+final readonly class Error
 {
     public function __construct(
         public int $code,
@@ -18,20 +15,9 @@ final readonly class Error implements ErrorInterface
     ) {
     }
 
-    /**
-     * @see OneToMany\LlmSdk\Contract\Client\Type\Error\ErrorInterface
-     */
     public function getMessage(): string
     {
-        // Removes extra spaces after periods that Gemini adds.
+        // Removes extra spaces after periods that Gemini likes to add
         return implode(' ', array_filter(explode(' ', $this->message)));
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Client\Type\Error\ErrorInterface
-     */
-    public function getInlineMessage(): string
-    {
-        return rtrim($this->getMessage(), '.');
     }
 }

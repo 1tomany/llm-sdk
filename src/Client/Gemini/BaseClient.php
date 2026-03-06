@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Client\Gemini;
 
 use OneToMany\LlmSdk\Client\Gemini\Type\Error\Error;
 use OneToMany\LlmSdk\Client\Trait\DenormalizerTrait;
-use OneToMany\LlmSdk\Client\Trait\SupportsModelTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
@@ -18,9 +17,6 @@ use function sprintf;
 abstract readonly class BaseClient
 {
     use DenormalizerTrait;
-    use SupportsModelTrait;
-
-    public const string BASE_URI = 'https://generativelanguage.googleapis.com';
 
     /**
      * @param non-empty-string $apiKey
@@ -30,28 +26,8 @@ abstract readonly class BaseClient
         protected DenormalizerInterface $denormalizer,
         protected HttpClientInterface $httpClient,
         #[\SensitiveParameter] protected string $apiKey,
-        protected string $apiVersion = 'v1beta',
+        protected string $apiVersion,
     ) {
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
-     *
-     * @return non-empty-list<non-empty-lowercase-string>
-     */
-    public static function getModels(): array
-    {
-        return [
-            'gemini-3.1-pro-preview',
-            'gemini-3.1-flash-lite-preview',
-            'gemini-3-pro-preview',
-            'gemini-3-flash-preview',
-            'gemini-2.5-pro',
-            'gemini-2.5-flash',
-            'gemini-2.5-flash-preview-09-2025',
-            'gemini-2.5-flash-lite',
-            'gemini-2.5-flash-lite-preview-09-2025',
-        ];
     }
 
     /**
@@ -97,7 +73,7 @@ abstract readonly class BaseClient
      */
     protected function generateUrl(string ...$paths): string
     {
-        return sprintf('%s/%s', self::BASE_URI, ltrim(implode('/', $paths), '/'));
+        return sprintf('https://generativelanguage.googleapis.com/%s', ltrim(implode('/', $paths), '/'));
     }
 
     /**
