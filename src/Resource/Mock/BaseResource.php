@@ -21,7 +21,7 @@ abstract readonly class BaseResource
      *
      * @return non-empty-lowercase-string
      */
-    protected function generateResponseId(string $prefix, int $suffixLength = 4): string
+    protected function generateId(string $prefix, int $suffixLength = 4): string
     {
         return strtolower(sprintf('%s_%s', $prefix, bin2hex(random_bytes($suffixLength))));
     }

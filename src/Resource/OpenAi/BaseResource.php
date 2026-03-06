@@ -13,14 +13,6 @@ use function sprintf;
 abstract readonly class BaseResource extends AbstractResource
 {
     /**
-     * @see OneToMany\LlmSdk\Resource\AbstractResource
-     */
-    protected function request(string $method, string $url, array $options = []): string
-    {
-        return parent::request($method, $url, $options + ['auth_bearer' => $this->apiKey]);
-    }
-
-    /**
      * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait
      *
      * @param array<mixed> $content

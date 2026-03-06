@@ -15,7 +15,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function upload(UploadRequest $request): UploadResponse
     {
-        return new UploadResponse($request->getModel(), $this->generateResponseId('file'));
+        return new UploadResponse($request->getModel(), $this->generateId('file'));
     }
 
     /**

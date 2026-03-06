@@ -16,7 +16,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function create(CreateRequest $request): CreateResponse
     {
-        return new CreateResponse($request->getModel(), $this->generateResponseId('batch'), Status::Processing->getValue());
+        return new CreateResponse($request->getModel(), $this->generateId('batch'), Status::Processing->getValue());
     }
 
     /**
@@ -24,6 +24,6 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function read(ReadRequest $request): ReadResponse
     {
-        return new ReadResponse($request->getModel(), $request->getUri(), Status::Completed->getValue(), $this->generateResponseId('file'));
+        return new ReadResponse($request->getModel(), $request->getUri(), Status::Completed->getValue(), $this->generateId('file'));
     }
 }

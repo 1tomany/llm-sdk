@@ -14,7 +14,7 @@ abstract readonly class BaseResource extends AbstractResource
 {
     protected function request(string $method, string $url, array $options = []): string
     {
-        return parent::request($method, $this->generateUrl($url), $options + [
+        return parent::request($method, $url, $options + [
             'headers' => [
                 'x-api-key' => $this->apiKey,
                 'anthropic-version' => $this->apiVersion,
