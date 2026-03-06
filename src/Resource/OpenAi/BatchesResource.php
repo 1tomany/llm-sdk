@@ -9,7 +9,7 @@ use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
-final readonly class BatchesResource extends CommonResource implements BatchesResourceInterface
+final readonly class BatchesResource extends BaseResource implements BatchesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface

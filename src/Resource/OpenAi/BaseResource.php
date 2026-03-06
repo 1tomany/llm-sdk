@@ -10,7 +10,7 @@ use function implode;
 use function ltrim;
 use function sprintf;
 
-abstract readonly class CommonResource extends AbstractResource
+abstract readonly class BaseResource extends AbstractResource
 {
     /**
      * @see OneToMany\LlmSdk\Resource\AbstractResource
