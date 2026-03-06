@@ -19,13 +19,8 @@ use function trim;
 
 class UploadRequest extends BaseRequest
 {
-    /** @var ?non-empty-string */
-    private ?string $path = null;
-
-    /** @var ?non-empty-string */
-    private ?string $name = null;
-
-    /** @var ?non-negative-int */
+    private string $path = '';
+    private string $name = '';
     private ?int $size = null;
 
     /** @var ?non-empty-lowercase-string */
@@ -39,52 +34,42 @@ class UploadRequest extends BaseRequest
 
     public function __destruct()
     {
-        $this->closeFileHandle();
+        $this->closeFile();
     }
 
     public function atPath(?string $path): static
     {
-        $this->path = trim($path ?? '') ?: null;
+        $this->path = trim($path ?? '');
 
-        return $this;
+        return $this->withName(basename($this->path));
     }
 
-    /**
-     * @return ?non-empty-string
-     */
-    public function getPath(): ?string
+    public function getPath(): string
     {
         return $this->path;
     }
 
     public function withName(?string $name): static
     {
-        $this->name = trim($name ?? '') ?: null;
+        $this->name = trim($name ?? '');
 
         return $this;
     }
 
-    /**
-     * @return ?non-empty-string
-     */
-    public function getName(): ?string
+    public function getName(): string
     {
-        if (!$this->name && null !== $this->getPath()) {
-            $this->withName(basename($this->getPath()));
-        }
-
         return $this->name;
     }
 
     /**
      * @return non-negative-int
      *
-     * @throws RuntimeException the filesize could not be calculated
+     * @throws RuntimeException when the size of the file could not be calculated
      */
     public function getSize(): int
     {
         if (null === $this->size) {
-            $this->size = @filesize((string) $this->path) ?: throw new RuntimeException('Calculating the size of the file failed.');
+            $this->size = @filesize((string) $this->path) ?: throw new RuntimeException(sprintf('Calculating the size of the file "%s" failed.', $this->getName()));
         }
 
         return $this->size;
@@ -102,7 +87,7 @@ class UploadRequest extends BaseRequest
      */
     public function getFormat(): string
     {
-        if (null === $this->format && null !== $this->getPath()) {
+        if (null === $this->format) {
             if (is_file($this->getPath()) && is_readable($this->getPath())) {
                 $this->withFormat(mime_content_type($this->getPath()) ?: null);
             }
@@ -131,16 +116,16 @@ class UploadRequest extends BaseRequest
      *
      * @throws RuntimeException when opening the file fails
      */
-    public function openFileHandle(): mixed
+    public function openFile(): mixed
     {
         if (null === $this->fileHandle) {
-            $this->fileHandle = @fopen((string) $this->path, 'r') ?: throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->path));
+            $this->fileHandle = @fopen((string) $this->path, 'r') ?: throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->getName()));
         }
 
         return $this->fileHandle;
     }
 
-    public function closeFileHandle(): void
+    public function closeFile(): void
     {
         if (is_resource($this->fileHandle)) {
             @fclose($this->fileHandle);

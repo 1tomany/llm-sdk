@@ -46,16 +46,16 @@ $clientFactory = new ClientFactory([
     new MockClient(),
 ]);
 
-if (is_string($apiKey = getenv('ANTHROPIC_API_KEY'))) {
-    $clientFactory->addClient(new AnthropicClient($serializer, $httpClient, $apiKey));
-}
+// if (is_string($apiKey = getenv('ANTHROPIC_API_KEY'))) {
+//     $clientFactory->addClient(new AnthropicClient($serializer, $httpClient, $apiKey));
+// }
 
-if (is_string($apiKey = getenv('GEMINI_API_KEY'))) {
-    $clientFactory->addClient(new GeminiClient($serializer, $httpClient, $apiKey));
-}
+// if (is_string($apiKey = getenv('GEMINI_API_KEY'))) {
+//     $clientFactory->addClient(new GeminiClient($serializer, $httpClient, $apiKey));
+// }
 
 if (is_string($apiKey = getenv('OPENAI_API_KEY'))) {
-    $clientFactory->addClient(new OpenAiClient($serializer, $httpClient, $apiKey));
+    $clientFactory->addClient(new OpenAiClient($httpClient, $apiKey));
 }
 
 return $clientFactory;

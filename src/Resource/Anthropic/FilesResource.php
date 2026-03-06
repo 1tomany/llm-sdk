@@ -19,7 +19,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
     public function upload(UploadRequest $request): UploadResponse
     {
         $content = $this->doRequest('POST', $this->generateUrl('files'), [
-            'body' => ['file' => $request->openFileHandle()],
+            'body' => ['file' => $request->openFile()],
         ]);
 
         $file = $this->denormalize($content, File::class);

@@ -29,7 +29,7 @@ final readonly class FileClient extends BaseClient implements FilesResourceInter
     public function upload(UploadRequest $request): UploadResponse
     {
         // Ensure the file can be opened first
-        $fileHandle = $request->openFileHandle();
+        $fileHandle = $request->openFile();
 
         if (0 === $fileSize = $request->getSize()) {
             throw new RuntimeException('Empty files cannot be uploaded.');

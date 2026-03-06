@@ -2,11 +2,10 @@
 
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
-use OneToMany\LlmSdk\Client\Trait\DenormalizeTrait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 use function implode;
 use function ltrim;
@@ -23,13 +22,17 @@ abstract readonly class BaseResource
     ) {
     }
 
-    /**
-     * @param array<string, mixed> $options
-     *
-     * @return array<mixed>
-     */
-    protected function doRequest(string $method, string $url, array $options = []): array
+    protected function doRequest(
+        string $method,
+        string $url,
+        ?array $json = null,
+        ?array $body = null,
+    ): ResponseInterface
     {
+        $url = $this->generateUrl($url);
+
+        $options = ['json' => $json, 'body' => $body];
+
         try {
             $response = $this->httpClient->request($method, $url, $options + [
                 'auth_bearer' => $this->apiKey,
@@ -37,11 +40,32 @@ abstract readonly class BaseResource
 
             /** @var int<100, 599> $statusCode */
             $statusCode = $response->getStatusCode();
+
+            $headers = $response->getHeaders(false);
+
+            if (isset($headers['content-type'][0]) && 0 === \stripos($headers['content-type'][0], 'application/json')) {
+
+            }
+
+            // print_r($headers);
+
+            if (200 !== $statusCode) {
+                throw new RuntimeException('Request failed!', $statusCode);
+            }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
         }
 
-        return [];
+        return $response;
+    }
+
+    protected function doPostRequest(
+        string $url,
+        ?array $json = null,
+        ?array $body = null,
+    ): ResponseInterface
+    {
+        return $this->doRequest('POST', $url, $json, $body);
     }
 
     /**
