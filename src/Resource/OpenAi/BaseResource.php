@@ -37,11 +37,14 @@ abstract readonly class BaseResource
 
             /** @var int<100, 599> $statusCode */
             $statusCode = $response->getStatusCode();
+
+            print_r($response);
+            exit;
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
         }
 
-        return $content;
+        return [];
     }
 
     /**
