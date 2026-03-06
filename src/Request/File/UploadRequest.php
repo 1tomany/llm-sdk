@@ -9,12 +9,8 @@ use function basename;
 use function fclose;
 use function filesize;
 use function fopen;
-use function is_file;
-use function is_readable;
 use function is_resource;
-use function mime_content_type;
 use function sprintf;
-use function strtolower;
 use function trim;
 
 class UploadRequest extends BaseRequest
@@ -22,14 +18,12 @@ class UploadRequest extends BaseRequest
     private string $path = '';
     private string $name = '';
     private ?int $size = null;
-
-    /** @var ?non-empty-lowercase-string */
     private ?string $format = null;
-
-    /** @var ?non-empty-lowercase-string */
     private ?string $purpose = null;
 
-    /** @var ?resource */
+    /**
+     * @var ?resource
+     */
     private mixed $fileHandle = null;
 
     public function __destruct()
@@ -62,8 +56,6 @@ class UploadRequest extends BaseRequest
     }
 
     /**
-     * @return non-negative-int
-     *
      * @throws RuntimeException when the size of the file could not be calculated
      */
     public function getSize(): int
@@ -77,35 +69,23 @@ class UploadRequest extends BaseRequest
 
     public function withFormat(?string $format): static
     {
-        $this->format = strtolower(trim($format ?? '')) ?: null;
+        $this->format = trim($format ?? '') ?: null;
 
         return $this;
     }
 
-    /**
-     * @return non-empty-lowercase-string
-     */
-    public function getFormat(): string
+    public function getFormat(): ?string
     {
-        if (null === $this->format) {
-            if (is_file($this->getPath()) && is_readable($this->getPath())) {
-                $this->withFormat(mime_content_type($this->getPath()) ?: null);
-            }
-        }
-
-        return $this->format ?? 'application/octet-stream';
+        return $this->format;
     }
 
     public function withPurpose(?string $purpose): static
     {
-        $this->purpose = strtolower(trim($purpose ?? '')) ?: null;
+        $this->purpose = trim($purpose ?? '') ?: null;
 
         return $this;
     }
 
-    /**
-     * @return ?non-empty-lowercase-string
-     */
     public function getPurpose(): ?string
     {
         return $this->purpose;
