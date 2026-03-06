@@ -56,8 +56,9 @@ $clientFactory = new ClientFactory([
     new MockClient(),
 ]);
 
-if (is_string($apiKey = getenv('ANTHROPIC_API_KEY'))) {
-    $clientFactory->addClient(new AnthropicClient($httpClient, $serializer, $apiKey, '2023-06-01'));
+// Anthropic Client
+if (!empty($apiKey = getenv('ANTHROPIC_API_KEY'))) {
+    $clientFactory->addClient(new AnthropicClient($httpClient, $serializer, $apiKey));
 }
 
 if (is_string($apiKey = getenv('GEMINI_API_KEY'))) {

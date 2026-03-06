@@ -16,7 +16,7 @@ abstract readonly class BaseResource extends AbstractResource
     /**
      * @return array<string>
      */
-    protected function createHttpHeaders(): array
+    protected function buildHttpHeaders(): array
     {
         return [
             'x-api-key' => $this->getApiKey(),

@@ -10,6 +10,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 abstract readonly class AbstractResource
 {
+    /**
+     * @param non-empty-string $apiKey
+     */
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected SerializerInterface $serializer,
@@ -18,6 +21,9 @@ abstract readonly class AbstractResource
     ) {
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getApiKey(): string
     {
         return $this->apiKey;

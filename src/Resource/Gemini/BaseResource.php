@@ -14,16 +14,12 @@ use function sprintf;
 abstract readonly class BaseResource extends AbstractResource
 {
     /**
-     * @see OneToMany\LlmSdk\Resource\Trait\HttpRequestTrait
-     *
-     * @return array<mixed>
+     * @return array<string>
      */
-    protected function buildAuthOptions(): array
+    protected function buildHttpHeaders(): array
     {
         return [
-            'headers' => [
-                'x-goog-api-key' => $this->apiKey,
-            ],
+            'x-goog-api-key' => $this->getApiKey(),
         ];
     }
 

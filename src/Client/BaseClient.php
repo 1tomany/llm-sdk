@@ -15,11 +15,21 @@ abstract class BaseClient implements ClientInterface
     protected ?FilesResourceInterface $files = null;
     protected ?QueriesResourceInterface $queries = null;
 
+    /**
+     * @param non-empty-string $apiKey
+     */
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected SerializerInterface $serializer,
         protected string $apiKey,
-        protected string $apiVersion,
+        protected ?string $apiVersion = null,
     ) {
+    }
+
+    public function setApiVersion(?string $apiVersion): static
+    {
+        $this->apiVersion = $apiVersion;
+
+        return $this;
     }
 }
