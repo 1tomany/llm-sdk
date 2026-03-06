@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
+require_once __DIR__.'/functions.php';
 
 // Create the Symfony Serializer component
 $typeExtractor = new PropertyInfoExtractor([], [
@@ -39,17 +40,6 @@ $serializer = new Serializer([
 $httpClient = HttpClient::create([
     'timeout' => 60.0,
 ]);
-
-function successMessage(string $message, string ...$values): void
-{
-    printf("%s\n", vsprintf($message, $values));
-}
-
-function errorMessage(string $message, string ...$values): never
-{
-    printf("[ERROR] %s\n", vsprintf($message, $values));
-    exit(1);
-}
 
 // Create each client that has an API key
 $clientFactory = new ClientFactory([
