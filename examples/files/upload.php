@@ -10,22 +10,16 @@ use OneToMany\LlmSdk\Request\File\UploadRequest;
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
-if ($argc < 2) {
-    printUsage();
-}
-
-$filePath = trim($argv[1]);
+$filePath = trim($argv[1] ?? '');
 
 if (!is_file($filePath)) {
-    printUsage();
+    errorMessage('Usage: php %s <file-path> <model>', basename(__FILE__));
 }
 
-$model = strtolower($argv[2]);
+$model = strtolower($argv[2] ?? 'mock');
 
 try {
     $fileName = basename($filePath);
-
-    successMessage('Uploading the file "%s" to the model "%s".', $fileName, $model);
 
     // Create a request to upload the file
     $uploadRequest = new UploadRequest($model)->atPath($filePath);
@@ -35,7 +29,7 @@ try {
         'request' => $uploadRequest,
     ]);
 
-    successMessage('The file "%s" was successfully uploaded to the model "%s" with URI "%s"', $fileName, $response->getModel(), $response->getUri());
+    successMessage('The file "%s" was successfully uploaded to the model "%s" with URI "%s".', $fileName, $response->getModel(), $response->getUri());
 
     // Create a request to delete the file
     $deleteRequest = new DeleteRequest($model, $response->getUri());
@@ -45,13 +39,7 @@ try {
         'request' => $deleteRequest,
     ]);
 
-    successMessage('The file "%s" was successfully deleted from the model "%s"', $fileName, $response->getModel());
+    successMessage('The file "%s" was successfully deleted from the model "%s".', $fileName, $response->getModel());
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
-}
-
-function printUsage(): never
-{
-    printf("Usage: php %s <path> <model>\n", basename(__FILE__));
-    exit(1);
 }

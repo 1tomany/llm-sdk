@@ -35,8 +35,10 @@ abstract readonly class BaseResource
     protected function doRequest(string $method, string $url, array $options = []): array
     {
         $options = array_merge_recursive($options, [
-            'x-api-key' => $this->apiKey,
-            'anthropic-version' => $this->apiVersion,
+            'headers' => [
+                'x-api-key' => $this->apiKey,
+                'anthropic-version' => $this->apiVersion,
+            ],
         ]);
 
         try {
