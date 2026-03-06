@@ -10,7 +10,7 @@ use OneToMany\LlmSdk\Request\File\UploadRequest;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
-final readonly class FilesResource extends OpenAiResource implements FilesResourceInterface
+final readonly class FilesResource extends CommonResource implements FilesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface

@@ -18,6 +18,7 @@ abstract readonly class BaseResource extends AbstractResource
             'headers' => [
                 'x-api-key' => $this->apiKey,
                 'anthropic-version' => $this->apiVersion,
+                'anthropic-beta' => 'files-api-2025-04-14',
             ],
         ]);
     }

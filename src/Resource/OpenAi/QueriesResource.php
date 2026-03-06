@@ -19,7 +19,7 @@ use function parse_url;
 
 use const PHP_URL_PATH;
 
-final readonly class QueriesResource extends OpenAiResource implements QueriesResourceInterface
+final readonly class QueriesResource extends CommonResource implements QueriesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface

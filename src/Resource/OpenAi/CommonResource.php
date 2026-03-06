@@ -10,12 +10,10 @@ use function implode;
 use function ltrim;
 use function sprintf;
 
-abstract readonly class OpenAiResource extends AbstractResource
+abstract readonly class CommonResource extends AbstractResource
 {
     /**
-     * @param array<string, mixed> $options
-     *
-     * @return array<mixed>
+     * @see OneToMany\LlmSdk\Resource\AbstractResource
      */
     protected function doRequest(string $method, string $url, array $options = []): array
     {
