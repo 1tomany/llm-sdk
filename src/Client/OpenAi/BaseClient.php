@@ -46,19 +46,12 @@ abstract readonly class BaseClient
             /** @var array<mixed> $content */
             $content = $response->toArray(false);
 
-            if ($statusCode >= 300 || isset($content['error'])) {
+            if ($statusCode >= 300) {
                 if (is_array($content['error'] ?? null)) {
-                    if (is_string($content['error']['message'] ?? null)) {
-                        throw new RuntimeException($content['error']['message'], $statusCode);
-                    }
+                    $message = $content['error']['message'] ?? null;
                 }
 
-                throw new RuntimeException('no good happen', $statusCode);
-                // $error = $this->denormalize($content, Error::class, [
-                //     UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
-                // ]);
-
-                // throw new RuntimeException($error->message, $statusCode);
+                throw new RuntimeException(is_string($message ?? null) ? $message : sprintf('OpenAI request to "%s %s" failed.', $method, $url), $statusCode);
             }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
