@@ -7,6 +7,7 @@ use OneToMany\LlmSdk\Client\OpenAi\Type\File\File;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\File\DeletedFile;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
@@ -27,8 +28,6 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             ],
         ]);
 
-        var_dump($content);
-
         $file = $this->deserialize($content, File::class);
 
         return new UploadResponse($request->getModel(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
@@ -45,8 +44,8 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             'auth_bearer' => $this->apiKey,
         ]);
 
-        var_dump($content);
+        $file = $this->deserialize($content, DeletedFile::class);
 
-        return new DeleteResponse($request->getModel(), $request->getUri());
+        return new DeleteResponse($request->getModel(), $file->id);
     }
 }
