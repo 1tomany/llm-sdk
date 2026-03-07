@@ -24,6 +24,14 @@ abstract readonly class BaseResource
     }
 
     /**
+     * @return non-empty-string
+     */
+    public function getApiKey(): string
+    {
+        return $this->apiKey;
+    }
+
+    /**
      * @see OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait
      */
     public function getBaseUrl(): string
