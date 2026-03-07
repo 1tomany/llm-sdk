@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Request;
 
-use function strtolower;
 use function trim;
 
 abstract class BaseRequest
