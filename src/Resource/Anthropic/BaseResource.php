@@ -15,23 +15,15 @@ abstract readonly class BaseResource
 
     /**
      * @param non-empty-string $apiKey
-     * @param non-empty-string $apiVersion
+     * @param non-empty-string $anthropicVersion
      */
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected SerializerInterface $serializer,
         protected string $apiKey,
-        protected string $apiVersion,
+        protected string $anthropicVersion,
         protected string $filesApiVersion = 'files-api-2025-04-14',
     ) {
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    public function getApiKey(): string
-    {
-        return $this->apiKey;
     }
 
     /**
@@ -47,7 +39,7 @@ abstract readonly class BaseResource
      */
     protected function getBaseHeaders(): array
     {
-        return ['anthropic-version' => $this->apiVersion, 'x-api-key' => $this->apiKey];
+        return ['anthropic-version' => $this->anthropicVersion, 'x-api-key' => $this->apiKey];
     }
 
     /**
