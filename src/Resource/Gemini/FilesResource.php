@@ -18,6 +18,7 @@ use function max;
 use function rtrim;
 use function sprintf;
 use function strlen;
+use function trim;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
@@ -84,11 +85,11 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             while ($fileChunk = fread($fileHandle, $uploadChunkSize)) {
                 $chunkSize = strlen($fileChunk);
 
-                // Determine the upload command to send to the server
+                // Determine the upload command to send
+                $uploadCommand = self::UPLOAD_COMMAND_UPLOAD;
+
                 if ($uploadOffset + $chunkSize >= $request->getSize()) {
                     $uploadCommand = self::UPLOAD_COMMAND_FINALIZE;
-                } else {
-                    $uploadCommand = self::UPLOAD_COMMAND_UPLOAD;
                 }
 
                 $content = $this->doPostRequest($uploadUrl, [
@@ -105,12 +106,15 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 $uploadOffset = $uploadOffset + $chunkSize;
             }
 
-            $file = $this->doDeserialize($content, File::class, context: [
-                UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
-            ]);
+            // Ensure some content was returned
+            $content = trim($content ?? '');
         } catch (ExceptionInterface $e) {
             throw new RuntimeException(sprintf('The file "%s" was rejected at byte %d of %d by the server: %s.', $request->getName(), $uploadOffset, $request->getSize(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
+
+        $file = $this->doDeserialize($content, File::class, context: [
+            UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
+        ]);
 
         return new UploadResponse($request->getModel(), $file->uri, $file->name, null, $file->expirationTime);
     }
