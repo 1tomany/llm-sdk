@@ -29,7 +29,6 @@ final readonly class FilesResource extends BaseResource implements FilesResource
     private const string UPLOAD_COMMAND_UPLOAD = 'upload';
     private const string UPLOAD_COMMAND_FINALIZE = 'upload, finalize';
 
-
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      *
