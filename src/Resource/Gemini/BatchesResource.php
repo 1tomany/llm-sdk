@@ -19,7 +19,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
         $url = $this->buildModelUrl($request->getModel(), 'batchGenerateContent');
 
         $content = $this->doPostRequest($url, [
-            'headers' => $this->buildHttpHeaders(),
+            'headers' => $this->buildHeaders(),
             'json' => [
                 'batch' => [
                     'displayName' => $request->getName(),
@@ -42,7 +42,9 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
     {
         $url = $this->buildUrl($this->apiVersion, $request->getUri());
 
-        $content = $this->doGetRequest($url);
+        $content = $this->doGetRequest($url, [
+            'headers' => $this->buildHeaders(),
+        ]);
 
         $batch = $this->doDeserialize($content, Batch::class);
 

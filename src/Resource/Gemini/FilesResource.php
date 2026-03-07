@@ -103,7 +103,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
     public function delete(DeleteRequest $request): DeleteResponse
     {
         $this->doDeleteRequest($request->getUri(), [
-            'headers' => $this->buildHttpHeaders(),
+            'headers' => $this->buildHeaders(),
         ]);
 
         return new DeleteResponse($request->getModel(), $request->getUri());
