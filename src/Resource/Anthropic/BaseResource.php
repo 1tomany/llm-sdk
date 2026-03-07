@@ -18,10 +18,7 @@ abstract readonly class BaseResource extends AbstractResource
      */
     protected function buildHttpHeaders(): array
     {
-        return [
-            'x-api-key' => $this->getApiKey(),
-            'anthropic-version' => $this->getApiVersion(),
-        ];
+        return ['x-api-key' => $this->apiKey, 'anthropic-version' => $this->apiVersion];
     }
 
     /**

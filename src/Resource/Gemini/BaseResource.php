@@ -20,7 +20,7 @@ abstract readonly class BaseResource extends AbstractResource
      */
     protected function buildHttpHeaders(array $headers = []): array
     {
-        return [...$headers, ...['x-goog-api-key' => $this->getApiKey()]];
+        return [...$headers, ...['x-goog-api-key' => $this->apiKey]];
     }
 
     /**
