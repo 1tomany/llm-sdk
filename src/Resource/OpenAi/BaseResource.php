@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-abstract readonly class BaseResource extends AbstractResource
+abstract readonly class BaseResource
 {
     use TransportTrait;
 
