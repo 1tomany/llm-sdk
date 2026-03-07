@@ -4,14 +4,14 @@ namespace OneToMany\LlmSdk\Resource\Anthropic;
 
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Anthropic\Type\Error\Error;
-use OneToMany\LlmSdk\Resource\Trait\TransportTrait;
+use OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 abstract readonly class BaseResource
 {
-    use TransportTrait;
+    use HttpResourceTrait;
 
     /**
      * @param non-empty-string $apiKey
@@ -35,7 +35,7 @@ abstract readonly class BaseResource
     }
 
     /**
-     * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
+     * @see OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait
      */
     public function getBaseUrl(): string
     {
@@ -43,7 +43,7 @@ abstract readonly class BaseResource
     }
 
     /**
-     * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
+     * @see OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait
      */
     protected function getBaseHeaders(): array
     {
@@ -51,7 +51,7 @@ abstract readonly class BaseResource
     }
 
     /**
-     * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
+     * @see OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait
      */
     protected function handleRequestError(string $content, int $statusCode): never
     {

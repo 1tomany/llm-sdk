@@ -10,7 +10,7 @@ use function implode;
 use function ltrim;
 use function rtrim;
 
-trait TransportTrait
+trait HttpResourceTrait
 {
     /**
      * @return non-empty-string
