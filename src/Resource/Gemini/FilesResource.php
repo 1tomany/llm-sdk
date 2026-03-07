@@ -17,7 +17,6 @@ use function ceil;
 use function fread;
 use function rtrim;
 use function sprintf;
-use function str_repeat;
 use function strlen;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
@@ -35,29 +34,34 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         $fileHandle = $request->openFile();
 
         try {
+            $uploadCommand = 'start';
+            $uploadProtocol = 'resumable';
+
             // Generate a signed URL to upload the file with
             $url = $this->buildUrl('upload', $this->apiVersion, 'files');
 
             $response = $this->doRequest('POST', $url, [
                 'headers' => $this->buildHeaders([
-                    'x-goog-upload-command' => 'start',
-                    'x-goog-upload-protocol' => 'resumable',
+                    // 'x-goog-upload-command' => $uploadCommand,
+                    'x-goog-upload-protocol' => $uploadProtocol,
                     'x-goog-upload-header-content-length' => $request->getSize(),
                     'x-goog-upload-header-content-type' => $request->getFormat(),
                 ]),
                 'json' => [
                     'file' => [
-                        'displayName' => str_repeat('A', 1024), // $request->getName(),
+                        'displayName' => $request->getName(),
                     ],
                 ],
             ]);
+
+            $headers = $response->getHeaders(true);
+            print_r($headers);
+            exit;
         } catch (ExceptionInterface $e) {
             throw new RuntimeException(sprintf('Generating the signed upload URL failed: %s.', rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
         try {
-            $headers = $response->getHeaders(true);
-
             /** @var non-empty-string $uploadUrl */
             $uploadUrl = $headers['x-goog-upload-url'][0];
 

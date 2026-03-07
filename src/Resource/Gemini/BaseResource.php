@@ -9,6 +9,7 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+use function json_validate;
 use function sprintf;
 
 abstract readonly class BaseResource
@@ -48,9 +49,13 @@ abstract readonly class BaseResource
      */
     protected function handleRequestError(string $content, int $statusCode): never
     {
-        $error = $this->doDeserialize($content, Error::class, context: [
-            UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
-        ]);
+        if (false === json_validate($content)) {
+            $error = new Error($statusCode, $content);
+        } else {
+            $error = $this->doDeserialize($content, Error::class, context: [
+                UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
+            ]);
+        }
 
         throw new RuntimeException($error->getMessage(), $statusCode);
     }
