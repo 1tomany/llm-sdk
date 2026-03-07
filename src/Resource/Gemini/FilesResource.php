@@ -21,11 +21,11 @@ use function strlen;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
+    private const int TIMEOUT_SECONDS = 120;
     private const int DEFAULT_CHUNK_SIZE = 8 * 1024 * 1024;
 
     private const string HEADER_CHUNK_SIZE = 'x-goog-upload-chunk-granularity';
     private const string HEADER_UPLOAD_URL = 'x-goog-upload-url';
-
     private const string UPLOAD_COMMAND_UPLOAD = 'upload';
     private const string UPLOAD_COMMAND_FINALIZE = 'upload, finalize';
 
@@ -76,10 +76,10 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         $uploadChunkSize = max(1, (int) ($uploadChunkSize ?? self::DEFAULT_CHUNK_SIZE));
 
         try {
+            $uploadOffset = 0;
+
             /** @var non-empty-string $uploadUrl */
             $uploadUrl = $headers[self::HEADER_UPLOAD_URL][0];
-
-            $uploadOffset = 0;
 
             while ($fileChunk = fread($fileHandle, $uploadChunkSize)) {
                 $chunkSize = strlen($fileChunk);
@@ -91,18 +91,18 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                     $uploadCommand = self::UPLOAD_COMMAND_UPLOAD;
                 }
 
-                // Determine the command to let the server know if we're done uploading or not
-                // $uploadCommand = (++$uploadChunk >= $totalUploadChunkCount) ? 'upload, finalize' : 'upload';
-
                 $content = $this->doPostRequest($uploadUrl, [
+                    'timeout' => self::TIMEOUT_SECONDS,
                     'headers' => $this->buildHeaders([
+                        'content-length' => $request->getSize(),
                         'x-goog-upload-offset' => $uploadOffset,
                         'x-goog-upload-command' => $uploadCommand,
                     ]),
                     'body' => $fileChunk,
                 ]);
 
-                $uploadOffset += $chunkSize;
+                // Account for unevenly divided file sizes
+                $uploadOffset = $uploadOffset + $chunkSize;
             }
 
             $file = $this->doDeserialize($content, File::class, context: [
