@@ -20,16 +20,18 @@ final class UploadRequestTest extends TestCase
 {
     public function testGettingSizeRequiresFileToExist(): void
     {
+        $path = \tempnam(\sys_get_temp_dir(), '__onetomany_llmsdk__');
+
+        // $metadata = stream_get_meta_data($handle);
+        // assert(array_key_exists('uri', $metadata));
+
+        $this->assertFileExists($path);
+        $uploadRequest = new UploadRequest()->atPath($path);
+
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Calculating the size of the file failed.');
+        $this->expectExceptionMessage('Calculating the size of the file "'.$uploadRequest->getName().'" failed.');
 
-        $handle = tmpfile();
-        $metadata = stream_get_meta_data($handle);
-
-        assert(array_key_exists('uri', $metadata));
-        $this->assertFileExists($metadata['uri']);
-
-        fclose($handle);
-        new UploadRequest()->atPath($metadata['uri'])->getSize();
+        \unlink($path);
+        $uploadRequest->getSize();
     }
 }
