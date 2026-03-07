@@ -7,8 +7,8 @@ use OneToMany\LlmSdk\Response\BaseResponse;
 
 use function json_decode;
 use function max;
+use function trim;
 
-use const JSON_BIGINT_AS_STRING;
 use const JSON_THROW_ON_ERROR;
 
 final readonly class ExecuteResponse extends BaseResponse
@@ -20,7 +20,7 @@ final readonly class ExecuteResponse extends BaseResponse
         string $model,
         private string $uri,
         private string $output,
-        private string $response,
+        private ?string $response = null,
         private int|float $runtime = 0,
         private UsageResponse $usage = new UsageResponse(),
     ) {
@@ -49,7 +49,7 @@ final readonly class ExecuteResponse extends BaseResponse
     {
         try {
             /** @var array<string, mixed> $response */
-            $response = json_decode($this->response, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
+            $response = json_decode(trim($this->response ?? ''), true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new RuntimeException('Decoding the response failed.', previous: $e);
         }
@@ -79,7 +79,7 @@ final readonly class ExecuteResponse extends BaseResponse
     {
         try {
             /** @var list<array<string, mixed>>|array<string, mixed> $record */
-            $record = json_decode($this->output, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
+            $record = json_decode($this->output, true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new RuntimeException('Decoding the output failed.', previous: $e);
         }
