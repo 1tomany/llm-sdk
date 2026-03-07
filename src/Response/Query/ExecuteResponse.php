@@ -79,7 +79,7 @@ final readonly class ExecuteResponse extends BaseResponse
     {
         try {
             /** @var list<array<string, mixed>>|array<string, mixed> $record */
-            $record = json_decode($this->output, true, 512, JSON_THROW_ON_ERROR);
+            $record = json_decode(trim($this->output), true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new RuntimeException('Decoding the output failed.', previous: $e);
         }
