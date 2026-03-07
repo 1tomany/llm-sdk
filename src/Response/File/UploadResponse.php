@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Response\File;
 
-use DateTimeImmutable;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
 use function strtolower;
