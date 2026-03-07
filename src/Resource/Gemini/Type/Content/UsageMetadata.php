@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Gemini\Type\Content;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content;
 
 final class UsageMetadata
 {

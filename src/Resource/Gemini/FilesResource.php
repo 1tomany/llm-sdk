@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Client\Gemini\Type\File\File;
+use OneToMany\LlmSdk\Resource\Gemini\Type\File\File;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;

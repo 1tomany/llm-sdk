@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Gemini\Type\Error;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Error;
 
 use function array_filter;
 use function explode;

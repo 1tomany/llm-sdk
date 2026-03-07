@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Gemini\Type\Batch;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Batch;
 
-use OneToMany\LlmSdk\Client\Gemini\Type\Batch\Enum\State;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Batch\Enum\State;
 
 final readonly class Metadata
 {

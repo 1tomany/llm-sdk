@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Client\Gemini\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\AbstractResource;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;

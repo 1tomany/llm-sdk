@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Client\Gemini\Type\Batch\Batch;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Batch\Batch;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;

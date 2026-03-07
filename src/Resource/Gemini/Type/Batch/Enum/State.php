@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\Gemini\Type\Batch\Enum;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Batch\Enum;
 
 enum State: string
 {
