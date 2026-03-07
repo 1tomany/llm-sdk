@@ -12,7 +12,6 @@ use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 
-use function ceil;
 use function fread;
 use function is_numeric;
 use function max;
