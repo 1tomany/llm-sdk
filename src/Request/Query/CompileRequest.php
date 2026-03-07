@@ -70,25 +70,11 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @param ?non-empty-string $text
-     *
-     * @deprecated since 0.3.3, use withPrompt() instead
-     */
-    public function withText(?string $text, Role $role = Role::User): static
-    {
-        if (null !== $text) {
-            $this->addComponent(new PromptComponent($text, $role));
-        }
-
-        return $this;
-    }
-
-    /**
      * @param ?non-empty-string $prompt
      */
     public function withPrompt(?string $prompt, Role $role = Role::User): static
     {
-        if (null !== $prompt) {
+        if ($prompt = trim($prompt ?? '')) {
             $this->addComponent(new PromptComponent($prompt, $role));
         }
 
@@ -101,6 +87,16 @@ class CompileRequest extends BaseRequest
     public function withInstructions(?string $instructions): static
     {
         return $this->withPrompt($instructions, Role::System);
+    }
+
+    /**
+     * @param ?non-empty-string $text
+     *
+     * @deprecated since 0.3.3, use withPrompt() instead
+     */
+    public function withText(?string $text, Role $role = Role::User): static
+    {
+        return $this->withPrompt($text, $role);
     }
 
     /**

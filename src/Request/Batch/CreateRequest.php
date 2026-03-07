@@ -40,21 +40,17 @@ class CreateRequest extends BaseRequest
 
     public function withFileUri(?string $fileUri): static
     {
-        if (!$fileUri = trim($fileUri ?? '')) {
-            throw new InvalidArgumentException('The file URI cannot be empty.');
-        }
-
-        $this->fileUri = $fileUri;
+        $this->fileUri = trim($fileUri ?? '') ?: null;
 
         return $this;
     }
 
     /**
-     * @return non-empty-string
+     * @return ?non-empty-string
      */
-    public function getFileUri(): string
+    public function getFileUri(): ?string
     {
-        return $this->fileUri ?: throw new RuntimeException('The file URI is empty');
+        return $this->fileUri ?: null;
     }
 
     public function withFileName(?string $fileName): static
@@ -64,9 +60,12 @@ class CreateRequest extends BaseRequest
         return $this;
     }
 
+    /**
+     * @return ?non-empty-string
+     */
     public function getFileName(): ?string
     {
-        return $this->fileName;
+        return $this->fileName ?: null;
     }
 
     /**
