@@ -14,9 +14,6 @@ use function trim;
 
 class CompileRequest extends BaseRequest
 {
-    /**
-     * @var ?non-empty-string
-     */
     private ?string $batchKey = null;
 
     /**
@@ -36,7 +33,7 @@ class CompileRequest extends BaseRequest
      */
     public function getBatchKey(): ?string
     {
-        return $this->batchKey;
+        return $this->batchKey ?: null;
     }
 
     /**
@@ -58,20 +55,21 @@ class CompileRequest extends BaseRequest
      */
     public function usingSchema(?array $schema, ?string $name = null): static
     {
-        if (null !== $schema) {
-            if (!$name && is_string($schema['title'] ?? null)) {
-                $name = trim($schema['title']);
-            }
-
-            $this->addComponent(new SchemaComponent($schema, $name));
+        if (!$schema) {
+            return $this;
         }
 
-        return $this;
+        $name = trim($name ?? '');
+
+        if (!$name && isset($schema['title'])) {
+            if (is_string($schema['title'])) {
+                $name = trim($schema['title']);
+            }
+        }
+
+        return $this->addComponent(new SchemaComponent($schema, $name ?: null));
     }
 
-    /**
-     * @param ?non-empty-string $prompt
-     */
     public function withPrompt(?string $prompt, Role $role = Role::User): static
     {
         if ($prompt = trim($prompt ?? '')) {
@@ -81,17 +79,12 @@ class CompileRequest extends BaseRequest
         return $this;
     }
 
-    /**
-     * @param ?non-empty-string $instructions
-     */
     public function withInstructions(?string $instructions): static
     {
         return $this->withPrompt($instructions, Role::System);
     }
 
     /**
-     * @param ?non-empty-string $text
-     *
      * @deprecated since 0.3.3, use withPrompt() instead
      */
     public function withText(?string $text, Role $role = Role::User): static
@@ -100,8 +93,6 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @param ?non-empty-string $text
-     *
      * @deprecated since 0.3.3, use withInstructions() instead
      */
     public function withSystemText(?string $text): static
