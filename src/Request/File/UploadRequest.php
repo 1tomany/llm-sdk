@@ -17,24 +17,9 @@ use function trim;
 
 class UploadRequest extends BaseRequest
 {
-    /**
-     * @var ?non-empty-string
-     */
     private ?string $path = null;
-
-    /**
-     * @var ?non-empty-string
-     */
     private ?string $name = null;
-
-    /**
-     * @var ?non-negative-int
-     */
     private ?int $size = null;
-
-    /**
-     * @var ?non-empty-lowercase-string
-     */
     private ?string $format = null;
 
     /**
@@ -88,7 +73,7 @@ class UploadRequest extends BaseRequest
      */
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->name ?: null;
     }
 
     /**
@@ -111,11 +96,11 @@ class UploadRequest extends BaseRequest
     }
 
     /**
-     * @return ?non-empty-lowercase-string
+     * @return ?non-empty-string
      */
     public function getFormat(): ?string
     {
-        return $this->format;
+        return $this->format ?: null;
     }
 
     public function withPurpose(?string $purpose): static
@@ -130,7 +115,7 @@ class UploadRequest extends BaseRequest
      */
     public function getPurpose(): ?string
     {
-        return $this->purpose;
+        return $this->purpose ?: null;
     }
 
     /**
