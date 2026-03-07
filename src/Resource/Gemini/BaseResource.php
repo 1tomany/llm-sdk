@@ -2,9 +2,9 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\AbstractResource;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 
 use function array_merge_recursive;
