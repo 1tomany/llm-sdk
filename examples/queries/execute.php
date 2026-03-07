@@ -10,7 +10,7 @@ use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
-$model = strtolower($argv[1] ?? 'mock');
+$model = trim($argv[1] ?? '') ?: 'mock';
 
 try {
     $prompt = 'Write a short summary of the history of PHP.';

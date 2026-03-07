@@ -16,7 +16,7 @@ if (!is_file($filePath)) {
     errorMessage('Usage: php %s <file-path> <model>', basename(__FILE__));
 }
 
-$model = strtolower($argv[2] ?? 'mock');
+$model = trim($argv[2] ?? '') ?: 'mock';
 
 try {
     $fileName = basename($filePath);
