@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Mock\Trait;
 
-trait ResourceTrait
+trait GenerateIdTrait
 {
     /**
      * @param non-empty-string $prefix

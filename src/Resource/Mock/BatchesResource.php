@@ -5,14 +5,14 @@ namespace OneToMany\LlmSdk\Resource\Mock;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
-use OneToMany\LlmSdk\Resource\Mock\Trait\ResourceTrait;
+use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Resource\Mock\Type\Batch\Status;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
 final readonly class BatchesResource implements BatchesResourceInterface
 {
-    use ResourceTrait;
+    use GenerateIdTrait;
 
     public function __construct()
     {
