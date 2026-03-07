@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
@@ -15,37 +16,48 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 
 use function ceil;
 use function fread;
+use function is_numeric;
 use function rtrim;
 use function sprintf;
 use function strlen;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
+    private const int DEFAULT_CHUNK_SIZE = 8 * 1024 * 1024;
+
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      *
-     * @throws RuntimeException when an empty file is uploaded
+     * @throws RuntimeException when opening the file fails
+     * @throws InvalidArgumentException when an empty file is uploaded
+     * @throws InvalidArgumentException when a file without a format is uploaded
      * @throws RuntimeException when a signed URL is not generated
      * @throws RuntimeException when uploading a file chunk fails
      */
     public function upload(UploadRequest $request): UploadResponse
     {
-        // Ensure the file can be opened
-        $fileHandle = $request->openFile();
+        $url = $this->buildUrl('upload', $this->apiVersion, 'files');
 
         try {
+            $fileHandle = $request->openFile();
+
+            if (!$fileSize = $request->getSize()) {
+                throw new InvalidArgumentException('Empty files cannot be uploaded.');
+            }
+
+            if (!$fileFormat = $request->getFormat()) {
+                throw new InvalidArgumentException('The file format cannot be empty.');
+            }
+
             $uploadCommand = 'start';
             $uploadProtocol = 'resumable';
-
-            // Generate a signed URL to upload the file with
-            $url = $this->buildUrl('upload', $this->apiVersion, 'files');
 
             $response = $this->doRequest('POST', $url, [
                 'headers' => $this->buildHeaders([
                     'x-goog-upload-command' => $uploadCommand,
                     'x-goog-upload-protocol' => $uploadProtocol,
-                    'x-goog-upload-header-content-length' => $request->getSize(),
-                    'x-goog-upload-header-content-type' => $request->getFormat(),
+                    'x-goog-upload-header-content-length' => $fileSize,
+                    'x-goog-upload-header-content-type' => $fileFormat,
                 ]),
                 'json' => [
                     'file' => [
@@ -56,27 +68,28 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
             $headers = $response->getHeaders(false);
 
-            $requiredHeaders = [
-                'x-goog-upload-url',
-                'x-goog-upload-chunk-granularity',
-            ];
-
-            foreach ($requiredHeaders as $requiredHeader) {
-                if (!isset($headers[$requiredHeader])) {
-                    throw new RuntimeException(sprintf('The header "%s" was not sent with the response.', $requiredHeader));
-                }
+            if (empty($headers['x-guploader-uploadid'][0] ?? null)) {
+                throw new RuntimeException('The header "x-guploader-uploadid" was not sent in the response.');
             }
         } catch (ExceptionInterface $e) {
             throw new RuntimeException(sprintf('Generating the signed upload URL failed: %s.', rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
-        try {
-            /** @var non-empty-string $uploadUrl */
-            $uploadUrl = $headers['x-goog-upload-url'][0];
+        // The default chunk size is 8MB
+        // $uploadChunkSize = 8 * 1024 * 1024;
 
-            /** @var positive-int $uploadChunkSize */
+        // Adjust the chunk size to the size preferred by the server
+        if (is_numeric($headers['x-goog-upload-chunk-granularity'][0] ?? null)) {
             $uploadChunkSize = (int) $headers['x-goog-upload-chunk-granularity'][0];
+        }
 
+        $uploadChunkSize = (($uploadChunkSize ?? 0) <= 0) ? self::DEFAULT_CHUNK_SIZE : $uploadChunkSize;
+
+        // if (($uploadChunkSize ?? 0) < 1) {
+        //     $uploadChunkSize = self::DEFAULT_CHUNK_SIZE;
+        // }
+
+        try {
             // Calculate the number of chunks needed to upload the file
             $uploadChunkCount = (int) ceil($request->getSize() / $uploadChunkSize);
 
@@ -87,12 +100,16 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 // Determine the command to let the server know if we're done uploading or not
                 $uploadCommand = (++$uploadChunk >= $uploadChunkCount) ? 'upload, finalize' : 'upload';
 
-                $response = $this->httpClient->request('POST', $uploadUrl, [
+                $response = $this->doRequest('POST', $url, [
                     'headers' => $this->buildHeaders([
                         'content-length' => $request->getSize(),
                         'x-goog-upload-offset' => $uploadOffset,
                         'x-goog-upload-command' => $uploadCommand,
                     ]),
+                    'query' => [
+                        'upload_id' => $headers['x-guploader-uploadid'][0],
+                        'upload_protocol' => $uploadProtocol,
+                    ],
                     'body' => $fileChunk,
                 ]);
 
