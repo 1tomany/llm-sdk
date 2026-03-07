@@ -23,7 +23,6 @@ use function strlen;
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     private const int DEFAULT_CHUNK_SIZE = 8 * 1024 * 1024;
-
     private const string HEADER_CHUNK_SIZE = 'x-goog-upload-chunk-granularity';
     private const string HEADER_UPLOAD_URL = 'x-goog-upload-url';
 
@@ -36,6 +35,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function upload(UploadRequest $request): UploadResponse
     {
+        // Ensure the file can be opened
         $fileHandle = $request->openFile();
 
         try {
@@ -60,33 +60,36 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             if (empty($headers[self::HEADER_UPLOAD_URL][0] ?? null)) {
                 throw new RuntimeException(sprintf('The header "%s" was not sent in the response.', self::HEADER_UPLOAD_URL));
             }
-
-            /** @var non-empty-string $uploadUrl */
-            $uploadUrl = $headers[self::HEADER_UPLOAD_URL][0];
         } catch (ExceptionInterface $e) {
             throw new RuntimeException(sprintf('Generating the signed upload URL failed: %s.', rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
-        // The default chunk size is 8MB
-        $uploadChunkSize = self::DEFAULT_CHUNK_SIZE;
-
-        // Adjust the chunk size to the size preferred by the server
+        // Set the chunk size to the amount preferred by the server
         if (is_numeric($headers[self::HEADER_CHUNK_SIZE][0] ?? null)) {
-            $uploadChunkSize = max(1, (int) $headers[self::HEADER_CHUNK_SIZE][0]);
+            $uploadChunkSize = $headers[self::HEADER_CHUNK_SIZE][0];
         }
 
-        // Calculate the number of chunks needed to upload the file
-        $uploadChunkCount = (int) ceil($request->getSize() / $uploadChunkSize);
+        // Use the default chunk size (8MB) if the server did not return the header
+        $uploadChunkSize = max(1, (int) ($uploadChunkSize ?? self::DEFAULT_CHUNK_SIZE));
 
         try {
-            // Counters to track progress
-            $uploadChunk = $uploadOffset = 0;
+            /** @var non-empty-string $uploadUrl */
+            $uploadUrl = $headers[self::HEADER_UPLOAD_URL][0];
+
+            $uploadOffset = 0;
+            $uploadCommand = 'upload';
 
             while ($fileChunk = fread($fileHandle, $uploadChunkSize)) {
-                // Determine the command to let the server know if we're done uploading or not
-                $uploadCommand = (++$uploadChunk >= $uploadChunkCount) ? 'upload, finalize' : 'upload';
+                $fileChunkSize = strlen($fileChunk);
 
-                $response = $this->doRequest('POST', $uploadUrl, [
+                if ($uploadOffset + $fileChunkSize >= $request->getSize()) {
+                    $uploadCommand = 'upload, finalize';
+                }
+
+                // Determine the command to let the server know if we're done uploading or not
+                // $uploadCommand = (++$uploadChunk >= $totalUploadChunkCount) ? 'upload, finalize' : 'upload';
+
+                $content = $this->doPostRequest($uploadUrl, [
                     'headers' => $this->buildHeaders([
                         'content-length' => $request->getSize(),
                         'x-goog-upload-offset' => $uploadOffset,
@@ -95,14 +98,14 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                     'body' => $fileChunk,
                 ]);
 
-                $uploadOffset = $uploadOffset + strlen($fileChunk);
+                $uploadOffset += $fileChunkSize;
             }
 
-            $file = $this->doDeserialize($response->getContent(), File::class, context: [
+            $file = $this->doDeserialize($content, File::class, context: [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
             ]);
         } catch (ExceptionInterface $e) {
-            throw new RuntimeException(sprintf('Chunk %d of %d was rejected by the server: %s.', $uploadChunk, $uploadChunkCount, rtrim($e->getMessage(), '.')), $e->getCode(), $e);
+            throw new RuntimeException(sprintf('The file "%s" was rejected at byte %d of %d by the server: %s.', $request->getName(), $uploadOffset, $request->getSize(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
         return new UploadResponse($request->getModel(), $file->uri, $file->name, null, $file->expirationTime);
