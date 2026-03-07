@@ -59,7 +59,8 @@ trait HttpResourceTrait
             $statusCode = $response->getStatusCode();
 
             try {
-                $response->getContent(true);
+                // Cache and validate the content
+                $response->getContent(throw: true);
             } catch (HttpExceptionInterface $e) {
                 $this->handleRequestError($response->getContent(false), $statusCode);
             }
