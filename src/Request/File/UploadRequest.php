@@ -21,15 +21,7 @@ class UploadRequest extends BaseRequest
     private ?string $name = null;
     private ?int $size = null;
     private ?string $format = null;
-
-    /**
-     * @var ?non-empty-string
-     */
     private ?string $purpose = null;
-
-    /**
-     * @var ?resource
-     */
     private mixed $fileHandle = null;
 
     public function __destruct()
@@ -125,8 +117,12 @@ class UploadRequest extends BaseRequest
      */
     public function openFile(): mixed
     {
-        if (null === $this->fileHandle) {
-            $this->fileHandle = @fopen((string) $this->path, 'r') ?: throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->getName()));
+        if (!is_resource($this->fileHandle)) {
+            $this->fileHandle = @fopen((string) $this->path, 'r');
+        }
+
+        if (!is_resource($this->fileHandle)) {
+            throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->getName()));
         }
 
         return $this->fileHandle;
