@@ -9,8 +9,6 @@ use OneToMany\LlmSdk\Resource\OpenAi\Type\Batch\Batch;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
-use function array_merge;
-
 final readonly class BatchesResource extends OpenAiResource implements BatchesResourceInterface
 {
     /**
