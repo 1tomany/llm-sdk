@@ -8,6 +8,7 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 
 use function implode;
 use function ltrim;
+use function rtrim;
 
 trait TransportTrait
 {
@@ -21,7 +22,7 @@ trait TransportTrait
      */
     protected function buildUrl(string ...$paths): string
     {
-        return sprintf('%s/%s', \rtrim($this->getBaseUrl(), '/'), ltrim(implode('/', $paths), '/'));
+        return sprintf('%s/%s', rtrim($this->getBaseUrl(), '/'), ltrim(implode('/', $paths), '/'));
     }
 
     /**
