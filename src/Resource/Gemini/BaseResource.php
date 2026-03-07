@@ -44,16 +44,6 @@ abstract readonly class BaseResource
     }
 
     /**
-     * @param array<string, int|string|null> $headers
-     *
-     * @return array<string, int|string|null>
-     */
-    protected function buildHttpHeaders(array $headers = []): array
-    {
-        return $headers;
-    }
-
-    /**
      * @see OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait
      */
     protected function handleRequestError(string $content, int $statusCode): never

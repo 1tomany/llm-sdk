@@ -36,7 +36,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             $url = $this->buildUrl('upload', $this->apiVersion, 'files');
 
             $response = $this->httpClient->request('POST', $url, [
-                'headers' => $this->buildHttpHeaders([
+                'headers' => $this->buildHeaders([
                     'x-goog-upload-command' => 'start',
                     'x-goog-upload-protocol' => 'resumable',
                     'x-goog-upload-header-content-length' => $request->getSize(),
@@ -72,7 +72,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 $uploadCommand = (++$uploadChunk >= $uploadChunkCount) ? 'upload, finalize' : 'upload';
 
                 $response = $this->httpClient->request('POST', $uploadUrl, [
-                    'headers' => $this->buildHttpHeaders([
+                    'headers' => $this->buildHeaders([
                         'content-length' => $request->getSize(),
                         'x-goog-upload-offset' => $uploadOffset,
                         'x-goog-upload-command' => $uploadCommand,
