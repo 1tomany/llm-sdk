@@ -5,6 +5,7 @@ namespace OneToMany\LlmSdk\Resource\Trait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 use function implode;
@@ -51,12 +52,15 @@ trait HttpResourceTrait
         array $options = [],
     ): ResponseInterface {
         try {
+            /** @var ResponseInterface $response */
             $response = $this->httpClient->request($method, $url, $options);
 
             /** @var int<100, 599> $statusCode */
             $statusCode = $response->getStatusCode();
 
-            if ($statusCode >= 300) {
+            try {
+                $response->getContent(true);
+            } catch (HttpExceptionInterface $e) {
                 $this->handleRequestError($response->getContent(false), $statusCode);
             }
         } catch (HttpClientExceptionInterface $e) {
