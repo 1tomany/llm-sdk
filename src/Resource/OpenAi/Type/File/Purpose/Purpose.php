@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\OpenAi\Type\File\Enum;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\File\Enum;
 
 use function strtolower;
 use function trim;

@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\OpenAi\Type\File;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\File;
 
-use OneToMany\LlmSdk\Client\OpenAi\Type\File\Enum\Purpose;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\File\Enum\Purpose;
 
 final readonly class File
 {
