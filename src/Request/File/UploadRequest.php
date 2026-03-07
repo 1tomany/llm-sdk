@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\File;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 
@@ -15,7 +16,10 @@ use function trim;
 
 class UploadRequest extends BaseRequest
 {
-    private string $path = '';
+    /**
+     * @var non-empty-string
+     */
+    private string $path;
     private string $name = '';
     private ?int $size = null;
     private ?string $format = null;
@@ -26,6 +30,15 @@ class UploadRequest extends BaseRequest
      */
     private mixed $fileHandle = null;
 
+    public function __construct(
+        string $model,
+        string $path,
+    ) {
+        parent::__construct($model);
+
+        $this->atPath($path);
+    }
+
     public function __destruct()
     {
         $this->closeFile();
@@ -33,11 +46,19 @@ class UploadRequest extends BaseRequest
 
     public function atPath(?string $path): static
     {
-        $this->path = trim($path ?? '');
+        if (!$path = trim($path ?? '')) {
+            throw new InvalidArgumentException('The path cannot be empty.');
+        }
 
-        return $this->withName(basename($this->path));
+        $this->path = $path;
+        // \PHPStan\dumpType($this->path);
+
+        return $this->withName(basename($path));
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getPath(): string
     {
         return $this->path;

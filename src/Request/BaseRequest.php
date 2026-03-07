@@ -9,8 +9,9 @@ class BaseRequest
     /**
      * @param non-empty-string $model
      */
-    public function __construct(private string $model = 'mock')
-    {
+    public function __construct(
+        private string $model = 'mock',
+    ) {
     }
 
     public function forModel(?string $model): static
