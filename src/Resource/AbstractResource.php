@@ -118,5 +118,8 @@ abstract readonly class AbstractResource
      *
      * @throws RuntimeException when the HTTP request was not successful
      */
-    abstract protected function handleHttpError(string $content, int $statusCode): never;
+    protected function handleHttpError(string $content, int $statusCode): never
+    {
+        throw new RuntimeException('The HTTP request failed.', $statusCode);
+    }
 }

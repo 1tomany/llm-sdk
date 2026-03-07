@@ -9,7 +9,7 @@ use function random_bytes;
 use function sprintf;
 use function strtolower;
 
-abstract readonly class BaseResource
+readonly class BaseResource
 {
     public function __construct()
     {
