@@ -25,6 +25,6 @@ final class ExecuteResponseTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Decoding the output failed.');
 
-        new ExecuteResponse('test-model', 'id_123', '{"invalid', '')->getResponse();
+        new ExecuteResponse('test-model', 'id_123', '{"invalid', '')->toRecord();
     }
 }
