@@ -91,14 +91,9 @@ abstract readonly class AbstractResource
     }
 
     /**
-     * @param positive-int $statusCode
-     *
      * @throws RuntimeException when the HTTP request was not successful
      */
-    protected function handleHttpError(string $content, int $statusCode): never
-    {
-        throw new RuntimeException('The HTTP request failed.', $statusCode);
-    }
+    abstract protected function handleHttpError(string $content, int $statusCode): never;
 
     /**
      * @template T of object
