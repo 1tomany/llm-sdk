@@ -45,21 +45,11 @@ final class OpenAiClient extends BaseClient implements ClientInterface
     }
 
     /**
-     * @see OneToMany\LlmSdk\Client\BaseClient
-     *
-     * @return non-empty-string
-     */
-    public function getApiVersion(): string
-    {
-        return parent::getApiVersion() ?? 'v1';
-    }
-
-    /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
     public function batches(): BatchesResourceInterface
     {
-        $this->batches ??= new BatchesResource($this->httpClient, $this->serializer, $this->apiKey, $this->getApiVersion());
+        $this->batches ??= new BatchesResource($this->httpClient, $this->serializer, $this->apiKey);
 
         return $this->batches;
     }
@@ -69,7 +59,7 @@ final class OpenAiClient extends BaseClient implements ClientInterface
      */
     public function files(): FilesResourceInterface
     {
-        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->apiKey, $this->getApiVersion());
+        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->apiKey);
 
         return $this->files;
     }
@@ -79,7 +69,7 @@ final class OpenAiClient extends BaseClient implements ClientInterface
      */
     public function queries(): QueriesResourceInterface
     {
-        $this->queries ??= new QueriesResource($this->httpClient, $this->serializer, $this->apiKey, $this->getApiVersion());
+        $this->queries ??= new QueriesResource($this->httpClient, $this->serializer, $this->apiKey);
 
         return $this->queries;
     }

@@ -34,21 +34,11 @@ final class GeminiClient extends BaseClient implements ClientInterface
     }
 
     /**
-     * @see OneToMany\LlmSdk\Client\BaseClient
-     *
-     * @return non-empty-string
-     */
-    public function getApiVersion(): string
-    {
-        return parent::getApiVersion() ?? 'v1beta';
-    }
-
-    /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
     public function batches(): BatchesResourceInterface
     {
-        $this->batches ??= new BatchesResource($this->httpClient, $this->serializer, $this->apiKey, $this->getApiVersion());
+        $this->batches ??= new BatchesResource($this->httpClient, $this->serializer, $this->apiKey, $this->apiVersion);
 
         return $this->batches;
     }
