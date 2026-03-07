@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\OpenAi\Type\Usage\Details;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Usage\Details;
 
 final readonly class InputTokensDetails
 {
