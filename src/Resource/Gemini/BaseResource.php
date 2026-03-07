@@ -28,22 +28,6 @@ abstract readonly class BaseResource
     }
 
     /**
-     * @return non-empty-string
-     */
-    public function getApiKey(): string
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    public function getApiVersion(): string
-    {
-        return $this->apiVersion;
-    }
-
-    /**
      * @see OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait
      */
     public function getBaseUrl(): string
@@ -56,7 +40,7 @@ abstract readonly class BaseResource
      */
     protected function getBaseHeaders(): array
     {
-        return ['x-goog-api-key' => $this->getApiKey()];
+        return ['x-goog-api-key' => $this->apiKey];
     }
 
     /**
@@ -86,6 +70,6 @@ abstract readonly class BaseResource
      */
     protected function buildModelUrl(string $model, string $action): string
     {
-        return $this->buildUrl($this->getApiVersion(), 'models', sprintf('%s:%s', $model, $action));
+        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model, $action));
     }
 }

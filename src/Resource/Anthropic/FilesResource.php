@@ -21,7 +21,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
         $content = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders([
-                'anthropic-beta' => $this->filesApiVersion,
+                'anthropic-beta' => $this->filesVersion,
             ]),
             'body' => [
                 'file' => $request->openFile(),
@@ -42,7 +42,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
         $content = $this->doDeleteRequest($url, [
             'headers' => $this->buildHeaders([
-                'anthropic-beta' => $this->filesApiVersion,
+                'anthropic-beta' => $this->filesVersion,
             ]),
         ]);
 

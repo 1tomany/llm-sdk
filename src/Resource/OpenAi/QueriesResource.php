@@ -96,7 +96,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         $timer = new Stopwatch(true)->start('execute');
 
         $content = $this->doPostRequest($request->getUrl(), [
-            'auth_bearer' => $this->getApiKey(),
+            'auth_bearer' => $this->apiKey,
             'json' => [
                 ...$request->getRequest(),
             ],
