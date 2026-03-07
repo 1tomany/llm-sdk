@@ -11,7 +11,7 @@ use function implode;
 use function ltrim;
 use function sprintf;
 
-abstract readonly class BaseResource extends AbstractResource
+abstract readonly class OpenAiResource extends AbstractResource
 {
     /**
      * @see OneToMany\LlmSdk\Resource\AbstractResource

@@ -11,7 +11,7 @@ use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
 use function array_merge;
 
-final readonly class BatchesResource extends BaseResource implements BatchesResourceInterface
+final readonly class BatchesResource extends OpenAiResource implements BatchesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
