@@ -16,11 +16,8 @@ use function trim;
 
 class UploadRequest extends BaseRequest
 {
-    /**
-     * @var non-empty-string
-     */
-    private string $path;
-    private string $name;
+    private ?string $path = null;
+    private ?string $name = null;
     private ?int $size = null;
     private ?string $format = null;
     private ?string $purpose = null;
@@ -29,15 +26,6 @@ class UploadRequest extends BaseRequest
      * @var ?resource
      */
     private mixed $fileHandle = null;
-
-    public function __construct(
-        string $model,
-        string $path,
-    ) {
-        parent::__construct($model);
-
-        $this->atPath($path);
-    }
 
     public function __destruct()
     {
@@ -51,7 +39,6 @@ class UploadRequest extends BaseRequest
         }
 
         $this->path = $path;
-        // \PHPStan\dumpType($this->path);
 
         return $this->withName(basename($path));
     }
@@ -61,17 +48,17 @@ class UploadRequest extends BaseRequest
      */
     public function getPath(): string
     {
-        return $this->path;
+        return $this->path ?: throw new RuntimeException('The path cannot be empty.');
     }
 
     public function withName(?string $name): static
     {
-        $this->name = trim($name ?? '');
+        $this->name = trim($name ?? '') ?: null;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
