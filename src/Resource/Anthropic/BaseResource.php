@@ -15,7 +15,7 @@ abstract readonly class BaseResource
 
     /**
      * @param non-empty-string $apiKey
-     * @param ?non-empty-string $apiVersion
+     * @param non-empty-string $apiVersion
      */
     public function __construct(
         protected HttpClientInterface $httpClient,

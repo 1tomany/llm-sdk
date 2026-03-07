@@ -49,7 +49,7 @@ final class OpenAiClient extends BaseClient implements ClientInterface
      */
     public function batches(): BatchesResourceInterface
     {
-        $this->batches ??= new BatchesResource($this->httpClient, $this->serializer, $this->apiKey);
+        $this->batches ??= new BatchesResource($this->httpClient, $this->serializer, $this->getApiKey());
 
         return $this->batches;
     }
@@ -59,7 +59,7 @@ final class OpenAiClient extends BaseClient implements ClientInterface
      */
     public function files(): FilesResourceInterface
     {
-        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->apiKey);
+        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->getApiKey());
 
         return $this->files;
     }
@@ -69,7 +69,7 @@ final class OpenAiClient extends BaseClient implements ClientInterface
      */
     public function queries(): QueriesResourceInterface
     {
-        $this->queries ??= new QueriesResource($this->httpClient, $this->serializer, $this->apiKey);
+        $this->queries ??= new QueriesResource($this->httpClient, $this->serializer, $this->getApiKey());
 
         return $this->queries;
     }
