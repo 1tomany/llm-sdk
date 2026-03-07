@@ -2,17 +2,17 @@
 
 namespace OneToMany\LlmSdk\Response;
 
-abstract readonly class BaseResponse
+readonly class BaseResponse
 {
     /**
-     * @param non-empty-lowercase-string $model
+     * @param non-empty-string $model
      */
     public function __construct(private string $model)
     {
     }
 
     /**
-     * @return non-empty-lowercase-string
+     * @return non-empty-string
      */
     public function getModel(): string
     {

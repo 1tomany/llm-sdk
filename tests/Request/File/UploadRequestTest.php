@@ -7,11 +7,9 @@ use OneToMany\LlmSdk\Request\File\UploadRequest;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-use function array_key_exists;
-use function assert;
-use function fclose;
-use function stream_get_meta_data;
-use function tmpfile;
+use function sys_get_temp_dir;
+use function tempnam;
+use function unlink;
 
 #[Group('UnitTests')]
 #[Group('RequestTests')]
@@ -20,16 +18,21 @@ final class UploadRequestTest extends TestCase
 {
     public function testGettingSizeRequiresFileToExist(): void
     {
+        // Arrange: Create a temporary file
+        $this->assertFileExists($path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__'));
+
+        // Arrange: Create the request to upload the file
+        $uploadRequest = new UploadRequest()->atPath($path);
+
+        // Assert: File must exist to calculate the size
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Calculating the size of the file failed.');
+        $this->expectExceptionMessage('Calculating the size of the file "'.$uploadRequest->getName().'" failed.');
 
-        $handle = tmpfile();
-        $metadata = stream_get_meta_data($handle);
+        // Act: Delete the file
+        $this->assertTrue(unlink($path));
+        $this->assertFileDoesNotExist($path);
 
-        assert(array_key_exists('uri', $metadata));
-        $this->assertFileExists($metadata['uri']);
-
-        fclose($handle);
-        new UploadRequest()->atPath($metadata['uri'])->getSize();
+        // Act: Get the size
+        $uploadRequest->getSize();
     }
 }

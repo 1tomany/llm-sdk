@@ -4,10 +4,9 @@ namespace OneToMany\LlmSdk\Response\Batch;
 
 use OneToMany\LlmSdk\Response\BaseResponse;
 
-abstract readonly class BatchResponse extends BaseResponse
+readonly class BatchResponse extends BaseResponse
 {
     /**
-     * @param non-empty-lowercase-string $model
      * @param non-empty-string $uri
      * @param non-empty-string $status
      * @param ?non-empty-string $fileUri

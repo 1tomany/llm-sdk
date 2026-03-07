@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\Query;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 
 use function trim;
@@ -11,7 +12,7 @@ class ExecuteRequest extends BaseRequest
     /**
      * @var non-empty-string
      */
-    private string $url = 'mock';
+    private string $url = 'https://api.mock-llm.example';
 
     /**
      * @var array<string, mixed>
@@ -20,7 +21,11 @@ class ExecuteRequest extends BaseRequest
 
     public function withUrl(?string $url): static
     {
-        $this->url = trim($url ?? '') ?: $this->url;
+        if (!$url = trim($url ?? '')) {
+            throw new InvalidArgumentException('The URL cannot be empty.');
+        }
+
+        $this->url = $url;
 
         return $this;
     }

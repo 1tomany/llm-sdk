@@ -3,13 +3,13 @@
 namespace OneToMany\LlmSdk\Action\Batch;
 
 use OneToMany\LlmSdk\Contract\Action\Batch\CreateBatchActionInterface;
-use OneToMany\LlmSdk\Factory\BatchClientFactory;
+use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 
 final readonly class CreateBatchAction implements CreateBatchActionInterface
 {
-    public function __construct(private BatchClientFactory $clientFactory)
+    public function __construct(private ClientFactory $clientFactory)
     {
     }
 
@@ -18,6 +18,6 @@ final readonly class CreateBatchAction implements CreateBatchActionInterface
      */
     public function act(CreateRequest $request): CreateResponse
     {
-        return $this->clientFactory->create($request->getModel())->create($request);
+        return $this->clientFactory->create($request->getModel())->batches()->create($request);
     }
 }

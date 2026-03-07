@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\File;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 
@@ -9,52 +10,47 @@ use function basename;
 use function fclose;
 use function filesize;
 use function fopen;
-use function is_file;
-use function is_readable;
 use function is_resource;
-use function mime_content_type;
 use function sprintf;
 use function strtolower;
 use function trim;
 
 class UploadRequest extends BaseRequest
 {
-    /** @var ?non-empty-string */
     private ?string $path = null;
-
-    /** @var ?non-empty-string */
     private ?string $name = null;
-
-    /** @var ?non-negative-int */
     private ?int $size = null;
-
-    /** @var ?non-empty-lowercase-string */
     private ?string $format = null;
-
-    /** @var ?non-empty-lowercase-string */
     private ?string $purpose = null;
-
-    /** @var ?resource */
     private mixed $fileHandle = null;
 
     public function __destruct()
     {
-        $this->closeFileHandle();
-    }
-
-    public function atPath(?string $path): static
-    {
-        $this->path = trim($path ?? '') ?: null;
-
-        return $this;
+        $this->closeFile();
     }
 
     /**
-     * @return ?non-empty-string
+     * @throws InvalidArgumentException when the trimmed path is empty
      */
-    public function getPath(): ?string
+    public function atPath(?string $path): static
     {
-        return $this->path;
+        if (!$path = trim($path ?? '')) {
+            throw new InvalidArgumentException('The path cannot be empty.');
+        }
+
+        $this->path = $path;
+
+        return $this->withName(basename($path));
+    }
+
+    /**
+     * @return non-empty-string
+     *
+     * @throws RuntimeException when the path is empty
+     */
+    public function getPath(): string
+    {
+        return $this->path ?: throw new RuntimeException('The path is empty.');
     }
 
     public function withName(?string $name): static
@@ -69,22 +65,16 @@ class UploadRequest extends BaseRequest
      */
     public function getName(): ?string
     {
-        if (!$this->name && null !== $this->getPath()) {
-            $this->withName(basename($this->getPath()));
-        }
-
-        return $this->name;
+        return $this->name ?: null;
     }
 
     /**
-     * @return non-negative-int
-     *
-     * @throws RuntimeException the filesize could not be calculated
+     * @throws RuntimeException when the size of the file could not be calculated
      */
     public function getSize(): int
     {
         if (null === $this->size) {
-            $this->size = @filesize((string) $this->path) ?: throw new RuntimeException('Calculating the size of the file failed.');
+            $this->size = @filesize((string) $this->path) ?: throw new RuntimeException(sprintf('Calculating the size of the file "%s" failed.', $this->getName()));
         }
 
         return $this->size;
@@ -98,32 +88,26 @@ class UploadRequest extends BaseRequest
     }
 
     /**
-     * @return non-empty-lowercase-string
+     * @return ?non-empty-string
      */
-    public function getFormat(): string
+    public function getFormat(): ?string
     {
-        if (null === $this->format && null !== $this->getPath()) {
-            if (is_file($this->getPath()) && is_readable($this->getPath())) {
-                $this->withFormat(mime_content_type($this->getPath()) ?: null);
-            }
-        }
-
-        return $this->format ?? 'application/octet-stream';
+        return $this->format ?: null;
     }
 
     public function withPurpose(?string $purpose): static
     {
-        $this->purpose = strtolower(trim($purpose ?? '')) ?: null;
+        $this->purpose = trim($purpose ?? '') ?: null;
 
         return $this;
     }
 
     /**
-     * @return ?non-empty-lowercase-string
+     * @return ?non-empty-string
      */
     public function getPurpose(): ?string
     {
-        return $this->purpose;
+        return $this->purpose ?: null;
     }
 
     /**
@@ -131,16 +115,20 @@ class UploadRequest extends BaseRequest
      *
      * @throws RuntimeException when opening the file fails
      */
-    public function openFileHandle(): mixed
+    public function openFile(): mixed
     {
-        if (null === $this->fileHandle) {
-            $this->fileHandle = @fopen((string) $this->path, 'r') ?: throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->path));
+        if (!is_resource($this->fileHandle)) {
+            $this->fileHandle = @fopen((string) $this->path, 'r');
+        }
+
+        if (!is_resource($this->fileHandle)) {
+            throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->getName()));
         }
 
         return $this->fileHandle;
     }
 
-    public function closeFileHandle(): void
+    public function closeFile(): void
     {
         if (is_resource($this->fileHandle)) {
             @fclose($this->fileHandle);

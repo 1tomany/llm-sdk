@@ -16,21 +16,24 @@ final class CompileRequestTest extends TestCase
 {
     public function testUsingSchemaExtractsNameFromTitle(): void
     {
+        // Arrange: JSON Schema
+        $jsonSchema = ['title' => 'Identify'];
+
+        // Arrange: Compile query request
         $compileRequest = new CompileRequest();
         $this->assertCount(0, $compileRequest->getComponents());
 
-        $schema = [
-            'title' => 'Identify',
-        ];
-
-        $compileRequest->usingSchema($schema);
+        // Act: Add the JSON schema to the request
+        $compileRequest->usingSchema($jsonSchema);
         $this->assertCount(1, $compileRequest->getComponents());
 
+        // Assert: The JSON schema was added to the request
         $component = $compileRequest->getComponents()[0];
         assert($component instanceof SchemaComponent);
 
+        // Assert: The title of the JSON schema is used as the name
         $this->assertInstanceOf(SchemaComponent::class, $component);
-        $this->assertEquals($schema['title'], $component->getName());
+        $this->assertEquals($jsonSchema['title'], $component->getName());
     }
 
     public function testUsingSchemaSetsDefaultNameWhenTitleIsMissing(): void
@@ -50,24 +53,36 @@ final class CompileRequestTest extends TestCase
 
     public function testUsingSchemaWithName(): void
     {
+        // Arrange: Schema name
+        $schemaName = 'Identity';
+
+        // Arrange: JSON schema
+        $jsonSchema = [
+            'title' => 'ID',
+            'required' => [
+                'name',
+                'age',
+                'weight',
+                'height',
+            ],
+        ];
+
+        // Assert: Schema name and schema title are not equal
+        $this->assertNotEquals($schemaName, $jsonSchema['title']);
+
+        // Arrange: Compile query request
         $compileRequest = new CompileRequest();
         $this->assertCount(0, $compileRequest->getComponents());
 
-        $schemaName = 'Identity';
-
-        $schema = [
-            'title' => 'Identification',
-            'required' => ['tag', 'summary'],
-        ];
-
-        $this->assertNotEquals($schemaName, $schema['title']);
-
-        $compileRequest->usingSchema($schema, $schemaName);
+        // Act: Add the JSON schema to the request
+        $compileRequest->usingSchema($jsonSchema, $schemaName);
         $this->assertCount(1, $compileRequest->getComponents());
 
+        // Assert: The JSON schema was added to the request
         $component = $compileRequest->getComponents()[0];
         assert($component instanceof SchemaComponent);
 
+        // Assert: The schema name is used instead of the title
         $this->assertInstanceOf(SchemaComponent::class, $component);
         $this->assertEquals($schemaName, $component->getName());
     }

@@ -9,8 +9,10 @@ class ReadRequest extends BaseRequest
     /**
      * @param non-empty-string $uri
      */
-    public function __construct(string $model, private string $uri)
-    {
+    public function __construct(
+        string $model,
+        private string $uri,
+    ) {
         parent::__construct($model);
     }
 

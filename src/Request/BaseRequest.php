@@ -2,27 +2,27 @@
 
 namespace OneToMany\LlmSdk\Request;
 
-use function strtolower;
 use function trim;
 
-abstract class BaseRequest
+class BaseRequest
 {
     /**
-     * @param non-empty-lowercase-string $model
+     * @param non-empty-string $model
      */
-    public function __construct(private string $model = 'mock')
-    {
+    public function __construct(
+        private string $model = 'mock',
+    ) {
     }
 
-    public function forModel(string $model): static
+    public function forModel(?string $model): static
     {
-        $this->model = strtolower(trim($model)) ?: $this->model;
+        $this->model = trim($model ?? '') ?: 'mock';
 
         return $this;
     }
 
     /**
-     * @return non-empty-lowercase-string
+     * @return non-empty-string
      */
     public function getModel(): string
     {

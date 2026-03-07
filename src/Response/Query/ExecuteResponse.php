@@ -14,17 +14,13 @@ use const JSON_THROW_ON_ERROR;
 final readonly class ExecuteResponse extends BaseResponse
 {
     /**
-     * @param non-empty-lowercase-string $model
      * @param non-empty-string $uri
-     * @param non-empty-string $output
-     * @param array<string, mixed> $response
-     * @param non-negative-int|float $runtime
      */
     public function __construct(
         string $model,
         private string $uri,
         private string $output,
-        private array $response,
+        private string $response,
         private int|float $runtime,
         private UsageResponse $usage = new UsageResponse(),
     ) {
@@ -39,9 +35,6 @@ final readonly class ExecuteResponse extends BaseResponse
         return $this->uri;
     }
 
-    /**
-     * @return non-empty-string
-     */
     public function getOutput(): string
     {
         return $this->output;
@@ -58,16 +51,13 @@ final readonly class ExecuteResponse extends BaseResponse
             /** @var list<array<string, mixed>>|array<string, mixed> $record */
             $record = json_decode($this->output, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw new RuntimeException('Converting the output to a record failed.', previous: $e);
+            throw new RuntimeException('Decoding the output to a record failed.', previous: $e);
         }
 
         return $record;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function getResponse(): array
+    public function getResponse(): string
     {
         return $this->response;
     }

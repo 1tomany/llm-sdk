@@ -2,45 +2,39 @@
 
 namespace OneToMany\LlmSdk\Request\Batch;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 
 use function trim;
 
 class CreateRequest extends BaseRequest
 {
-    /** @var ?non-empty-string */
     private ?string $name = null;
-
-    /** @var ?non-empty-string */
     private ?string $fileUri = null;
-
-    /** @var ?non-empty-string */
     private ?string $fileName = null;
-
-    /** @var non-empty-string */
-    private string $endpoint = '/v1/responses';
-
-    /** @var non-empty-string */
-    private string $timeframe = '24h';
+    private ?string $endpoint = '/v1/responses';
+    private ?string $window = '24h';
 
     public function withName(?string $name): static
     {
-        $this->name = trim($name ?? '') ?: null;
+        if (!$name = trim($name ?? '')) {
+            throw new InvalidArgumentException('The name cannot be empty.');
+        }
+
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * @return ?non-empty-string
+     * @return non-empty-string
      */
-    public function getName(): ?string
+    public function getName(): string
     {
-        return $this->name;
+        return $this->name ?: throw new RuntimeException('The name is empty.');
     }
 
-    /**
-     * @param ?non-empty-string $fileUri
-     */
     public function withFileUri(?string $fileUri): static
     {
         $this->fileUri = trim($fileUri ?? '') ?: null;
@@ -53,12 +47,9 @@ class CreateRequest extends BaseRequest
      */
     public function getFileUri(): ?string
     {
-        return $this->fileUri;
+        return $this->fileUri ?: null;
     }
 
-    /**
-     * @param ?non-empty-string $fileName
-     */
     public function withFileName(?string $fileName): static
     {
         $this->fileName = trim($fileName ?? '') ?: null;
@@ -71,22 +62,36 @@ class CreateRequest extends BaseRequest
      */
     public function getFileName(): ?string
     {
-        return $this->fileName;
+        return $this->fileName ?: null;
+    }
+
+    public function atEndpoint(?string $endpoint): static
+    {
+        $this->endpoint = trim($endpoint ?? '') ?: null;
+
+        return $this;
     }
 
     /**
-     * @return non-empty-string
+     * @return ?non-empty-string
      */
-    public function getEndpoint(): string
+    public function getEndpoint(): ?string
     {
-        return $this->endpoint;
+        return $this->endpoint ?: null;
+    }
+
+    public function withWindow(?string $window): static
+    {
+        $this->window = trim($window ?? '') ?: null;
+
+        return $this;
     }
 
     /**
-     * @return non-empty-string
+     * @return ?non-empty-string
      */
-    public function getTimeframe(): string
+    public function getWindow(): ?string
     {
-        return $this->timeframe;
+        return $this->window ?: null;
     }
 }

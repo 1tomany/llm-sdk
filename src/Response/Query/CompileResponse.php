@@ -8,7 +8,6 @@ use OneToMany\LlmSdk\Response\BaseResponse;
 final readonly class CompileResponse extends BaseResponse
 {
     /**
-     * @param non-empty-lowercase-string $model
      * @param non-empty-string $url
      * @param array<string, mixed> $request
      */

@@ -9,7 +9,6 @@ use function strtolower;
 final readonly class UploadResponse extends BaseResponse
 {
     /**
-     * @param non-empty-lowercase-string $model
      * @param non-empty-string $uri
      * @param ?non-empty-string $name
      * @param ?non-empty-string $purpose

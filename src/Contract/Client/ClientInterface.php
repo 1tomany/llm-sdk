@@ -2,15 +2,20 @@
 
 namespace OneToMany\LlmSdk\Contract\Client;
 
+use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
+
 interface ClientInterface
 {
     /**
-     * @param non-empty-lowercase-string $model
-     */
-    public function supportsModel(string $model): bool;
-
-    /**
      * @return non-empty-list<non-empty-lowercase-string>
      */
-    public function getSupportedModels(): array;
+    public static function getModels(): array;
+
+    public function batches(): BatchesResourceInterface;
+
+    public function files(): FilesResourceInterface;
+
+    public function queries(): QueriesResourceInterface;
 }
