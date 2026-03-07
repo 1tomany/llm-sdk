@@ -17,6 +17,7 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 use function ceil;
 use function fread;
 use function is_numeric;
+use function max;
 use function rtrim;
 use function sprintf;
 use function strlen;
@@ -71,27 +72,23 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             if (empty($headers['x-guploader-uploadid'][0] ?? null)) {
                 throw new RuntimeException('The header "x-guploader-uploadid" was not sent in the response.');
             }
+
+            $uploadId = $headers['x-guploader-uploadid'][0];
         } catch (ExceptionInterface $e) {
             throw new RuntimeException(sprintf('Generating the signed upload URL failed: %s.', rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
         // The default chunk size is 8MB
-        // $uploadChunkSize = 8 * 1024 * 1024;
+        $uploadChunkSize = self::DEFAULT_CHUNK_SIZE;
 
         // Adjust the chunk size to the size preferred by the server
         if (is_numeric($headers['x-goog-upload-chunk-granularity'][0] ?? null)) {
-            $uploadChunkSize = (int) $headers['x-goog-upload-chunk-granularity'][0];
+            $uploadChunkSize = max(1, (int) $headers['x-goog-upload-chunk-granularity'][0]);
         }
-
-        $uploadChunkSize = (($uploadChunkSize ?? 0) <= 0) ? self::DEFAULT_CHUNK_SIZE : $uploadChunkSize;
-
-        // if (($uploadChunkSize ?? 0) < 1) {
-        //     $uploadChunkSize = self::DEFAULT_CHUNK_SIZE;
-        // }
 
         try {
             // Calculate the number of chunks needed to upload the file
-            $uploadChunkCount = (int) ceil($request->getSize() / $uploadChunkSize);
+            $uploadChunkCount = (int) ceil($fileSize / $uploadChunkSize);
 
             // Counters to track progress
             $uploadChunk = $uploadOffset = 0;
@@ -102,12 +99,12 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
                 $response = $this->doRequest('POST', $url, [
                     'headers' => $this->buildHeaders([
-                        'content-length' => $request->getSize(),
+                        'content-length' => $fileSize,
                         'x-goog-upload-offset' => $uploadOffset,
                         'x-goog-upload-command' => $uploadCommand,
                     ]),
                     'query' => [
-                        'upload_id' => $headers['x-guploader-uploadid'][0],
+                        'upload_id' => $uploadId,
                         'upload_protocol' => $uploadProtocol,
                     ],
                     'body' => $fileChunk,
