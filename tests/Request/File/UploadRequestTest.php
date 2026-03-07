@@ -9,9 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 use function array_key_exists;
 use function assert;
-use function fclose;
 use function stream_get_meta_data;
-use function tmpfile;
+use function sys_get_temp_dir;
+use function tempnam;
+use function unlink;
 
 #[Group('UnitTests')]
 #[Group('RequestTests')]
@@ -20,7 +21,7 @@ final class UploadRequestTest extends TestCase
 {
     public function testGettingSizeRequiresFileToExist(): void
     {
-        $path = \tempnam(\sys_get_temp_dir(), '__onetomany_llmsdk__');
+        $path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__');
 
         // $metadata = stream_get_meta_data($handle);
         // assert(array_key_exists('uri', $metadata));
@@ -31,7 +32,7 @@ final class UploadRequestTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Calculating the size of the file "'.$uploadRequest->getName().'" failed.');
 
-        \unlink($path);
+        unlink($path);
         $uploadRequest->getSize();
     }
 }
