@@ -22,8 +22,13 @@ use function strlen;
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     private const int DEFAULT_CHUNK_SIZE = 8 * 1024 * 1024;
+
     private const string HEADER_CHUNK_SIZE = 'x-goog-upload-chunk-granularity';
     private const string HEADER_UPLOAD_URL = 'x-goog-upload-url';
+
+    private const string UPLOAD_COMMAND_UPLOAD = 'upload';
+    private const string UPLOAD_COMMAND_FINALIZE = 'upload, finalize';
+
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
@@ -60,7 +65,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 throw new RuntimeException(sprintf('The header "%s" was not sent in the response.', self::HEADER_UPLOAD_URL));
             }
         } catch (ExceptionInterface $e) {
-            throw new RuntimeException(sprintf('Generating the signed upload URL failed: %s.', rtrim($e->getMessage(), '.')), $e->getCode(), $e);
+            throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server failed to generate the signed upload URL: %s.', $request->getName(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
         // Set the chunk size to the amount preferred by the server
@@ -76,13 +81,15 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             $uploadUrl = $headers[self::HEADER_UPLOAD_URL][0];
 
             $uploadOffset = 0;
-            $uploadCommand = 'upload';
 
             while ($fileChunk = fread($fileHandle, $uploadChunkSize)) {
-                $fileChunkSize = strlen($fileChunk);
+                $chunkSize = strlen($fileChunk);
 
-                if ($uploadOffset + $fileChunkSize >= $request->getSize()) {
-                    $uploadCommand = 'upload, finalize';
+                // Determine the upload command to send to the server
+                if ($uploadOffset + $chunkSize >= $request->getSize()) {
+                    $uploadCommand = self::UPLOAD_COMMAND_FINALIZE;
+                } else {
+                    $uploadCommand = self::UPLOAD_COMMAND_UPLOAD;
                 }
 
                 // Determine the command to let the server know if we're done uploading or not
@@ -90,14 +97,13 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
                 $content = $this->doPostRequest($uploadUrl, [
                     'headers' => $this->buildHeaders([
-                        'content-length' => $request->getSize(),
                         'x-goog-upload-offset' => $uploadOffset,
                         'x-goog-upload-command' => $uploadCommand,
                     ]),
                     'body' => $fileChunk,
                 ]);
 
-                $uploadOffset += $fileChunkSize;
+                $uploadOffset += $chunkSize;
             }
 
             $file = $this->doDeserialize($content, File::class, context: [
