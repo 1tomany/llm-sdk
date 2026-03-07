@@ -45,17 +45,6 @@ abstract readonly class BaseResource
     }
 
     /**
-     * @return array<string, int|string|null>
-     */
-    protected function buildHttpHeaders(): array
-    {
-        return [
-            'x-api-key' => $this->apiKey,
-            'anthropic-version' => $this->apiVersion,
-        ];
-    }
-
-    /**
      * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
      */
     protected function handleHttpError(string $content, int $statusCode): never

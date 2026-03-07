@@ -30,6 +30,16 @@ trait TransportTrait
     abstract protected function getStandardHeaders(): array;
 
     /**
+     * @param array<string, int|string|null> $headers
+     *
+     * @return array<string, int|string|null>
+     */
+    protected function buildHeaders(array $headers = []): array
+    {
+        return [...$headers, ...$this->getStandardHeaders()];
+    }
+
+    /**
      * @param 'GET'|'POST'|'PUT'|'DELETE' $method
      * @param array<string, mixed> $options
      */
