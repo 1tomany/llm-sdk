@@ -41,23 +41,6 @@ final readonly class ExecuteResponse extends BaseResponse
     }
 
     /**
-     * @return list<array<string, mixed>>|array<string, mixed>
-     *
-     * @throws RuntimeException when decoding the output as JSON fails
-     */
-    public function toRecord(): array
-    {
-        try {
-            /** @var list<array<string, mixed>>|array<string, mixed> $record */
-            $record = json_decode($this->output, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
-            throw new RuntimeException('Decoding the output to a record failed.', previous: $e);
-        }
-
-        return $record;
-    }
-
-    /**
      * @return array<string, mixed>
      *
      * @throws RuntimeException when decoding the response as JSON fails
@@ -86,4 +69,21 @@ final readonly class ExecuteResponse extends BaseResponse
     {
         return $this->usage;
     }
+
+    /**
+         * @return list<array<string, mixed>>|array<string, mixed>
+         *
+         * @throws RuntimeException when decoding the output as JSON fails
+         */
+        public function toRecord(): array
+        {
+            try {
+                /** @var list<array<string, mixed>>|array<string, mixed> $record */
+                $record = json_decode($this->output, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                throw new RuntimeException('Decoding the output failed.', previous: $e);
+            }
+
+            return $record;
+        }
 }
