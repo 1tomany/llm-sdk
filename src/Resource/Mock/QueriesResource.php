@@ -8,14 +8,17 @@ use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
+use OneToMany\LlmSdk\Resource\Mock\Trait\ResourceTrait;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 
 use function json_encode;
 use function random_int;
 
-final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
+final readonly class QueriesResource implements QueriesResourceInterface
 {
+    use ResourceTrait;
+
     private \Faker\Generator $faker;
 
     public function __construct()

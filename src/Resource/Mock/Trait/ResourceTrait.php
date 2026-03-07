@@ -1,15 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Mock;
+namespace OneToMany\LlmSdk\Resource\Mock\Trait;
 
-use function bin2hex;
-use function implode;
-use function ltrim;
-use function random_bytes;
-use function sprintf;
-use function strtolower;
-
-readonly class BaseResource
+trait ResourceTrait
 {
     /**
      * @param non-empty-string $prefix

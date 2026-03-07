@@ -5,11 +5,14 @@ namespace OneToMany\LlmSdk\Resource\Mock;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
+use OneToMany\LlmSdk\Resource\Mock\Trait\ResourceTrait;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
-final readonly class FilesResource extends BaseResource implements FilesResourceInterface
+final readonly class FilesResource implements FilesResourceInterface
 {
+    use ResourceTrait;
+
     public function __construct()
     {
     }
