@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Request;
 
 use function trim;
 
-abstract class BaseRequest
+class BaseRequest
 {
     /**
      * @param non-empty-string $model
@@ -13,9 +13,9 @@ abstract class BaseRequest
     {
     }
 
-    public function forModel(string $model): static
+    public function forModel(?string $model): static
     {
-        $this->model = trim($model) ?: 'mock';
+        $this->model = trim($model ?? '') ?: 'mock';
 
         return $this;
     }
