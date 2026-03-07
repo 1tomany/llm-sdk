@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Response;
 
-abstract readonly class BaseResponse
+readonly class BaseResponse
 {
     public function __construct(private string $model)
     {
