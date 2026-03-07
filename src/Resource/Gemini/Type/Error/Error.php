@@ -8,7 +8,7 @@ use function implode;
 
 final class Error
 {
-    private string $cleanedMessage = null;
+    private ?string $cleanedMessage = null;
 
     public function __construct(
         public readonly int $code,
