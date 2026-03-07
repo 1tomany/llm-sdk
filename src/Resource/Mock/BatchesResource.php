@@ -11,6 +11,10 @@ use OneToMany\LlmSdk\Response\Batch\ReadResponse;
 
 final readonly class BatchesResource extends BaseResource implements BatchesResourceInterface
 {
+    public function __construct()
+    {
+    }
+
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */

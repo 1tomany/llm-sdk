@@ -10,6 +10,10 @@ use OneToMany\LlmSdk\Response\File\UploadResponse;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
+    public function __construct()
+    {
+    }
+
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */

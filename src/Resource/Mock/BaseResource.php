@@ -11,10 +11,6 @@ use function strtolower;
 
 readonly class BaseResource
 {
-    public function __construct()
-    {
-    }
-
     /**
      * @param non-empty-string $prefix
      * @param positive-int $suffixLength
