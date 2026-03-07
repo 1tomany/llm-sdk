@@ -5,6 +5,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\AbstractResource;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\Trait\TransportTrait;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 
 use function implode;
@@ -13,6 +14,8 @@ use function sprintf;
 
 abstract readonly class BaseResource extends AbstractResource
 {
+    use TransportTrait;
+
     /**
      * @param array<string, int|string|null> $headers
      *
@@ -24,7 +27,7 @@ abstract readonly class BaseResource extends AbstractResource
     }
 
     /**
-     * @see OneToMany\LlmSdk\Resource\AbstractResource
+     * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
      */
     protected function handleHttpError(string $content, int $statusCode): never
     {

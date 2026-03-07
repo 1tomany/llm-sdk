@@ -11,7 +11,7 @@ use OneToMany\LlmSdk\Resource\OpenAi\Type\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 use OneToMany\LlmSdk\Response\File\UploadResponse;
 
-final readonly class FilesResource extends OpenAiResource implements FilesResourceInterface
+final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface

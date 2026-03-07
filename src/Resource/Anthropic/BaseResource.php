@@ -5,6 +5,7 @@ namespace OneToMany\LlmSdk\Resource\Anthropic;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\AbstractResource;
 use OneToMany\LlmSdk\Resource\Anthropic\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\Trait\TransportTrait;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 
 use function implode;
@@ -13,6 +14,8 @@ use function sprintf;
 
 abstract readonly class BaseResource extends AbstractResource
 {
+    use TransportTrait;
+
     /**
      * @return array<string, int|string|null>
      */
@@ -22,7 +25,7 @@ abstract readonly class BaseResource extends AbstractResource
     }
 
     /**
-     * @see OneToMany\LlmSdk\Resource\AbstractResource
+     * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
      */
     protected function handleHttpError(string $content, int $statusCode): never
     {

@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Trait;
 
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
 trait TransportTrait
 {
