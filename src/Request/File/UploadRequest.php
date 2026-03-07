@@ -12,14 +12,34 @@ use function filesize;
 use function fopen;
 use function is_resource;
 use function sprintf;
+use function strtolower;
 use function trim;
 
 class UploadRequest extends BaseRequest
 {
+    /**
+     * @var ?non-empty-string
+     */
     private ?string $path = null;
+
+    /**
+     * @var ?non-empty-string
+     */
     private ?string $name = null;
+
+    /**
+     * @var ?non-negative-int
+     */
     private ?int $size = null;
+
+    /**
+     * @var ?non-empty-lowercase-string
+     */
     private ?string $format = null;
+
+    /**
+     * @var ?non-empty-string
+     */
     private ?string $purpose = null;
 
     /**
@@ -32,6 +52,9 @@ class UploadRequest extends BaseRequest
         $this->closeFile();
     }
 
+    /**
+     * @throws InvalidArgumentException when the trimmed path is empty
+     */
     public function atPath(?string $path): static
     {
         if (!$path = trim($path ?? '')) {
@@ -45,6 +68,8 @@ class UploadRequest extends BaseRequest
 
     /**
      * @return non-empty-string
+     *
+     * @throws RuntimeException when the path is empty
      */
     public function getPath(): string
     {
@@ -58,6 +83,9 @@ class UploadRequest extends BaseRequest
         return $this;
     }
 
+    /**
+     * @return ?non-empty-string
+     */
     public function getName(): ?string
     {
         return $this->name;
@@ -77,11 +105,14 @@ class UploadRequest extends BaseRequest
 
     public function withFormat(?string $format): static
     {
-        $this->format = trim($format ?? '') ?: null;
+        $this->format = strtolower(trim($format ?? '')) ?: null;
 
         return $this;
     }
 
+    /**
+     * @return ?non-empty-lowercase-string
+     */
     public function getFormat(): ?string
     {
         return $this->format;
@@ -94,6 +125,9 @@ class UploadRequest extends BaseRequest
         return $this;
     }
 
+    /**
+     * @return ?non-empty-string
+     */
     public function getPurpose(): ?string
     {
         return $this->purpose;
