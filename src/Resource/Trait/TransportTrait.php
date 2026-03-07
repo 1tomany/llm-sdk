@@ -9,6 +9,19 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 trait TransportTrait
 {
     /**
+     * @return non-empty-string
+     */
+    abstract public function getBaseUrl(): string;
+
+    /**
+     * @return non-empty-string
+     */
+    protected function buildUrl(string ...$paths): string
+    {
+        return sprintf('%s/%s', $this->getBaseUrl(), \ltrim(\implode('/', $paths), '/'));
+    }
+
+    /**
      * @param 'GET'|'POST'|'PUT'|'DELETE' $method
      * @param array<string, mixed> $options
      */

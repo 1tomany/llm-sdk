@@ -17,6 +17,14 @@ abstract readonly class BaseResource extends AbstractResource
     use TransportTrait;
 
     /**
+     * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
+     */
+    public function getBaseUrl(): string
+    {
+        return 'https://generativelanguage.googleapis.com';
+    }
+
+    /**
      * @param array<string, int|string|null> $headers
      *
      * @return array<string, int|string|null>
@@ -41,16 +49,8 @@ abstract readonly class BaseResource extends AbstractResource
     /**
      * @return non-empty-string
      */
-    protected function generateUrl(string ...$paths): string
+    protected function buildModelUrl(string $model, string $action): string
     {
-        return sprintf('https://generativelanguage.googleapis.com/%s', ltrim(implode('/', $paths), '/'));
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    protected function generateModelUrl(string $model, string $action): string
-    {
-        return $this->generateUrl($this->getApiVersion(), 'models', sprintf('%s:%s', $model, $action));
+        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model, $action));
     }
 }

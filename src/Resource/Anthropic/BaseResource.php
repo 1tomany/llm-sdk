@@ -30,6 +30,14 @@ abstract readonly class BaseResource
     }
 
     /**
+     * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
+     */
+    public function getBaseUrl(): string
+    {
+        return 'https://api.anthropic.com/v1';
+    }
+
+    /**
      * @return array<string, int|string|null>
      */
     protected function buildHttpHeaders(): array
@@ -50,13 +58,5 @@ abstract readonly class BaseResource
         ]);
 
         throw new RuntimeException($error->message, $statusCode);
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    protected function generateUrl(string ...$paths): string
-    {
-        return sprintf('https://api.anthropic.com/v1/%s', ltrim(implode('/', $paths), '/'));
     }
 }

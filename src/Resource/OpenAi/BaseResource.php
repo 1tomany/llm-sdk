@@ -19,6 +19,14 @@ abstract readonly class BaseResource extends AbstractResource
     /**
      * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
      */
+    public function getBaseUrl(): string
+    {
+        return 'https://api.openai.com/v1';
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
+     */
     protected function handleHttpError(string $content, int $statusCode): never
     {
         $error = $this->doDeserialize($content, Error::class, context: [
@@ -26,13 +34,5 @@ abstract readonly class BaseResource extends AbstractResource
         ]);
 
         throw new RuntimeException($error->message, $statusCode);
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    protected function generateUrl(string ...$paths): string
-    {
-        return sprintf('https://api.openai.com/%s/%s', $this->getApiVersion(), ltrim(implode('/', $paths), '/'));
     }
 }

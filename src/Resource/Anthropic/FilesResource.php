@@ -17,7 +17,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function upload(UploadRequest $request): UploadResponse
     {
-        $url = $this->generateUrl('files');
+        $url = $this->buildUrl('files');
 
         $content = $this->doHttpPostRequest($url, [
             'headers' => $this->buildHttpHeaders(),
@@ -36,7 +36,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        $url = $this->generateUrl('files', $request->getUri());
+        $url = $this->buildUrl('files', $request->getUri());
 
         $content = $this->doHttpDeleteRequest($url, [
             'headers' => $this->buildHttpHeaders(),

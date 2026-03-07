@@ -16,7 +16,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function create(CreateRequest $request): CreateResponse
     {
-        $url = $this->generateUrl('batches');
+        $url = $this->buildUrl('batches');
 
         $content = $this->doHttpPostRequest($url, [
             'auth_header' => $this->getApiKey(),
@@ -32,7 +32,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function read(ReadRequest $request): ReadResponse
     {
-        $url = $this->generateUrl('batches', $request->getUri());
+        $url = $this->buildUrl('batches', $request->getUri());
 
         $content = $this->doHttpGetRequest($url, [
             'auth_header' => $this->getApiKey(),

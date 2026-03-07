@@ -33,7 +33,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
         try {
             // Generate a signed URL to upload the file with
-            $url = $this->generateUrl('upload', $this->getApiVersion(), 'files');
+            $url = $this->buildUrl('upload', $this->apiVersion, 'files');
 
             $response = $this->httpClient->request('POST', $url, [
                 'headers' => $this->buildHttpHeaders([
