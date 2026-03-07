@@ -8,8 +8,6 @@ use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-use function trim;
-
 class BaseClient
 {
     protected ?BatchesResourceInterface $batches = null;
@@ -26,13 +24,6 @@ class BaseClient
         protected string $apiKey,
         protected ?string $apiVersion = null,
     ) {
-    }
-
-    public function setApiVersion(?string $apiVersion): static
-    {
-        $this->apiVersion = trim($apiVersion ?? '') ?: null;
-
-        return $this;
     }
 
     /**
