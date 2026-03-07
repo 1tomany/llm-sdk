@@ -42,7 +42,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
             $response = $this->doRequest('POST', $url, [
                 'headers' => $this->buildHeaders([
-                    // 'x-goog-upload-command' => $uploadCommand,
+                    'x-goog-upload-command' => $uploadCommand,
                     'x-goog-upload-protocol' => $uploadProtocol,
                     'x-goog-upload-header-content-length' => $request->getSize(),
                     'x-goog-upload-header-content-type' => $request->getFormat(),
@@ -54,9 +54,18 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 ],
             ]);
 
-            $headers = $response->getHeaders(true);
-            print_r($headers);
-            exit;
+            $headers = $response->getHeaders(false);
+
+            $requiredHeaders = [
+                'x-goog-upload-url',
+                'x-goog-upload-chunk-granularity',
+            ];
+
+            foreach ($requiredHeaders as $requiredHeader) {
+                if (!isset($headers[$requiredHeader])) {
+                    throw new RuntimeException(sprintf('The header "%s" was not sent with the response.', $requiredHeader));
+                }
+            }
         } catch (ExceptionInterface $e) {
             throw new RuntimeException(sprintf('Generating the signed upload URL failed: %s.', rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
