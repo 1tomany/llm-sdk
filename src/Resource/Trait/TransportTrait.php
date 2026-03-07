@@ -23,16 +23,14 @@ trait TransportTrait
             /** @var int<100, 599> $statusCode */
             $statusCode = $response->getStatusCode();
 
-            $content = $response->getContent(false);
+            if ($statusCode >= 300) {
+                $this->handleHttpError($response->getContent(false), $statusCode);
+            }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
         }
 
-        if ($statusCode >= 300) {
-            $this->handleHttpError($content, $statusCode);
-        }
-
-        return $content;
+        return $response->getContent();
     }
 
     /**
