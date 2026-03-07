@@ -20,14 +20,8 @@ final readonly class BatchesResource extends OpenAiResource implements BatchesRe
     {
         $url = $this->generateUrl('batches');
 
-        $options = [
+        $content = $this->doHttpPostRequest($url, [
             'auth_header' => $this->getApiKey(),
-        ];
-
-        $content = $this->doHttpPostRequest($url, $options + [
-            'json' => array_merge($request->getOptions(), [
-                'input_file_id' => $request->getFileUri(),
-            ]),
         ]);
 
         $batch = $this->doDeserialize($content, Batch::class);
