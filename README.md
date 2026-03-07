@@ -23,10 +23,12 @@ I learn best by looking at actual code samples, so lets take a look at the two m
 
 ### Direct usage
 
-See the [`basic_query.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/gemini/basic_query.php) example.
+- [`examples/files/upload.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/upload.php)
+- [`examples/queries/execute.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/queries/execute.php)
 
 ## Supported platforms
 
+- Anthropic
 - Gemini
 - Mock
 - OpenAI
@@ -35,21 +37,21 @@ See the [`basic_query.php`](https://github.com/1tomany/llm-sdk/blob/master/examp
 
 **Note:** Each platform refers to running model inference differently; OpenAI uses the word "Responses" while Gemini uses the word "Content". I've decided the word "Query" is the most succinct term to describe interacting with an LLM. The "Queries" section below refers to the ability to compile and execute a query against a large language model.
 
-| Feature     | Claude | Gemini | Mock | OpenAI |
-| ----------- | :----: | :----: | :--: | :----: |
-| **Batches** |        |        |      |        |
-| Create      |   ❌   |   ✅   |  ✅  |   ✅   |
-| Read        |   ❌   |   ✅   |  ✅  |   ✅   |
-| Cancel      |   ❌   |   ❌   |  ❌  |   ❌   |
-| **Files**   |        |        |      |        |
-| Upload      |   ✅   |   ✅   |  ✅  |   ✅   |
-| Read        |   ❌   |   ❌   |  ❌  |   ❌   |
-| List        |   ❌   |   ❌   |  ❌  |   ❌   |
-| Download    |   ❌   |   ❌   |  ❌  |   ❌   |
-| Delete      |   ✅   |   ✅   |  ✅  |   ✅   |
-| **Queries** |        |        |      |        |
-| Compile     |   ❌   |   ✅   |  ✅  |   ✅   |
-| Execute     |   ❌   |   ✅   |  ✅  |   ✅   |
+| Feature     | Anthropic | Gemini | Mock | OpenAI |
+| ----------- | :-------: | :----: | :--: | :----: |
+| **Batches** |           |        |      |        |
+| Create      |    ❌     |   ✅   |  ✅  |   ✅   |
+| Read        |    ❌     |   ✅   |  ✅  |   ✅   |
+| Cancel      |    ❌     |   ❌   |  ❌  |   ❌   |
+| **Files**   |           |        |      |        |
+| Upload      |    ✅     |   ✅   |  ✅  |   ✅   |
+| Read        |    ❌     |   ❌   |  ❌  |   ❌   |
+| List        |    ❌     |   ❌   |  ❌  |   ❌   |
+| Download    |    ❌     |   ❌   |  ❌  |   ❌   |
+| Delete      |    ✅     |   ✅   |  ✅  |   ✅   |
+| **Queries** |           |        |      |        |
+| Compile     |    ❌     |   ✅   |  ✅  |   ✅   |
+| Execute     |    ❌     |   ✅   |  ✅  |   ✅   |
 
 ## Credits
 
