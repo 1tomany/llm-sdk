@@ -6,6 +6,9 @@ use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 
+use function implode;
+use function ltrim;
+
 trait TransportTrait
 {
     /**
@@ -18,7 +21,7 @@ trait TransportTrait
      */
     protected function buildUrl(string ...$paths): string
     {
-        return sprintf('%s/%s', $this->getBaseUrl(), \ltrim(\implode('/', $paths), '/'));
+        return sprintf('%s/%s', $this->getBaseUrl(), ltrim(implode('/', $paths), '/'));
     }
 
     /**

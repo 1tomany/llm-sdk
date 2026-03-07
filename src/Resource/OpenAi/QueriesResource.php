@@ -28,7 +28,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $url = $this->generateUrl('responses');
+        $url = $this->buildUrl('responses');
 
         $requestContent = [
             'model' => $request->getModel(),

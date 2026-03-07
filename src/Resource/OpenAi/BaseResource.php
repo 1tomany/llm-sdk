@@ -8,10 +8,6 @@ use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\Trait\TransportTrait;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 
-use function implode;
-use function ltrim;
-use function sprintf;
-
 abstract readonly class BaseResource extends AbstractResource
 {
     use TransportTrait;

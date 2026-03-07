@@ -9,10 +9,6 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-use function implode;
-use function ltrim;
-use function sprintf;
-
 abstract readonly class BaseResource
 {
     use TransportTrait;
