@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Client\Anthropic;
 
-use OneToMany\LlmSdk\Client\AbstractClient;
+use OneToMany\LlmSdk\Client\BaseClient;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
@@ -10,7 +10,7 @@ use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Anthropic\FilesResource;
 
-final class AnthropicClient extends AbstractClient implements ClientInterface
+final class AnthropicClient extends BaseClient implements ClientInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
@@ -29,7 +29,7 @@ final class AnthropicClient extends AbstractClient implements ClientInterface
     }
 
     /**
-     * @see OneToMany\LlmSdk\Client\AbstractClient
+     * @see OneToMany\LlmSdk\Client\BaseClient
      *
      * @return non-empty-string
      */

@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Client\Gemini;
 
-use OneToMany\LlmSdk\Client\AbstractClient;
+use OneToMany\LlmSdk\Client\BaseClient;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
@@ -11,7 +11,7 @@ use OneToMany\LlmSdk\Resource\Gemini\BatchesResource;
 use OneToMany\LlmSdk\Resource\Gemini\FilesResource;
 use OneToMany\LlmSdk\Resource\Gemini\QueriesResource;
 
-final class GeminiClient extends AbstractClient implements ClientInterface
+final class GeminiClient extends BaseClient implements ClientInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
@@ -34,7 +34,7 @@ final class GeminiClient extends AbstractClient implements ClientInterface
     }
 
     /**
-     * @see OneToMany\LlmSdk\Client\AbstractClient
+     * @see OneToMany\LlmSdk\Client\BaseClient
      *
      * @return non-empty-string
      */

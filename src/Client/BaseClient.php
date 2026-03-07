@@ -10,7 +10,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function trim;
 
-abstract class AbstractClient
+class BaseClient
 {
     protected ?BatchesResourceInterface $batches = null;
     protected ?FilesResourceInterface $files = null;
