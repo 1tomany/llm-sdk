@@ -5,8 +5,6 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -20,7 +18,7 @@ abstract readonly class BaseResource
      */
     public function __construct(
         protected HttpClientInterface $httpClient,
-        protected SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer,
+        protected SerializerInterface $serializer,
         protected string $apiKey,
     ) {
     }
