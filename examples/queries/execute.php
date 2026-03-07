@@ -13,7 +13,7 @@ $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 $model = trim($argv[1] ?? '') ?: 'mock';
 
 try {
-    $prompt = 'Write a short summary of the history of PHP.';
+    $prompt = 'Write a short summary of the history of PHP';
 
     // First, compile the query: this is not strictly necessary,
     // but you can inspect the request that will be sent to the LLM
