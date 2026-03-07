@@ -52,6 +52,6 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     protected function buildHttpHeaders(): array
     {
-        return [...parent::buildHttpHeaders(), ...['anthropic-beta' => $this->filesVersion]];
+        return [...parent::buildHttpHeaders(), ...['anthropic-beta' => 'files-api-2025-04-14']];
     }
 }

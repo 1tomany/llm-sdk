@@ -26,7 +26,6 @@ abstract readonly class BaseResource
         protected SerializerInterface $serializer,
         protected string $apiKey,
         protected string $apiVersion,
-        protected string $filesVersion = 'files-api-2025-04-14',
     ) {
     }
 
