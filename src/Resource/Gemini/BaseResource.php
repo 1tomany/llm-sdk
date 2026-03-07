@@ -7,7 +7,6 @@ use OneToMany\LlmSdk\Resource\AbstractResource;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 
-use function array_merge;
 use function implode;
 use function ltrim;
 use function sprintf;
@@ -21,11 +20,7 @@ abstract readonly class BaseResource extends AbstractResource
      */
     protected function buildHttpHeaders(array $headers = []): array
     {
-        $mergedHeaders = array_merge($headers, [
-            'x-goog-api-key' => $this->getApiKey(),
-        ]);
-
-        return $mergedHeaders;
+        return [...$headers, ...['x-goog-api-key' => $this->getApiKey()]];
     }
 
     /**
