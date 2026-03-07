@@ -43,7 +43,7 @@ final readonly class ExecuteResponse extends BaseResponse
     /**
      * @return list<array<string, mixed>>|array<string, mixed>
      *
-     * @throws RuntimeException when the output is not valid JSON
+     * @throws RuntimeException when decoding the output as JSON fails
      */
     public function toRecord(): array
     {
@@ -57,9 +57,21 @@ final readonly class ExecuteResponse extends BaseResponse
         return $record;
     }
 
-    public function getResponse(): string
+    /**
+     * @return array<string, mixed>
+     *
+     * @throws RuntimeException when decoding the response as JSON fails
+     */
+    public function getResponse(): array
     {
-        return $this->response;
+        try {
+            /** @var array<string, mixed> $response */
+            $response = json_decode($this->response, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new RuntimeException('Decoding the response failed.', previous: $e);
+        }
+
+        return $response;
     }
 
     /**
