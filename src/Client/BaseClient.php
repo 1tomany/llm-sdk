@@ -25,4 +25,20 @@ class BaseClient
         protected ?string $apiVersion = null,
     ) {
     }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getApiKey(): string
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * @return ?non-empty-string
+     */
+    public function getApiVersion(): ?string
+    {
+        return $this->apiVersion;
+    }
 }

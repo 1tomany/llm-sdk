@@ -29,6 +29,16 @@ final class AnthropicClient extends BaseClient implements ClientInterface
     }
 
     /**
+     * @see OneToMany\LlmSdk\Client\BaseClient
+     *
+     * @return non-empty-string
+     */
+    public function getApiVersion(): string
+    {
+        return parent::getApiVersion() ?: '2023-06-01';
+    }
+
+    /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
     public function batches(): BatchesResourceInterface
@@ -41,7 +51,7 @@ final class AnthropicClient extends BaseClient implements ClientInterface
      */
     public function files(): FilesResourceInterface
     {
-        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->apiKey, $this->apiVersion);
+        $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->getApiKey(), $this->getApiVersion());
 
         return $this->files;
     }
