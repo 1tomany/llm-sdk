@@ -92,4 +92,14 @@ final readonly class QueriesResource implements QueriesResourceInterface
     {
         return null === $batchKey ? $request : ['batchKey' => $batchKey, 'request' => $request];
     }
+
+    /**
+     * @param non-empty-string $paths
+     *
+     * @return non-empty-string
+     */
+    private function generateUrl(string ...$paths): string
+    {
+        return sprintf('https://mock-llm.service/api/%s', ltrim(implode('/', $paths), '/'));
+    }
 }
