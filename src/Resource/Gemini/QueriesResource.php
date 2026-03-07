@@ -80,7 +80,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
     {
         $timer = new Stopwatch(true)->start('execute');
 
-        $content = $this->doHttpPostRequest($request->getUrl(), [
+        $content = $this->doPostRequest($request->getUrl(), [
             'headers' => $this->buildHttpHeaders(),
             'json' => $request->getRequest(),
         ]);

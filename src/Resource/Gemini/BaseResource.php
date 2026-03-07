@@ -43,7 +43,7 @@ abstract readonly class BaseResource extends AbstractResource
     /**
      * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
      */
-    protected function handleHttpError(string $content, int $statusCode): never
+    protected function handleRequestError(string $content, int $statusCode): never
     {
         $error = $this->doDeserialize($content, Error::class, context: [
             UnwrappingDenormalizer::UNWRAP_PATH => '[error]',

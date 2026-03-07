@@ -44,7 +44,7 @@ trait TransportTrait
      * @param 'GET'|'POST'|'PUT'|'DELETE' $method
      * @param array<string, mixed> $options
      */
-    protected function doHttpRequest(
+    protected function doRequest(
         string $method,
         string $url,
         array $options = [],
@@ -56,7 +56,7 @@ trait TransportTrait
             $statusCode = $response->getStatusCode();
 
             if ($statusCode >= 300) {
-                $this->handleHttpError($response->getContent(false), $statusCode);
+                $this->handleRequestError($response->getContent(false), $statusCode);
             }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
@@ -68,31 +68,31 @@ trait TransportTrait
     /**
      * @param array<string, mixed> $options
      */
-    protected function doHttpGetRequest(string $url, array $options = []): string
+    protected function doGetRequest(string $url, array $options = []): string
     {
-        return $this->doHttpRequest('GET', $url, $options);
+        return $this->doRequest('GET', $url, $options);
     }
 
     /**
      * @param array<string, mixed> $options
      */
-    protected function doHttpPostRequest(string $url, array $options = []): string
+    protected function doPostRequest(string $url, array $options = []): string
     {
-        return $this->doHttpRequest('POST', $url, $options);
+        return $this->doRequest('POST', $url, $options);
     }
 
     /**
      * @param array<string, mixed> $options
      */
-    protected function doHttpDeleteRequest(string $url, array $options = []): string
+    protected function doDeleteRequest(string $url, array $options = []): string
     {
-        return $this->doHttpRequest('DELETE', $url, $options);
+        return $this->doRequest('DELETE', $url, $options);
     }
 
     /**
      * @throws RuntimeException when the HTTP request was not successful
      */
-    abstract protected function handleHttpError(string $content, int $statusCode): never;
+    abstract protected function handleRequestError(string $content, int $statusCode): never;
 
     /**
      * @template T of object
