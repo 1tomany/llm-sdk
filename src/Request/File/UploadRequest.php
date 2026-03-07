@@ -50,7 +50,7 @@ class UploadRequest extends BaseRequest
      */
     public function getPath(): string
     {
-        return $this->path ?: throw new RuntimeException('The path cannot be empty.');
+        return $this->path ?: throw new RuntimeException('The path is empty.');
     }
 
     public function withName(?string $name): static

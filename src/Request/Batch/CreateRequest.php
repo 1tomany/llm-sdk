@@ -2,6 +2,8 @@
 
 namespace OneToMany\LlmSdk\Request\Batch;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 
 use function trim;
@@ -19,26 +21,40 @@ class CreateRequest extends BaseRequest
 
     public function withName(?string $name): static
     {
-        $this->name = trim($name ?? '') ?: null;
+        if (!$name = trim($name ?? '')) {
+            throw new InvalidArgumentException('The name cannot be empty.');
+        }
+
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getName(): ?string
+    /**
+     * @return non-empty-string
+     */
+    public function getName(): string
     {
-        return $this->name;
+        return $this->name ?: throw new RuntimeException('The name is empty.');
     }
 
     public function withFileUri(?string $fileUri): static
     {
-        $this->fileUri = trim($fileUri ?? '') ?: null;
+        if (!$fileUri = trim($fileUri ?? '')) {
+            throw new InvalidArgumentException('The file URI cannot be empty.');
+        }
+
+        $this->fileUri = $fileUri;
 
         return $this;
     }
 
-    public function getFileUri(): ?string
+    /**
+     * @return non-empty-string
+     */
+    public function getFileUri(): string
     {
-        return $this->fileUri;
+        return $this->fileUri ?: throw new RuntimeException('The file URI is empty');
     }
 
     public function withFileName(?string $fileName): static
