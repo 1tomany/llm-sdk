@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface;
+use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
@@ -64,7 +64,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             if (empty($headers[self::HEADER_UPLOAD_URL][0] ?? null)) {
                 throw new RuntimeException(sprintf('The header "%s" was not sent in the response.', self::HEADER_UPLOAD_URL));
             }
-        } catch (ExceptionInterface $e) {
+        } catch (LlmSdkExceptionInterface $e) {
             throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server failed to generate the signed upload URL: %s.', $request->getName(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
@@ -106,9 +106,9 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 $uploadOffset = $uploadOffset + $chunkSize;
             }
 
-            // Ensure some content was returned
+            // Ensure content was returned
             $content = trim($content ?? '');
-        } catch (ExceptionInterface $e) {
+        } catch (LlmSdkExceptionInterface $e) {
             throw new RuntimeException(sprintf('The file "%s" was rejected at byte %d of %d by the server: %s.', $request->getName(), $uploadOffset, $request->getSize(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
