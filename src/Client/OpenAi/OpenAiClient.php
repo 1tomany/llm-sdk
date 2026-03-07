@@ -2,7 +2,8 @@
 
 namespace OneToMany\LlmSdk\Client\OpenAi;
 
-use OneToMany\LlmSdk\Client\BaseClient;
+use OneToMany\LlmSdk\Client\AbstractClient;
+use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
@@ -10,7 +11,7 @@ use OneToMany\LlmSdk\Resource\OpenAi\BatchesResource;
 use OneToMany\LlmSdk\Resource\OpenAi\FilesResource;
 use OneToMany\LlmSdk\Resource\OpenAi\QueriesResource;
 
-final class OpenAiClient extends BaseClient
+final class OpenAiClient extends AbstractClient implements ClientInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
@@ -44,7 +45,7 @@ final class OpenAiClient extends BaseClient
     }
 
     /**
-     * @see OneToMany\LlmSdk\Client\BaseClient
+     * @see OneToMany\LlmSdk\Client\AbstractClient
      *
      * @return non-empty-string
      */

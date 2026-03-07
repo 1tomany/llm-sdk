@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Client;
 
-use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
@@ -11,7 +10,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function trim;
 
-abstract class BaseClient implements ClientInterface
+abstract class AbstractClient
 {
     protected ?BatchesResourceInterface $batches = null;
     protected ?FilesResourceInterface $files = null;
