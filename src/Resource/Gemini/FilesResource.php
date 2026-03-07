@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
+use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
@@ -15,6 +16,7 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExcep
 use function ceil;
 use function fread;
 use function sprintf;
+use function str_repeat;
 use function strlen;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
@@ -35,7 +37,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             // Generate a signed URL to upload the file with
             $url = $this->buildUrl('upload', $this->apiVersion, 'files');
 
-            $response = $this->httpClient->request('POST', $url, [
+            $response = $this->doRequest('POST', $url, [
                 'headers' => $this->buildHeaders([
                     'x-goog-upload-command' => 'start',
                     'x-goog-upload-protocol' => 'resumable',
@@ -44,15 +46,15 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 ]),
                 'json' => [
                     'file' => [
-                        'displayName' => $request->getName(),
+                        'displayName' => str_repeat('A', 1024), // $request->getName(),
                     ],
                 ],
             ]);
+        } catch (ExceptionInterface $e) {
+            throw new RuntimeException(sprintf('Generating the signed upload URL failed: %s.', $e->getMessage()), $e->getCode(), $e);
+        }
 
-            if (200 !== $response->getStatusCode()) {
-                throw new RuntimeException('Generating the signed upload URL failed.', $response->getStatusCode());
-            }
-
+        try {
             $headers = $response->getHeaders(true);
 
             /** @var non-empty-string $uploadUrl */

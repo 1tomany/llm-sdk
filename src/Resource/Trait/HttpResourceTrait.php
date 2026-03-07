@@ -5,6 +5,7 @@ namespace OneToMany\LlmSdk\Resource\Trait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 use function implode;
 use function ltrim;
@@ -48,7 +49,7 @@ trait HttpResourceTrait
         string $method,
         string $url,
         array $options = [],
-    ): string {
+    ): ResponseInterface {
         try {
             $response = $this->httpClient->request($method, $url, $options);
 
@@ -62,7 +63,7 @@ trait HttpResourceTrait
             throw new RuntimeException($e->getMessage(), previous: $e);
         }
 
-        return $response->getContent();
+        return $response;
     }
 
     /**
@@ -70,7 +71,7 @@ trait HttpResourceTrait
      */
     protected function doGetRequest(string $url, array $options = []): string
     {
-        return $this->doRequest('GET', $url, $options);
+        return $this->doRequest('GET', $url, $options)->getContent();
     }
 
     /**
@@ -78,7 +79,7 @@ trait HttpResourceTrait
      */
     protected function doPostRequest(string $url, array $options = []): string
     {
-        return $this->doRequest('POST', $url, $options);
+        return $this->doRequest('POST', $url, $options)->getContent();
     }
 
     /**
@@ -86,7 +87,7 @@ trait HttpResourceTrait
      */
     protected function doDeleteRequest(string $url, array $options = []): string
     {
-        return $this->doRequest('DELETE', $url, $options);
+        return $this->doRequest('DELETE', $url, $options)->getContent();
     }
 
     /**
