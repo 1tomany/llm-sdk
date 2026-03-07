@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\OpenAi\Type\Batch;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Batch;
 
 final readonly class RequestCounts
 {

@@ -2,9 +2,9 @@
 
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
-use OneToMany\LlmSdk\Client\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\AbstractResource;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 
 use function implode;

@@ -1,9 +1,9 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\OpenAi\Type\Batch;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Batch;
 
-use OneToMany\LlmSdk\Client\OpenAi\Type\Batch\Enum\Status;
-use OneToMany\LlmSdk\Client\OpenAi\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Batch\Enum\Status;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Usage\Usage;
 
 final readonly class Batch
