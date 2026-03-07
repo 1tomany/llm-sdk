@@ -22,7 +22,7 @@ try {
     $fileName = basename($filePath);
 
     // Create a request to upload the file
-    $uploadRequest = new UploadRequest($model)->atPath($filePath);
+    $uploadRequest = new UploadRequest($model, $filePath);
 
     // Upload the file to the LLM vendor
     $response = new UploadFileAction($clientFactory)->act(...[

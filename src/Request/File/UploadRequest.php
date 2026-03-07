@@ -20,7 +20,7 @@ class UploadRequest extends BaseRequest
      * @var non-empty-string
      */
     private string $path;
-    private string $name = '';
+    private string $name;
     private ?int $size = null;
     private ?string $format = null;
     private ?string $purpose = null;
