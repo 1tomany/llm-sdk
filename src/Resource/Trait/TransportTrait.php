@@ -25,6 +25,11 @@ trait TransportTrait
     }
 
     /**
+     * @return array<string, int|string|null>
+     */
+    abstract protected function getStandardHeaders(): array;
+
+    /**
      * @param 'GET'|'POST'|'PUT'|'DELETE' $method
      * @param array<string, mixed> $options
      */

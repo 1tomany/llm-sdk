@@ -23,6 +23,14 @@ abstract readonly class BaseResource extends AbstractResource
     /**
      * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
      */
+    protected function getStandardHeaders(): array
+    {
+        return [];
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
+     */
     protected function handleHttpError(string $content, int $statusCode): never
     {
         $error = $this->doDeserialize($content, Error::class, context: [
