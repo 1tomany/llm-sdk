@@ -7,12 +7,42 @@ use OneToMany\LlmSdk\Resource\AbstractResource;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\Trait\TransportTrait;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function sprintf;
 
-abstract readonly class BaseResource extends AbstractResource
+abstract readonly class BaseResource
 {
     use TransportTrait;
+
+    /**
+     * @param non-empty-string $apiKey
+     * @param non-empty-string $apiVersion
+     */
+    public function __construct(
+        protected HttpClientInterface $httpClient,
+        protected SerializerInterface $serializer,
+        protected string $apiKey,
+        protected string $apiVersion,
+    ) {
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getApiKey(): string
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getApiVersion(): string
+    {
+        return $this->apiVersion;
+    }
 
     /**
      * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
@@ -27,7 +57,7 @@ abstract readonly class BaseResource extends AbstractResource
      */
     protected function getBaseHeaders(): array
     {
-        return ['x-goog-api-key' => $this->apiKey];
+        return ['x-goog-api-key' => $this->getApiKey()];
     }
 
     /**
@@ -57,6 +87,6 @@ abstract readonly class BaseResource extends AbstractResource
      */
     protected function buildModelUrl(string $model, string $action): string
     {
-        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model, $action));
+        return $this->buildUrl($this->getApiVersion(), 'models', sprintf('%s:%s', $model, $action));
     }
 }
