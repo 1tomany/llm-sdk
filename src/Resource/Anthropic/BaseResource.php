@@ -22,6 +22,7 @@ abstract readonly class BaseResource
         protected SerializerInterface $serializer,
         protected string $apiKey,
         protected string $apiVersion,
+        protected string $filesApiVersion = 'files-api-2025-04-14',
     ) {
     }
 
@@ -38,10 +39,7 @@ abstract readonly class BaseResource
      */
     protected function getStandardHeaders(): array
     {
-        return [
-            'x-api-key' => $this->apiKey,
-            'anthropic-version' => $this->apiVersion,
-        ];
+        return ['anthropic-version' => $this->apiVersion, 'x-api-key' => $this->apiKey];
     }
 
     /**
