@@ -2,8 +2,6 @@
 
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
-use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Input\Enum\Type as InputType;
-use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Response;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
@@ -12,6 +10,8 @@ use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type as InputType;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\UsageResponse;

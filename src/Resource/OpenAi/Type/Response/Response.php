@@ -1,11 +1,11 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\OpenAi\Type\Response;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response;
 
-use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Enum\Status;
-use OneToMany\LlmSdk\Client\OpenAi\Type\Response\Output\Output;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Enum\Status;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Output\Output;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Usage\Usage;
 
 use function array_map;

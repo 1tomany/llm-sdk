@@ -1,13 +1,12 @@
 <?php
 
-namespace OneToMany\LlmSdk\Client\OpenAi\Type\Response\Input\Enum;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Enum;
 
-enum Type: string
+enum Role: string
 {
-    case InputFile = 'input_file';
-    case InputImage = 'input_image';
-    case InputText = 'input_text';
-    case JsonSchema = 'json_schema';
+    case Assistant = 'assistant';
+    case Developer = 'developer';
+    case User = 'user';
 
     /**
      * @return non-empty-string
