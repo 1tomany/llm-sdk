@@ -21,7 +21,7 @@ final readonly class ExecuteResponse extends BaseResponse
         private string $uri,
         private string $output,
         private string $response,
-        private int|float $runtime,
+        private int|float $runtime = 0,
         private UsageResponse $usage = new UsageResponse(),
     ) {
         parent::__construct($model);
