@@ -25,7 +25,7 @@ abstract readonly class BaseResource extends AbstractResource
     /**
      * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
      */
-    protected function getStandardHeaders(): array
+    protected function getBaseHeaders(): array
     {
         return ['x-goog-api-key' => $this->apiKey];
     }

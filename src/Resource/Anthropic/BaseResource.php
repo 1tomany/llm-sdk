@@ -37,7 +37,7 @@ abstract readonly class BaseResource
     /**
      * @see OneToMany\LlmSdk\Resource\Trait\TransportTrait
      */
-    protected function getStandardHeaders(): array
+    protected function getBaseHeaders(): array
     {
         return ['anthropic-version' => $this->apiVersion, 'x-api-key' => $this->apiKey];
     }

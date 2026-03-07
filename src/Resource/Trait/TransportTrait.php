@@ -21,13 +21,13 @@ trait TransportTrait
      */
     protected function buildUrl(string ...$paths): string
     {
-        return sprintf('%s/%s', $this->getBaseUrl(), ltrim(implode('/', $paths), '/'));
+        return sprintf('%s/%s', \rtrim($this->getBaseUrl(), '/'), ltrim(implode('/', $paths), '/'));
     }
 
     /**
      * @return array<string, int|string|null>
      */
-    abstract protected function getStandardHeaders(): array;
+    abstract protected function getBaseHeaders(): array;
 
     /**
      * @param array<string, int|string|null> $headers
@@ -36,7 +36,7 @@ trait TransportTrait
      */
     protected function buildHeaders(array $headers = []): array
     {
-        return [...$headers, ...$this->getStandardHeaders()];
+        return [...$headers, ...$this->getBaseHeaders()];
     }
 
     /**
