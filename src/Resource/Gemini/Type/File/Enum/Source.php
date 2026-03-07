@@ -10,7 +10,7 @@ enum Source: string
     case Uploaded = 'UPLOADED';
 
     /**
-     * @return 'Generated'|'Registered'|'Unspecified'|'Uploaded'
+     * @return non-empty-string
      */
     public function getName(): string
     {
@@ -18,7 +18,7 @@ enum Source: string
     }
 
     /**
-     * @return 'GENERATED'|'REGISTERED'|'SOURCE_UNSPECIFIED'|'UPLOADED'
+     * @return non-empty-uppercase-string
      */
     public function getValue(): string
     {

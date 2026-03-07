@@ -10,7 +10,7 @@ enum State: string
     case Unspecified = 'STATE_UNSPECIFIED';
 
     /**
-     * @return 'Active'|'Failed'|'Processing'|'Unspecified'
+     * @return non-empty-string
      */
     public function getName(): string
     {
@@ -18,7 +18,7 @@ enum State: string
     }
 
     /**
-     * @return 'ACTIVE'|'FAILED'|'PROCESSING'|'STATE_UNSPECIFIED'
+     * @return non-empty-uppercase-string
      */
     public function getValue(): string
     {

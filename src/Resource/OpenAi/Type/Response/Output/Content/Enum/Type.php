@@ -8,7 +8,7 @@ enum Type: string
     case Refusal = 'refusal';
 
     /**
-     * @return 'OutputText'|'Refusal'
+     * @return non-empty-string
      */
     public function getName(): string
     {
@@ -16,7 +16,7 @@ enum Type: string
     }
 
     /**
-     * @return 'output_text'|'refusal'
+     * @return non-empty-lowercase-string
      */
     public function getValue(): string
     {
