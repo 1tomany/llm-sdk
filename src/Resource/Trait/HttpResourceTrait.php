@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Resource\Trait;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface as HttpClientHttpExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 use function implode;
@@ -61,7 +61,7 @@ trait HttpResourceTrait
             try {
                 // Cache and validate the content
                 $response->getContent(throw: true);
-            } catch (HttpExceptionInterface $e) {
+            } catch (HttpClientHttpExceptionInterface $e) {
                 $this->handleRequestError($response->getContent(false), $statusCode);
             }
         } catch (HttpClientExceptionInterface $e) {
