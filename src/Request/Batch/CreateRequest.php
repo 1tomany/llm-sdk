@@ -13,11 +13,8 @@ class CreateRequest extends BaseRequest
     private ?string $name = null;
     private ?string $fileUri = null;
     private ?string $fileName = null;
-
-    /**
-     * @var array<string, ?scalar>
-     */
-    private array $options = [];
+    private ?string $endpoint = '/v1/responses';
+    private ?string $window = '24h';
 
     public function withName(?string $name): static
     {
@@ -68,21 +65,33 @@ class CreateRequest extends BaseRequest
         return $this->fileName ?: null;
     }
 
-    /**
-     * @param array<string, ?scalar> $options
-     */
-    public function withOptions(array $options): static
+    public function atEndpoint(?string $endpoint): static
     {
-        $this->options = $options;
+        $this->endpoint = trim($endpoint ?? '') ?: null;
 
         return $this;
     }
 
     /**
-     * @return array<string, ?scalar>
+     * @return ?non-empty-string
      */
-    public function getOptions(): array
+    public function getEndpoint(): ?string
     {
-        return $this->options;
+        return $this->endpoint ?: null;
+    }
+
+    public function withWindow(?string $window): static
+    {
+        $this->window = trim($window ?? '') ?: null;
+
+        return $this;
+    }
+
+    /**
+     * @return ?non-empty-string
+     */
+    public function getWindow(): ?string
+    {
+        return $this->window ?: null;
     }
 }

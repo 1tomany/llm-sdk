@@ -18,20 +18,13 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
     {
         $url = $this->buildUrl('batches');
 
-        if ($fileUri = $request->getFileUri()) {
-            $json['input_file_id'] = $fileUri;
-        }
-
-        $options = array_merge($request->getOptions(), [
-            'input_file_id' => $request->getFileUri(),
-        ]);
-
         $content = $this->doPostRequest($url, [
             'auth_header' => $this->getApiKey(),
-            'json' => \array_merge($options, [
-                'endpoint' => '/v1/responses',
-                'completion_window' => '24h',
-            ]),
+            'json' => [
+                'endpoint' => $request->getEndpoint(),
+                'completion_window' => $request->getWindow(),
+                'input_file_id' => $request->getFileUri(),
+            ],
         ]);
 
         $batch = $this->doDeserialize($content, Batch::class);
