@@ -51,7 +51,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 ],
             ]);
         } catch (ExceptionInterface $e) {
-            throw new RuntimeException(sprintf('Generating the signed upload URL failed: %s.', $e->getMessage()), $e->getCode(), $e);
+            throw new RuntimeException(sprintf('Generating the signed upload URL failed: %s.', \rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
         try {
