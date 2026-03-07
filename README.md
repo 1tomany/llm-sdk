@@ -21,7 +21,7 @@ There are two ways to use this library:
 
 I learn best by looking at actual code samples, so lets take a look at the two methods first.
 
-### Direct usage
+### Examples
 
 - [`examples/files/upload.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/upload.php)
 - [`examples/queries/execute.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/queries/execute.php)
