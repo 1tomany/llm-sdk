@@ -1,10 +1,8 @@
 <?php
 
-use OneToMany\LlmSdk\Action\File\DeleteFileAction;
 use OneToMany\LlmSdk\Action\File\UploadFileAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
-use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 
 /** @var ClientFactory $clientFactory */
@@ -32,16 +30,6 @@ try {
     ]);
 
     successMessage('The file "%s" was successfully uploaded to %s with URI "%s".', $fileName, $response->getVendor()->getName(), $response->getUri());
-
-    // Create a request to delete the file
-    $deleteRequest = new DeleteRequest($vendor, $response->getUri());
-
-    // Delete the file from the LLM vendor
-    $response = new DeleteFileAction($clientFactory)->act(...[
-        'request' => $deleteRequest,
-    ]);
-
-    successMessage('The file "%s" was successfully deleted from %s.', $fileName, $response->getVendor()->getName());
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }

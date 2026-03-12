@@ -23,60 +23,56 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $contentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
-
-        $requestContent = [
-            $contentKey => [
-                'parts' => [],
-            ],
-        ];
-
-        foreach ($request->getFiles() as $file) {
-            $requestContent[$contentKey]['parts'][] = [
-                'fileData' => [
-                    'fileUri' => $file->getUri(),
-                    'mimeType' => $file->getFormat(),
-                ],
-            ];
-        }
-
-        foreach ($request->getPrompts() as $prompt) {
-            $requestContent[$contentKey]['parts'][] = [
-                'text' => $prompt->getPrompt(),
-            ];
-
-            if ($dimensionality = $request->getDimensions()) {
-                $requestContent = array_merge($requestContent, [
-                    'outputDimensionality' => $dimensionality,
-                ]);
-            }
-        }
-
-        if (!$request->getModel()->isEmbedding()) {
-            unset($requestContent['outputDimensionality']);
-        }
-
-        if ($prompt = $request->getInstructions()) {
-            $requestContent['systemInstruction'] = [
-                'parts' => [
-                    [
-                        'text' => $prompt->getPrompt(),
-                    ],
-                ],
-            ];
-        }
-
-        if ($schema = $request->getSchema()) {
-            $requestContent['generationConfig'] = [
-                'responseMimeType' => $schema->getFormat(),
-                'responseJsonSchema' => $schema->getSchema(),
-            ];
-        }
-
         $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent');
 
-        if ($request->getModel()->isEmbedding() && $request->getDimensions()) {
-            $requestContent['outputDimensionality'] = $request->getDimensions();
+        if ($request->getModel()->isEmbedding()) {
+            $requestContent = ['content' => []];
+
+            foreach ($request->getPrompts() as $prompt) {
+                $requestContent['content']['parts'][] = [
+                    'text' => $prompt->getPrompt(),
+                ];
+
+                if ($dimensionality = $request->getDimensions()) {
+                    $requestContent = array_merge($requestContent, [
+                        'outputDimensionality' => $dimensionality,
+                    ]);
+                }
+            }
+        } else {
+            $requestContent = ['contents' => []];
+
+            foreach ($request->getFiles() as $file) {
+                $requestContent['contents']['parts'][] = [
+                    'fileData' => [
+                        'fileUri' => $file->getUri(),
+                        'mimeType' => $file->getFormat(),
+                    ],
+                ];
+            }
+
+            foreach ($request->getPrompts() as $prompt) {
+                $requestContent['contents']['parts'][] = [
+                    'text' => $prompt->getPrompt(),
+                ];
+            }
+
+            if ($prompt = $request->getInstructions()) {
+                $requestContent['systemInstruction'] = [
+                    'parts' => [
+                        [
+                            'text' => $prompt->getPrompt(),
+                        ],
+                    ],
+                ];
+            }
+
+            if ($schema = $request->getSchema()) {
+                $requestContent['generationConfig'] = [
+                    'responseMimeType' => $schema->getFormat(),
+                    'responseJsonSchema' => $schema->getSchema(),
+                ];
+            }
         }
 
         return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
