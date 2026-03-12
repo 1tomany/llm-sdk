@@ -10,6 +10,8 @@ use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 
+use function array_filter;
+use function count;
 use function is_string;
 use function trim;
 
@@ -177,6 +179,18 @@ class CompileRequest extends BaseRequest
      */
     public function hasComponents(): bool
     {
-        return [] !== $this->getComponents();
+        return 0 !== count($this->components);
+    }
+
+    /**
+     * @phpstan-assert-if-true non-empty-list<ComponentInterface> $this->getComponents()
+     */
+    public function hasUserComponents(): bool
+    {
+        $filter = function (ComponentInterface $c): bool {
+            return $c->getRole()->isUser();
+        };
+
+        return 0 !== count(array_filter($this->components, $filter));
     }
 }

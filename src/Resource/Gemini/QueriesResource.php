@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
-use OneToMany\LlmSdk\Request\Query\Component\DimensionsComponent;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
@@ -25,7 +24,9 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         $contentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
 
         $requestContent = [
-            $contentKey => [],
+            $contentKey => [
+                'parts' => [],
+            ],
         ];
 
         foreach ($request->getComponents() as $component) {
@@ -41,27 +42,17 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 }
 
                 if ($component->getRole()->isUser()) {
-                    // @phpstan-ignore-next-line
-                    $requestContent[$contentKey][] = [
-                        'parts' => [
-                            [
-                                'text' => $component->getPrompt(),
-                            ],
-                        ],
+                    $requestContent[$contentKey]['parts'][] = [
+                        'text' => $component->getPrompt(),
                     ];
                 }
             }
 
             if ($component instanceof FileUriComponent) {
-                // @phpstan-ignore-next-line
-                $requestContent[$contentKey][] = [
-                    'parts' => [
-                        [
-                            'fileData' => [
-                                'fileUri' => $component->getUri(),
-                                'mimeType' => $component->getFormat(),
-                            ],
-                        ],
+                $requestContent[$contentKey]['parts'][] = [
+                    'fileData' => [
+                        'fileUri' => $component->getUri(),
+                        'mimeType' => $component->getFormat(),
                     ],
                 ];
             }
@@ -74,8 +65,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-        if (null !== $dimensions = $request->getDimensions()) {
-            $requestContent['outputDimensionality'] = $dimensions;
+        if ($request->getModel()->isEmbedding() && $request->getDimensions()) {
+            $requestContent['outputDimensionality'] = $request->getDimensions();
         }
 
         return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertToBatchRequest($request->getBatchKey(), $requestContent));
