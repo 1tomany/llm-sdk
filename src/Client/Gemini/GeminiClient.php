@@ -30,6 +30,8 @@ final class GeminiClient extends BaseClient implements ClientInterface
             'gemini-2.5-flash-preview-09-2025',
             'gemini-2.5-flash-lite',
             'gemini-2.5-flash-lite-preview-09-2025',
+            'gemini-embedding-001',
+            'gemini-embedding-2-preview',
         ];
     }
 
