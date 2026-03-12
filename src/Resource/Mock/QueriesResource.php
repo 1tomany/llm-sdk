@@ -37,25 +37,25 @@ final readonly class QueriesResource implements QueriesResourceInterface
             'model' => $request->getModel()->getId(),
         ];
 
-        if ($dimensions = $request->getDimensions()) {
-            $requestContent['dimensions'] = $dimensions;
+        foreach ($request->getFiles() as $file) {
+            $requestContent['files'][] = [
+                'fileUri' => $file->getUri(),
+            ];
+        }
+
+        foreach ($request->getPrompts() as $prompt) {
+            $requestContent['prompts'][] = [
+                'text' => $prompt->getPrompt(),
+                'role' => $prompt->getRole()->getValue(),
+            ];
         }
 
         if (null !== $instructions = $request->getInstructions()) {
             $requestContent['instructions'] = $instructions->getPrompt();
         }
 
-        foreach ($request->getFiles() as $file) {
-            $requestContent['contents'][] = [
-                'fileUri' => $file->getUri(),
-            ];
-        }
-
-        foreach ($request->getPrompts() as $prompt) {
-            $requestContent['contents'][] = [
-                'text' => $prompt->getPrompt(),
-                'role' => $prompt->getRole()->getValue(),
-            ];
+        if ($dimensions = $request->getDimensions()) {
+            $requestContent['dimensions'] = $dimensions;
         }
 
         if ($schema = $request->getSchema()) {
