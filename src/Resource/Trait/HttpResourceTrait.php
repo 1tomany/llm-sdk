@@ -45,6 +45,9 @@ trait HttpResourceTrait
     /**
      * @param 'GET'|'POST'|'PUT'|'DELETE' $method
      * @param array<string, mixed> $options
+     *
+     * @throws RuntimeException when a non-successful HTTP status code is returned
+     * @throws RuntimeException when a network, transport, or decoding error occurs
      */
     protected function doRequest(
         string $method,

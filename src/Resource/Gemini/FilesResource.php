@@ -109,6 +109,10 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             throw new RuntimeException(sprintf('The file "%s" was rejected at byte %d of %d by the server: %s.', $request->getName(), $uploadOffset, $request->getSize(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
+        if (!isset($content)) {
+            throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server returned an empty response.', $request->getName()));
+        }
+
         $file = $this->doDenormalize($content, File::class, [
             UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
         ]);
