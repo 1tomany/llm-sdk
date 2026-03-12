@@ -91,11 +91,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         return new ExecuteResponse($request->getModel(), $response->responseId, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usageMetadata->promptTokenCount, $response->usageMetadata->cachedContentTokenCount, $response->usageMetadata->outputTokenCount));
     }
 
-    public function embed(): void
-    {
-
-    }
-
     /**
      * @param ?non-empty-string $batchKey
      * @param array<string, mixed> $request
