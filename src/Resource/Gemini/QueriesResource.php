@@ -87,7 +87,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ]);
 
-        $response = $this->doDeserialize($content, GenerateContentResponse::class);
+        $response = $this->doDenormalize($content, GenerateContentResponse::class);
 
         return new ExecuteResponse($request->getModel(), $response->responseId, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usageMetadata->promptTokenCount, $response->usageMetadata->cachedContentTokenCount, $response->usageMetadata->outputTokenCount));
     }

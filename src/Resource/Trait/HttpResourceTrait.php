@@ -60,7 +60,7 @@ trait HttpResourceTrait
 
             try {
                 // Cache and validate the content
-                $response->getContent(throw: true);
+                $response->toArray(throw: true);
             } catch (HttpClientHttpExceptionInterface $e) {
                 $this->handleRequestError($response->getContent(false), $statusCode);
             }
@@ -73,26 +73,32 @@ trait HttpResourceTrait
 
     /**
      * @param array<string, mixed> $options
+     *
+     * @return array<mixed>
      */
-    protected function doGetRequest(string $url, array $options = []): string
+    protected function doGetRequest(string $url, array $options = []): array
     {
-        return $this->doRequest('GET', $url, $options)->getContent();
+        return $this->doRequest('GET', $url, $options)->toArray();
     }
 
     /**
      * @param array<string, mixed> $options
+     *
+     * @return array<mixed>
      */
-    protected function doPostRequest(string $url, array $options = []): string
+    protected function doPostRequest(string $url, array $options = []): array
     {
-        return $this->doRequest('POST', $url, $options)->getContent();
+        return $this->doRequest('POST', $url, $options)->toArray();
     }
 
     /**
      * @param array<string, mixed> $options
+     *
+     * @return array<mixed>
      */
-    protected function doDeleteRequest(string $url, array $options = []): string
+    protected function doDeleteRequest(string $url, array $options = []): array
     {
-        return $this->doRequest('DELETE', $url, $options)->getContent();
+        return $this->doRequest('DELETE', $url, $options)->toArray();
     }
 
     /**

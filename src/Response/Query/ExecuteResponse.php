@@ -15,12 +15,13 @@ final readonly class ExecuteResponse extends BaseResponse
 {
     /**
      * @param non-empty-string $uri
+     * @param array<mixed> $response
      */
     public function __construct(
         string $model,
         private string $uri,
         private string $output,
-        private ?string $response = null,
+        private array $response = [],
         private int|float $runtime = 0,
         private UsageResponse $usage = new UsageResponse(),
     ) {
@@ -41,20 +42,11 @@ final readonly class ExecuteResponse extends BaseResponse
     }
 
     /**
-     * @return array<string, mixed>
-     *
-     * @throws RuntimeException when decoding the response fails
+     * @return array<mixed>
      */
     public function getResponse(): array
     {
-        try {
-            /** @var array<string, mixed> $response */
-            $response = json_decode(trim($this->response ?? ''), true, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
-            throw new RuntimeException('Decoding the response failed.', previous: $e);
-        }
-
-        return $response;
+        return $this->response;
     }
 
     /**

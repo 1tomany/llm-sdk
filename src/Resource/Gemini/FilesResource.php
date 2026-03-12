@@ -105,14 +105,11 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 // Account for unevenly divided file sizes
                 $uploadOffset = $uploadOffset + $chunkSize;
             }
-
-            // Ensure content was returned
-            $content = trim($content ?? '');
         } catch (LlmSdkExceptionInterface $e) {
             throw new RuntimeException(sprintf('The file "%s" was rejected at byte %d of %d by the server: %s.', $request->getName(), $uploadOffset, $request->getSize(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
-        $file = $this->doDeserialize($content, File::class, context: [
+        $file = $this->doDenormalize($content, File::class, [
             UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
         ]);
 

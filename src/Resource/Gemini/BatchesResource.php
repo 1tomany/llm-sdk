@@ -30,7 +30,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
             ],
         ]);
 
-        $batch = $this->doDeserialize($content, Batch::class);
+        $batch = $this->doDenormalize($content, Batch::class);
 
         return new CreateResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
     }
@@ -46,7 +46,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
             'headers' => $this->buildHeaders(),
         ]);
 
-        $batch = $this->doDeserialize($content, Batch::class);
+        $batch = $this->doDenormalize($content, Batch::class);
 
         return new ReadResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
     }

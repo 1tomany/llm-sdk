@@ -102,7 +102,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ]);
 
-        $response = $this->doDeserialize($content, Response::class);
+        $response = $this->doDenormalize($content, Response::class);
 
         if ($response->error instanceof Error) {
             throw new RuntimeException($response->error->message);
