@@ -16,23 +16,19 @@ $model = trim($argv[1] ?? '') ?: 'mock';
 try {
     $prompt = 'Write a short summary of the history of PHP';
 
-    // First, compile the query: this is not strictly necessary,
-    // but you can inspect the request that will be sent to the LLM
+    // Build a request of individual query components
     $compileRequest = new CompileRequest($model)->withPrompt($prompt);
 
-    // Upload the file to the LLM vendor
+    // Compile the query into a request that can be sent to the LLM
     $response = new CompileQueryAction($clientFactory)->act(...[
         'request' => $compileRequest,
     ]);
 
-    // Now that the query is compiled, create a request to send it to the LLM
-    $executeRequest = new ExecuteRequest($model)->withUrl($response->getUrl())->withRequest($response->getRequest());
-
-    // Note: The `CompileResponse` object returned from
-    // `compile()` has a handy method which does the same
-    // work above but as a single method call:
-    //
-    //     $executeRequest = $response->toExecuteRequest();
+    // Now that the query is compiled, build a request to send it to the LLM. Note: You can call
+    // $response->toExecuteRequest() to automatically build the same object as the steps below.
+    $executeRequest = new ExecuteRequest($model)->withUrl($response->getUrl())->withRequest(...[
+        'request' => $response->getRequest(),
+    ]);
 
     /** @var ContentResponse $response */
     $response = new ExecuteQueryAction($clientFactory)->act(...[

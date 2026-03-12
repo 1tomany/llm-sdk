@@ -35,10 +35,10 @@ final readonly class QueriesResource implements QueriesResourceInterface
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $url = $this->generateUrl($request->getModel()->isEmbedding() ? 'embed' : 'generate');
+        $url = $this->buildUrl($request->getModel()->isEmbedding() ? 'embed' : 'generate');
 
         $requestContent = [
-            'model' => $request->getModel(),
+            'model' => $request->getModel()->getId(),
         ];
 
         if ($dimensions = $request->getDimensions()) {
@@ -123,7 +123,7 @@ final readonly class QueriesResource implements QueriesResourceInterface
      *
      * @return non-empty-string
      */
-    private function generateUrl(string ...$paths): string
+    private function buildUrl(string ...$paths): string
     {
         return sprintf('https://mock-llm.service/api/%s', ltrim(implode('/', $paths), '/'));
     }
