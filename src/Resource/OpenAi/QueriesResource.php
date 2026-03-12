@@ -86,6 +86,10 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
+        if ($dimensions = $request->getDimensions()) {
+            $requestContent['dimensions'] = $dimensions;
+        }
+
         return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $url, $requestContent));
     }
 
@@ -126,8 +130,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ]);
 
-        print_r($content);
-        throw new \Exception('Not implemented');
+        // print_r($content);
+        // throw new \Exception('Not implemented');
     }
 
     /**
