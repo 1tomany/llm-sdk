@@ -4,10 +4,8 @@ namespace OneToMany\LlmSdk\Response\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Response\BaseResponse;
 
 use function json_decode;
-use function max;
 use function trim;
 
 use const JSON_THROW_ON_ERROR;
