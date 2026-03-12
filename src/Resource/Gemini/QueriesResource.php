@@ -74,7 +74,9 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
 
             if ($component instanceof DimensionsComponent) {
-                $requestContent['outputDimensionality'] = $component->getDimensions();
+                $requestContent['outputDimensionality'] = (
+                    $component->getDimensions()
+                );
             }
         }
 
