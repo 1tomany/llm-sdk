@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
@@ -67,8 +68,8 @@ abstract readonly class BaseResource
     /**
      * @return non-empty-string
      */
-    protected function buildModelUrl(string $model, string $action): string
+    protected function buildModelUrl(Model $model, string $action): string
     {
-        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model, $action));
+        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $action));
     }
 }
