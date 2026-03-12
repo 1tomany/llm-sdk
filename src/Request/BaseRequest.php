@@ -2,19 +2,17 @@
 
 namespace OneToMany\LlmSdk\Request;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
+
 use function trim;
 
 class BaseRequest
 {
-    /**
-     * @param non-empty-string $model
-     */
-    public function __construct(
-        private string $model = 'mock',
-    ) {
+    public function __construct(private Model $model = Model::Mock)
+    {
     }
 
-    public function forModel(?string $model): static
+    public function forModel(string|Model|null $model): static
     {
         $this->model = trim($model ?? '') ?: 'mock';
 

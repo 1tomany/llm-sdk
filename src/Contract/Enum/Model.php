@@ -3,6 +3,8 @@
 namespace OneToMany\LlmSdk\Contract\Enum;
 
 use function in_array;
+use function strtolower;
+use function trim;
 
 enum Model: string
 {
@@ -39,6 +41,19 @@ enum Model: string
     case Gpt5Mini = 'gpt-5-mini';
     case Gpt5Nano = 'gpt-5-nano';
     case Gpt41 = 'gpt-4.1';
+
+    public static function create(?string $model): self
+    {
+        if (null === $model) {
+            return self::Mock;
+        }
+
+        if (!$model = trim($model)) {
+            return self::Mock;
+        }
+
+        return self::tryFrom(strtolower($model)) ?? self::Mock;
+    }
 
     /**
      * @return non-empty-string
