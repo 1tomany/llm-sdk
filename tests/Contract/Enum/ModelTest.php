@@ -39,6 +39,18 @@ final class ModelTest extends TestCase
             [Model::Gemini25FlashLitePreview, false],
             [Model::GeminiEmbedding2Preview, true],
             [Model::GeminiEmbedding001, true],
+            [Model::Mock, false],
+            [Model::MockEmbedding, true],
+            [Model::Gpt54Pro, false],
+            [Model::Gpt54, false],
+            [Model::Gpt52Pro, false],
+            [Model::Gpt52, false],
+            [Model::Gpt51, false],
+            [Model::Gpt5Pro, false],
+            [Model::Gpt5, false],
+            [Model::Gpt5Mini, false],
+            [Model::Gpt5Nano, false],
+            [Model::Gpt41, false],
         ];
 
         return $provider;

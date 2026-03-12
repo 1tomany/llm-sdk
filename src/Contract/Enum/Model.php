@@ -24,6 +24,7 @@ enum Model: string
 
     // Mock
     case Mock = 'mock';
+    case MockEmbedding = 'mock-embedding';
 
     // OpenAI
     case Gpt54Pro = 'gpt-5.4-pro';
@@ -79,6 +80,7 @@ enum Model: string
 
             // Mock
             self::Mock => 'mock',
+            self::MockEmbedding => 'mock-embedding',
 
             // OpenAI
             self::Gpt54Pro => 'gpt-5.4-pro-2026-03-05',
@@ -119,6 +121,7 @@ enum Model: string
 
             // Mock
             self::Mock => Vendor::Mock,
+            self::MockEmbedding => Vendor::Mock,
 
             // OpenAI
             self::Gpt54Pro => Vendor::OpenAI,
@@ -137,13 +140,14 @@ enum Model: string
     }
 
     /**
-     * @phpstan-assert-if-true self::GeminiEmbedding2Preview|self::GeminiEmbedding001 $this
+     * @phpstan-assert-if-true self::GeminiEmbedding2Preview|self::GeminiEmbedding001|self::MockEmbedding $this
      */
     public function isEmbedding(): bool
     {
         return \in_array($this, [
             self::GeminiEmbedding2Preview,
             self::GeminiEmbedding001,
+            self::MockEmbedding,
         ]);
     }
 }
