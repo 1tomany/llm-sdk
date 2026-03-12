@@ -3,6 +3,7 @@
 namespace OneToMany\LlmSdk\Tests\Contract\Enum;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -12,6 +13,50 @@ use PHPUnit\Framework\TestCase;
 #[Group('EnumTests')]
 final class ModelTest extends TestCase
 {
+    #[DataProvider('providerModelAndVendor')]
+    public function testGettingVendor(Model $model, Vendor $vendor): void
+    {
+        $this->assertSame($vendor, $model->getVendor());
+    }
+
+    /**
+     * @return non-empty-list<non-empty-list<Model|Vendor>>
+     */
+    public static function providerModelAndVendor(): array
+    {
+        $provider = [
+            [Model::ClaudeOpus46, Vendor::Anthropic],
+            [Model::ClaudeSonnet45, Vendor::Anthropic],
+            [Model::ClaudeHaiku45, Vendor::Anthropic],
+            [Model::Gemini31ProPreview, Vendor::Gemini],
+            [Model::Gemini31ProPreview, Vendor::Gemini],
+            [Model::Gemini31FlashLitePreview, Vendor::Gemini],
+            [Model::Gemini3ProPreview, Vendor::Gemini],
+            [Model::Gemini3FlashPreview, Vendor::Gemini],
+            [Model::Gemini25Pro, Vendor::Gemini],
+            [Model::Gemini25Flash, Vendor::Gemini],
+            [Model::Gemini25FlashPreview, Vendor::Gemini],
+            [Model::Gemini25FlashLite, Vendor::Gemini],
+            [Model::Gemini25FlashLitePreview, Vendor::Gemini],
+            [Model::GeminiEmbedding2Preview, Vendor::Gemini],
+            [Model::GeminiEmbedding001, Vendor::Gemini],
+            [Model::Mock, Vendor::Mock],
+            [Model::MockEmbedding, Vendor::Mock],
+            [Model::Gpt54Pro, Vendor::OpenAI],
+            [Model::Gpt54, Vendor::OpenAI],
+            [Model::Gpt52Pro, Vendor::OpenAI],
+            [Model::Gpt52, Vendor::OpenAI],
+            [Model::Gpt51, Vendor::OpenAI],
+            [Model::Gpt5Pro, Vendor::OpenAI],
+            [Model::Gpt5, Vendor::OpenAI],
+            [Model::Gpt5Mini, Vendor::OpenAI],
+            [Model::Gpt5Nano, Vendor::OpenAI],
+            [Model::Gpt41, Vendor::OpenAI],
+        ];
+
+        return $provider;
+    }
+
     #[DataProvider('providerModelAndIsEmbedding')]
     public function testIsEmbedding(Model $model, bool $isEmbedding): void
     {
