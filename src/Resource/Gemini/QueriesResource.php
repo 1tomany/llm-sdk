@@ -8,12 +8,13 @@ use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Embedding;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Generation;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
-use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
+use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
@@ -81,23 +82,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function generate(ExecuteRequest $request): GenerateResponse
     {
-        throw new \Exception('Not implemented');
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
-     */
-    public function embed(ExecuteRequest $request): EmbedResponse
-    {
-        throw new \Exception('Not implemented');
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
-     */
-    public function execute(ExecuteRequest $request): ExecuteResponse
-    {
-        $timer = new Stopwatch(true)->start('execute');
+        $timer = new Stopwatch(true)->start('generate');
 
         $content = $this->doPostRequest($request->getUrl(), [
             'headers' => $this->buildHeaders(),
@@ -106,9 +91,30 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ]);
 
-        $response = $this->doDenormalize($content, Generation::class);
+        $generation = $this->doDenormalize($content, Generation::class);
 
-        return new GenerateResponse($request->getModel(), $response->responseId, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usageMetadata->promptTokenCount, $response->usageMetadata->cachedContentTokenCount, $response->usageMetadata->outputTokenCount));
+        return new GenerateResponse($request->getModel(), $generation->responseId, $generation->getOutput(), $content, $timer->getDuration(), new UsageResponse($generation->usageMetadata->promptTokenCount, $generation->usageMetadata->cachedContentTokenCount, $generation->usageMetadata->outputTokenCount));
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
+     */
+    public function embed(ExecuteRequest $request): EmbedResponse
+    {
+        $timer = new Stopwatch(true)->start('embed');
+
+        $content = $this->doPostRequest($request->getUrl(), [
+            'headers' => $this->buildHeaders(),
+            'json' => [
+                ...$request->getRequest(),
+            ],
+        ]);
+
+        $embedding = $this->doDenormalize($content, Embedding::class, [
+            UnwrappingDenormalizer::UNWRAP_PATH => '[embedding]',
+        ]);
+
+        return new EmbedResponse($request->getModel(), $embedding->values, $timer->getDuration());
     }
 
     /**
