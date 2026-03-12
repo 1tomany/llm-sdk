@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Trait;
 
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface as HttpClientDecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface as HttpClientHttpExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -64,7 +65,7 @@ trait HttpResourceTrait
             try {
                 // Cache and validate the content
                 $response->toArray(throw: true);
-            } catch (HttpClientHttpExceptionInterface $e) {
+            } catch (HttpClientDecodingExceptionInterface|HttpClientHttpExceptionInterface $e) {
                 $this->handleRequestError($response);
             }
         } catch (HttpClientExceptionInterface $e) {
