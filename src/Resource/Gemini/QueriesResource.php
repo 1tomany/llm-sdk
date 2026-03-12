@@ -72,12 +72,10 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                     'responseJsonSchema' => $component->getSchema(),
                 ];
             }
+        }
 
-            if ($component instanceof DimensionsComponent) {
-                $requestContent['outputDimensionality'] = (
-                    $component->getDimensions()
-                );
-            }
+        if (null !== $dimensions = $request->getDimensions()) {
+            $requestContent['outputDimensionality'] = $dimensions;
         }
 
         return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertToBatchRequest($request->getBatchKey(), $requestContent));

@@ -6,7 +6,6 @@ use OneToMany\LlmSdk\Contract\Request\Query\Component\ComponentInterface;
 use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
-use OneToMany\LlmSdk\Request\Query\Component\DimensionsComponent;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
@@ -22,6 +21,11 @@ class CompileRequest extends BaseRequest
      * @var list<ComponentInterface>
      */
     private array $components = [];
+
+    /**
+     * @var ?positive-int
+     */
+    private ?int $dimensions = null;
 
     public function withBatchKey(?string $batchKey): static
     {
@@ -140,7 +144,17 @@ class CompileRequest extends BaseRequest
             throw new InvalidArgumentException('Output dimensions must be a positive integer.');
         }
 
-        return $this->addComponent(new DimensionsComponent($dimensions));
+        $this->dimensions = $dimensions;
+
+        return $this;
+    }
+
+    /**
+     * @return ?positive-int
+     */
+    public function getDimensions(): ?int
+    {
+        return $this->dimensions;
     }
 
     public function addComponent(ComponentInterface $component): static
