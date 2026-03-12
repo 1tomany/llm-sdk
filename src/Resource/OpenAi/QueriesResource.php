@@ -35,59 +35,61 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             'model' => $request->getModel()->getId(),
         ];
 
-        foreach ($request->getComponents() as $component) {
-            if (!isset($requestContent['input'])) {
-                $requestContent['input'] = [];
-            }
+        $requestContentInput = [];
 
-            if ($component instanceof PromptComponent) {
-                $inputType = Type::Text;
+        foreach ($request->getFiles() as $file) {
+            $type = $file->isImage() ? Type::Image : Type::File;
 
-                if ($request->getModel()->isEmbedding()) {
-                    $text = $component->getPrompt();
+            $requestContentInput[] = [
+                'content' => [
+                    [
+                        'type' => $type->getValue(),
+                        'file_id' => $file->getUri(),
+                    ],
+                ],
+                'role' => $file->getRole()->getValue(),
+            ];
+        }
 
-                    if ($component->getRole()->isUser()) {
-                        $requestContent['input'] = $text;
-                    }
-                } else {
-                    $requestContent['input'][] = [
-                        'content' => [
-                            [
-                                'type' => $inputType->getValue(),
-                                'text' => $component->getPrompt(),
-                            ],
-                        ],
-                        'role' => $component->getRole()->getValue(),
-                    ];
+        foreach ($request->getPrompts() as $prompt) {
+            if ($request->getModel()->isEmbedding()) {
+                $text = $prompt->getPrompt();
+
+                if ($prompt->getRole()->isUser()) {
+                    $requestContentInput = $text;
                 }
-            } elseif ($component instanceof FileUriComponent) {
-                $inputType = $component->isImage() ? Type::Image : Type::File;
 
-                $requestContent['input'][] = [
+                if ($dimensions = $request->getDimensions()) {
+                    $requestContent['dimensions'] = $dimensions;
+                }
+            } else {
+                $type = Type::Text;
+
+                $requestContentInput[] = [
                     'content' => [
                         [
-                            'type' => $inputType->getValue(),
-                            'file_id' => $component->getUri(),
+                            'type' => $type->getValue(),
+                            'text' => $prompt->getPrompt(),
                         ],
                     ],
-                    'role' => $component->getRole()->getValue(),
-                ];
-            } elseif ($component instanceof SchemaComponent) {
-                $inputType = Type::Schema;
-
-                $requestContent['text'] = [
-                    'format' => [
-                        'type' => $inputType->getValue(),
-                        'name' => $component->getName(),
-                        'schema' => $component->getSchema(),
-                        'strict' => $component->isStrict(),
-                    ],
+                    'role' => $prompt->getRole()->getValue(),
                 ];
             }
         }
 
-        if ($dimensions = $request->getDimensions()) {
-            $requestContent['dimensions'] = $dimensions;
+        $requestContent['input'] = $requestContentInput;
+
+        if ($schema = $request->getSchema()) {
+            $type = Type::Schema;
+
+            $requestContent['text'] = [
+                'format' => [
+                    'type' => $type->getValue(),
+                    'name' => $schema->getName(),
+                    'schema' => $schema->getSchema(),
+                    'strict' => $schema->isStrict(),
+                ],
+            ];
         }
 
         return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $url, $requestContent));

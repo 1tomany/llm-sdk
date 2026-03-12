@@ -42,6 +42,10 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             $requestContent[$contentKey]['parts'][] = [
                 'text' => $prompt->getPrompt(),
             ];
+
+            if ($dimensions = $request->getDimensions()) {
+                $requestContent['outputDimensionality'] = $dimensions;
+            }
         }
 
         if ($prompt = $request->getInstructions()) {
@@ -52,10 +56,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                     ],
                 ],
             ];
-        }
-
-        if ($dimensions = $request->getDimensions()) {
-            $requestContent['outputDimensionality'] = $dimensions;
         }
 
         if ($schema = $request->getSchema()) {
