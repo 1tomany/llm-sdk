@@ -131,7 +131,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         ]);
 
         $embedding = $this->doDenormalize($content, Embedding::class, [
-           UnwrappingDenormalizer::UNWRAP_PATH => '[data][0]',
+            UnwrappingDenormalizer::UNWRAP_PATH => '[data][0]',
         ]);
 
         return new EmbedResponse($request->getModel(), $embedding->embedding);
