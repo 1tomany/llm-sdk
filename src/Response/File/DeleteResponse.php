@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Response\File;
 
-use OneToMany\LlmSdk\Response\BaseResponse;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 final readonly class DeleteResponse extends BaseResponse
 {
@@ -10,10 +10,10 @@ final readonly class DeleteResponse extends BaseResponse
      * @param non-empty-string $uri
      */
     public function __construct(
-        string $model,
+        Vendor $vendor,
         private string $uri,
     ) {
-        parent::__construct($model);
+        parent::__construct($vendor);
     }
 
     /**

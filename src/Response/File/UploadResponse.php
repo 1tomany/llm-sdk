@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Response\File;
 
-use OneToMany\LlmSdk\Response\BaseResponse;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 use function strtolower;
 
@@ -14,13 +14,13 @@ final readonly class UploadResponse extends BaseResponse
      * @param ?non-empty-string $purpose
      */
     public function __construct(
-        string $model,
+        Vendor $vendor,
         private string $uri,
         private ?string $name = null,
         private ?string $purpose = null,
         private ?\DateTimeImmutable $expiresAt = null,
     ) {
-        parent::__construct($model);
+        parent::__construct($vendor);
     }
 
     /**
