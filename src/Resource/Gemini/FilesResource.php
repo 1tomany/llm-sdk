@@ -18,7 +18,6 @@ use function max;
 use function rtrim;
 use function sprintf;
 use function strlen;
-use function trim;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {

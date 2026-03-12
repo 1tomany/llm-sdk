@@ -12,19 +12,11 @@ use PHPUnit\Framework\TestCase;
 #[Group('QueryTests')]
 final class ExecuteResponseTest extends TestCase
 {
-    public function testGettingResponseRequiresResponseToBeValidJson(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Decoding the response failed.');
-
-        new ExecuteResponse('test-model', 'id_123', '', '{"invalid')->getResponse();
-    }
-
     public function testToRecordRequiresOutputToBeValidJson(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Decoding the output failed.');
 
-        new ExecuteResponse('test-model', 'id_123', '{"invalid', '')->toRecord();
+        new ExecuteResponse('test-model', 'id_123', '{"invalid')->toRecord();
     }
 }
