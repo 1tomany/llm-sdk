@@ -2,29 +2,26 @@
 
 namespace OneToMany\LlmSdk\Action\Query;
 
+use OneToMany\LlmSdk\Action\BaseAction;
+use OneToMany\LlmSdk\Action\Query\Trait\CompileQueryTrait;
 use OneToMany\LlmSdk\Contract\Action\Query\GenerateOutputActionInterface;
-use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 
-final readonly class GenerateOutputAction implements GenerateOutputActionInterface
+final readonly class GenerateOutputAction extends BaseAction implements GenerateOutputActionInterface
 {
-    public function __construct(private ClientFactory $clientFactory)
-    {
-    }
+    use CompileQueryTrait;
 
     /**
      * @see OneToMany\LlmSdk\Contract\Action\Query\GenerateOutputActionInterface
      */
     public function act(CompileRequest|ExecuteRequest $request): GenerateResponse
     {
-        $client = $this->clientFactory->create($request->getVendor());
-
         if ($request instanceof CompileRequest) {
-            $request = $client->queries()->compile($request)->toExecuteRequest();
+            $request = $this->compileQuery($request)->toExecuteRequest();
         }
 
-        return $client->queries()->generate($request);
+        return $this->createClient($request->getVendor())->queries()->generate($request);
     }
 }

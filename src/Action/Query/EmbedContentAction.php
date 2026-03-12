@@ -2,31 +2,26 @@
 
 namespace OneToMany\LlmSdk\Action\Query;
 
+use OneToMany\LlmSdk\Action\BaseAction;
+use OneToMany\LlmSdk\Action\Query\Trait\CompileQueryTrait;
 use OneToMany\LlmSdk\Contract\Action\Query\EmbedContentActionInterface;
-use OneToMany\LlmSdk\Contract\Action\Query\GenerateOutputActionInterface;
-use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
-use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 
-final readonly class EmbedContentAction implements EmbedContentActionInterface
+final readonly class EmbedContentAction extends BaseAction implements EmbedContentActionInterface
 {
-    public function __construct(private ClientFactory $clientFactory)
-    {
-    }
+    use CompileQueryTrait;
 
     /**
      * @see OneToMany\LlmSdk\Contract\Action\Query\EmbedContentActionInterface
      */
     public function act(CompileRequest|ExecuteRequest $request): EmbedResponse
     {
-        $client = $this->clientFactory->create($request->getVendor());
-
         if ($request instanceof CompileRequest) {
-            $request = $client->queries()->compile($request)->toExecuteRequest();
+            $request = $this->compileQuery($request)->toExecuteRequest();
         }
 
-        return $client->queries()->embed($request);
+        return $this->createClient($request->getVendor())->queries()->embed($request);
     }
 }
