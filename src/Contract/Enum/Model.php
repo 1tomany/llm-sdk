@@ -163,4 +163,14 @@ enum Model: string
             self::MockEmbedding,
         ]);
     }
+
+    /**
+     * @phpstan-assert-if-false self::GeminiEmbedding001 $this
+     */
+    public function isMultiModal(): bool
+    {
+        return !in_array($this, [
+            self::GeminiEmbedding001,
+        ]);
+    }
 }

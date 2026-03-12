@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
+use OneToMany\LlmSdk\Request\Query\Component\DimensionsComponent;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
@@ -14,6 +15,20 @@ use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\UsageResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 
+/**
+ * @phpstan-type PartText array{
+ *   text: non-empty-string,
+ * }
+ *
+ * @phpstan-type PartFileData array{
+ *   fileUri: non-empty-string,
+ *   mimeType: non-empty-lowercase-string,
+ * }
+ *
+ * @phpstan-type PartList array{
+ *   parts: non-empty-list<PartText|PartFileData>,
+ * }
+ */
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
     /**
@@ -21,10 +36,17 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $requestContentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
+        $contentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
 
+        /**
+         * @var array{
+         *   content?: list<PartList>,
+         *   contents?: list<PartList>,
+         *   systemInstruction?: non-empty-list<PartList>
+         * } $requestContent
+         */
         $requestContent = [
-            $requestContentKey => [],
+            $contentKey => [],
         ];
 
         foreach ($request->getComponents() as $component) {
@@ -40,7 +62,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 }
 
                 if ($component->getRole()->isUser()) {
-                    $requestContent[$requestContentKey][] = [
+                    $requestContent[$contentKey][] = [
                         'parts' => [
                             [
                                 'text' => $component->getPrompt(),
@@ -51,7 +73,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
 
             if ($component instanceof FileUriComponent) {
-                $requestContent[$requestContentKey][] = [
+                $requestContent[$contentKey][] = [
                     'parts' => [
                         [
                             'fileData' => [
@@ -68,6 +90,10 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                     'responseMimeType' => $component->getFormat(),
                     'responseJsonSchema' => $component->getSchema(),
                 ];
+            }
+
+            if ($component instanceof DimensionsComponent) {
+                $requestContent['outputDimensionality'] = $component->getDimensions();
             }
         }
 

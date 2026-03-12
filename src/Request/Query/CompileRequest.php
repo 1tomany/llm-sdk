@@ -41,10 +41,16 @@ class CompileRequest extends BaseRequest
     /**
      * @param ?non-empty-string $fileUri
      * @param ?non-empty-lowercase-string $format
+     *
+     * @throws InvalidArgumentException when the model is a single-modality model
      */
     public function withFileUri(?string $fileUri, ?string $format): static
     {
         if (null !== $fileUri && null !== $format) {
+            if (!$this->getModel()->isMultiModal()) {
+                throw new InvalidArgumentException('Files cannot be added to single-modality models.');
+            }
+
             $this->addComponent(new FileUriComponent($fileUri, $format));
         }
 
@@ -54,15 +60,22 @@ class CompileRequest extends BaseRequest
     /**
      * @param ?array<string, mixed> $schema
      * @param ?non-empty-string $name
+     *
+     * @throws InvalidArgumentException when the model is an embedding model
+     * @throws InvalidArgumentException when the model is a single-modality model
      */
     public function usingSchema(?array $schema, ?string $name = null): static
     {
-        if ($this->getModel()->isEmbedding()) {
-            throw new InvalidArgumentException('A schema cannot be added to a query using an embedding model.');
-        }
-
         if (!$schema) {
             return $this;
+        }
+
+        if ($this->getModel()->isEmbedding()) {
+            throw new InvalidArgumentException('Schemas cannot be added to a query using an embedding model.');
+        }
+
+        if (!$this->getModel()->isMultiModal()) {
+            throw new InvalidArgumentException('Schemas cannot be added to single-modality models.');
         }
 
         $name = trim($name ?? '');
@@ -76,6 +89,9 @@ class CompileRequest extends BaseRequest
         return $this->addComponent(new SchemaComponent($schema, $name ?: null));
     }
 
+    /**
+     * @throws InvalidArgumentException when the role is a system role and the model is an embedding model
+     */
     public function withPrompt(?string $prompt, Role $role = Role::User): static
     {
         if ($prompt = trim($prompt ?? '')) {
@@ -110,6 +126,10 @@ class CompileRequest extends BaseRequest
         return $this->withPrompt($text, Role::System);
     }
 
+    /**
+     * @throws InvalidArgumentException when the model is not an embedding model
+     * @throws InvalidArgumentException when the dimensions are not a positive integer
+     */
     public function withDimensions(int $dimensions): static
     {
         if (!$this->getModel()->isEmbedding()) {
@@ -117,7 +137,7 @@ class CompileRequest extends BaseRequest
         }
 
         if ($dimensions < 1) {
-            throw new InvalidArgumentException('The output dimensions must be a positive integer.');
+            throw new InvalidArgumentException('Output dimensions must be a positive integer.');
         }
 
         return $this->addComponent(new DimensionsComponent($dimensions));
