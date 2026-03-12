@@ -10,7 +10,6 @@ use OneToMany\LlmSdk\Resource\OpenAi\Type\Embedding\Embedding;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Usage\Usage;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
