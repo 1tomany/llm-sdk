@@ -15,20 +15,6 @@ use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\UsageResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-/**
- * @phpstan-type PartText array{
- *   text: non-empty-string,
- * }
- *
- * @phpstan-type PartFileData array{
- *   fileUri: non-empty-string,
- *   mimeType: non-empty-lowercase-string,
- * }
- *
- * @phpstan-type PartList array{
- *   parts: non-empty-list<PartText|PartFileData>,
- * }
- */
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
     /**
@@ -38,13 +24,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
     {
         $contentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
 
-        /**
-         * @var array{
-         *   content?: list<PartList>,
-         *   contents?: list<PartList>,
-         *   systemInstruction?: non-empty-list<PartList>
-         * } $requestContent
-         */
         $requestContent = [
             $contentKey => [],
         ];
@@ -62,6 +41,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 }
 
                 if ($component->getRole()->isUser()) {
+                    // @phpstan-ignore-next-line
                     $requestContent[$contentKey][] = [
                         'parts' => [
                             [
@@ -73,6 +53,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
 
             if ($component instanceof FileUriComponent) {
+                // @phpstan-ignore-next-line
                 $requestContent[$contentKey][] = [
                     'parts' => [
                         [
