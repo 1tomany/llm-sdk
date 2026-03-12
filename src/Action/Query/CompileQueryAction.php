@@ -14,7 +14,6 @@ final readonly class CompileQueryAction extends BaseAction implements CompileQue
 
     /**
      * @see OneToMany\LlmSdk\Contract\Action\Query\CompileQueryActionInterface
-     * @see OneToMany\LlmSdk\Action\Query\Trait\CompileQueryTrait
      */
     public function act(CompileRequest $request): CompileResponse
     {
