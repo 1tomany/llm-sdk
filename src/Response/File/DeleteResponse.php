@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Response\File;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-final readonly class DeleteResponse extends BaseResponse
+final readonly class DeleteResponse extends FileResponse
 {
     /**
      * @param non-empty-string $uri

@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Response\Batch;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
 readonly class BatchResponse extends BaseResponse
@@ -12,7 +13,7 @@ readonly class BatchResponse extends BaseResponse
      * @param ?non-empty-string $fileUri
      */
     public function __construct(
-        string $model,
+        Model $model,
         private string $uri,
         private string $status,
         private ?string $fileUri = null,

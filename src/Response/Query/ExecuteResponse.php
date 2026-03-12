@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Response\Query;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
@@ -18,7 +19,7 @@ final readonly class ExecuteResponse extends BaseResponse
      * @param array<mixed> $response
      */
     public function __construct(
-        string $model,
+        Model $model,
         private string $uri,
         private string $output,
         private array $response = [],

@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Response\Query;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
@@ -12,7 +13,7 @@ final readonly class CompileResponse extends BaseResponse
      * @param array<string, mixed> $request
      */
     public function __construct(
-        string $model,
+        Model $model,
         private string $url,
         private array $request,
     ) {

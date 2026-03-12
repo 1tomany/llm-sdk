@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 use function strtolower;
 
-final readonly class UploadResponse extends BaseResponse
+final readonly class UploadResponse extends FileResponse
 {
     /**
      * @param non-empty-string $uri
