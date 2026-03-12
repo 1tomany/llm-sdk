@@ -59,6 +59,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 if ($dimensions = $request->getDimensions()) {
                     $requestContent['dimensions'] = $dimensions;
                 }
+
+                break;
             } else {
                 $type = Type::Text;
 
