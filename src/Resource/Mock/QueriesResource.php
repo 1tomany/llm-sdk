@@ -77,11 +77,10 @@ final readonly class QueriesResource implements QueriesResourceInterface
         $output = $response['text'];
 
         if (isset($request->getRequest()['schema'])) {
-            /** @var non-empty-string $output */
             $output = json_encode(['output' => $output]);
         }
 
-        return new GenerateResponse($request->getModel(), $response['id'], $output, $response, random_int(100, 10000));
+        return new GenerateResponse($request->getModel(), $response['id'], (string) $output, $response, random_int(100, 10000));
     }
 
     /**
