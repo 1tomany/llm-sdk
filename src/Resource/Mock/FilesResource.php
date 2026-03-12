@@ -22,7 +22,7 @@ final readonly class FilesResource implements FilesResourceInterface
      */
     public function upload(UploadRequest $request): UploadResponse
     {
-        return new UploadResponse($request->getModel(), $this->generateId('file'));
+        return new UploadResponse($request->getVendor(), $this->generateId('file'));
     }
 
     /**
@@ -30,6 +30,6 @@ final readonly class FilesResource implements FilesResourceInterface
      */
     public function delete(DeleteRequest $request): DeleteResponse
     {
-        return new DeleteResponse($request->getModel(), $request->getUri());
+        return new DeleteResponse($request->getVendor(), $request->getUri());
     }
 }

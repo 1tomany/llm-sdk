@@ -116,7 +116,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
         ]);
 
-        return new UploadResponse($request->getModel(), $file->uri, $file->name, null, $file->expirationTime);
+        return new UploadResponse($request->getVendor(), $file->uri, $file->name, null, $file->expirationTime);
     }
 
     /**
@@ -128,6 +128,6 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             'headers' => $this->buildHeaders(),
         ]);
 
-        return new DeleteResponse($request->getModel(), $request->getUri());
+        return new DeleteResponse($request->getVendor(), $request->getUri());
     }
 }

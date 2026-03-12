@@ -30,7 +30,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
         $file = $this->doDenormalize($content, File::class);
 
-        return new UploadResponse($request->getModel(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
+        return new UploadResponse($request->getVendor(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
     }
 
     /**
@@ -46,6 +46,6 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
         $file = $this->doDenormalize($content, DeletedFile::class);
 
-        return new DeleteResponse($request->getModel(), $file->id);
+        return new DeleteResponse($request->getVendor(), $file->id);
     }
 }
