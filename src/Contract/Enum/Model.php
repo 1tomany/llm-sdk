@@ -2,6 +2,8 @@
 
 namespace OneToMany\LlmSdk\Contract\Enum;
 
+use function in_array;
+
 enum Model: string
 {
     // Anthropic
@@ -100,7 +102,7 @@ enum Model: string
 
     public function getVendor(): Vendor
     {
-        $vendor = match($this) {
+        $vendor = match ($this) {
             // Anthropic
             self::ClaudeOpus46 => Vendor::Anthropic,
             self::ClaudeSonnet45 => Vendor::Anthropic,
@@ -144,7 +146,7 @@ enum Model: string
      */
     public function isEmbedding(): bool
     {
-        return \in_array($this, [
+        return in_array($this, [
             self::GeminiEmbedding2Preview,
             self::GeminiEmbedding001,
             self::MockEmbedding,
