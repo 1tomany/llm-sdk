@@ -41,6 +41,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
 
             if ($component instanceof PromptComponent) {
+                $inputType = Type::Text;
+
                 if ($request->getModel()->isEmbedding()) {
                     $text = $component->getPrompt();
 
@@ -48,12 +50,10 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                         $requestContent['input'][] = $text;
                     }
                 } else {
-                    $type = Type::InputText;
-
                     $requestContent['input'][] = [
                         'content' => [
                             [
-                                'type' => $type->getValue(),
+                                'type' => $inputType->getValue(),
                                 'text' => $component->getPrompt(),
                             ],
                         ],
@@ -61,23 +61,23 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                     ];
                 }
             } elseif ($component instanceof FileUriComponent) {
-                $type = Type::InputFile;
+                $inputType = $component->isImage() ? Type::Image : Type::File;
 
                 $requestContent['input'][] = [
                     'content' => [
                         [
-                            'type' => $type->getValue(),
+                            'type' => $inputType->getValue(),
                             'file_id' => $component->getUri(),
                         ],
                     ],
                     'role' => $component->getRole()->getValue(),
                 ];
             } elseif ($component instanceof SchemaComponent) {
-                $type = Type::JsonSchema;
+                $inputType = Type::Schema;
 
                 $requestContent['text'] = [
                     'format' => [
-                        'type' => $type->getValue(),
+                        'type' => $inputType->getValue(),
                         'name' => $component->getName(),
                         'schema' => $component->getSchema(),
                         'strict' => $component->isStrict(),

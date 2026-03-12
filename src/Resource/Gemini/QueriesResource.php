@@ -49,18 +49,14 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                         'text' => $component->getPrompt(),
                     ];
                 }
-            }
-
-            if ($component instanceof FileUriComponent) {
+            } elseif ($component instanceof FileUriComponent) {
                 $requestContent[$contentKey]['parts'][] = [
                     'fileData' => [
                         'fileUri' => $component->getUri(),
                         'mimeType' => $component->getFormat(),
                     ],
                 ];
-            }
-
-            if ($component instanceof SchemaComponent) {
+            } elseif ($component instanceof SchemaComponent) {
                 $requestContent['generationConfig'] = [
                     'responseMimeType' => $component->getFormat(),
                     'responseJsonSchema' => $component->getSchema(),
