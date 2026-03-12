@@ -12,6 +12,4 @@ interface QueriesResourceInterface
     public function compile(CompileRequest $request): CompileResponse;
 
     public function execute(ExecuteRequest $request): ExecuteResponse;
-
-
 }
