@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Response\Query\Content;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
-use OneToMany\LlmSdk\Response\Query\UsageResponse;
+use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
 
 final readonly class EmbedResponse extends ExecuteResponse
 {

@@ -15,6 +15,7 @@ final readonly class EmbedContentAction extends BaseAction implements EmbedConte
 
     /**
      * @see OneToMany\LlmSdk\Contract\Action\Query\EmbedContentActionInterface
+     * @see OneToMany\LlmSdk\Action\Query\Trait\CompileQueryTrait
      */
     public function act(CompileRequest|ExecuteRequest $request): EmbedResponse
     {

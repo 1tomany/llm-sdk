@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Response\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Response\BaseResponse;
+use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
 
 use function max;
 

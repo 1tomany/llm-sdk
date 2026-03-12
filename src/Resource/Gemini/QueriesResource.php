@@ -10,9 +10,10 @@ use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Generation;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
+use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
-use OneToMany\LlmSdk\Response\Query\UsageResponse;
+use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
@@ -22,10 +23,10 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $url = $this->buildModelUrl($request->getModel(), 'generateContent');
+        $contentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
 
         $requestContent = [
-            'contents' => [
+            $contentKey => [
                 'parts' => [],
             ],
         ];
@@ -43,14 +44,14 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 }
 
                 if ($component->getRole()->isUser()) {
-                    $requestContent['contents']['parts'][] = [
+                    $requestContent[$contentKey]['parts'][] = [
                         'text' => $component->getPrompt(),
                     ];
                 }
             }
 
             if ($component instanceof FileUriComponent) {
-                $requestContent['contents']['parts'][] = [
+                $requestContent[$contentKey]['parts'][] = [
                     'fileData' => [
                         'fileUri' => $component->getUri(),
                         'mimeType' => $component->getFormat(),
@@ -66,11 +67,29 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-        // if ($request->getModel()->isEmbedding() && $request->getDimensions()) {
-        //     $requestContent['outputDimensionality'] = $request->getDimensions();
-        // }
+        $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent');
+
+        if ($request->getModel()->isEmbedding() && $request->getDimensions()) {
+            $requestContent['outputDimensionality'] = $request->getDimensions();
+        }
 
         return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
+     */
+    public function generate(ExecuteRequest $request): GenerateResponse
+    {
+        throw new \Exception('Not implemented');
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
+     */
+    public function embed(ExecuteRequest $request): EmbedResponse
+    {
+        throw new \Exception('Not implemented');
     }
 
     /**

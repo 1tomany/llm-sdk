@@ -15,7 +15,7 @@ use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
-use OneToMany\LlmSdk\Response\Query\UsageResponse;
+use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 use function parse_url;

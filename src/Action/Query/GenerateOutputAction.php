@@ -15,6 +15,7 @@ final readonly class GenerateOutputAction extends BaseAction implements Generate
 
     /**
      * @see OneToMany\LlmSdk\Contract\Action\Query\GenerateOutputActionInterface
+     * @see OneToMany\LlmSdk\Action\Query\Trait\CompileQueryTrait
      */
     public function act(CompileRequest|ExecuteRequest $request): GenerateResponse
     {
