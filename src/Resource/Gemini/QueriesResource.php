@@ -29,8 +29,19 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ];
 
-        if ($dimensions = $request->getDimensions()) {
-            $requestContent['outputDimensionality'] = $dimensions;
+        foreach ($request->getFiles() as $file) {
+            $requestContent[$contentKey]['parts'][] = [
+                'fileData' => [
+                    'fileUri' => $file->getUri(),
+                    'mimeType' => $file->getFormat(),
+                ],
+            ];
+        }
+
+        foreach ($request->getPrompts() as $prompt) {
+            $requestContent[$contentKey]['parts'][] = [
+                'text' => $prompt->getPrompt(),
+            ];
         }
 
         if ($prompt = $request->getInstructions()) {
@@ -43,19 +54,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ];
         }
 
-        foreach ($request->getFiles() as $file) {
-            $requestContent[$contentKey]['parts'][] = [
-                'fileData' => [
-                    'fileUri' => $file->getUri(),
-                    'mimeType' => $file->getFormat(),
-                ],
-            ];
-        }
-
-        foreach ($request->getPrompts() as $component) {
-            $requestContent[$contentKey]['parts'][] = [
-                'text' => $component->getPrompt(),
-            ];
+        if ($dimensions = $request->getDimensions()) {
+            $requestContent['outputDimensionality'] = $dimensions;
         }
 
         if ($schema = $request->getSchema()) {

@@ -50,8 +50,8 @@ final readonly class QueriesResource implements QueriesResourceInterface
             ];
         }
 
-        if (null !== $instructions = $request->getInstructions()) {
-            $requestContent['instructions'] = $instructions->getPrompt();
+        if ($prompt = $request->getInstructions()) {
+            $requestContent['instructions'] = $prompt->getPrompt();
         }
 
         if ($dimensions = $request->getDimensions()) {
