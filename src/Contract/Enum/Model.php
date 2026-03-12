@@ -177,12 +177,15 @@ enum Model: string
     }
 
     /**
-     * @phpstan-assert-if-false self::GeminiEmbedding001 $this
+     * @phpstan-assert-if-false self::GeminiEmbedding001|self::GptEmbeddingAda002|self::GptEmbedding3Small|self::GptEmbedding3Large $this
      */
     public function isMultiModal(): bool
     {
         return !in_array($this, [
             self::GeminiEmbedding001,
+            self::GptEmbeddingAda002,
+            self::GptEmbedding3Small,
+            self::GptEmbedding3Large,
         ]);
     }
 }
