@@ -32,39 +32,35 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             'model' => $request->getModel()->getId(),
         ];
 
-        $requestContentInput = [];
-
-        foreach ($request->getFiles() as $file) {
-            $type = $file->isImage() ? Type::Image : Type::File;
-
-            $requestContentInput[] = [
-                'content' => [
-                    [
-                        'type' => $type->getValue(),
-                        'file_id' => $file->getUri(),
-                    ],
-                ],
-                'role' => $file->getRole()->getValue(),
-            ];
-        }
-
-        foreach ($request->getPrompts() as $prompt) {
-            if ($request->getModel()->isEmbedding()) {
-                $text = $prompt->getPrompt();
-
-                if ($prompt->getRole()->isUser()) {
-                    $requestContentInput = $text;
-                }
+        if ($request->getModel()->isEmbedding()) {
+            if ($prompt = $request->getPrompts()[0]) {
+                $requestContent['input'] = $prompt->getPrompt();
 
                 if ($dimensions = $request->getDimensions()) {
                     $requestContent['dimensions'] = $dimensions;
                 }
+            }
+        } else {
+            $requestContent['input'] = [];
 
-                break;
-            } else {
+            foreach ($request->getFiles() as $file) {
+                $type = $file->isImage() ? Type::Image : Type::File;
+
+                $requestContent['input'][] = [
+                    'content' => [
+                        [
+                            'type' => $type->getValue(),
+                            'file_id' => $file->getUri(),
+                        ],
+                    ],
+                    'role' => $file->getRole()->getValue(),
+                ];
+            }
+
+            foreach ($request->getPrompts() as $prompt) {
                 $type = Type::Text;
 
-                $requestContentInput[] = [
+                $requestContent['input'][] = [
                     'content' => [
                         [
                             'type' => $type->getValue(),
@@ -74,21 +70,19 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                     'role' => $prompt->getRole()->getValue(),
                 ];
             }
-        }
 
-        $requestContent['input'] = $requestContentInput;
+            if ($schema = $request->getSchema()) {
+                $type = Type::Schema;
 
-        if ($schema = $request->getSchema()) {
-            $type = Type::Schema;
-
-            $requestContent['text'] = [
-                'format' => [
-                    'type' => $type->getValue(),
-                    'name' => $schema->getName(),
-                    'schema' => $schema->getSchema(),
-                    'strict' => $schema->isStrict(),
-                ],
-            ];
+                $requestContent['text'] = [
+                    'format' => [
+                        'type' => $type->getValue(),
+                        'name' => $schema->getName(),
+                        'schema' => $schema->getSchema(),
+                        'strict' => $schema->isStrict(),
+                    ],
+                ];
+            }
         }
 
         return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $url, $requestContent));
