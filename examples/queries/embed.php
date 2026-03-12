@@ -1,8 +1,8 @@
 <?php
 
 use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
-use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
+use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 
 /** @var ClientFactory $clientFactory */

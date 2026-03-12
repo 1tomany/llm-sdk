@@ -10,8 +10,8 @@ use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
-use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
+use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 
 use function is_int;
