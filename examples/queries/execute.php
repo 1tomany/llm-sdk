@@ -6,6 +6,7 @@ use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInt
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
+use OneToMany\LlmSdk\Response\Query\GenerateResponse;
 
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
@@ -33,6 +34,7 @@ try {
     //
     //     $executeRequest = $response->toExecuteRequest();
 
+    /** @var GenerateResponse $response */
     $response = new ExecuteQueryAction($clientFactory)->act(...[
         'request' => $executeRequest,
     ]);
