@@ -11,6 +11,8 @@ use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 
 use function count;
 use function is_string;
+use function max;
+use function min;
 use function trim;
 
 class CompileRequest extends BaseRequest
@@ -32,7 +34,7 @@ class CompileRequest extends BaseRequest
     private ?PromptComponent $instructions = null;
 
     /**
-     * @var ?positive-int
+     * @var ?int<1, 4096>
      */
     private ?int $dimensions = null;
     private ?SchemaComponent $schema = null;
@@ -80,7 +82,7 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when a system prompt is used with an embedding model
+     * @throws InvalidArgumentException when instructions are used with an embedding model
      */
     public function withPrompt(?string $prompt, Role $role = Role::User): static
     {
@@ -89,7 +91,7 @@ class CompileRequest extends BaseRequest
 
             if ($this->getModel()->isEmbedding()) {
                 if ($component->getRole()->isSystem()) {
-                    throw new InvalidArgumentException('System prompts cannot be used with embedding models.');
+                    throw new InvalidArgumentException('Instructions cannot be used with embedding models.');
                 }
 
                 $this->prompts = [$component];
@@ -125,19 +127,14 @@ class CompileRequest extends BaseRequest
 
     /**
      * @throws InvalidArgumentException when the model is not an embedding model
-     * @throws InvalidArgumentException when the dimensions are not a positive integer
      */
     public function withDimensions(int $dimensions): static
     {
         if (!$this->getModel()->isEmbedding()) {
-            throw new InvalidArgumentException('Output dimensions can only be added to a query using an embedding model.');
+            throw new InvalidArgumentException('Output dimensions can only be used with embedding models.');
         }
 
-        if ($dimensions < 1) {
-            throw new InvalidArgumentException('Output dimensions must be a positive integer.');
-        }
-
-        $this->dimensions = $dimensions;
+        $this->dimensions = min(max(1, $dimensions), 4096);
 
         return $this;
     }
@@ -163,7 +160,7 @@ class CompileRequest extends BaseRequest
         }
 
         if ($this->getModel()->isEmbedding()) {
-            throw new InvalidArgumentException('Schemas cannot be used with embedding models.');
+            throw new InvalidArgumentException('A schema cannot be used with an embedding model.');
         }
 
         $name = trim($name ?? '');

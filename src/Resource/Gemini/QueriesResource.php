@@ -43,9 +43,11 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 'text' => $prompt->getPrompt(),
             ];
 
-            if ($dimensions = $request->getDimensions()) {
-                $requestContent['outputDimensionality'] = $dimensions;
-            }
+            $requestContent['outputDimensionality'] = $request->getDimensions();
+        }
+
+        if (!$request->getModel()->isEmbedding()) {
+            unset($requestContent['outputDimensionality']);
         }
 
         if ($prompt = $request->getInstructions()) {
@@ -64,6 +66,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 'responseJsonSchema' => $schema->getSchema(),
             ];
         }
+
+        // print_r($requestContent);exit;
 
         $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent');
 
