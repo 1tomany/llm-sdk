@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Request\File;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-class BaseRequest
+class FileRequest
 {
     private Vendor $vendor = Vendor::Mock;
 

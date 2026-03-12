@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Request\File;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-class DeleteRequest extends BaseRequest
+class DeleteRequest extends FileRequest
 {
     /**
      * @param non-empty-string $uri
