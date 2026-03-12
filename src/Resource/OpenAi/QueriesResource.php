@@ -10,7 +10,7 @@ use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type as InputType;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
@@ -29,31 +29,11 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
+        $url = $this->buildUrl($request->getModel()->isEmbedding() ? 'embeddings' : 'responses');
+
         $requestContent = [
             'model' => $request->getModel()->getId(),
         ];
-
-        if ($request->getModel()->isEmbedding()) {
-            $requestContent['input'] = [];
-
-            foreach ($request->getComponents() as $component) {
-                if ($component instanceof PromptComponent) {
-                    $text = $component->getPrompt();
-
-                    if ($component->getRole()->isUser()) {
-                        $requestContent['input'][] = $text;
-                    }
-                }
-            }
-
-            if ($dimensions = $request->getDimensions()) {
-                $requestContent['dimensions'] = $dimensions;
-            }
-
-            return new CompileResponse($request->getModel(), $this->buildUrl('embeddings'), $requestContent);
-        }
-
-        $url = $this->buildUrl('responses');
 
         foreach ($request->getComponents() as $component) {
             if (!isset($requestContent['input'])) {
@@ -61,43 +41,43 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
 
             if ($component instanceof PromptComponent) {
-                $inputType = InputType::InputText;
+                if ($request->getModel()->isEmbedding()) {
+                    $text = $component->getPrompt();
 
-                $requestContent['input'][] = [
-                    'content' => [
-                        [
-                            'type' => $inputType->getValue(),
-                            'text' => $component->getPrompt(),
+                    if ($component->getRole()->isUser()) {
+                        $requestContent['input'][] = $text;
+                    }
+                } else {
+                    $type = Type::InputText;
+
+                    $requestContent['input'][] = [
+                        'content' => [
+                            [
+                                'type' => $type->getValue(),
+                                'text' => $component->getPrompt(),
+                            ],
                         ],
-                    ],
-                    'role' => $component->getRole()->getValue(),
-                ];
-            }
-
-            if ($component instanceof FileUriComponent) {
-                $inputType = InputType::InputFile;
-
-                if ($component->isImage()) {
-                    $inputType = InputType::InputImage;
+                        'role' => $component->getRole()->getValue(),
+                    ];
                 }
+            } elseif ($component instanceof FileUriComponent) {
+                $type = Type::InputFile;
 
                 $requestContent['input'][] = [
                     'content' => [
                         [
-                            'type' => $inputType->getValue(),
+                            'type' => $type->getValue(),
                             'file_id' => $component->getUri(),
                         ],
                     ],
                     'role' => $component->getRole()->getValue(),
                 ];
-            }
-
-            if ($component instanceof SchemaComponent) {
-                $inputType = InputType::JsonSchema;
+            } elseif ($component instanceof SchemaComponent) {
+                $type = Type::JsonSchema;
 
                 $requestContent['text'] = [
                     'format' => [
-                        'type' => $inputType->getValue(),
+                        'type' => $type->getValue(),
                         'name' => $component->getName(),
                         'schema' => $component->getSchema(),
                         'strict' => $component->isStrict(),
@@ -105,6 +85,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 ];
             }
         }
+
+
 
         return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $url, $requestContent));
     }

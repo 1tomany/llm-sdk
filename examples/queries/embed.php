@@ -17,7 +17,7 @@ try {
     // Build a request of individual query components
     $compileRequest = new CompileRequest($model)->withPrompt($prompt)->withDimensions(512);
 
-    // $compileRequest->withPrompt('And what about a history of Ruby?');
+    $compileRequest->withPrompt('And what about a history of Ruby?');
 
     // Compile the query into a request that can be sent to the LLM
     $response = new CompileQueryAction($clientFactory)->act(...[
