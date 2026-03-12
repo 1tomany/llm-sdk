@@ -86,8 +86,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-
-
         return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $url, $requestContent));
     }
 
