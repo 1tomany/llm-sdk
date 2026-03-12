@@ -9,6 +9,15 @@ enum Vendor: string
     case Mock = 'mock';
     case OpenAI = 'openai';
 
+    public static function create(string|self|null $vendor): self
+    {
+        if ($vendor instanceof self) {
+            return $vendor;
+        }
+
+        return self::tryFrom(\strtolower(\trim($vendor ?? ''))) ?? self::Mock;
+    }
+
     /**
      * @return non-empty-string
      */

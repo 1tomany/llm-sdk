@@ -19,7 +19,7 @@ final readonly class ExecuteQueryAction implements ExecuteQueryActionInterface
      */
     public function act(CompileRequest|ExecuteRequest $request): ExecuteResponse
     {
-        $client = $this->clientFactory->create($request->getModel());
+        $client = $this->clientFactory->create($request->getVendor());
 
         if ($request instanceof CompileRequest) {
             $request = $client->queries()->compile($request)->toExecuteRequest();

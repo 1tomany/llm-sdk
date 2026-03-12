@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Request\File;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Request\BaseRequest;
 
 use function basename;
 use function fclose;

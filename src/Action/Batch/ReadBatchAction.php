@@ -18,6 +18,6 @@ final readonly class ReadBatchAction implements ReadBatchActionInterface
      */
     public function act(ReadRequest $request): ReadResponse
     {
-        return $this->clientFactory->create($request->getModel())->batches()->read($request);
+        return $this->clientFactory->create($request->getVendor())->batches()->read($request);
     }
 }

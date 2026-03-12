@@ -18,6 +18,6 @@ final readonly class UploadFileAction implements UploadFileActionInterface
      */
     public function act(UploadRequest $request): UploadResponse
     {
-        return $this->clientFactory->create($request->getModel())->files()->upload($request);
+        return $this->clientFactory->create($request->getVendor())->files()->upload($request);
     }
 }

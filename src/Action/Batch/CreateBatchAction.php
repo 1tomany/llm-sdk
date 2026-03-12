@@ -18,6 +18,6 @@ final readonly class CreateBatchAction implements CreateBatchActionInterface
      */
     public function act(CreateRequest $request): CreateResponse
     {
-        return $this->clientFactory->create($request->getModel())->batches()->create($request);
+        return $this->clientFactory->create($request->getVendor())->batches()->create($request);
     }
 }

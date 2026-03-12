@@ -48,15 +48,7 @@ enum Model: string
             return $model;
         }
 
-        if (null === $model) {
-            return self::Mock;
-        }
-
-        if (!$model = trim($model)) {
-            return self::Mock;
-        }
-
-        return self::tryFrom(strtolower($model)) ?? self::Mock;
+        return self::tryFrom(strtolower(trim($model ?? ''))) ?? self::Mock;
     }
 
     /**

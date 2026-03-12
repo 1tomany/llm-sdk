@@ -18,6 +18,6 @@ final readonly class DeleteFileAction implements DeleteFileActionInterface
      */
     public function act(DeleteRequest $request): DeleteResponse
     {
-        return $this->clientFactory->create($request->getModel())->files()->delete($request);
+        return $this->clientFactory->create($request->getVendor())->files()->delete($request);
     }
 }

@@ -25,6 +25,6 @@ final readonly class CompileQueryAction implements CompileQueryActionInterface
             throw new InvalidArgumentException('Compiling the query failed because no components have been added to it.');
         }
 
-        return $this->clientFactory->create($request->getModel())->queries()->compile($request);
+        return $this->clientFactory->create($request->getVendor())->queries()->compile($request);
     }
 }

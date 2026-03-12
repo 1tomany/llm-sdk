@@ -3,73 +3,33 @@
 namespace OneToMany\LlmSdk\Factory;
 
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Factory\Exception\CreatingClientFailedModelNotSupportedException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 
-use function array_find;
-use function array_values;
-use function in_array;
-use function iterator_to_array;
-use function strtolower;
-use function trim;
+use function sprintf;
 
-final class ClientFactory
+final readonly class ClientFactory
 {
-    /**
-     * @var list<ClientInterface>
-     */
-    private array $clients = [];
-
-    /**
-     * @var array<string, ClientInterface>
-     */
-    private array $modelToClientMap = [];
-
-    /**
-     * @param iterable<ClientInterface> $clients
-     */
-    public function __construct(iterable $clients)
+    public function __construct(private ContainerInterface $container)
     {
-        if ($clients instanceof \Traversable) {
-            $clients = iterator_to_array($clients);
-        }
-
-        $this->clients = array_values($clients);
-    }
-
-    public function addClient(ClientInterface $client): static
-    {
-        if (!in_array($client, $this->clients, true)) {
-            $this->clients[] = $client;
-        }
-
-        return $this;
     }
 
     /**
-     * @throws CreatingClientFailedModelNotSupportedException when a model is not supported by any clients
+     * @throws InvalidArgumentException when the vendor does not have a registered client
      */
-    public function create(string $model): ClientInterface
+    public function create(Vendor $vendor): ClientInterface
     {
-        $model = strtolower(trim($model));
-
-        if (empty($model)) {
-            throw new InvalidArgumentException('The model cannot be empty.');
+        try {
+            $client = $this->container->get($vendor->getValue());
+        } catch (ContainerExceptionInterface $e) {
         }
 
-        if (!isset($this->modelToClientMap[$model])) {
-            if (null === $client = $this->findClient($model)) {
-                throw new CreatingClientFailedModelNotSupportedException($model);
-            }
-
-            $this->modelToClientMap[$model] = $client;
+        if (!isset($client) || !$client instanceof ClientInterface) {
+            throw new InvalidArgumentException(sprintf('Creating a client failed because the vendor "%s" is not valid.', $vendor->getValue()), previous: $e ?? null);
         }
 
-        return $this->modelToClientMap[$model];
-    }
-
-    private function findClient(string $model): ?ClientInterface
-    {
-        return array_find($this->clients, fn ($c) => in_array($model, $c::getModels()));
+        return $client;
     }
 }
