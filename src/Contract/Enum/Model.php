@@ -60,12 +60,25 @@ enum Model: string
     {
         $id = match ($this) {
             // Anthropic
+            self::ClaudeOpus46 => 'claude-opus-4-6',
             self::ClaudeSonnet45 => 'claude-sonnet-4-5-20250929',
             self::ClaudeHaiku45 => 'claude-haiku-4-5-20251001',
 
             // Gemini
+            self::Gemini31ProPreview => 'gemini-3.1-pro-preview',
+            self::Gemini31FlashLitePreview => 'gemini-3.1-flash-lite-preview',
+            self::Gemini3ProPreview => 'gemini-3-pro-preview',
+            self::Gemini3FlashPreview => 'gemini-3-flash-preview',
+            self::Gemini25Pro => 'gemini-2.5-pro',
+            self::Gemini25Flash => 'gemini-2.5-flash',
             self::Gemini25FlashPreview => 'gemini-2.5-flash-preview-09-2025',
+            self::Gemini25FlashLite => 'gemini-2.5-flash-lite',
             self::Gemini25FlashLitePreview => 'gemini-2.5-flash-lite-preview-09-2025',
+            self::GeminiEmbedding2Preview => 'gemini-embedding-2-preview',
+            self::GeminiEmbedding001 => 'gemini-embedding-001',
+
+            // Mock
+            self::Mock => 'mock',
 
             // OpenAI
             self::Gpt54Pro => 'gpt-5.4-pro-2026-03-05',
@@ -78,8 +91,6 @@ enum Model: string
             self::Gpt5Mini => 'gpt-5-mini-2025-08-07',
             self::Gpt5Nano => 'gpt-5-nano-2025-08-07',
             self::Gpt41 => 'gpt-4.1-2025-04-14',
-
-            default => $this->getValue(),
         };
 
         return $id;
@@ -123,5 +134,16 @@ enum Model: string
         };
 
         return $vendor;
+    }
+
+    /**
+     * @phpstan-assert-if-true self::GeminiEmbedding2Preview|self::GeminiEmbedding001 $this
+     */
+    public function isEmbedding(): bool
+    {
+        return \in_array($this, [
+            self::GeminiEmbedding2Preview,
+            self::GeminiEmbedding001,
+        ]);
     }
 }
