@@ -73,9 +73,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ];
         }
 
-        print_r($requestContent);
-        exit;
-
         $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent');
 
         if ($request->getModel()->isEmbedding() && $request->getDimensions()) {
