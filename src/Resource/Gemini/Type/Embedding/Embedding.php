@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Embedding;
 
 final readonly class Embedding
 {

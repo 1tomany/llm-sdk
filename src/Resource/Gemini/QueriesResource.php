@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Embedding;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Embedding\Embedding;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Generation;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
