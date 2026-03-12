@@ -23,14 +23,22 @@ class CompileRequest extends BaseRequest
     private ?string $batchKey = null;
 
     /**
+     *
+     * @var list<FileUriComponent>
+     */
+    private array $files = [];
+
+    /**
+     * @var list<PromptComponent>
+     */
+    private array $prompts = [];
+    private ?PromptComponent $instructions = null;
+
+    /**
      * @var ?positive-int
      */
     private ?int $dimensions = null;
-
-    /**
-     * @var list<ComponentInterface>
-     */
-    private array $components = [];
+    private ?SchemaComponent $schema = null;
 
     public function withBatchKey(?string $batchKey): static
     {
@@ -45,6 +53,77 @@ class CompileRequest extends BaseRequest
     public function getBatchKey(): ?string
     {
         return $this->batchKey ?: null;
+    }
+
+    /**
+     * @param ?non-empty-string $fileUri
+     * @param ?non-empty-lowercase-string $format
+     *
+     * @throws InvalidArgumentException when the model is single-modality
+     */
+    public function withFileUri(?string $fileUri, ?string $format): static
+    {
+        if (null !== $fileUri && null !== $format) {
+            if (!$this->getModel()->isMultiModal()) {
+                throw new InvalidArgumentException('Files cannot be used with single-modality models.');
+            }
+
+            $this->files[] = new FileUriComponent($fileUri, $format);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return list<FileUriComponent>
+     */
+    public function getFiles(): array
+    {
+        return $this->files;
+    }
+
+    /**
+     * @throws InvalidArgumentException when a system prompt is used with an embedding model
+     */
+    public function withPrompt(?string $prompt, Role $role = Role::User): static
+    {
+        if ('' !== $prompt = trim($prompt ?? '')) {
+            $component = new PromptComponent($prompt, $role);
+
+            if ($this->getModel()->isEmbedding()) {
+                if ($component->getRole()->isSystem()) {
+                    throw new InvalidArgumentException('System prompts cannot be used with embedding models.');
+                }
+
+                $this->prompts = [$component];
+            } else {
+                if ($component->getRole()->isSystem()) {
+                    $this->instructions = $component;
+                } else {
+                    $this->prompts[] = $component;
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return list<PromptComponent>
+     */
+    public function getPrompts(): array
+    {
+        return $this->prompts;
+    }
+
+    public function usingInstructions(?string $instructions): static
+    {
+        return $this->withPrompt($instructions, Role::System);
+    }
+
+    public function getInstructions(): ?PromptComponent
+    {
+        return $this->instructions;
     }
 
     /**
@@ -75,30 +154,10 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @param ?non-empty-string $fileUri
-     * @param ?non-empty-lowercase-string $format
-     *
-     * @throws InvalidArgumentException when the model is a single-modality model
-     */
-    public function withFileUri(?string $fileUri, ?string $format): static
-    {
-        if (null !== $fileUri && null !== $format) {
-            if (!$this->getModel()->isMultiModal()) {
-                throw new InvalidArgumentException('Files cannot be added to single-modality models.');
-            }
-
-            $this->addComponent(new FileUriComponent($fileUri, $format));
-        }
-
-        return $this;
-    }
-
-    /**
      * @param ?array<string, mixed> $schema
      * @param ?non-empty-string $name
      *
      * @throws InvalidArgumentException when the model is an embedding model
-     * @throws InvalidArgumentException when the model is a single-modality model
      */
     public function usingSchema(?array $schema, ?string $name = null): static
     {
@@ -107,11 +166,7 @@ class CompileRequest extends BaseRequest
         }
 
         if ($this->getModel()->isEmbedding()) {
-            throw new InvalidArgumentException('Schemas cannot be added to a query using an embedding model.');
-        }
-
-        if (!$this->getModel()->isMultiModal()) {
-            throw new InvalidArgumentException('Schemas cannot be added to single-modality models.');
+            throw new InvalidArgumentException('Schemas cannot be used with embedding models.');
         }
 
         $name = trim($name ?? '');
@@ -122,78 +177,18 @@ class CompileRequest extends BaseRequest
             }
         }
 
-        return $this->addComponent(new SchemaComponent($schema, $name ?: null));
-    }
-
-    /**
-     * @throws InvalidArgumentException when the role is a system role and the model is an embedding model
-     */
-    public function withPrompt(?string $prompt, Role $role = Role::User): static
-    {
-        if ($prompt = trim($prompt ?? '')) {
-            if ($this->getModel()->isEmbedding() && $role->isSystem()) {
-                throw new InvalidArgumentException('System prompts cannot be added to a query using an embedding model.');
-            }
-
-            $this->addComponent(new PromptComponent($prompt, $role));
-        }
+        $this->schema = new SchemaComponent($schema, $name ?: null);
 
         return $this;
     }
 
-    public function withInstructions(?string $instructions): static
+    public function getSchema(): ?SchemaComponent
     {
-        return $this->withPrompt($instructions, Role::System);
+        return $this->schema;
     }
 
-    /**
-     * @deprecated since 0.3.3, use withPrompt() instead
-     */
-    public function withText(?string $text, Role $role = Role::User): static
-    {
-        return $this->withPrompt($text, $role);
-    }
-
-    /**
-     * @deprecated since 0.3.3, use withInstructions() instead
-     */
-    public function withSystemText(?string $text): static
-    {
-        return $this->withPrompt($text, Role::System);
-    }
-
-    public function addComponent(ComponentInterface $component): static
-    {
-        $this->components[] = $component;
-
-        return $this;
-    }
-
-    /**
-     * @return list<ComponentInterface>
-     */
-    public function getComponents(): array
-    {
-        return $this->components;
-    }
-
-    /**
-     * @phpstan-assert-if-true non-empty-list<ComponentInterface> $this->getComponents()
-     */
-    public function hasComponents(): bool
-    {
-        return 0 !== count($this->components);
-    }
-
-    /**
-     * @phpstan-assert-if-true non-empty-list<ComponentInterface> $this->getComponents()
-     */
     public function hasUserComponents(): bool
     {
-        $filter = function (ComponentInterface $c): bool {
-            return $c->getRole()->isUser();
-        };
-
-        return 0 !== count(array_filter($this->components, $filter));
+        return 0 !== (count($this->files) + count($this->prompts));
     }
 }

@@ -32,36 +32,40 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ];
 
-        foreach ($request->getComponents() as $component) {
-            if ($component instanceof PromptComponent) {
-                if ($component->getRole()->isSystem()) {
-                    $requestContent['systemInstruction'] = [
-                        'parts' => [
-                            [
-                                'text' => $component->getPrompt(),
-                            ],
-                        ],
-                    ];
-                }
+        if ($dimensions = $request->getDimensions()) {
+            $requestContent['outputDimensionality'] = $dimensions;
+        }
 
-                if ($component->getRole()->isUser()) {
-                    $requestContent[$contentKey]['parts'][] = [
-                        'text' => $component->getPrompt(),
-                    ];
-                }
-            } elseif ($component instanceof FileUriComponent) {
-                $requestContent[$contentKey]['parts'][] = [
-                    'fileData' => [
-                        'fileUri' => $component->getUri(),
-                        'mimeType' => $component->getFormat(),
+        if ($prompt = $request->getInstructions()) {
+            $requestContent['systemInstruction'] = [
+                'parts' => [
+                    [
+                        'text' => $prompt->getPrompt(),
                     ],
-                ];
-            } elseif ($component instanceof SchemaComponent) {
-                $requestContent['generationConfig'] = [
-                    'responseMimeType' => $component->getFormat(),
-                    'responseJsonSchema' => $component->getSchema(),
-                ];
-            }
+                ],
+            ];
+        }
+
+        foreach ($request->getFiles() as $file) {
+            $requestContent[$contentKey]['parts'][] = [
+                'fileData' => [
+                    'fileUri' => $file->getUri(),
+                    'mimeType' => $file->getFormat(),
+                ],
+            ];
+        }
+
+        foreach ($request->getPrompts() as $component) {
+            $requestContent[$contentKey]['parts'][] = [
+                'text' => $component->getPrompt(),
+            ];
+        }
+
+        if ($schema = $request->getSchema()) {
+            $requestContent['generationConfig'] = [
+                'responseMimeType' => $schema->getFormat(),
+                'responseJsonSchema' => $schema->getSchema(),
+            ];
         }
 
         $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent');

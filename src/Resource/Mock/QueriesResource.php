@@ -44,27 +44,29 @@ final readonly class QueriesResource implements QueriesResourceInterface
             $requestContent['dimensions'] = $dimensions;
         }
 
-        foreach ($request->getComponents() as $component) {
-            if ($component instanceof PromptComponent) {
-                $requestContent['contents'][] = [
-                    'text' => $component->getPrompt(),
-                    'role' => $component->getRole()->getValue(),
-                ];
-            }
+        if (null !== $instructions = $request->getInstructions()) {
+            $requestContent['instructions'] = $instructions->getPrompt();
+        }
 
-            if ($component instanceof FileUriComponent) {
-                $requestContent['contents'][] = [
-                    'fileUri' => $component->getUri(),
-                ];
-            }
+        foreach ($request->getFiles() as $file) {
+            $requestContent['contents'][] = [
+                'fileUri' => $file->getUri(),
+            ];
+        }
 
-            if ($component instanceof SchemaComponent) {
-                $requestContent['schema'] = [
-                    'name' => $component->getName(),
-                    'schema' => $component->getSchema(),
-                    'format' => $component->getFormat(),
-                ];
-            }
+        foreach ($request->getPrompts() as $prompt) {
+            $requestContent['contents'][] = [
+                'text' => $prompt->getPrompt(),
+                'role' => $prompt->getRole()->getValue(),
+            ];
+        }
+
+        if ($schema = $request->getSchema()) {
+            $requestContent['schema'] = [
+                'name' => $schema->getName(),
+                'schema' => $schema->getSchema(),
+                'format' => $schema->getFormat(),
+            ];
         }
 
         return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));

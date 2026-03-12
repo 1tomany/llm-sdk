@@ -15,7 +15,7 @@ try {
     $prompt = 'Write a short summary of the history of PHP';
 
     // Build a request of individual query components
-    $compileRequest = new CompileRequest($model)->withPrompt($prompt)->withDimensions(512);
+    $compileRequest = new CompileRequest($model)->withPrompt($prompt)->withDimensions(64);
 
     $compileRequest->withPrompt('And what about a history of Ruby?');
 

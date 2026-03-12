@@ -47,7 +47,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                     $text = $component->getPrompt();
 
                     if ($component->getRole()->isUser()) {
-                        $requestContent['input'][] = $text;
+                        $requestContent['input'] = $text;
                     }
                 } else {
                     $requestContent['input'][] = [
@@ -130,7 +130,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ]);
 
-        // print_r($content);
+        print_r($content);exit;
         // throw new \Exception('Not implemented');
     }
 

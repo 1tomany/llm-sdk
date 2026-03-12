@@ -86,22 +86,4 @@ final class CompileRequestTest extends TestCase
         $this->assertInstanceOf(SchemaComponent::class, $component);
         $this->assertEquals($schemaName, $component->getName());
     }
-
-    public function testHasComponentsIsFalseWhenTheContentsAreEmpty(): void
-    {
-        $compileRequest = new CompileRequest();
-
-        $this->assertFalse($compileRequest->hasComponents());
-        $this->assertCount(0, $compileRequest->getComponents());
-    }
-
-    public function testHasComponentsIsTrueWhenTheContentsAreNotEmpty(): void
-    {
-        $compileRequest = new CompileRequest()->withPrompt(...[
-            'prompt' => 'When was PHP first released?',
-        ]);
-
-        $this->assertTrue($compileRequest->hasComponents());
-        $this->assertCount(1, $compileRequest->getComponents());
-    }
 }
