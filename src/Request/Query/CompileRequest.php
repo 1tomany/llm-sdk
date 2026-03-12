@@ -184,7 +184,7 @@ class CompileRequest extends BaseRequest
         return $this->schema;
     }
 
-    public function hasUserComponents(): bool
+    public function hasComponents(): bool
     {
         return 0 !== (count($this->files) + count($this->prompts));
     }

@@ -14,8 +14,8 @@ trait CompileQueryTrait
      */
     private function compileQuery(CompileRequest $request): CompileResponse
     {
-        if (!$request->hasUserComponents()) {
-            throw new InvalidArgumentException(sprintf('Compiling the query failed because no components with the role "%s" have been added to it.', Role::User->getValue()));
+        if (!$request->hasComponents()) {
+            throw new InvalidArgumentException('Compiling the query failed because no components have been added to it.');
         }
 
         return $this->createClient($request->getVendor())->queries()->compile($request);

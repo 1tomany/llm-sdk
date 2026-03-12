@@ -7,8 +7,6 @@ use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-use function assert;
-
 #[Group('UnitTests')]
 #[Group('RequestTests')]
 #[Group('QueryTests')]
@@ -28,11 +26,11 @@ final class CompileRequestTest extends TestCase
         $this->assertNotNull($compileRequest->getSchema());
 
         // Assert: The JSON schema was added
-        $schema = $compileRequest->getSchema();
+        $component = $compileRequest->getSchema();
 
         // Assert: The title of the JSON schema is used as the name
-        $this->assertInstanceOf(SchemaComponent::class, $schema);
-        $this->assertEquals($jsonSchema['title'], $schema->getName());
+        $this->assertInstanceOf(SchemaComponent::class, $component);
+        $this->assertEquals($jsonSchema['title'], $component->getName());
     }
 
     public function testUsingSchemaSetsDefaultNameWhenTitleIsMissing(): void
@@ -44,10 +42,10 @@ final class CompileRequestTest extends TestCase
         $this->assertNotNull($compileRequest->getSchema());
 
         // Assert: The JSON schema was added
-        $schema = $compileRequest->getSchema();
+        $component = $compileRequest->getSchema();
 
-        $this->assertInstanceOf(SchemaComponent::class, $schema);
-        $this->assertEquals('JsonSchema', $schema->getName());
+        $this->assertInstanceOf(SchemaComponent::class, $component);
+        $this->assertEquals('JsonSchema', $component->getName());
     }
 
     public function testUsingSchemaWithName(): void
@@ -78,10 +76,10 @@ final class CompileRequestTest extends TestCase
         $this->assertNotNull($compileRequest->getSchema());
 
         // Assert: The JSON schema was added
-        $schema = $compileRequest->getSchema();
+        $component = $compileRequest->getSchema();
 
         // Assert: The schema name is used instead of the title
-        $this->assertInstanceOf(SchemaComponent::class, $schema);
-        $this->assertEquals($schemaName, $schema->getName());
+        $this->assertInstanceOf(SchemaComponent::class, $component);
+        $this->assertEquals($schemaName, $component->getName());
     }
 }
