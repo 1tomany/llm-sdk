@@ -12,7 +12,6 @@ use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
-use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 
 use function is_int;
 use function json_encode;
@@ -71,30 +70,11 @@ final readonly class QueriesResource implements QueriesResourceInterface
         return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
     }
 
-    // public function generate(ExecuteRequest $request): GenerateRes
-
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
-    public function execute(ExecuteRequest $request): ExecuteResponse
+    public function generate(ExecuteRequest $request): GenerateResponse
     {
-        $runtime = random_int(100, 10000);
-
-        if ($request->getModel()->isEmbedding()) {
-            $embedding = [];
-
-            if (isset($request->getRequest()['dimensions'])) {
-                $dimensions = $request->getRequest()['dimensions'];
-            }
-
-            $dimensions = !is_int($dimensions ?? null) ? 1024 : max(1, $dimensions);
-
-            for ($i = 0; $i < $dimensions; ++$i) {
-                $embedding[] = $this->faker->randomFloat();
-            }
-
-            return new EmbedResponse($request->getModel(), $embedding, $runtime);
-        }
         $response = [
             'id' => $this->generateId('query'),
             'text' => $this->faker->sentence(),
@@ -106,7 +86,27 @@ final readonly class QueriesResource implements QueriesResourceInterface
             $output = json_encode(['output' => $output]);
         }
 
-        return new GenerateResponse($request->getModel(), $response['id'], (string) $output, $response, $runtime);
+        return new GenerateResponse($request->getModel(), $response['id'], (string) $output, $response, random_int(100, 10000));
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
+     */
+    public function embed(ExecuteRequest $request): EmbedResponse
+    {
+        $embedding = [];
+
+        if (isset($request->getRequest()['dimensions'])) {
+            $dimensions = $request->getRequest()['dimensions'];
+        }
+
+        $dimensions = !is_int($dimensions ?? null) ? 1024 : max(1, $dimensions);
+
+        for ($i = 0; $i < $dimensions; ++$i) {
+            $embedding[] = $this->faker->randomFloat();
+        }
+
+        return new EmbedResponse($request->getModel(), $embedding, random_int(100, 10000));
     }
 
     /**

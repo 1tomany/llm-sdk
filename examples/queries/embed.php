@@ -1,6 +1,7 @@
 <?php
 
 use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
+use OneToMany\LlmSdk\Action\Query\EmbedContentAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
@@ -13,15 +14,22 @@ $model = trim($argv[1] ?? '') ?: 'mock-embedding';
 try {
     $prompt = 'Write a short summary of the history of PHP';
 
-    // First, compile the query to embed
+    // Build a request of individual query components
     $compileRequest = new CompileRequest($model)->withPrompt($prompt)->withDimensions(512);
 
-    // Upload the file to the LLM vendor
+    // Compile the query into a request that can be sent to the LLM
     $response = new CompileQueryAction($clientFactory)->act(...[
         'request' => $compileRequest,
     ]);
 
-    print_r($response->getRequest());
+    // Send the compiled request payload to the LLM server
+    $response = new EmbedContentAction($clientFactory)->act(...[
+        'request' => $response->toExecuteRequest(),
+    ]);
+
+    print_r($response->getEmbedding());
+
+    // print_r($response->getRequest());
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }

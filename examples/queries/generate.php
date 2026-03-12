@@ -1,12 +1,10 @@
 <?php
 
 use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
-use OneToMany\LlmSdk\Action\Query\ExecuteQueryAction;
+use OneToMany\LlmSdk\Action\Query\GenerateOutputAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
-use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
-use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
@@ -24,15 +22,9 @@ try {
         'request' => $compileRequest,
     ]);
 
-    // Now that the query is compiled, build a request to send it to the LLM. Note: You can call
-    // $response->toExecuteRequest() to automatically build the same object as the steps below.
-    $executeRequest = new ExecuteRequest($model)->withUrl($response->getUrl())->withRequest(...[
-        'request' => $response->getRequest(),
-    ]);
-
-    /** @var GenerateResponse $response */
-    $response = new ExecuteQueryAction($clientFactory)->act(...[
-        'request' => $executeRequest,
+    // Send the compiled request payload to the LLM server
+    $response = new GenerateOutputAction($clientFactory)->act(...[
+        'request' => $response->toExecuteRequest(),
     ]);
 
     successMessage('The model "%s" generated the following output for the prompt "%s":', $response->getModel()->getValue(), $prompt);
