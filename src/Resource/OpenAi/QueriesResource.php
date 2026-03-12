@@ -109,7 +109,13 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             throw new RuntimeException($response->error->message);
         }
 
-        return new GenerateResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
+        $usageResponse = new UsageResponse(
+            $response->usage->input_tokens,
+            $response->usage->cached_tokens,
+            $response->usage->output_tokens,
+        );
+
+        return new GenerateResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), $usageResponse);
     }
 
     /**
