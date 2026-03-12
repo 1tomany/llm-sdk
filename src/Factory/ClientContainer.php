@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Factory;
 
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Factory\Exception\ContainerEntryNotFoundException;
 use Psr\Container\ContainerInterface;
 
 use function array_key_exists;
@@ -38,7 +39,7 @@ final class ClientContainer implements ContainerInterface
      */
     public function get(string $id): ClientInterface
     {
-        return $this->clients[$id] ?? throw new InvalidArgumentException(sprintf('A client for the vendor "%s" could not be found.', $id));
+        return $this->clients[$id] ?? throw new ContainerEntryNotFoundException(sprintf('The entry "%s" was not found in the container.', $id));
     }
 
     /**
