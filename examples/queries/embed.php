@@ -27,7 +27,8 @@ try {
         'request' => $response->toExecuteRequest(),
     ]);
 
-    print_r($response->getEmbedding());
+    print_r($response->getUsage());
+    print_r($response->getRuntime());
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }
