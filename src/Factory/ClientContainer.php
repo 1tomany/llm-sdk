@@ -7,6 +7,11 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
+use function array_key_exists;
+use function sprintf;
+use function strtolower;
+use function trim;
+
 final class ClientContainer implements ContainerInterface
 {
     /**
@@ -25,17 +30,16 @@ final class ClientContainer implements ContainerInterface
     public function addClient(
         string|Vendor $vendor,
         ClientInterface $client,
-    ): static
-    {
+    ): static {
         if ($vendor instanceof Vendor) {
             $vendor = $vendor->getValue();
         }
 
-        if (!$vendor = \trim($vendor)) {
+        if (!$vendor = trim($vendor)) {
             throw new InvalidArgumentException('The vendor cannot be empty.');
         }
 
-        $this->clients[\strtolower($vendor)] = $client;
+        $this->clients[strtolower($vendor)] = $client;
 
         return $this;
     }
@@ -45,7 +49,7 @@ final class ClientContainer implements ContainerInterface
      */
     public function get(string $id): ClientInterface
     {
-        return $this->clients[$id] ?? throw new InvalidArgumentException(\sprintf('A client for the vendor "%s" could not be found.', $id));
+        return $this->clients[$id] ?? throw new InvalidArgumentException(sprintf('A client for the vendor "%s" could not be found.', $id));
     }
 
     /**
@@ -53,6 +57,6 @@ final class ClientContainer implements ContainerInterface
      */
     public function has(string $id): bool
     {
-        return \array_key_exists($id, $this->clients);
+        return array_key_exists($id, $this->clients);
     }
 }
