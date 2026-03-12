@@ -17,7 +17,15 @@ use function trim;
 
 class CompileRequest extends BaseRequest
 {
+    /**
+     * @var ?non-empty-string
+     */
     private ?string $batchKey = null;
+
+    /**
+     * @var ?positive-int
+     */
+    private ?int $dimensions = null;
 
     /**
      * @var list<ComponentInterface>
@@ -37,6 +45,33 @@ class CompileRequest extends BaseRequest
     public function getBatchKey(): ?string
     {
         return $this->batchKey ?: null;
+    }
+
+    /**
+     * @throws InvalidArgumentException when the model is not an embedding model
+     * @throws InvalidArgumentException when the dimensions are not a positive integer
+     */
+    public function withDimensions(int $dimensions): static
+    {
+        if (!$this->getModel()->isEmbedding()) {
+            throw new InvalidArgumentException('Output dimensions can only be added to a query using an embedding model.');
+        }
+
+        if ($dimensions < 1) {
+            throw new InvalidArgumentException('Output dimensions must be a positive integer.');
+        }
+
+        $this->dimensions = $dimensions;
+
+        return $this;
+    }
+
+    /**
+     * @return ?positive-int
+     */
+    public function getDimensions(): ?int
+    {
+        return $this->dimensions;
     }
 
     /**

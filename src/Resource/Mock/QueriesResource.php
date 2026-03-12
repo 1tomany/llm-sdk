@@ -10,10 +10,13 @@ use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
+use OneToMany\LlmSdk\Response\Query\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\GenerateResponse;
 
+use function is_int;
 use function json_encode;
+use function max;
 use function random_int;
 
 final readonly class QueriesResource implements QueriesResourceInterface
@@ -32,11 +35,15 @@ final readonly class QueriesResource implements QueriesResourceInterface
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $url = $this->generateUrl('generate');
+        $url = $this->generateUrl($request->getModel()->isEmbedding() ? 'embed' : 'generate');
 
         $requestContent = [
             'model' => $request->getModel(),
         ];
+
+        if ($dimensions = $request->getDimensions()) {
+            $requestContent['dimensions'] = $dimensions;
+        }
 
         foreach ($request->getComponents() as $component) {
             if ($component instanceof PromptComponent) {
@@ -61,7 +68,7 @@ final readonly class QueriesResource implements QueriesResourceInterface
             }
         }
 
-        return new CompileResponse($request->getModel(), $url, $this->convertToBatchRequest($request->getBatchKey(), $requestContent));
+        return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
     }
 
     /**
@@ -69,6 +76,23 @@ final readonly class QueriesResource implements QueriesResourceInterface
      */
     public function execute(ExecuteRequest $request): ExecuteResponse
     {
+        $runtime = random_int(100, 10000);
+
+        if ($request->getModel()->isEmbedding()) {
+            $embedding = [];
+
+            if (isset($request->getRequest()['dimensions'])) {
+                $dimensions = $request->getRequest()['dimensions'];
+            }
+
+            $dimensions = !is_int($dimensions ?? null) ? 1024 : max(1, $dimensions);
+
+            for ($i = 0; $i < $dimensions; ++$i) {
+                $embedding[] = $this->faker->randomFloat();
+            }
+
+            return new EmbedResponse($request->getModel(), $embedding, $runtime);
+        }
         $response = [
             'id' => $this->generateId('query'),
             'text' => $this->faker->sentence(),
@@ -80,7 +104,7 @@ final readonly class QueriesResource implements QueriesResourceInterface
             $output = json_encode(['output' => $output]);
         }
 
-        return new GenerateResponse($request->getModel(), $response['id'], (string) $output, $response, random_int(100, 10000));
+        return new GenerateResponse($request->getModel(), $response['id'], (string) $output, $response, $runtime);
     }
 
     /**
@@ -89,7 +113,7 @@ final readonly class QueriesResource implements QueriesResourceInterface
      *
      * @return array<string, mixed>
      */
-    private function convertToBatchRequest(?string $batchKey, array $request): array
+    private function convertIfBatchRequest(?string $batchKey, array $request): array
     {
         return null === $batchKey ? $request : ['batchKey' => $batchKey, 'request' => $request];
     }
