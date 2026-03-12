@@ -10,9 +10,9 @@ use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
+use OneToMany\LlmSdk\Response\Query\ContentResponse;
 use OneToMany\LlmSdk\Response\Query\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
-use OneToMany\LlmSdk\Response\Query\ContentResponse;
 
 use function is_int;
 use function json_encode;
