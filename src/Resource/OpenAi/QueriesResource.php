@@ -13,6 +13,7 @@ use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type as InputType;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
+use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
@@ -92,9 +93,9 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
-    public function execute(ExecuteRequest $request): ExecuteResponse
+    public function generate(ExecuteRequest $request): GenerateResponse
     {
-        $timer = new Stopwatch(true)->start('execute');
+        $timer = new Stopwatch(true)->start('generate');
 
         $content = $this->doPostRequest($request->getUrl(), [
             'auth_bearer' => $this->getApiKey(),
@@ -109,13 +110,12 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             throw new RuntimeException($response->error->message);
         }
 
-        $usageResponse = new UsageResponse(
-            $response->usage->input_tokens,
-            $response->usage->cached_tokens,
-            $response->usage->output_tokens,
-        );
+        return new GenerateResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
+    }
 
-        return new GenerateResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), $usageResponse);
+    public function embed(ExecuteRequest $request): EmbedResponse
+    {
+	throw new \Exception('Not implemented');
     }
 
     /**
