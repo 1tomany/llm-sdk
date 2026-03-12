@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 abstract readonly class BaseResource
 {
@@ -52,12 +53,12 @@ abstract readonly class BaseResource
     /**
      * @see OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait
      */
-    protected function handleRequestError(string $content, int $statusCode): never
+    protected function handleRequestError(ResponseInterface $response): never
     {
-        $error = $this->doDeserialize($content, Error::class, context: [
+        $error = $this->doDenormalize($response->toArray(false), Error::class, [
             UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
         ]);
 
-        throw new RuntimeException($error->message, $statusCode);
+        throw new RuntimeException($error->message, $response->getStatusCode());
     }
 }

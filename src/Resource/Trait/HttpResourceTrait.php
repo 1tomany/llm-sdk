@@ -65,7 +65,7 @@ trait HttpResourceTrait
                 // Cache and validate the content
                 $response->toArray(throw: true);
             } catch (HttpClientHttpExceptionInterface $e) {
-                $this->handleRequestError($response->getContent(false), $statusCode);
+                $this->handleRequestError($response);
             }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
@@ -107,7 +107,7 @@ trait HttpResourceTrait
     /**
      * @throws RuntimeException when the HTTP request was not successful
      */
-    abstract protected function handleRequestError(string $content, int $statusCode): never;
+    abstract protected function handleRequestError(ResponseInterface $response): never;
 
     /**
      * @template T of object
