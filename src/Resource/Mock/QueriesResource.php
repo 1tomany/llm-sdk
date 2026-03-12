@@ -12,7 +12,7 @@ use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
-use OneToMany\LlmSdk\Response\Query\GenerateResponse;
+use OneToMany\LlmSdk\Response\Query\ContentResponse;
 
 use function is_int;
 use function json_encode;
@@ -104,7 +104,7 @@ final readonly class QueriesResource implements QueriesResourceInterface
             $output = json_encode(['output' => $output]);
         }
 
-        return new GenerateResponse($request->getModel(), $response['id'], (string) $output, $response, $runtime);
+        return new ContentResponse($request->getModel(), $response['id'], (string) $output, $response, $runtime);
     }
 
     /**

@@ -10,7 +10,7 @@ use function trim;
 
 use const JSON_THROW_ON_ERROR;
 
-final readonly class GenerateResponse extends ExecuteResponse
+final readonly class ContentResponse extends ExecuteResponse
 {
     /**
      * @param non-empty-string $uri
