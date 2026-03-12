@@ -15,7 +15,7 @@ try {
     $prompt = 'Write a short summary of the history of PHP';
 
     // Build a request of individual query components
-    $compileRequest = new CompileRequest($model)->withPrompt($prompt)->withDimensions(768);
+    $compileRequest = new CompileRequest($model)->withPrompt($prompt)->usingDimensions(768);
 
     // Compile the query into a request that can be sent to the LLM
     $response = new CompileQueryAction($clientFactory)->act(...[

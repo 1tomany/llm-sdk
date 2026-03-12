@@ -128,7 +128,7 @@ class CompileRequest extends BaseRequest
     /**
      * @throws InvalidArgumentException when the model is not an embedding model
      */
-    public function withDimensions(int $dimensions): static
+    public function usingDimensions(int $dimensions): static
     {
         if (!$this->getModel()->isEmbedding()) {
             throw new InvalidArgumentException('Output dimensions can only be used with embedding models.');

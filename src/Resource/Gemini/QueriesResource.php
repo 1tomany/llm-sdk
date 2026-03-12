@@ -14,6 +14,8 @@ use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Stopwatch\Stopwatch;
 
+use function array_merge;
+
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
     /**
@@ -43,7 +45,11 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 'text' => $prompt->getPrompt(),
             ];
 
-            $requestContent['outputDimensionality'] = $request->getDimensions();
+            if ($dimensionality = $request->getDimensions()) {
+                $requestContent = array_merge($requestContent, [
+                    'outputDimensionality' => $dimensionality,
+                ]);
+            }
         }
 
         if (!$request->getModel()->isEmbedding()) {
@@ -67,7 +73,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ];
         }
 
-        // print_r($requestContent);exit;
+        print_r($requestContent);
+        exit;
 
         $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent');
 

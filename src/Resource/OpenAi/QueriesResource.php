@@ -44,7 +44,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             $requestContent['input'] = [];
 
             foreach ($request->getFiles() as $file) {
-                $type = match($file->isImage()) {
+                $type = match ($file->isImage()) {
                     true => Type::Image,
                     false => Type::File,
                 };
