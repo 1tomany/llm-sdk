@@ -11,6 +11,7 @@ use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
+use OneToMany\LlmSdk\Response\Query\GenerateResponse;
 
 use function json_encode;
 use function random_int;
@@ -76,10 +77,11 @@ final readonly class QueriesResource implements QueriesResourceInterface
         $output = $response['text'];
 
         if (isset($request->getRequest()['schema'])) {
+            /** @var non-empty-string $output */
             $output = json_encode(['output' => $output]);
         }
 
-        return new ExecuteResponse($request->getModel(), $response['id'], $output, json_encode($response), random_int(100, 10000)); // @phpstan-ignore-line
+        return new GenerateResponse($request->getModel(), $response['id'], $output, $response, random_int(100, 10000));
     }
 
     /**

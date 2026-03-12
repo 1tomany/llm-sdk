@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Response\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 
-final readonly class EmbedResponse extends GenerateResponse
+final readonly class EmbedResponse extends ExecuteResponse
 {
     /**
      * @param non-empty-list<float> $embedding

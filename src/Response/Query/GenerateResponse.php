@@ -3,30 +3,65 @@
 namespace OneToMany\LlmSdk\Response\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
-use OneToMany\LlmSdk\Response\BaseResponse;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 
-use function max;
+use function json_decode;
+use function trim;
 
-readonly class GenerateResponse extends BaseResponse
+use const JSON_THROW_ON_ERROR;
+
+final readonly class GenerateResponse extends ExecuteResponse
 {
+    /**
+     * @param non-empty-string $uri
+     * @param array<mixed> $response
+     */
     public function __construct(
         Model $model,
-        private int|float $runtime = 0,
-        private UsageResponse $usage = new UsageResponse(),
+        private string $uri,
+        private string $output,
+        private array $response = [],
+        int|float $runtime = 0,
+        UsageResponse $usage = new UsageResponse(),
     ) {
-        parent::__construct($model);
+        parent::__construct($model, $runtime, $usage);
     }
 
     /**
-     * @return non-negative-int
+     * @return non-empty-string
      */
-    public function getRuntime(): int
+    public function getUri(): string
     {
-        return max(0, (int) $this->runtime);
+        return $this->uri;
     }
 
-    public function getUsage(): UsageResponse
+    public function getOutput(): string
     {
-        return $this->usage;
+        return $this->output;
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getResponse(): array
+    {
+        return $this->response;
+    }
+
+    /**
+     * @return list<array<string, mixed>>|array<string, mixed>
+     *
+     * @throws RuntimeException when decoding the output fails
+     */
+    public function toRecord(): array
+    {
+        try {
+            /** @var list<array<string, mixed>>|array<string, mixed> $record */
+            $record = json_decode(trim($this->output), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new RuntimeException('Decoding the output failed.', previous: $e);
+        }
+
+        return $record;
     }
 }
