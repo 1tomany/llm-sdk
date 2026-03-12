@@ -37,7 +37,7 @@ try {
         'request' => $executeRequest,
     ]);
 
-    successMessage('The model "%s" generated the following output for the prompt "%s":', $response->getModel(), $prompt);
+    successMessage('The model "%s" generated the following output for the prompt "%s":', $response->getModel()->getName(), $prompt);
     successMessage(sprintf("\n%s", $response->getOutput()));
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
