@@ -14,15 +14,12 @@ class BaseRequest
 
     public function forModel(string|Model|null $model): static
     {
-        $this->model = trim($model ?? '') ?: 'mock';
+        $this->model = Model::create($model);
 
         return $this;
     }
 
-    /**
-     * @return non-empty-string
-     */
-    public function getModel(): string
+    public function getModel(): Model
     {
         return $this->model;
     }

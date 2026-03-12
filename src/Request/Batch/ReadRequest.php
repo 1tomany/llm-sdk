@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\Batch;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Request\BaseRequest;
 
 class ReadRequest extends BaseRequest
@@ -10,7 +11,7 @@ class ReadRequest extends BaseRequest
      * @param non-empty-string $uri
      */
     public function __construct(
-        string $model,
+        string|Model|null $model,
         private string $uri,
     ) {
         parent::__construct($model);

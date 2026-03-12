@@ -42,8 +42,12 @@ enum Model: string
     case Gpt5Nano = 'gpt-5-nano';
     case Gpt41 = 'gpt-4.1';
 
-    public static function create(?string $model): self
+    public static function create(string|self|null $model): self
     {
+        if ($model instanceof self) {
+            return $model;
+        }
+
         if (null === $model) {
             return self::Mock;
         }
