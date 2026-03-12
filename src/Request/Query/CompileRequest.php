@@ -4,7 +4,9 @@ namespace OneToMany\LlmSdk\Request\Query;
 
 use OneToMany\LlmSdk\Contract\Request\Query\Component\ComponentInterface;
 use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
+use OneToMany\LlmSdk\Request\Query\Component\DimensionsComponent;
 use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
@@ -55,6 +57,10 @@ class CompileRequest extends BaseRequest
      */
     public function usingSchema(?array $schema, ?string $name = null): static
     {
+        if ($this->getModel()->isEmbedding()) {
+            throw new InvalidArgumentException('A schema cannot be added to a query using an embedding model.');
+        }
+
         if (!$schema) {
             return $this;
         }
@@ -73,6 +79,10 @@ class CompileRequest extends BaseRequest
     public function withPrompt(?string $prompt, Role $role = Role::User): static
     {
         if ($prompt = trim($prompt ?? '')) {
+            if ($this->getModel()->isEmbedding() && $role->isSystem()) {
+                throw new InvalidArgumentException('System prompts cannot be added to a query using an embedding model.');
+            }
+
             $this->addComponent(new PromptComponent($prompt, $role));
         }
 
@@ -98,6 +108,19 @@ class CompileRequest extends BaseRequest
     public function withSystemText(?string $text): static
     {
         return $this->withPrompt($text, Role::System);
+    }
+
+    public function withDimensions(int $dimensions): static
+    {
+        if (!$this->getModel()->isEmbedding()) {
+            throw new InvalidArgumentException('Output dimensions can only be added to a query using an embedding model.');
+        }
+
+        if ($dimensions < 1) {
+            throw new InvalidArgumentException('The output dimensions must be a positive integer.');
+        }
+
+        return $this->addComponent(new DimensionsComponent($dimensions));
     }
 
     public function addComponent(ComponentInterface $component): static

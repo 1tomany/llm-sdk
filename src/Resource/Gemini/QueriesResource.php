@@ -21,10 +21,10 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $url = $this->buildModelUrl($request->getModel(), 'generateContent');
+        $requestContentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
 
         $requestContent = [
-            'contents' => [],
+            $requestContentKey => [],
         ];
 
         foreach ($request->getComponents() as $component) {
@@ -40,7 +40,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 }
 
                 if ($component->getRole()->isUser()) {
-                    $requestContent['contents'][] = [
+                    $requestContent[$requestContentKey][] = [
                         'parts' => [
                             [
                                 'text' => $component->getPrompt(),
@@ -51,11 +51,12 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
 
             if ($component instanceof FileUriComponent) {
-                $requestContent['contents'][] = [
+                $requestContent[$requestContentKey][] = [
                     'parts' => [
                         [
                             'fileData' => [
                                 'fileUri' => $component->getUri(),
+                                'mimeType' => $component->getFormat(),
                             ],
                         ],
                     ],
@@ -70,7 +71,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-        return new CompileResponse($request->getModel(), $url, $this->convertToBatchRequest($request->getBatchKey(), $requestContent));
+        return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertToBatchRequest($request->getBatchKey(), $requestContent));
     }
 
     /**

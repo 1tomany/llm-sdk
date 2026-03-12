@@ -68,8 +68,8 @@ abstract readonly class BaseResource
     /**
      * @return non-empty-string
      */
-    protected function buildModelUrl(Model $model, string $action): string
+    protected function buildModelUrl(Model $model): string
     {
-        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $action));
+        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $model->isEmbedding() ? 'embedContent' : 'generateContent'));
     }
 }
