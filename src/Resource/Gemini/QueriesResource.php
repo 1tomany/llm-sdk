@@ -8,7 +8,6 @@ use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
 use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Content\GenerateContentResponse;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Generation;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
@@ -22,10 +21,10 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $contentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
+        $url = $this->buildModelUrl($request->getModel(), 'generateContent');
 
         $requestContent = [
-            $contentKey => [
+            'contents' => [
                 'parts' => [],
             ],
         ];
@@ -43,14 +42,14 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 }
 
                 if ($component->getRole()->isUser()) {
-                    $requestContent[$contentKey]['parts'][] = [
+                    $requestContent['contents']['parts'][] = [
                         'text' => $component->getPrompt(),
                     ];
                 }
             }
 
             if ($component instanceof FileUriComponent) {
-                $requestContent[$contentKey]['parts'][] = [
+                $requestContent['contents']['parts'][] = [
                     'fileData' => [
                         'fileUri' => $component->getUri(),
                         'mimeType' => $component->getFormat(),
@@ -66,11 +65,11 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-        if ($request->getModel()->isEmbedding() && $request->getDimensions()) {
-            $requestContent['outputDimensionality'] = $request->getDimensions();
-        }
+        // if ($request->getModel()->isEmbedding() && $request->getDimensions()) {
+        //     $requestContent['outputDimensionality'] = $request->getDimensions();
+        // }
 
-        return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
+        return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
     }
 
     /**
@@ -90,6 +89,11 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         $response = $this->doDenormalize($content, Generation::class);
 
         return new ExecuteResponse($request->getModel(), $response->responseId, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usageMetadata->promptTokenCount, $response->usageMetadata->cachedContentTokenCount, $response->usageMetadata->outputTokenCount));
+    }
+
+    public function embed(): void
+    {
+
     }
 
     /**
