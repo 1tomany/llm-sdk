@@ -103,6 +103,26 @@ trait HttpResourceTrait
     /**
      * @template T of object
      *
+     * @param array<mixed> $content
+     * @param class-string<T> $type
+     * @param array<string, mixed> $context
+     *
+     * @return T
+     */
+    protected function doDenormalize(array $content, string $type, array $context = []): object
+    {
+        try {
+            $object = $this->serializer->denormalize($content, $type, null, $context);
+        } catch (SerializerExceptionInterface $e) {
+            throw new RuntimeException($e->getMessage(), previous: $e);
+        }
+
+        return $object;
+    }
+
+    /**
+     * @template T of object
+     *
      * @param class-string<T> $type
      * @param array<string, mixed> $context
      *
