@@ -3,14 +3,11 @@
 namespace OneToMany\LlmSdk\Factory;
 
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
-use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
 use function array_key_exists;
 use function sprintf;
-use function strtolower;
-use function trim;
 
 final class ClientContainer implements ContainerInterface
 {
