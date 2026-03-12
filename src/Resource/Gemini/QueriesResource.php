@@ -9,6 +9,7 @@ use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Content\GenerateContentResponse;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Generation;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\UsageResponse;
@@ -69,7 +70,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             $requestContent['outputDimensionality'] = $request->getDimensions();
         }
 
-        return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertToBatchRequest($request->getBatchKey(), $requestContent));
+        return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
     }
 
     /**
@@ -86,7 +87,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ]);
 
-        $response = $this->doDenormalize($content, GenerateContentResponse::class);
+        $response = $this->doDenormalize($content, Generation::class);
 
         return new ExecuteResponse($request->getModel(), $response->responseId, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usageMetadata->promptTokenCount, $response->usageMetadata->cachedContentTokenCount, $response->usageMetadata->outputTokenCount));
     }
@@ -97,7 +98,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      *
      * @return array<string, mixed>
      */
-    private function convertToBatchRequest(?string $batchKey, array $request): array
+    private function convertIfBatchRequest(?string $batchKey, array $request): array
     {
         return null === $batchKey ? $request : ['key' => $batchKey, 'request' => $request];
     }

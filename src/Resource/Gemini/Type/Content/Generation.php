@@ -9,7 +9,7 @@ use function implode;
 use function sprintf;
 use function trim;
 
-final readonly class GenerateContentResponse
+final readonly class Generation
 {
     /**
      * @param list<Candidate> $candidates
