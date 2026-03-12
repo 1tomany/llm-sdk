@@ -3,6 +3,7 @@
 namespace OneToMany\LlmSdk\Client\Mock;
 
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
@@ -22,9 +23,9 @@ final class MockClient implements ClientInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
-    public static function getModels(): array
+    public static function getVendor(): Vendor
     {
-        return ['mock'];
+        return Vendor::Mock;
     }
 
     /**

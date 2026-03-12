@@ -20,26 +20,18 @@ final class ClientContainer implements ContainerInterface
     private array $clients = [];
 
     /**
-     * @param array<non-empty-string, ClientInterface> $clients
+     * @param list<ClientInterface> $clients
      */
     public function __construct(array $clients = [])
     {
-        $this->clients = $clients;
+        foreach ($clients as $client) {
+            $this->addClient($client);
+        }
     }
 
-    public function addClient(
-        string|Vendor $vendor,
-        ClientInterface $client,
-    ): static {
-        if ($vendor instanceof Vendor) {
-            $vendor = $vendor->getValue();
-        }
-
-        if (!$vendor = trim($vendor)) {
-            throw new InvalidArgumentException('The vendor cannot be empty.');
-        }
-
-        $this->clients[strtolower($vendor)] = $client;
+    public function addClient(ClientInterface $client): static
+    {
+        $this->clients[$client::getVendor()->getValue()] = $client;
 
         return $this;
     }
