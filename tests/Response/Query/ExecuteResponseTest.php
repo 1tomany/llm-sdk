@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Tests\Response\Query;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use PHPUnit\Framework\Attributes\Group;
@@ -17,6 +18,6 @@ final class ExecuteResponseTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Decoding the output failed.');
 
-        new ExecuteResponse('test-model', 'id_123', '{"invalid')->toRecord();
+        new ExecuteResponse(Model::Mock, 'id_123', '{"invalid')->toRecord();
     }
 }
