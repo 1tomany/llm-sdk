@@ -29,11 +29,32 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $url = $this->buildUrl('responses');
-
         $requestContent = [
-            'model' => $request->getModel(),
+            'model' => $request->getModel()->getId(),
         ];
+
+
+        if ($request->getModel()->isEmbedding()) {
+            $requestContent['input'] = [];
+
+            foreach ($request->getComponents() as $component) {
+                if ($component instanceof PromptComponent) {
+                    $text = $component->getPrompt();
+
+                    if ($component->getRole()->isUser()) {
+                        $requestContent['input'][] = $text;
+                    }
+                }
+            }
+
+            if ($dimensions = $request->getDimensions()) {
+                $requestContent['dimensions'] = $dimensions;
+            }
+
+            return new CompileResponse($request->getModel(), $this->buildUrl('embeddings'), $requestContent);
+        }
+
+        $url = $this->buildUrl('responses');
 
         foreach ($request->getComponents() as $component) {
             if (!isset($requestContent['input'])) {
@@ -86,7 +107,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-        return new CompileResponse($request->getModel(), $url, $this->convertToBatchRequest($request->getBatchKey(), $url, $requestContent));
+        return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $url, $requestContent));
     }
 
     /**
@@ -112,8 +133,21 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         return new GenerateResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
     }
 
+    /**
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
+     */
     public function embed(ExecuteRequest $request): EmbedResponse
     {
+        $timer = new Stopwatch(true)->start('generate');
+
+        $content = $this->doPostRequest($request->getUrl(), [
+            'auth_bearer' => $this->getApiKey(),
+            'json' => [
+                ...$request->getRequest(),
+            ],
+        ]);
+
+        print_r($content);
         throw new \Exception('Not implemented');
     }
 
@@ -124,8 +158,14 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      *
      * @return array<string, mixed>
      */
-    private function convertToBatchRequest(?string $batchKey, string $url, array $request): array
+    private function convertIfBatchRequest(?string $batchKey, string $url, array $request): array
     {
-        return null === $batchKey ? $request : ['custom_id' => $batchKey, 'method' => 'POST', 'url' => parse_url($url, PHP_URL_PATH), 'body' => $request];
+        $url = parse_url($url, PHP_URL_PATH);
+
+        if (!$batchKey || !$url) {
+            return $request;
+        }
+
+        return ['custom_id' => $batchKey, 'method' => 'POST', 'url' => $url, 'body' => $request];
     }
 }
