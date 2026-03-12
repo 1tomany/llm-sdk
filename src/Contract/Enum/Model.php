@@ -41,6 +41,9 @@ enum Model: string
     case Gpt5Mini = 'gpt-5-mini';
     case Gpt5Nano = 'gpt-5-nano';
     case Gpt41 = 'gpt-4.1';
+    case GptEmbeddingAda002 = 'text-embedding-ada-002';
+    case GptEmbedding3Small = 'text-embedding-3-small';
+    case GptEmbedding3Large = 'text-embedding-3-large';
 
     public static function create(string|self|null $model): self
     {
@@ -106,6 +109,9 @@ enum Model: string
             self::Gpt5Mini => 'gpt-5-mini-2025-08-07',
             self::Gpt5Nano => 'gpt-5-nano-2025-08-07',
             self::Gpt41 => 'gpt-4.1-2025-04-14',
+            self::GptEmbeddingAda002 => 'text-embedding-ada-002',
+            self::GptEmbedding3Small => 'text-embedding-3-small',
+            self::GptEmbedding3Large => 'text-embedding-3-large',
         };
 
         return $id;
@@ -147,13 +153,16 @@ enum Model: string
             self::Gpt5Mini => Vendor::OpenAI,
             self::Gpt5Nano => Vendor::OpenAI,
             self::Gpt41 => Vendor::OpenAI,
+            self::GptEmbeddingAda002 => Vendor::OpenAI,
+            self::GptEmbedding3Small => Vendor::OpenAI,
+            self::GptEmbedding3Large => Vendor::OpenAI,
         };
 
         return $vendor;
     }
 
     /**
-     * @phpstan-assert-if-true self::GeminiEmbedding2Preview|self::GeminiEmbedding001|self::MockEmbedding $this
+     * @phpstan-assert-if-true self::GeminiEmbedding2Preview|self::GeminiEmbedding001|self::MockEmbedding|self::GptEmbeddingAda002|self::GptEmbedding3Small|self::GptEmbedding3Large $this
      */
     public function isEmbedding(): bool
     {
@@ -161,6 +170,9 @@ enum Model: string
             self::GeminiEmbedding2Preview,
             self::GeminiEmbedding001,
             self::MockEmbedding,
+            self::GptEmbeddingAda002,
+            self::GptEmbedding3Small,
+            self::GptEmbedding3Large,
         ]);
     }
 

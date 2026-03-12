@@ -15,7 +15,6 @@ use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
-use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -115,7 +114,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
 
     public function embed(ExecuteRequest $request): EmbedResponse
     {
-	throw new \Exception('Not implemented');
+        throw new \Exception('Not implemented');
     }
 
     /**
