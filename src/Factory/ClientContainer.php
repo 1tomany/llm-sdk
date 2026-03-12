@@ -3,7 +3,6 @@
 namespace OneToMany\LlmSdk\Factory;
 
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Factory\Exception\ContainerEntryNotFoundException;
 use Psr\Container\ContainerInterface;
 
