@@ -1,16 +1,18 @@
 <?php
 
-namespace OneToMany\LlmSdk\Response\Query;
+namespace OneToMany\LlmSdk\Response\Query\Content;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\RuntimeException;
+use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
+use OneToMany\LlmSdk\Response\Query\UsageResponse;
 
 use function json_decode;
 use function trim;
 
 use const JSON_THROW_ON_ERROR;
 
-final readonly class ContentResponse extends ExecuteResponse
+final readonly class GenerateResponse extends ExecuteResponse
 {
     /**
      * @param non-empty-string $uri

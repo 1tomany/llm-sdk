@@ -13,7 +13,7 @@ use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type as InputType;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
-use OneToMany\LlmSdk\Response\Query\ContentResponse;
+use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\UsageResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -109,7 +109,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             throw new RuntimeException($response->error->message);
         }
 
-        return new ContentResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
+        return new GenerateResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
     }
 
     /**

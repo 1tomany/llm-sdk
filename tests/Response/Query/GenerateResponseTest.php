@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Tests\Response\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Response\Query\ContentResponse;
+use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
@@ -18,6 +18,6 @@ final class GenerateResponseTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Decoding the output failed.');
 
-        new ContentResponse(Model::Mock, 'id_123', '{"invalid')->toRecord();
+        new GenerateResponse(Model::Mock, 'id_123', '{"invalid')->toRecord();
     }
 }

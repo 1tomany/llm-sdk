@@ -10,8 +10,8 @@ use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
-use OneToMany\LlmSdk\Response\Query\ContentResponse;
-use OneToMany\LlmSdk\Response\Query\EmbedResponse;
+use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
+use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 
 use function is_int;
@@ -71,6 +71,8 @@ final readonly class QueriesResource implements QueriesResourceInterface
         return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
     }
 
+    // public function generate(ExecuteRequest $request): GenerateRes
+
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
@@ -104,7 +106,7 @@ final readonly class QueriesResource implements QueriesResourceInterface
             $output = json_encode(['output' => $output]);
         }
 
-        return new ContentResponse($request->getModel(), $response['id'], (string) $output, $response, $runtime);
+        return new GenerateResponse($request->getModel(), $response['id'], (string) $output, $response, $runtime);
     }
 
     /**
