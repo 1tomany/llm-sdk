@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Action\Query\Trait;
 
-use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
