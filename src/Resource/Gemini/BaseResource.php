@@ -57,8 +57,8 @@ abstract readonly class BaseResource
             $error = $this->doDenormalize($response->toArray(false), Error::class, [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
             ]);
-        } catch (HttpClientDecodingExceptionInterface|LlmSdkExceptionInterface) {
-            $error = new Error($response->getStatusCode(), $response->getContent(false));
+        } catch (HttpClientDecodingExceptionInterface|LlmSdkExceptionInterface $e) {
+            $error = new Error($response->getStatusCode(), $response->getContent(false) ?: $e->getMessage());
         }
 
         throw new RuntimeException($error->getMessage(), $response->getStatusCode());

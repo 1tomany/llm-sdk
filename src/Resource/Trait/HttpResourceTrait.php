@@ -64,7 +64,9 @@ trait HttpResourceTrait
 
             try {
                 // Cache and validate the content
-                $response->toArray(throw: true);
+                if ($response->getContent(true)) {
+                    $response->toArray(true);
+                }
             } catch (HttpClientDecodingExceptionInterface|HttpClientHttpExceptionInterface $e) {
                 $this->handleRequestError($response);
             }
