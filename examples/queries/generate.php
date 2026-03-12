@@ -22,8 +22,6 @@ try {
         'request' => $compileRequest,
     ]);
 
-    print_r($response->toExecuteRequest());exit;
-
     // Send the compiled request payload to the LLM server
     $response = new GenerateOutputAction($clientFactory)->act(...[
         'request' => $response->toExecuteRequest(),
