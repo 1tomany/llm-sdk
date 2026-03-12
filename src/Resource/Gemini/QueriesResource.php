@@ -4,9 +4,6 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
-use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
-use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
-use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Embedding;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Generation;

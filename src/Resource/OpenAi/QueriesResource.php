@@ -130,7 +130,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ]);
 
-        print_r($content);exit;
+        print_r($content);
+        exit;
         // throw new \Exception('Not implemented');
     }
 
