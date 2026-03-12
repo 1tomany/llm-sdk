@@ -6,6 +6,7 @@ use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Embedding\Embedding;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
@@ -13,6 +14,7 @@ use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
+use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 use function parse_url;
@@ -128,9 +130,11 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ]);
 
-        print_r($content);
-        exit;
-        // throw new \Exception('Not implemented');
+        $embedding = $this->doDenormalize($content, Embedding::class, [
+           UnwrappingDenormalizer::UNWRAP_PATH => '[data][0]',
+        ]);
+
+        return new EmbedResponse($request->getModel(), $embedding->embedding);
     }
 
     /**

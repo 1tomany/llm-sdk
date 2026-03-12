@@ -41,9 +41,9 @@ enum Model: string
     case Gpt5Mini = 'gpt-5-mini';
     case Gpt5Nano = 'gpt-5-nano';
     case Gpt41 = 'gpt-4.1';
-    case GptEmbeddingAda002 = 'text-embedding-ada-002';
-    case GptEmbedding3Small = 'text-embedding-3-small';
-    case GptEmbedding3Large = 'text-embedding-3-large';
+    case GptEmbeddingAda002 = 'gpt-embedding-ada-002';
+    case GptEmbedding3Small = 'gpt-embedding-3-small';
+    case GptEmbedding3Large = 'gpt-embedding-3-large';
 
     public static function create(string|self|null $model): self
     {
