@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Factory;
 
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
 final class ClientContainer implements ContainerInterface
@@ -18,11 +19,7 @@ final class ClientContainer implements ContainerInterface
      */
     public function __construct(array $clients = [])
     {
-        foreach ($clients as $vendor => $client) {
-            if ($client instanceof ClientInterface) {
-                $this->addClient($vendor, $client);
-            }
-        }
+        $this->clients = $clients;
     }
 
     public function addClient(
@@ -34,7 +31,11 @@ final class ClientContainer implements ContainerInterface
             $vendor = $vendor->getValue();
         }
 
-        $this->clients[$vendor] = $client;
+        if (!$vendor = \trim($vendor)) {
+            throw new InvalidArgumentException('The vendor cannot be empty.');
+        }
+
+        $this->clients[\strtolower($vendor)] = $client;
 
         return $this;
     }
@@ -44,12 +45,10 @@ final class ClientContainer implements ContainerInterface
      */
     public function get(string $id): ClientInterface
     {
-	throw new \Exception('Not implemented');
+        return $this->clients[$id] ?? throw new InvalidArgumentException(\sprintf('A client for the vendor "%s" could not be found.', $id));
     }
 
     /**
-     * @phpstan-assert-if-true ClientInterface $this->get()
-     *
      * @see Psr\Container\ContainerInterface
      */
     public function has(string $id): bool
