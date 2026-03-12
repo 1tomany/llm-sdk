@@ -131,27 +131,4 @@ trait HttpResourceTrait
 
         return $object;
     }
-
-    /**
-     * @template T of object
-     *
-     * @param class-string<T> $type
-     * @param array<string, mixed> $context
-     *
-     * @return T
-     */
-    protected function doDeserialize(
-        string $content,
-        string $type,
-        string $format = 'json',
-        array $context = [],
-    ): object {
-        try {
-            $object = $this->serializer->deserialize($content, $type, $format, $context);
-        } catch (SerializerExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), previous: $e);
-        }
-
-        return $object;
-    }
 }
