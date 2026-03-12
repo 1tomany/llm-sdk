@@ -33,7 +33,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             'model' => $request->getModel()->getId(),
         ];
 
-
         if ($request->getModel()->isEmbedding()) {
             $requestContent['input'] = [];
 
