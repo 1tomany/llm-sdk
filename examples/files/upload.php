@@ -16,13 +16,13 @@ if (!is_file($filePath)) {
     errorMessage('Usage: php %s <file-path> <model>', basename(__FILE__));
 }
 
-$model = trim($argv[2] ?? '') ?: 'mock';
+$vendor = trim($argv[2] ?? '') ?: 'mock';
 
 try {
     $fileName = basename($filePath);
 
     // Create a request to upload the file
-    $uploadRequest = new UploadRequest($model)->atPath($filePath)->withFormat(...[
+    $uploadRequest = new UploadRequest($vendor)->atPath($filePath)->withFormat(...[
         'format' => mime_content_type($filePath) ?: 'application/octet-stream',
     ]);
 
@@ -31,17 +31,17 @@ try {
         'request' => $uploadRequest,
     ]);
 
-    successMessage('The file "%s" was successfully uploaded to the model "%s" with URI "%s".', $fileName, $response->getModel(), $response->getUri());
+    successMessage('The file "%s" was successfully uploaded to %s with URI "%s".', $fileName, $response->getVendor()->getName(), $response->getUri());
 
     // Create a request to delete the file
-    $deleteRequest = new DeleteRequest($model, $response->getUri());
+    $deleteRequest = new DeleteRequest($vendor, $response->getUri());
 
     // Delete the file from the LLM vendor
     $response = new DeleteFileAction($clientFactory)->act(...[
         'request' => $deleteRequest,
     ]);
 
-    successMessage('The file "%s" was successfully deleted from the model "%s".', $fileName, $response->getModel());
+    successMessage('The file "%s" was successfully deleted from %s.', $fileName, $response->getVendor()->getName());
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }
