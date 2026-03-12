@@ -2,6 +2,9 @@
 
 namespace OneToMany\LlmSdk\Contract\Enum;
 
+use function strtolower;
+use function trim;
+
 enum Vendor: string
 {
     case Anthropic = 'anthropic';
@@ -15,7 +18,7 @@ enum Vendor: string
             return $vendor;
         }
 
-        return self::tryFrom(\strtolower(\trim($vendor ?? ''))) ?? self::Mock;
+        return self::tryFrom(strtolower(trim($vendor ?? ''))) ?? self::Mock;
     }
 
     /**
