@@ -10,7 +10,6 @@ use OneToMany\LlmSdk\Response\Query\CompileResponse;
 use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 
-use function assert;
 use function is_int;
 use function json_encode;
 use function max;
@@ -105,8 +104,6 @@ final readonly class QueriesResource implements QueriesResourceInterface
         for ($i = 0; $i < $dimensions; ++$i) {
             $embedding[] = $this->faker->randomFloat();
         }
-
-        assert([] !== $embedding);
 
         return new EmbedResponse($request->getModel(), $embedding, random_int(100, 10000));
     }

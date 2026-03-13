@@ -18,8 +18,12 @@ final readonly class EmbedResponse extends ExecuteResponse
      * @var non-empty-list<float>
      */
     private array $embedding;
-    private float $l2Norm;
+
+    /**
+     * @var positive-int
+     */
     private int $dimensions;
+    private float $l2Norm;
 
     /**
      * @var non-empty-list<float>
@@ -27,7 +31,7 @@ final readonly class EmbedResponse extends ExecuteResponse
     private array $embeddingL2Norm;
 
     /**
-     * @param non-empty-list<float> $embedding
+     * @param list<float> $embedding
      */
     public function __construct(
         Model $model,
@@ -37,8 +41,10 @@ final readonly class EmbedResponse extends ExecuteResponse
     ) {
         parent::__construct($model, $runtime, $usage);
 
-        if (0 === $dimensions = count($embedding)) {
+        if ([] === $embedding) {
             throw new InvalidArgumentException('The embedding vector cannot be empty.');
+        } else {
+            $dimensions = count($embedding);
         }
 
         $this->embedding = $embedding;
