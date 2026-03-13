@@ -173,7 +173,7 @@ enum Model: string
         ]);
     }
 
-    public function supportsFileInputs(): bool
+    public function supportsFiles(): bool
     {
         return !in_array($this, [
             self::GeminiEmbedding001,
@@ -181,15 +181,5 @@ enum Model: string
             self::GptEmbedding3Small,
             self::GptEmbedding3Large,
         ]);
-    }
-
-    public function supportsInstructions(): bool
-    {
-        return !$this->isEmbedding();
-    }
-
-    public function supportsStructuredOutput(): bool
-    {
-        return !$this->isEmbedding();
     }
 }

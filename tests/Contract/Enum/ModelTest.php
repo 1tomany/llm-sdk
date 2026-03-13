@@ -52,6 +52,9 @@ final class ModelTest extends TestCase
             [Model::Gpt5Mini, Vendor::OpenAI],
             [Model::Gpt5Nano, Vendor::OpenAI],
             [Model::Gpt41, Vendor::OpenAI],
+            [Model::GptEmbeddingAda002, Vendor::OpenAI],
+            [Model::GptEmbedding3Small, Vendor::OpenAI],
+            [Model::GptEmbedding3Large, Vendor::OpenAI],
         ];
 
         return $provider;
@@ -96,6 +99,9 @@ final class ModelTest extends TestCase
             [Model::Gpt5Mini, false],
             [Model::Gpt5Nano, false],
             [Model::Gpt41, false],
+            [Model::GptEmbeddingAda002, true],
+            [Model::GptEmbedding3Small, true],
+            [Model::GptEmbedding3Large, true],
         ];
 
         return $provider;

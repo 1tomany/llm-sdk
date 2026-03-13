@@ -64,7 +64,7 @@ class CompileRequest extends BaseRequest
     public function withFileUri(?string $fileUri, ?string $format): static
     {
         if (null !== $fileUri && null !== $format) {
-            if (!$this->getModel()->supportsFileInputs()) {
+            if (!$this->getModel()->supportsFiles()) {
                 throw new InvalidArgumentException(sprintf('The model "%s" does not support file inputs.', $this->getModel()->getValue()));
             }
 
@@ -90,7 +90,7 @@ class CompileRequest extends BaseRequest
         if ('' !== $prompt = trim($prompt ?? '')) {
             $component = new PromptComponent($prompt, $role);
 
-            if (!$this->getModel()->supportsInstructions()) {
+            if ($this->getModel()->isEmbedding()) {
                 if ($component->getRole()->isSystem()) {
                     throw new InvalidArgumentException(sprintf('The model "%s" does not support instructions.', $this->getModel()->getValue()));
                 }
@@ -164,7 +164,7 @@ class CompileRequest extends BaseRequest
             return $this;
         }
 
-        if (!$this->getModel()->supportsStructuredOutput()) {
+        if ($this->getModel()->isEmbedding()) {
             throw new InvalidArgumentException(sprintf('The model "%s" does not support structured output.', $this->getModel()->getValue()));
         }
 
