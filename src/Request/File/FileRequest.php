@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\File;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 
@@ -13,6 +14,11 @@ class FileRequest
         string|Vendor|null $vendor = Vendor::Mock,
     ) {
         $this->forVendor($vendor);
+    }
+
+    public static function fromModel(string|Model|null $model = Model::Mock): self
+    {
+        return new self(Model::create($model)->getVendor());
     }
 
     /**
