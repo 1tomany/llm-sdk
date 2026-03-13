@@ -161,9 +161,6 @@ enum Model: string
         return $vendor;
     }
 
-    /**
-     * @phpstan-assert-if-true self::GeminiEmbedding2Preview|self::GeminiEmbedding001|self::MockEmbedding|self::GptEmbeddingAda002|self::GptEmbedding3Small|self::GptEmbedding3Large $this
-     */
     public function isEmbedding(): bool
     {
         return in_array($this, [
@@ -176,9 +173,6 @@ enum Model: string
         ]);
     }
 
-    /**
-     * @phpstan-assert-if-false self::GeminiEmbedding001|self::GptEmbeddingAda002|self::GptEmbedding3Small|self::GptEmbedding3Large $this
-     */
     public function isMultiModal(): bool
     {
         return !in_array($this, [
