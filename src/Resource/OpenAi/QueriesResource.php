@@ -38,6 +38,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             foreach ($request->getPrompts() as $prompt) {
                 $requestContent['input'] = $prompt->getPrompt();
 
+                // Adjust the number of output dimensions
                 if ($dimensions = $request->getDimensions()) {
                     $requestContent['dimensions'] = $dimensions;
                 }
@@ -117,7 +118,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         }
 
         if (!$output = $response->getOutput()) {
-            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $request->getModel()->getValue()));
+            throw new RuntimeException(\sprintf('The model "%s" failed to generate any output.', $request->getModel()->getValue()));
         }
 
         return new GenerateResponse($request->getModel(), $response->id, $output, $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));

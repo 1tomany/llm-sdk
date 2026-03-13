@@ -34,6 +34,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                     'text' => $prompt->getPrompt(),
                 ];
 
+                // Adjust the number of output dimensions
                 if ($dimensionality = $request->getDimensions()) {
                     $requestContent = array_merge($requestContent, [
                         'outputDimensionality' => $dimensionality,
@@ -98,7 +99,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         $generation = $this->doDenormalize($content, Generation::class);
 
         if (!$output = $generation->getOutput()) {
-            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $request->getModel()->getName()));
+            throw new RuntimeException(\sprintf('The model "%s" failed to generate any output.', $request->getModel()->getName()));
         }
 
         return new GenerateResponse($request->getModel(), $generation->responseId, $output, $content, $timer->getDuration(), new UsageResponse($generation->usageMetadata->promptTokenCount, $generation->usageMetadata->cachedContentTokenCount, $generation->usageMetadata->outputTokenCount));
