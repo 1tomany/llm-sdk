@@ -27,6 +27,9 @@ try {
         'request' => $response->toExecuteRequest(),
     ]);
 
+    // print_r($response);
+    $response->getL2Norm();
+
     $dimensions = count($response->getEmbedding());
 
     successMessage(sprintf('The model "%s" generated an embedding with %d %s.', $response->getModel()->getValue(), $dimensions, 1 === $dimensions ? 'dimension' : 'dimensions'));
