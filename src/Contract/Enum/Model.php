@@ -173,7 +173,7 @@ enum Model: string
         ]);
     }
 
-    public function isMultiModal(): bool
+    public function supportsFileInputs(): bool
     {
         return !in_array($this, [
             self::GeminiEmbedding001,
@@ -183,7 +183,13 @@ enum Model: string
         ]);
     }
 
-    public function supportsInputType(DataType $dataType): bool
+    public function supportsInstructions(): bool
     {
+        return !$this->isEmbedding();
+    }
+
+    public function supportsStructuredOutput(): bool
+    {
+        return !$this->isEmbedding();
     }
 }

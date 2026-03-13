@@ -58,13 +58,13 @@ class CompileRequest extends BaseRequest
      * @param ?non-empty-string $fileUri
      * @param ?non-empty-lowercase-string $format
      *
-     * @throws InvalidArgumentException when the model is single-modality
+     * @throws InvalidArgumentException when the model does not support file inputs
      */
     public function withFileUri(?string $fileUri, ?string $format): static
     {
         if (null !== $fileUri && null !== $format) {
-            if (!$this->getModel()->isMultiModal()) {
-                throw new InvalidArgumentException('Files cannot be used with single-modality models.');
+            if (!$this->getModel()->supportsFileInputs()) {
+                throw new InvalidArgumentException(\sprintf('The model "%s" does not support file inputs.', $this->getModel()->getId()));
             }
 
             $this->files[] = new FileUriComponent($fileUri, $format);
@@ -82,16 +82,16 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when instructions are used with an embedding model
+     * @throws InvalidArgumentException when the model does not support instructions
      */
     public function withPrompt(?string $prompt, Role $role = Role::User): static
     {
         if ('' !== $prompt = trim($prompt ?? '')) {
             $component = new PromptComponent($prompt, $role);
 
-            if ($this->getModel()->isEmbedding()) {
+            if (!$this->getModel()->supportsInstructions()) {
                 if ($component->getRole()->isSystem()) {
-                    throw new InvalidArgumentException('Instructions cannot be used with embedding models.');
+                    throw new InvalidArgumentException(\sprintf('The model "%s" does not support instructions.', $this->getModel()->getId()));
                 }
 
                 $this->prompts = [$component];
@@ -126,15 +126,19 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the model is not an embedding model
+     * @throws InvalidArgumentException when the model does not support changing the output dimensions
      */
-    public function usingDimensions(int $dimensions): static
+    public function usingDimensions(?int $dimensions): static
     {
-        if (!$this->getModel()->isEmbedding()) {
-            throw new InvalidArgumentException('Output dimensions can only be used with embedding models.');
-        }
+        if (null === $dimensions) {
+            $this->dimensions = null;
+        } else {
+            if (!$this->getModel()->isEmbedding()) {
+                throw new InvalidArgumentException(\sprintf('The model "%s" does not support changing the output dimensions.', $this->getModel()->getId()));
+            }
 
-        $this->dimensions = min(max(1, $dimensions), 4096);
+            $this->dimensions = min(max(1, $dimensions), 4096);
+        }
 
         return $this;
     }
@@ -151,7 +155,7 @@ class CompileRequest extends BaseRequest
      * @param ?array<string, mixed> $schema
      * @param ?non-empty-string $name
      *
-     * @throws InvalidArgumentException when the model is an embedding model
+     * @throws InvalidArgumentException when the model does not support structured output
      */
     public function usingSchema(?array $schema, ?string $name = null): static
     {
@@ -159,8 +163,8 @@ class CompileRequest extends BaseRequest
             return $this;
         }
 
-        if ($this->getModel()->isEmbedding()) {
-            throw new InvalidArgumentException('A schema cannot be used with an embedding model.');
+        if (!$this->getModel()->supportsStructuredOutput()) {
+            throw new InvalidArgumentException(\sprintf('The model "%s" does not support structured output.', $this->getModel()->getId()));
         }
 
         $name = trim($name ?? '');
