@@ -33,7 +33,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      *
      * @throws RuntimeException when opening the file fails
-     * @throws RuntimeException when a signed URL is not generated
+     * @throws RuntimeException when generating a signed URL fails
      * @throws RuntimeException when uploading a file chunk fails
      */
     public function upload(UploadRequest $request): UploadResponse

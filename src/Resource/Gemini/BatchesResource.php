@@ -16,7 +16,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function create(CreateRequest $request): CreateResponse
     {
-        $url = $this->buildModelUrl($request->getModel(), 'batchGenerateContent');
+        $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'asyncBatchEmbedContent' : 'batchGenerateContent');
 
         $content = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders(),

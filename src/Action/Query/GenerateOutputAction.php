@@ -24,7 +24,7 @@ final readonly class GenerateOutputAction extends BaseAction implements Generate
     public function act(CompileRequest|ExecuteRequest $request): GenerateResponse
     {
         if ($request->getModel()->isEmbedding()) {
-            throw new InvalidArgumentException(sprintf('Generating output failed because the model "%s" is an embedding model.', $request->getModel()->getId()));
+            throw new InvalidArgumentException(sprintf('Generating output failed because the model "%s" is an embedding model.', $request->getModel()->getName()));
         }
 
         if ($request instanceof CompileRequest) {
