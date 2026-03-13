@@ -43,7 +43,7 @@ final readonly class GenerateResponse extends ExecuteResponse
     }
 
     /**
-     * @return array<mixed>
+     * @return array<string, mixed>
      */
     public function getResponse(): array
     {
