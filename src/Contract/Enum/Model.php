@@ -182,4 +182,8 @@ enum Model: string
             self::GptEmbedding3Large,
         ]);
     }
+
+    public function supportsInputType(DataType $dataType): bool
+    {
+    }
 }
