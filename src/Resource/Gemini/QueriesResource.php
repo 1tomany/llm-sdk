@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 use function array_merge;
+use function sprintf;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
@@ -99,7 +100,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         $generation = $this->doDenormalize($content, Generation::class);
 
         if (!$output = $generation->getOutput()) {
-            throw new RuntimeException(\sprintf('The model "%s" failed to generate any output.', $request->getModel()->getName()));
+            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $request->getModel()->getName()));
         }
 
         return new GenerateResponse($request->getModel(), $generation->responseId, $output, $content, $timer->getDuration(), new UsageResponse($generation->usageMetadata->promptTokenCount, $generation->usageMetadata->cachedContentTokenCount, $generation->usageMetadata->outputTokenCount));

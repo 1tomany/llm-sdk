@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 use function parse_url;
+use function sprintf;
 
 use const PHP_URL_PATH;
 
@@ -118,7 +119,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         }
 
         if (!$output = $response->getOutput()) {
-            throw new RuntimeException(\sprintf('The model "%s" failed to generate any output.', $request->getModel()->getValue()));
+            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $request->getModel()->getValue()));
         }
 
         return new GenerateResponse($request->getModel(), $response->id, $output, $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
