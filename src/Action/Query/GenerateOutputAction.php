@@ -18,6 +18,8 @@ final readonly class GenerateOutputAction extends BaseAction implements Generate
 
     /**
      * @see OneToMany\LlmSdk\Contract\Action\Query\GenerateOutputActionInterface
+     *
+     * @throws InvalidArgumentException when the model is an embedding model
      */
     public function act(CompileRequest|ExecuteRequest $request): GenerateResponse
     {

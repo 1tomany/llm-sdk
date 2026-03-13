@@ -17,6 +17,9 @@ final readonly class Candidate
     ) {
     }
 
+    /**
+     * @return ?non-empty-string
+     */
     public function getOutput(): ?string
     {
         return trim(implode('', array_map(fn ($p) => $p->text, $this->content->parts))) ?: null;

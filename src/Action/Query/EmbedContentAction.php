@@ -18,11 +18,13 @@ final readonly class EmbedContentAction extends BaseAction implements EmbedConte
 
     /**
      * @see OneToMany\LlmSdk\Contract\Action\Query\EmbedContentActionInterface
+     *
+     * @throws InvalidArgumentException when the model is not an embedding model
      */
     public function act(CompileRequest|ExecuteRequest $request): EmbedResponse
     {
         if (!$request->getModel()->isEmbedding()) {
-            throw new InvalidArgumentException(sprintf('Embedding the content failed because the model "%s" is not an embedding model.', $request->getModel()->getId()));
+            throw new InvalidArgumentException(sprintf('Generating an embedding failed because the model "%s" is not an embedding model.', $request->getModel()->getName()));
         }
 
         if ($request instanceof CompileRequest) {
