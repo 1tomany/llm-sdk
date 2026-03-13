@@ -21,9 +21,7 @@ use function strlen;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
-    private const int TIMEOUT_SECONDS = 120;
     private const int DEFAULT_CHUNK_SIZE = 8 * 1024 * 1024;
-
     private const string HEADER_CHUNK_SIZE = 'x-goog-upload-chunk-granularity';
     private const string HEADER_UPLOAD_URL = 'x-goog-upload-url';
     private const string UPLOAD_COMMAND_UPLOAD = 'upload';
@@ -92,7 +90,6 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 }
 
                 $content = $this->doPostRequest($uploadUrl, [
-                    'timeout' => self::TIMEOUT_SECONDS,
                     'headers' => $this->buildHeaders([
                         'content-length' => $request->getSize(),
                         'x-goog-upload-offset' => $uploadOffset,
