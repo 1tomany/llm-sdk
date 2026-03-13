@@ -24,8 +24,10 @@ enum Vendor: string
             return $vendor;
         }
 
+        $vendor = trim($vendor ?? '');
+
         try {
-            return self::from(strtolower(trim($vendor ?? '')));
+            return self::from(strtolower($vendor));
         } catch (\TypeError|\ValueError $e) {
             throw new InvalidArgumentException(sprintf('The vendor "%s" does not exist.', $vendor), previous: $e);
         }
@@ -45,5 +47,13 @@ enum Vendor: string
     public function getValue(): string
     {
         return $this->value;
+    }
+
+    /**
+     * @return list<Model>
+     */
+    public function getModels(): array
+    {
+        return \array_values(\array_filter(Model::cases(), fn ($m): bool => $m->usesVendor($this)));
     }
 }

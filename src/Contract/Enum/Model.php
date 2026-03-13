@@ -182,4 +182,9 @@ enum Model: string
             self::GptEmbedding3Large,
         ]);
     }
+
+    public function usesVendor(Vendor $vendor): bool
+    {
+        return $this->getVendor() === $vendor;
+    }
 }
