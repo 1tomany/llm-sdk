@@ -4,6 +4,8 @@ namespace OneToMany\LlmSdk\Contract\Enum;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 
+use function array_filter;
+use function array_values;
 use function sprintf;
 use function strtolower;
 use function trim;
@@ -54,6 +56,6 @@ enum Vendor: string
      */
     public function getModels(): array
     {
-        return \array_values(\array_filter(Model::cases(), fn ($m): bool => $m->usesVendor($this)));
+        return array_values(array_filter(Model::cases(), fn ($m): bool => $m->usesVendor($this)));
     }
 }
