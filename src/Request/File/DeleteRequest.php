@@ -4,6 +4,8 @@ namespace OneToMany\LlmSdk\Request\File;
 
 use OneToMany\LlmSdk\Exception\RuntimeException;
 
+use function trim;
+
 class DeleteRequest extends FileRequest
 {
     /**
@@ -13,7 +15,7 @@ class DeleteRequest extends FileRequest
 
     public function usingUri(?string $uri): static
     {
-        $this->uri = \trim($uri ?? '') ?: null;
+        $this->uri = trim($uri ?? '') ?: null;
 
         return $this;
     }
