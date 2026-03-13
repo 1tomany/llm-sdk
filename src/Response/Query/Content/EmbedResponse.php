@@ -73,9 +73,6 @@ final readonly class EmbedResponse extends ExecuteResponse
         return $this->embeddingL2Norm;
     }
 
-    /**
-     * @return positive-int
-     */
     public function getDimensions(): int
     {
         return $this->dimensions;
