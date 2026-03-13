@@ -9,7 +9,7 @@ class FileRequest
 {
     private readonly Vendor $vendor;
 
-    public function __construct(
+    final public function __construct(
         string|Vendor|null $vendor = Vendor::Mock,
     ) {
         $this->vendor = Vendor::create($vendor);

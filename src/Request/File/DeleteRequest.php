@@ -2,25 +2,29 @@
 
 namespace OneToMany\LlmSdk\Request\File;
 
-use OneToMany\LlmSdk\Contract\Enum\Vendor;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 
 class DeleteRequest extends FileRequest
 {
     /**
-     * @param non-empty-string $uri
+     * @var ?non-empty-string
      */
-    public function __construct(
-        string|Vendor|null $vendor,
-        private string $uri,
-    ) {
-        parent::__construct($vendor);
+    private ?string $uri = null;
+
+    public function usingUri(?string $uri): static
+    {
+        $this->uri = \trim($uri ?? '') ?: null;
+
+        return $this;
     }
 
     /**
      * @return non-empty-string
+     *
+     * @throws RuntimeException when the URI is empty
      */
     public function getUri(): string
     {
-        return $this->uri;
+        return $this->uri ?? throw new RuntimeException('The URI cannot be empty.');
     }
 }
