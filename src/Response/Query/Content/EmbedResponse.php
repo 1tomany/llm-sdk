@@ -18,6 +18,7 @@ final readonly class EmbedResponse extends ExecuteResponse
      */
     private array $embedding;
     private float $l2Norm;
+    private int $dimensions;
 
     /**
      * @var non-empty-list<float>
@@ -40,6 +41,8 @@ final readonly class EmbedResponse extends ExecuteResponse
         $this->l2Norm = $this->calculateL2Norm(...[
             'vector' => $this->embedding,
         ]);
+
+        $this->dimensions = count($embedding);
 
         // Normalize the embedding vector
         $mapper = function (float $e): float {
@@ -75,7 +78,7 @@ final readonly class EmbedResponse extends ExecuteResponse
      */
     public function getDimensions(): int
     {
-        return count($this->embedding);
+        return $this->dimensions;
     }
 
     /**
