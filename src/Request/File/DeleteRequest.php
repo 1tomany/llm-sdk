@@ -3,7 +3,6 @@
 namespace OneToMany\LlmSdk\Request\File;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 
 use function trim;
 
