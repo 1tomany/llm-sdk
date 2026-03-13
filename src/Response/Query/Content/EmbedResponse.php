@@ -43,9 +43,8 @@ final readonly class EmbedResponse extends ExecuteResponse
 
         if ([] === $embedding) {
             throw new InvalidArgumentException('The embedding vector cannot be empty.');
-        } else {
-            $this->embedding = $embedding;
         }
+        $this->embedding = $embedding;
 
         $this->dimensions = count($this->embedding);
 
