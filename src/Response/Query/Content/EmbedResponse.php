@@ -44,6 +44,7 @@ final readonly class EmbedResponse extends ExecuteResponse
         if ([] === $embedding) {
             throw new InvalidArgumentException('The embedding vector cannot be empty.');
         }
+
         $this->embedding = $embedding;
 
         // Calculate the embedding dimensionality
