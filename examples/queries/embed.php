@@ -27,9 +27,7 @@ try {
         'request' => $response->toExecuteRequest(),
     ]);
 
-    $dimensions = count($response->getEmbedding());
-
-    successMessage(sprintf('The model "%s" generated an embedding with %d %s.', $response->getModel()->getValue(), $dimensions, 1 === $dimensions ? 'dimension' : 'dimensions'));
+    successMessage(sprintf('The model "%s" generated an embedding with %d %s.', $response->getModel()->getValue(), $response->getDimensions(), 1 === $response->getDimensions() ? 'dimension' : 'dimensions'));
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }
