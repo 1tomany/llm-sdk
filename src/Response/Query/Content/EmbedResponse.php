@@ -46,8 +46,10 @@ final readonly class EmbedResponse extends ExecuteResponse
         }
         $this->embedding = $embedding;
 
+        // Calculate the embedding dimensionality
         $this->dimensions = count($this->embedding);
 
+        // The norm is used to normalize the embedding
         $this->l2Norm = $this->calculateL2Norm(...[
             'vector' => $this->embedding,
         ]);
