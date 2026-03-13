@@ -23,8 +23,9 @@ I learn best by looking at actual code samples, so lets take a look at the two m
 
 ### Examples
 
-- [`examples/files/upload.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/upload.php)
-- [`examples/queries/execute.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/queries/execute.php)
+- [`examples/files/upload.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/upload.php) Uploads a file to an LLM vendor
+- [`examples/queries/embed.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/queries/embed.php) Embeds content to a high dimensionality vector
+- [`examples/queries/generate.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/queries/generate.php) Generates output from a prompt sent to an LLM
 
 ## Supported platforms
 
