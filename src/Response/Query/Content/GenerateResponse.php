@@ -16,7 +16,7 @@ final readonly class GenerateResponse extends ExecuteResponse
 {
     /**
      * @param non-empty-string $uri
-     * @param array<mixed> $response
+     * @param array<string, mixed> $response
      */
     public function __construct(
         Model $model,
