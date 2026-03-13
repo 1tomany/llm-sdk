@@ -3,6 +3,8 @@
 namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content;
 
 use OneToMany\LlmSdk\Exception\RuntimeException;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Candidate\Candidate;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Usage\UsageMetadata;
 
 use function array_map;
 use function implode;

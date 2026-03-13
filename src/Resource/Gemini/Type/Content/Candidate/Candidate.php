@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content\Candidate;
 
 use function array_map;
 use function implode;

@@ -1,6 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content\Candidate;
+
+use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Candidate\Part\Part;
 
 final readonly class Content
 {
