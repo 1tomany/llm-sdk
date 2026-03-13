@@ -17,7 +17,6 @@ final readonly class EmbedResponse extends ExecuteResponse
      * @var non-empty-list<float>
      */
     private array $embedding;
-
     private float $l2Norm;
 
     /**
