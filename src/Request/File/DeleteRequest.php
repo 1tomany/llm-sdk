@@ -2,18 +2,29 @@
 
 namespace OneToMany\LlmSdk\Request\File;
 
-use OneToMany\LlmSdk\Contract\Enum\Vendor;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+
+use function trim;
 
 class DeleteRequest extends FileRequest
 {
     /**
-     * @param non-empty-string $uri
+     * @var non-empty-string
      */
-    public function __construct(
-        string|Vendor|null $vendor,
-        private string $uri,
-    ) {
-        parent::__construct($vendor);
+    private string $uri = 'mock-uri';
+
+    /**
+     * @throws InvalidArgumentException when the trimmed URI is empty
+     */
+    public function usingUri(?string $uri): static
+    {
+        if (!$uri = trim($uri ?? '')) {
+            throw new InvalidArgumentException('The URI cannot be empty.');
+        }
+
+        $this->uri = $uri;
+
+        return $this;
     }
 
     /**
