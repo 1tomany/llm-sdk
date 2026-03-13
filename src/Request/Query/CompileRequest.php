@@ -13,6 +13,7 @@ use function count;
 use function is_string;
 use function max;
 use function min;
+use function sprintf;
 use function trim;
 
 class CompileRequest extends BaseRequest
@@ -64,7 +65,7 @@ class CompileRequest extends BaseRequest
     {
         if (null !== $fileUri && null !== $format) {
             if (!$this->getModel()->supportsFileInputs()) {
-                throw new InvalidArgumentException(\sprintf('The model "%s" does not support file inputs.', $this->getModel()->getId()));
+                throw new InvalidArgumentException(sprintf('The model "%s" does not support file inputs.', $this->getModel()->getId()));
             }
 
             $this->files[] = new FileUriComponent($fileUri, $format);
@@ -91,7 +92,7 @@ class CompileRequest extends BaseRequest
 
             if (!$this->getModel()->supportsInstructions()) {
                 if ($component->getRole()->isSystem()) {
-                    throw new InvalidArgumentException(\sprintf('The model "%s" does not support instructions.', $this->getModel()->getId()));
+                    throw new InvalidArgumentException(sprintf('The model "%s" does not support instructions.', $this->getModel()->getId()));
                 }
 
                 $this->prompts = [$component];
@@ -134,7 +135,7 @@ class CompileRequest extends BaseRequest
             $this->dimensions = null;
         } else {
             if (!$this->getModel()->isEmbedding()) {
-                throw new InvalidArgumentException(\sprintf('The model "%s" does not support changing the output dimensions.', $this->getModel()->getId()));
+                throw new InvalidArgumentException(sprintf('The model "%s" does not support changing the output dimensions.', $this->getModel()->getId()));
             }
 
             $this->dimensions = min(max(1, $dimensions), 4096);
@@ -164,7 +165,7 @@ class CompileRequest extends BaseRequest
         }
 
         if (!$this->getModel()->supportsStructuredOutput()) {
-            throw new InvalidArgumentException(\sprintf('The model "%s" does not support structured output.', $this->getModel()->getId()));
+            throw new InvalidArgumentException(sprintf('The model "%s" does not support structured output.', $this->getModel()->getId()));
         }
 
         $name = trim($name ?? '');
