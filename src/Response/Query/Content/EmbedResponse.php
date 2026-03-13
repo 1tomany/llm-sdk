@@ -3,6 +3,7 @@
 namespace OneToMany\LlmSdk\Response\Query\Content;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
 use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
 
@@ -36,13 +37,16 @@ final readonly class EmbedResponse extends ExecuteResponse
     ) {
         parent::__construct($model, $runtime, $usage);
 
+        if (0 === $dimensions = count($embedding)) {
+            throw new InvalidArgumentException('The embedding vector cannot be empty.');
+        }
+
         $this->embedding = $embedding;
+        $this->dimensions = $dimensions;
 
         $this->l2Norm = $this->calculateL2Norm(...[
             'vector' => $this->embedding,
         ]);
-
-        $this->dimensions = count($embedding);
 
         // Normalize the embedding vector
         $mapper = function (float $e): float {
@@ -73,6 +77,9 @@ final readonly class EmbedResponse extends ExecuteResponse
         return $this->embeddingL2Norm;
     }
 
+    /**
+     * @return positive-int
+     */
     public function getDimensions(): int
     {
         return $this->dimensions;
