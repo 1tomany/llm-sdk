@@ -12,7 +12,7 @@ $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 $model = trim($argv[1] ?? '') ?: 'mock-embedding';
 
 try {
-    $prompt = 'Write a short summary of the history of PHP';
+    $prompt = 'Write a short summary of the history of PHP.';
 
     // Build a request of individual query components
     $compileRequest = new CompileRequest($model)->withPrompt($prompt)->usingDimensions(768);
@@ -26,6 +26,10 @@ try {
     $response = new EmbedContentAction($clientFactory)->act(...[
         'request' => $response->toExecuteRequest(),
     ]);
+
+    $dimensions = count($response->getEmbedding());
+
+    successMessage(sprintf('The model "%s" generated an embedding with %d %s.', $response->getModel()->getValue(), $dimensions, 1 === $dimensions ? 'dimension' : 'dimensions'));
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }

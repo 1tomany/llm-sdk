@@ -12,7 +12,7 @@ $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 $model = trim($argv[1] ?? '') ?: 'mock';
 
 try {
-    $prompt = 'Write a short summary of the history of PHP';
+    $prompt = 'Write a short summary of the history of PHP.';
 
     // Build a request of individual query components
     $compileRequest = new CompileRequest($model)->withPrompt($prompt);

@@ -39,16 +39,10 @@ final readonly class Response
     }
 
     /**
-     * @return non-empty-string
+     * @return ?non-empty-string
      */
-    public function getOutput(): string
+    public function getOutput(): ?string
     {
-        $output = array_map(fn ($o) => $o->getOutput(), $this->output ?? []);
-
-        if (!$output = trim(implode('', $output))) {
-            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $this->model));
-        }
-
-        return $output;
+        return trim(implode('', array_map(fn ($o) => $o->getOutput(), $this->output ?? []))) ?: null;
     }
 }

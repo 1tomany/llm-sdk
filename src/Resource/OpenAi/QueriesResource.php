@@ -95,6 +95,9 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
+     *
+     * @throws RuntimeException when the model returns an error
+     * @throws RuntimeException when the model fails to generate any output
      */
     public function generate(ExecuteRequest $request): GenerateResponse
     {
@@ -113,7 +116,11 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             throw new RuntimeException($response->error->message);
         }
 
-        return new GenerateResponse($request->getModel(), $response->id, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
+        if (!$output = $response->getOutput()) {
+            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $request->getModel()->getValue()));
+        }
+
+        return new GenerateResponse($request->getModel(), $response->id, $output, $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
     }
 
     /**
