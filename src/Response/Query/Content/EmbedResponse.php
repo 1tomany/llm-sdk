@@ -15,6 +15,11 @@ final readonly class EmbedResponse extends ExecuteResponse
     private float $l2Norm;
 
     /**
+     * @var non-empty-list<float>
+     */
+    private array $normedEmbedding;
+
+    /**
      * @param non-empty-list<float> $embedding
      */
     public function __construct(
@@ -26,6 +31,26 @@ final readonly class EmbedResponse extends ExecuteResponse
         parent::__construct($model, $runtime, $usage);
 
         $this->l2Norm = $this->calculateL2Norm();
+
+        // Normalize the embedding vector
+        $mapper = function (float $e): float {
+            return $e / $this->l2Norm;
+        };
+
+        $this->normedEmbedding = array_map($mapper, $this->embedding);
+    }
+
+    public function getL2Norm(): float
+    {
+        return $this->l2Norm;
+    }
+
+    /**
+     * @return non-empty-list<float>
+     */
+    public function getNormedEmbedding(): array
+    {
+        return $this->normedEmbedding;
     }
 
     /**
@@ -36,13 +61,8 @@ final readonly class EmbedResponse extends ExecuteResponse
         return $this->embedding;
     }
 
-    public function getL2Norm(): float
-    {
-        return $this->l2Norm;
-    }
-
     private function calculateL2Norm(): float
     {
-        return sqrt(array_sum(array_map(fn ($x) => $x * $x, $this->embedding)));
+        return sqrt(array_sum(array_map(fn ($e) => $e * $e, $this->embedding)));
     }
 }
