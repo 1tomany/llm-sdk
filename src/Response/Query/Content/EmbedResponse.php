@@ -44,11 +44,10 @@ final readonly class EmbedResponse extends ExecuteResponse
         if ([] === $embedding) {
             throw new InvalidArgumentException('The embedding vector cannot be empty.');
         } else {
-            $dimensions = count($embedding);
+            $this->embedding = $embedding;
         }
 
-        $this->embedding = $embedding;
-        $this->dimensions = $dimensions;
+        $this->dimensions = count($this->embedding);
 
         $this->l2Norm = $this->calculateL2Norm(...[
             'vector' => $this->embedding,
