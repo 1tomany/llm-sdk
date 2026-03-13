@@ -4,6 +4,7 @@ use OneToMany\LlmSdk\Client\Anthropic\AnthropicClient;
 use OneToMany\LlmSdk\Client\Gemini\GeminiClient;
 use OneToMany\LlmSdk\Client\Mock\MockClient;
 use OneToMany\LlmSdk\Client\OpenAi\OpenAiClient;
+use OneToMany\LlmSdk\Factory\ClientContainer;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\PropertyInfo\Extractor\ConstructorExtractor;
@@ -52,21 +53,18 @@ $httpClient = HttpClient::create([
 ]);
 
 // Create each client that has an API key
-$clientFactory = new ClientFactory([
-    new MockClient(),
-]);
+$clients = [new MockClient()];
 
-// Anthropic Client
-if (!empty($apiKey = getenv('ANTHROPIC_API_KEY'))) {
-    $clientFactory->addClient(new AnthropicClient($httpClient, $serializer, $apiKey));
+if (!empty($apiKey = getenv('ANTHROPIC_API_KEY', false))) {
+    $clients[] = new AnthropicClient($httpClient, $serializer, $apiKey);
 }
 
-if (!empty($apiKey = getenv('GEMINI_API_KEY'))) {
-    $clientFactory->addClient(new GeminiClient($httpClient, $serializer, $apiKey));
+if (!empty($apiKey = getenv('GEMINI_API_KEY', false))) {
+    $clients[] = new GeminiClient($httpClient, $serializer, $apiKey);
 }
 
-if (!empty($apiKey = getenv('OPENAI_API_KEY'))) {
-    $clientFactory->addClient(new OpenAiClient($httpClient, $serializer, $apiKey));
+if (!empty($apiKey = getenv('OPENAI_API_KEY', false))) {
+    $clients[] = new OpenAiClient($httpClient, $serializer, $apiKey);
 }
 
-return $clientFactory;
+return new ClientFactory(new ClientContainer($clients));

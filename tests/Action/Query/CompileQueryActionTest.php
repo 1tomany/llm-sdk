@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Tests\Action\Query;
 
 use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Factory\ClientContainer;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use PHPUnit\Framework\Attributes\Group;
@@ -19,6 +20,6 @@ final class CompileQueryActionTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Compiling the query failed because no components have been added to it.');
 
-        new CompileQueryAction(new ClientFactory([]))->act(new CompileRequest());
+        new CompileQueryAction(new ClientFactory(new ClientContainer()))->act(new CompileRequest());
     }
 }

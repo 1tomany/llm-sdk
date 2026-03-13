@@ -2,59 +2,20 @@
 
 namespace OneToMany\LlmSdk\Response\Query;
 
-use OneToMany\LlmSdk\Exception\RuntimeException;
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Response\BaseResponse;
+use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
 
-use function json_decode;
 use function max;
-use function trim;
 
-use const JSON_THROW_ON_ERROR;
-
-final readonly class ExecuteResponse extends BaseResponse
+readonly class ExecuteResponse extends BaseResponse
 {
-    /**
-     * @param non-empty-string $uri
-     */
     public function __construct(
-        string $model,
-        private string $uri,
-        private string $output,
-        private ?string $response = null,
+        Model $model,
         private int|float $runtime = 0,
         private UsageResponse $usage = new UsageResponse(),
     ) {
         parent::__construct($model);
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    public function getUri(): string
-    {
-        return $this->uri;
-    }
-
-    public function getOutput(): string
-    {
-        return $this->output;
-    }
-
-    /**
-     * @return array<string, mixed>
-     *
-     * @throws RuntimeException when decoding the response fails
-     */
-    public function getResponse(): array
-    {
-        try {
-            /** @var array<string, mixed> $response */
-            $response = json_decode(trim($this->response ?? ''), true, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
-            throw new RuntimeException('Decoding the response failed.', previous: $e);
-        }
-
-        return $response;
     }
 
     /**
@@ -68,22 +29,5 @@ final readonly class ExecuteResponse extends BaseResponse
     public function getUsage(): UsageResponse
     {
         return $this->usage;
-    }
-
-    /**
-     * @return list<array<string, mixed>>|array<string, mixed>
-     *
-     * @throws RuntimeException when decoding the output fails
-     */
-    public function toRecord(): array
-    {
-        try {
-            /** @var list<array<string, mixed>>|array<string, mixed> $record */
-            $record = json_decode(trim($this->output), true, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
-            throw new RuntimeException('Decoding the output failed.', previous: $e);
-        }
-
-        return $record;
     }
 }

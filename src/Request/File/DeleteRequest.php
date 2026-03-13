@@ -2,18 +2,18 @@
 
 namespace OneToMany\LlmSdk\Request\File;
 
-use OneToMany\LlmSdk\Request\BaseRequest;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-class DeleteRequest extends BaseRequest
+class DeleteRequest extends FileRequest
 {
     /**
      * @param non-empty-string $uri
      */
     public function __construct(
-        string $model,
+        string|Vendor|null $vendor,
         private string $uri,
     ) {
-        parent::__construct($model);
+        parent::__construct($vendor);
     }
 
     /**

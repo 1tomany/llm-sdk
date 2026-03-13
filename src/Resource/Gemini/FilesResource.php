@@ -18,13 +18,10 @@ use function max;
 use function rtrim;
 use function sprintf;
 use function strlen;
-use function trim;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
-    private const int TIMEOUT_SECONDS = 120;
     private const int DEFAULT_CHUNK_SIZE = 8 * 1024 * 1024;
-
     private const string HEADER_CHUNK_SIZE = 'x-goog-upload-chunk-granularity';
     private const string HEADER_UPLOAD_URL = 'x-goog-upload-url';
     private const string UPLOAD_COMMAND_UPLOAD = 'upload';
@@ -34,7 +31,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      *
      * @throws RuntimeException when opening the file fails
-     * @throws RuntimeException when a signed URL is not generated
+     * @throws RuntimeException when generating a signed URL fails
      * @throws RuntimeException when uploading a file chunk fails
      */
     public function upload(UploadRequest $request): UploadResponse
@@ -93,7 +90,6 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 }
 
                 $content = $this->doPostRequest($uploadUrl, [
-                    'timeout' => self::TIMEOUT_SECONDS,
                     'headers' => $this->buildHeaders([
                         'content-length' => $request->getSize(),
                         'x-goog-upload-offset' => $uploadOffset,
@@ -105,18 +101,19 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 // Account for unevenly divided file sizes
                 $uploadOffset = $uploadOffset + $chunkSize;
             }
-
-            // Ensure content was returned
-            $content = trim($content ?? '');
         } catch (LlmSdkExceptionInterface $e) {
             throw new RuntimeException(sprintf('The file "%s" was rejected at byte %d of %d by the server: %s.', $request->getName(), $uploadOffset, $request->getSize(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
-        $file = $this->doDeserialize($content, File::class, context: [
+        if (!isset($content)) {
+            throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server returned an empty response.', $request->getName()));
+        }
+
+        $file = $this->doDenormalize($content, File::class, [
             UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
         ]);
 
-        return new UploadResponse($request->getModel(), $file->uri, $file->name, null, $file->expirationTime);
+        return new UploadResponse($request->getVendor(), $file->uri, $file->name, null, $file->expirationTime);
     }
 
     /**
@@ -128,6 +125,6 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             'headers' => $this->buildHeaders(),
         ]);
 
-        return new DeleteResponse($request->getModel(), $request->getUri());
+        return new DeleteResponse($request->getVendor(), $request->getUri());
     }
 }

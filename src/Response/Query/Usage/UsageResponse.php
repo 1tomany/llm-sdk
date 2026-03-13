@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Response\Query;
+namespace OneToMany\LlmSdk\Response\Query\Usage;
 
 final readonly class UsageResponse
 {

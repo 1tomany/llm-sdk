@@ -2,30 +2,33 @@
 
 namespace OneToMany\LlmSdk\Request;
 
-use function trim;
+use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 class BaseRequest
 {
-    /**
-     * @param non-empty-string $model
-     */
+    private Model $model = Model::Mock;
+
     public function __construct(
-        private string $model = 'mock',
+        string|Model|null $model = Model::Mock,
     ) {
+        $this->forModel($model);
     }
 
-    public function forModel(?string $model): static
+    public function forModel(string|Model|null $model): static
     {
-        $this->model = trim($model ?? '') ?: 'mock';
+        $this->model = Model::create($model);
 
         return $this;
     }
 
-    /**
-     * @return non-empty-string
-     */
-    public function getModel(): string
+    public function getModel(): Model
     {
         return $this->model;
+    }
+
+    public function getVendor(): Vendor
+    {
+        return $this->model->getVendor();
     }
 }

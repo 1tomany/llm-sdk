@@ -2,14 +2,14 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content;
 
-use OneToMany\LlmSdk\Exception\RuntimeException;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Candidate\Candidate;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Usage\UsageMetadata;
 
 use function array_map;
 use function implode;
-use function sprintf;
 use function trim;
 
-final readonly class GenerateContentResponse
+final readonly class Generation
 {
     /**
      * @param list<Candidate> $candidates
@@ -25,16 +25,10 @@ final readonly class GenerateContentResponse
     }
 
     /**
-     * @return non-empty-string
+     * @return ?non-empty-string
      */
-    public function getOutput(): string
+    public function getOutput(): ?string
     {
-        $output = array_map(fn ($c) => $c->getOutput(), $this->candidates);
-
-        if (!$output = trim(implode('', $output))) {
-            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $this->modelVersion));
-        }
-
-        return $output;
+        return trim(implode('', array_map(fn ($c) => $c->getOutput(), $this->candidates))) ?: null;
     }
 }

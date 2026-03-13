@@ -2,22 +2,18 @@
 
 namespace OneToMany\LlmSdk\Action\File;
 
+use OneToMany\LlmSdk\Action\BaseAction;
 use OneToMany\LlmSdk\Contract\Action\File\DeleteFileActionInterface;
-use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Response\File\DeleteResponse;
 
-final readonly class DeleteFileAction implements DeleteFileActionInterface
+final readonly class DeleteFileAction extends BaseAction implements DeleteFileActionInterface
 {
-    public function __construct(private ClientFactory $clientFactory)
-    {
-    }
-
     /**
      * @see OneToMany\LlmSdk\Contract\Action\File\DeleteFileActionInterface
      */
     public function act(DeleteRequest $request): DeleteResponse
     {
-        return $this->clientFactory->create($request->getModel())->files()->delete($request);
+        return $this->createClient($request->getVendor())->files()->delete($request);
     }
 }

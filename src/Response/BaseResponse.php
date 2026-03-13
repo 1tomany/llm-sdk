@@ -2,19 +2,15 @@
 
 namespace OneToMany\LlmSdk\Response;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
+
 readonly class BaseResponse
 {
-    /**
-     * @param non-empty-string $model
-     */
-    public function __construct(private string $model)
+    public function __construct(private Model $model)
     {
     }
 
-    /**
-     * @return non-empty-string
-     */
-    public function getModel(): string
+    public function getModel(): Model
     {
         return $this->model;
     }

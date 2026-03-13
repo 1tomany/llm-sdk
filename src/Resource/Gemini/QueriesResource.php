@@ -3,16 +3,20 @@
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
-use OneToMany\LlmSdk\Request\Query\Component\FileUriComponent;
-use OneToMany\LlmSdk\Request\Query\Component\PromptComponent;
-use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Content\GenerateContentResponse;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Generation;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Embedding\Embedding;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
-use OneToMany\LlmSdk\Response\Query\ExecuteResponse;
-use OneToMany\LlmSdk\Response\Query\UsageResponse;
+use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
+use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
+use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
+use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Stopwatch\Stopwatch;
+
+use function array_merge;
+use function sprintf;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
@@ -21,64 +25,70 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $url = $this->buildModelUrl($request->getModel(), 'generateContent');
+        $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent');
 
-        $requestContent = [
-            'contents' => [],
-        ];
+        if ($request->getModel()->isEmbedding()) {
+            $requestContent = ['content' => []];
 
-        foreach ($request->getComponents() as $component) {
-            if ($component instanceof PromptComponent) {
-                if ($component->getRole()->isSystem()) {
-                    $requestContent['systemInstruction'] = [
-                        'parts' => [
-                            [
-                                'text' => $component->getPrompt(),
-                            ],
-                        ],
-                    ];
-                }
+            foreach ($request->getPrompts() as $prompt) {
+                $requestContent['content']['parts'][] = [
+                    'text' => $prompt->getPrompt(),
+                ];
 
-                if ($component->getRole()->isUser()) {
-                    $requestContent['contents'][] = [
-                        'parts' => [
-                            [
-                                'text' => $component->getPrompt(),
-                            ],
-                        ],
-                    ];
+                // Adjust the number of output dimensions
+                if ($dimensionality = $request->getDimensions()) {
+                    $requestContent = array_merge($requestContent, [
+                        'outputDimensionality' => $dimensionality,
+                    ]);
                 }
             }
+        } else {
+            $requestContent = ['contents' => []];
 
-            if ($component instanceof FileUriComponent) {
-                $requestContent['contents'][] = [
+            foreach ($request->getFiles() as $file) {
+                $requestContent['contents']['parts'][] = [
+                    'fileData' => [
+                        'fileUri' => $file->getUri(),
+                        'mimeType' => $file->getFormat(),
+                    ],
+                ];
+            }
+
+            foreach ($request->getPrompts() as $prompt) {
+                $requestContent['contents']['parts'][] = [
+                    'text' => $prompt->getPrompt(),
+                ];
+            }
+
+            if ($prompt = $request->getInstructions()) {
+                $requestContent['systemInstruction'] = [
                     'parts' => [
                         [
-                            'fileData' => [
-                                'fileUri' => $component->getUri(),
-                            ],
+                            'text' => $prompt->getPrompt(),
                         ],
                     ],
                 ];
             }
 
-            if ($component instanceof SchemaComponent) {
+            if ($schema = $request->getSchema()) {
                 $requestContent['generationConfig'] = [
-                    'responseMimeType' => $component->getFormat(),
-                    'responseJsonSchema' => $component->getSchema(),
+                    'responseMimeType' => $schema->getFormat(),
+                    'responseJsonSchema' => $schema->getSchema(),
                 ];
             }
         }
 
-        return new CompileResponse($request->getModel(), $url, $this->convertToBatchRequest($request->getBatchKey(), $requestContent));
+        return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
     }
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
+     *
+     * @throws RuntimeException when the model fails to generate any output
      */
-    public function execute(ExecuteRequest $request): ExecuteResponse
+    public function generate(ExecuteRequest $request): GenerateResponse
     {
-        $timer = new Stopwatch(true)->start('execute');
+        $timer = new Stopwatch(true)->start('generate');
 
         $content = $this->doPostRequest($request->getUrl(), [
             'headers' => $this->buildHeaders(),
@@ -87,9 +97,34 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ]);
 
-        $response = $this->doDeserialize($content, GenerateContentResponse::class);
+        $generation = $this->doDenormalize($content, Generation::class);
 
-        return new ExecuteResponse($request->getModel(), $response->responseId, $response->getOutput(), $content, $timer->getDuration(), new UsageResponse($response->usageMetadata->promptTokenCount, $response->usageMetadata->cachedContentTokenCount, $response->usageMetadata->outputTokenCount));
+        if (!$output = $generation->getOutput()) {
+            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $request->getModel()->getName()));
+        }
+
+        return new GenerateResponse($request->getModel(), $generation->responseId, $output, $content, $timer->getDuration(), new UsageResponse($generation->usageMetadata->promptTokenCount, $generation->usageMetadata->cachedContentTokenCount, $generation->usageMetadata->outputTokenCount));
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
+     */
+    public function embed(ExecuteRequest $request): EmbedResponse
+    {
+        $timer = new Stopwatch(true)->start('embed');
+
+        $content = $this->doPostRequest($request->getUrl(), [
+            'headers' => $this->buildHeaders(),
+            'json' => [
+                ...$request->getRequest(),
+            ],
+        ]);
+
+        $embedding = $this->doDenormalize($content, Embedding::class, [
+            UnwrappingDenormalizer::UNWRAP_PATH => '[embedding]',
+        ]);
+
+        return new EmbedResponse($request->getModel(), $embedding->values, $timer->getDuration());
     }
 
     /**
@@ -98,7 +133,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      *
      * @return array<string, mixed>
      */
-    private function convertToBatchRequest(?string $batchKey, array $request): array
+    private function convertIfBatchRequest(?string $batchKey, array $request): array
     {
         return null === $batchKey ? $request : ['key' => $batchKey, 'request' => $request];
     }

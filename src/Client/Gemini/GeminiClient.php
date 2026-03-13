@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Client\Gemini;
 
 use OneToMany\LlmSdk\Client\BaseClient;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
@@ -15,22 +16,10 @@ final class GeminiClient extends BaseClient implements ClientInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
-     *
-     * @return non-empty-list<non-empty-lowercase-string>
      */
-    public static function getModels(): array
+    public static function getVendor(): Vendor
     {
-        return [
-            'gemini-3.1-pro-preview',
-            'gemini-3.1-flash-lite-preview',
-            'gemini-3-pro-preview',
-            'gemini-3-flash-preview',
-            'gemini-2.5-pro',
-            'gemini-2.5-flash',
-            'gemini-2.5-flash-preview-09-2025',
-            'gemini-2.5-flash-lite',
-            'gemini-2.5-flash-lite-preview-09-2025',
-        ];
+        return Vendor::Gemini;
     }
 
     /**

@@ -4,10 +4,10 @@ namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum;
 
 enum Type: string
 {
-    case InputFile = 'input_file';
-    case InputImage = 'input_image';
-    case InputText = 'input_text';
-    case JsonSchema = 'json_schema';
+    case File = 'input_file';
+    case Image = 'input_image';
+    case Text = 'input_text';
+    case Schema = 'json_schema';
 
     /**
      * @return non-empty-string

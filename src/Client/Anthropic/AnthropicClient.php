@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Client\Anthropic;
 
 use OneToMany\LlmSdk\Client\BaseClient;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
@@ -14,18 +15,10 @@ final class AnthropicClient extends BaseClient implements ClientInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
-     *
-     * @return non-empty-list<non-empty-lowercase-string>
      */
-    public static function getModels(): array
+    public static function getVendor(): Vendor
     {
-        return [
-            'claude-opus-4-6',
-            'claude-sonnet-4-5',
-            'claude-sonnet-4-5-20250929',
-            'claude-haiku-4-5',
-            'claude-haiku-4-5-20251001',
-        ];
+        return Vendor::Anthropic;
     }
 
     /**

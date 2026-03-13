@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response;
 
-use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Enum\Status;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Output\Output;
@@ -10,7 +9,6 @@ use OneToMany\LlmSdk\Resource\OpenAi\Type\Usage\Usage;
 
 use function array_map;
 use function implode;
-use function sprintf;
 use function trim;
 
 final readonly class Response
@@ -39,16 +37,10 @@ final readonly class Response
     }
 
     /**
-     * @return non-empty-string
+     * @return ?non-empty-string
      */
-    public function getOutput(): string
+    public function getOutput(): ?string
     {
-        $output = array_map(fn ($o) => $o->getOutput(), $this->output ?? []);
-
-        if (!$output = trim(implode('', $output))) {
-            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $this->model));
-        }
-
-        return $output;
+        return trim(implode('', array_map(fn ($o) => $o->getOutput(), $this->output ?? []))) ?: null;
     }
 }

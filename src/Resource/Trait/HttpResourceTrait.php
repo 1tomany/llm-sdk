@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Trait;
 
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as SerializerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface as HttpClientDecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface as HttpClientHttpExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -45,6 +46,9 @@ trait HttpResourceTrait
     /**
      * @param 'GET'|'POST'|'PUT'|'DELETE' $method
      * @param array<string, mixed> $options
+     *
+     * @throws RuntimeException when a non-successful HTTP status code is returned
+     * @throws RuntimeException when a network, transport, or decoding error occurs
      */
     protected function doRequest(
         string $method,
@@ -60,9 +64,11 @@ trait HttpResourceTrait
 
             try {
                 // Cache and validate the content
-                $response->getContent(throw: true);
-            } catch (HttpClientHttpExceptionInterface $e) {
-                $this->handleRequestError($response->getContent(false), $statusCode);
+                if ($response->getContent(true)) {
+                    $response->toArray(true);
+                }
+            } catch (HttpClientDecodingExceptionInterface|HttpClientHttpExceptionInterface $e) {
+                $this->handleRequestError($response);
             }
         } catch (HttpClientExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
@@ -73,49 +79,52 @@ trait HttpResourceTrait
 
     /**
      * @param array<string, mixed> $options
+     *
+     * @return array<mixed>
      */
-    protected function doGetRequest(string $url, array $options = []): string
+    protected function doGetRequest(string $url, array $options = []): array
     {
-        return $this->doRequest('GET', $url, $options)->getContent();
+        return $this->doRequest('GET', $url, $options)->toArray();
     }
 
     /**
      * @param array<string, mixed> $options
+     *
+     * @return array<mixed>
      */
-    protected function doPostRequest(string $url, array $options = []): string
+    protected function doPostRequest(string $url, array $options = []): array
     {
-        return $this->doRequest('POST', $url, $options)->getContent();
+        return $this->doRequest('POST', $url, $options)->toArray();
     }
 
     /**
      * @param array<string, mixed> $options
+     *
+     * @return array<mixed>
      */
-    protected function doDeleteRequest(string $url, array $options = []): string
+    protected function doDeleteRequest(string $url, array $options = []): array
     {
-        return $this->doRequest('DELETE', $url, $options)->getContent();
+        return $this->doRequest('DELETE', $url, $options)->toArray();
     }
 
     /**
      * @throws RuntimeException when the HTTP request was not successful
      */
-    abstract protected function handleRequestError(string $content, int $statusCode): never;
+    abstract protected function handleRequestError(ResponseInterface $response): never;
 
     /**
      * @template T of object
      *
+     * @param array<mixed> $content
      * @param class-string<T> $type
      * @param array<string, mixed> $context
      *
      * @return T
      */
-    protected function doDeserialize(
-        string $content,
-        string $type,
-        string $format = 'json',
-        array $context = [],
-    ): object {
+    protected function doDenormalize(array $content, string $type, array $context = []): object
+    {
         try {
-            $object = $this->serializer->deserialize($content, $type, $format, $context);
+            $object = $this->serializer->denormalize($content, $type, null, $context);
         } catch (SerializerExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), previous: $e);
         }

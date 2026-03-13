@@ -10,9 +10,9 @@ use function trim;
 class ExecuteRequest extends BaseRequest
 {
     /**
-     * @var non-empty-string
+     * @var ?non-empty-string
      */
-    private string $url = 'https://api.mock-llm.example';
+    private ?string $url = null;
 
     /**
      * @var array<string, mixed>
@@ -35,7 +35,7 @@ class ExecuteRequest extends BaseRequest
      */
     public function getUrl(): string
     {
-        return $this->url;
+        return $this->url ?? throw new InvalidArgumentException('The URL is empty.');
     }
 
     /**

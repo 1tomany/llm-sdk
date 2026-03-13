@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Request\File;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Request\BaseRequest;
 
 use function basename;
 use function fclose;
@@ -15,7 +14,7 @@ use function sprintf;
 use function strtolower;
 use function trim;
 
-class UploadRequest extends BaseRequest
+class UploadRequest extends FileRequest
 {
     private ?string $path = null;
     private ?string $name = null;

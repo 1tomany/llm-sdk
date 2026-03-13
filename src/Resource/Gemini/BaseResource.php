@@ -2,13 +2,18 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface;
+use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface as HttpClientDecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 use function sprintf;
 
@@ -22,7 +27,7 @@ abstract readonly class BaseResource
      */
     public function __construct(
         protected HttpClientInterface $httpClient,
-        protected SerializerInterface $serializer,
+        protected DenormalizerInterface&NormalizerInterface&SerializerInterface $serializer,
         protected string $apiKey,
         protected string $apiVersion,
     ) {
@@ -47,24 +52,26 @@ abstract readonly class BaseResource
     /**
      * @see OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait
      */
-    protected function handleRequestError(string $content, int $statusCode): never
+    protected function handleRequestError(ResponseInterface $response): never
     {
         try {
-            $error = $this->doDeserialize($content, Error::class, context: [
+            $error = $this->doDenormalize($response->toArray(false), Error::class, [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[error]',
             ]);
-        } catch (ExceptionInterface) {
-            $error = new Error($statusCode, $content);
+        } catch (HttpClientDecodingExceptionInterface|LlmSdkExceptionInterface $e) {
+            $error = new Error($response->getStatusCode(), $response->getContent(false) ?: $e->getMessage());
         }
 
-        throw new RuntimeException($error->getMessage(), $statusCode);
+        throw new RuntimeException($error->getMessage(), $response->getStatusCode());
     }
 
     /**
+     * @param non-empty-string $action
+     *
      * @return non-empty-string
      */
-    protected function buildModelUrl(string $model, string $action): string
+    protected function buildModelUrl(Model $model, string $action): string
     {
-        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model, $action));
+        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $action));
     }
 }

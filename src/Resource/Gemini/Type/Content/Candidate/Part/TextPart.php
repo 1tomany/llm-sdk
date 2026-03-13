@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content\Candidate\Part;
 
-final readonly class Part
+final readonly class TextPart
 {
     /**
      * @param non-empty-string $text
