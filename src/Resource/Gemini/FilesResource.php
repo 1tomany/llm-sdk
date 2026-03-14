@@ -73,7 +73,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         }
 
         // Use the default chunk size (8MB) if the server did not return one
-        $uploadChunkSize = max(1, ($uploadChunkSize ?? self::DEFAULT_CHUNK_SIZE));
+        $uploadChunkSize = max(1, $uploadChunkSize ?? self::DEFAULT_CHUNK_SIZE);
 
         try {
             $uploadOffset = 0;
@@ -103,17 +103,15 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 // Account for unevenly divided file sizes
                 $uploadOffset = $uploadOffset + $chunkSize;
             }
-
-            if (null === $response || empty($response->getContent())) {
-                throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server returned an empty response.', $request->getName()));
-            }
-
-            $content = $response->toArray();
         } catch (LlmSdkExceptionInterface $e) {
             throw new RuntimeException(sprintf('The file "%s" was rejected at byte %d of %d by the server: %s.', $request->getName(), $uploadOffset, $request->getSize(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
         }
 
-        $file = $this->doDenormalize($content, File::class, [
+        if (null === $response || empty($response->getContent())) {
+            throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server returned an empty response.', $request->getName()));
+        }
+
+        $file = $this->doDenormalize($response->toArray(), File::class, [
             UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
         ]);
 
