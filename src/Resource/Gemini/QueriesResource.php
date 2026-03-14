@@ -26,55 +26,53 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        if ($request->getModel()->isEmbedding()) {
-            $requestContent = ['content' => []];
+        $contentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
 
-            foreach ($request->getPrompts() as $prompt) {
-                $requestContent['content']['parts'][] = [
+        $requestContent = [
+            $contentKey => [
+                'parts' => [],
+            ],
+        ];
+
+        // User Prompt Components
+        foreach ($request->getPrompts() as $prompt) {
+            $requestContent[$contentKey]['parts'][] = [
+                'text' => $prompt->getPrompt(),
+            ];
+        }
+
+        // File Prompt Components
+        foreach ($request->getFiles() as $file) {
+            $requestContent[$contentKey]['parts'][] = [
+                'fileData' => [
+                    'fileUri' => $file->getUri(),
+                    'mimeType' => $file->getFormat(),
+                ],
+            ];
+        }
+
+        // Instructions Prompt Component
+        if ($prompt = $request->getInstructions()) {
+            $requestContent['systemInstruction']['parts'] = [
+                [
                     'text' => $prompt->getPrompt(),
-                ];
+                ],
+            ];
+        }
 
-                // Adjust the number of output dimensions
-                if ($dimensionality = $request->getDimensions()) {
-                    $requestContent = array_merge($requestContent, [
-                        'outputDimensionality' => $dimensionality,
-                    ]);
-                }
-            }
-        } else {
-            $requestContent = ['contents' => []];
+        // Schema Prompt Component
+        if ($schema = $request->getSchema()) {
+            $requestContent['generationConfig'] = [
+                'responseMimeType' => $schema->getFormat(),
+                'responseJsonSchema' => $schema->getSchema(),
+            ];
+        }
 
-            foreach ($request->getFiles() as $file) {
-                $requestContent['contents']['parts'][] = [
-                    'fileData' => [
-                        'fileUri' => $file->getUri(),
-                        'mimeType' => $file->getFormat(),
-                    ],
-                ];
-            }
-
-            foreach ($request->getPrompts() as $prompt) {
-                $requestContent['contents']['parts'][] = [
-                    'text' => $prompt->getPrompt(),
-                ];
-            }
-
-            if ($prompt = $request->getInstructions()) {
-                $requestContent['systemInstruction'] = [
-                    'parts' => [
-                        [
-                            'text' => $prompt->getPrompt(),
-                        ],
-                    ],
-                ];
-            }
-
-            if ($schema = $request->getSchema()) {
-                $requestContent['generationConfig'] = [
-                    'responseMimeType' => $schema->getFormat(),
-                    'responseJsonSchema' => $schema->getSchema(),
-                ];
-            }
+        // Embedding Vector Dimensions Component
+        if ($dimensionality = $request->getDimensions()) {
+            $requestContent = array_merge($requestContent, [
+                'outputDimensionality' => $dimensionality,
+            ]);
         }
 
         return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
