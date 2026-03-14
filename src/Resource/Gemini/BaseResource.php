@@ -64,14 +64,4 @@ abstract readonly class BaseResource
 
         throw new RuntimeException($error->getMessage(), $response->getStatusCode());
     }
-
-    /**
-     * @param non-empty-string $action
-     *
-     * @return non-empty-string
-     */
-    protected function buildModelUrl(Model $model, string $action): string
-    {
-        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $action));
-    }
 }

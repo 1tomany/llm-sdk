@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
@@ -25,8 +26,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent');
-
         if ($request->getModel()->isEmbedding()) {
             $requestContent = ['content' => []];
 
@@ -78,7 +77,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-        return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
+        return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
     }
 
     /**
@@ -126,6 +125,14 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         ]);
 
         return new EmbedResponse($request->getModel(), $embedding->values, $timer->getDuration());
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    private function buildModelUrl(Model $model): string
+    {
+        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $model->isEmbedding() ? 'embedContent' : 'generateContent'));
     }
 
     /**
