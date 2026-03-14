@@ -40,7 +40,7 @@ class CompileRequest extends BaseRequest
     private ?int $dimensions = null;
     private ?SchemaComponent $schema = null;
 
-    public function withBatchKey(?string $batchKey): static
+    public function usingBatchKey(?string $batchKey): static
     {
         $this->batchKey = trim($batchKey ?? '') ?: null;
 
@@ -83,7 +83,7 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the model does not support instructions
+     * @throws InvalidArgumentException when the model does not support system instructions
      */
     public function withPrompt(?string $prompt, Role $role = Role::User): static
     {
@@ -92,7 +92,7 @@ class CompileRequest extends BaseRequest
 
             if ($this->getModel()->isEmbedding()) {
                 if ($component->getRole()->isSystem()) {
-                    throw new InvalidArgumentException(sprintf('The model "%s" does not support instructions.', $this->getModel()->getValue()));
+                    throw new InvalidArgumentException(sprintf('The model "%s" does not support system instructions.', $this->getModel()->getValue()));
                 }
 
                 $this->prompts = [$component];
@@ -106,6 +106,11 @@ class CompileRequest extends BaseRequest
         }
 
         return $this;
+    }
+
+    public function withUserPrompt(?string $prompt): static
+    {
+        return $this->withPrompt($prompt, Role::User);
     }
 
     /**

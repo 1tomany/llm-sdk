@@ -7,19 +7,12 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 class BaseRequest
 {
-    private Model $model = Model::Mock;
+    private readonly Model $model;
 
     public function __construct(
         string|Model|null $model = Model::Mock,
     ) {
-        $this->forModel($model);
-    }
-
-    public function forModel(string|Model|null $model): static
-    {
         $this->model = Model::create($model);
-
-        return $this;
     }
 
     public function getModel(): Model
