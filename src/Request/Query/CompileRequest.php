@@ -108,6 +108,11 @@ class CompileRequest extends BaseRequest
         return $this;
     }
 
+    public function withUserPrompt(?string $prompt): static
+    {
+        return $this->withPrompt($prompt, Role::User);
+    }
+
     /**
      * @return list<PromptComponent>
      */
