@@ -36,19 +36,19 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         ];
 
         if ($request->getModel()->isEmbedding()) {
-            // User Prompt Components
-            $requestContent['input'] = $request->getPrompts()[0]->getPrompt();
-            // foreach ($request->getPrompts() as $prompt) {
-            //     $requestContent['input'] = $prompt->getPrompt();
-            // }
+            // Text Prompt Components
+            foreach ($request->getPrompts() as $prompt) {
+                $requestContent['input'] = $prompt->getPrompt();
+            }
 
-            // Adjust the number of output dimensions
+            // Embedding Dimensions Component
             if ($dimensions = $request->getDimensions()) {
                 $requestContent['dimensions'] = $dimensions;
             }
         } else {
             $requestContent['input'] = [];
 
+            // File Prompt Components
             foreach ($request->getFiles() as $file) {
                 $type = match ($file->isImage()) {
                     true => Type::Image,
@@ -66,6 +66,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 ];
             }
 
+            // Text Prompt Components
             foreach ($request->getPrompts() as $prompt) {
                 $type = Type::Text;
 
@@ -80,6 +81,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 ];
             }
 
+            // Schema Prompt Component
             if ($schema = $request->getSchema()) {
                 $type = Type::Schema;
 

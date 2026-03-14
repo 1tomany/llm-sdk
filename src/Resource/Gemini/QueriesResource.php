@@ -34,13 +34,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ];
 
-        // User Prompt Components
-        foreach ($request->getPrompts() as $prompt) {
-            $requestContent[$contentKey]['parts'][] = [
-                'text' => $prompt->getPrompt(),
-            ];
-        }
-
         // File Prompt Components
         foreach ($request->getFiles() as $file) {
             $requestContent[$contentKey]['parts'][] = [
@@ -48,6 +41,13 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                     'fileUri' => $file->getUri(),
                     'mimeType' => $file->getFormat(),
                 ],
+            ];
+        }
+
+        // Text Prompt Components
+        foreach ($request->getPrompts() as $prompt) {
+            $requestContent[$contentKey]['parts'][] = [
+                'text' => $prompt->getPrompt(),
             ];
         }
 
@@ -62,19 +62,19 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ];
         }
 
+        // Embedding Dimensions Component
+        if ($dimensionality = $request->getDimensions()) {
+            $requestContent = array_merge($requestContent, [
+                'outputDimensionality' => $dimensionality,
+            ]);
+        }
+
         // Schema Prompt Component
         if ($schema = $request->getSchema()) {
             $requestContent['generationConfig'] = [
                 'responseMimeType' => $schema->getFormat(),
                 'responseJsonSchema' => $schema->getSchema(),
             ];
-        }
-
-        // Embedding Vector Dimensions Component
-        if ($dimensionality = $request->getDimensions()) {
-            $requestContent = array_merge($requestContent, [
-                'outputDimensionality' => $dimensionality,
-            ]);
         }
 
         return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
