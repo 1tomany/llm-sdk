@@ -60,9 +60,7 @@ trait HttpResourceTrait
             /** @var ResponseInterface $response */
             $response = $this->httpClient->request($method, $url, $options);
 
-            // This line indicates to the HttpClient
-            // that we will handle errors and to not
-            // throw an exception during destruction
+            // Indicate that we will handle errors
             $statusCode = $response->getStatusCode();
 
             try {
