@@ -16,6 +16,17 @@ use function random_int;
 #[Group('QueryTests')]
 final class CompileRequestTest extends TestCase
 {
+    public function testUsingInstructionsRequiresNonEmbeddingModel(): void
+    {
+        $model = Model::MockEmbedding;
+        $this->assertTrue($model->isEmbedding());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model "mock-embedding" does not support system instructions.');
+
+        new CompileRequest($model)->usingInstructions('You are a helpful large language model.');
+    }
+
     public function testUsingDimensionsRequiresEmbeddingModel(): void
     {
         $model = Model::Mock;

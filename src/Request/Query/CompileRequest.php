@@ -83,7 +83,7 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the model does not support instructions
+     * @throws InvalidArgumentException when the model does not support system instructions
      */
     public function withPrompt(?string $prompt, Role $role = Role::User): static
     {
@@ -92,7 +92,7 @@ class CompileRequest extends BaseRequest
 
             if ($this->getModel()->isEmbedding()) {
                 if ($component->getRole()->isSystem()) {
-                    throw new InvalidArgumentException(sprintf('The model "%s" does not support instructions.', $this->getModel()->getValue()));
+                    throw new InvalidArgumentException(sprintf('The model "%s" does not support system instructions.', $this->getModel()->getValue()));
                 }
 
                 $this->prompts = [$component];
