@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
@@ -14,8 +13,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface as HttpClientDecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-
-use function sprintf;
 
 abstract readonly class BaseResource
 {
