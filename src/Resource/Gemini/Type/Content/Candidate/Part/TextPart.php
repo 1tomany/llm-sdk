@@ -19,7 +19,7 @@ final readonly class TextPart
     public function toArray(): array
     {
         return [
-            'text' => $this->text
+            'text' => $this->text,
         ];
     }
 }
