@@ -10,12 +10,24 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 use function random_int;
+use function uniqid;
 
 #[Group('UnitTests')]
 #[Group('RequestTests')]
 #[Group('QueryTests')]
 final class CompileRequestTest extends TestCase
 {
+    public function testWithFileUriRequiresModelToSupportFileInputs(): void
+    {
+        $model = Model::GptEmbedding3Large;
+        $this->assertFalse($model->supportsFiles());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model "gpt-embedding-3-large" does not support file inputs.');
+
+        new CompileRequest($model)->withFileUri(uniqid(), 'image/jpeg');
+    }
+
     public function testUsingInstructionsRequiresNonEmbeddingModel(): void
     {
         $model = Model::MockEmbedding;
