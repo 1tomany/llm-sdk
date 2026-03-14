@@ -36,13 +36,15 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         ];
 
         if ($request->getModel()->isEmbedding()) {
-            foreach ($request->getPrompts() as $prompt) {
-                $requestContent['input'] = $prompt->getPrompt();
+            // User Prompt Components
+            $requestContent['input'] = $request->getPrompts()[0]->getPrompt();
+            // foreach ($request->getPrompts() as $prompt) {
+            //     $requestContent['input'] = $prompt->getPrompt();
+            // }
 
-                // Adjust the number of output dimensions
-                if ($dimensions = $request->getDimensions()) {
-                    $requestContent['dimensions'] = $dimensions;
-                }
+            // Adjust the number of output dimensions
+            if ($dimensions = $request->getDimensions()) {
+                $requestContent['dimensions'] = $dimensions;
             }
         } else {
             $requestContent['input'] = [];

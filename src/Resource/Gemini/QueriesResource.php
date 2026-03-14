@@ -53,9 +53,11 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
 
         // Instructions Prompt Component
         if ($prompt = $request->getInstructions()) {
-            $requestContent['systemInstruction']['parts'] = [
-                [
-                    'text' => $prompt->getPrompt(),
+            $requestContent['systemInstruction'] = [
+                'parts' => [
+                    [
+                        'text' => $prompt->getPrompt(),
+                    ],
                 ],
             ];
         }

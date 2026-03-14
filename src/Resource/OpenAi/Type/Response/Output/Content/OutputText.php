@@ -12,6 +12,10 @@ final readonly class OutputText
     /**
      * @param ?non-empty-string $text
      * @param ?non-empty-string $refusal
+     *
+     * @throws InvalidArgumentException when the text and refusal are empty
+     * @throws InvalidArgumentException when the type is output_text and the text is empty
+     * @throws InvalidArgumentException when the type is refusal and the refusal is empty
      */
     public function __construct(
         public Type $type,
