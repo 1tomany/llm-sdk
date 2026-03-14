@@ -10,4 +10,16 @@ final readonly class TextPart
     public function __construct(public string $text)
     {
     }
+
+    /**
+     * @return array{
+     *   text: non-empty-string,
+     * }
+     */
+    public function toArray(): array
+    {
+        return [
+            'text' => $this->text,
+        ];
+    }
 }

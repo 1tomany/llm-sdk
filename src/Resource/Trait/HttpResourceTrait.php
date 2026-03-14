@@ -10,6 +10,7 @@ use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface as HttpClientH
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 use function implode;
+use function json_validate;
 use function ltrim;
 use function rtrim;
 
@@ -59,13 +60,16 @@ trait HttpResourceTrait
             /** @var ResponseInterface $response */
             $response = $this->httpClient->request($method, $url, $options);
 
-            /** @var int<100, 599> $statusCode */
+            // Indicate that we will handle errors
             $statusCode = $response->getStatusCode();
 
             try {
-                // Cache and validate the content
-                if ($response->getContent(true)) {
-                    $response->toArray(true);
+                // Force the full response to be returned so
+                // it can be cached, validated, and decoded
+                if ($content = $response->getContent()) {
+                    if (json_validate($content, 512)) {
+                        $response->toArray(true);
+                    }
                 }
             } catch (HttpClientDecodingExceptionInterface|HttpClientHttpExceptionInterface $e) {
                 $this->handleRequestError($response);

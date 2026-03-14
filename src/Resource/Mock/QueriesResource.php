@@ -37,12 +37,15 @@ final readonly class QueriesResource implements QueriesResourceInterface
             'model' => $request->getModel()->getId(),
         ];
 
+        // File Prompt Components
         foreach ($request->getFiles() as $file) {
             $requestContent['files'][] = [
                 'fileUri' => $file->getUri(),
+                'format' => $file->getFormat(),
             ];
         }
 
+        // Text Prompt Components
         foreach ($request->getPrompts() as $prompt) {
             $requestContent['prompts'][] = [
                 'text' => $prompt->getPrompt(),
@@ -50,14 +53,17 @@ final readonly class QueriesResource implements QueriesResourceInterface
             ];
         }
 
+        // Instructions Prompt Component
         if ($prompt = $request->getInstructions()) {
             $requestContent['instructions'] = $prompt->getPrompt();
         }
 
+        // Embedding Dimensions Component
         if ($dimensions = $request->getDimensions()) {
             $requestContent['dimensions'] = $dimensions;
         }
 
+        // Schema Prompt Component
         if ($schema = $request->getSchema()) {
             $requestContent['schema'] = [
                 'name' => $schema->getName(),

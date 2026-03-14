@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
@@ -16,7 +17,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function create(CreateRequest $request): CreateResponse
     {
-        $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'asyncBatchEmbedContent' : 'batchGenerateContent');
+        $url = $this->buildModelUrl($request->getModel());
 
         $content = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders(),
@@ -49,5 +50,13 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
         $batch = $this->doDenormalize($content, Batch::class);
 
         return new ReadResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    private function buildModelUrl(Model $model): string
+    {
+        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $model->isEmbedding() ? 'asyncBatchEmbedContent' : 'batchGenerateContent'));
     }
 }

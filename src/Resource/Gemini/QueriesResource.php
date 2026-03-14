@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
@@ -25,60 +26,58 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        $url = $this->buildModelUrl($request->getModel(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent');
+        $contentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
 
-        if ($request->getModel()->isEmbedding()) {
-            $requestContent = ['content' => []];
+        $requestContent = [
+            $contentKey => [
+                'parts' => [],
+            ],
+        ];
 
-            foreach ($request->getPrompts() as $prompt) {
-                $requestContent['content']['parts'][] = [
-                    'text' => $prompt->getPrompt(),
-                ];
-
-                // Adjust the number of output dimensions
-                if ($dimensionality = $request->getDimensions()) {
-                    $requestContent = array_merge($requestContent, [
-                        'outputDimensionality' => $dimensionality,
-                    ]);
-                }
-            }
-        } else {
-            $requestContent = ['contents' => []];
-
-            foreach ($request->getFiles() as $file) {
-                $requestContent['contents']['parts'][] = [
-                    'fileData' => [
-                        'fileUri' => $file->getUri(),
-                        'mimeType' => $file->getFormat(),
-                    ],
-                ];
-            }
-
-            foreach ($request->getPrompts() as $prompt) {
-                $requestContent['contents']['parts'][] = [
-                    'text' => $prompt->getPrompt(),
-                ];
-            }
-
-            if ($prompt = $request->getInstructions()) {
-                $requestContent['systemInstruction'] = [
-                    'parts' => [
-                        [
-                            'text' => $prompt->getPrompt(),
-                        ],
-                    ],
-                ];
-            }
-
-            if ($schema = $request->getSchema()) {
-                $requestContent['generationConfig'] = [
-                    'responseMimeType' => $schema->getFormat(),
-                    'responseJsonSchema' => $schema->getSchema(),
-                ];
-            }
+        // File Prompt Components
+        foreach ($request->getFiles() as $file) {
+            $requestContent[$contentKey]['parts'][] = [
+                'fileData' => [
+                    'fileUri' => $file->getUri(),
+                    'mimeType' => $file->getFormat(),
+                ],
+            ];
         }
 
-        return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
+        // Text Prompt Components
+        foreach ($request->getPrompts() as $prompt) {
+            $requestContent[$contentKey]['parts'][] = [
+                'text' => $prompt->getPrompt(),
+            ];
+        }
+
+        // Instructions Prompt Component
+        if ($prompt = $request->getInstructions()) {
+            $requestContent['systemInstruction'] = [
+                'parts' => [
+                    [
+                        'text' => $prompt->getPrompt(),
+                    ],
+                ],
+            ];
+        }
+
+        // Embedding Dimensions Component
+        if ($dimensionality = $request->getDimensions()) {
+            $requestContent = array_merge($requestContent, [
+                'outputDimensionality' => $dimensionality,
+            ]);
+        }
+
+        // Schema Prompt Component
+        if ($schema = $request->getSchema()) {
+            $requestContent['generationConfig'] = [
+                'responseMimeType' => $schema->getFormat(),
+                'responseJsonSchema' => $schema->getSchema(),
+            ];
+        }
+
+        return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
     }
 
     /**
@@ -126,6 +125,14 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         ]);
 
         return new EmbedResponse($request->getModel(), $embedding->values, $timer->getDuration());
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    private function buildModelUrl(Model $model): string
+    {
+        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $model->isEmbedding() ? 'embedContent' : 'generateContent'));
     }
 
     /**

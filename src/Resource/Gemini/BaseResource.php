@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
@@ -14,8 +13,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface as HttpClientDecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-
-use function sprintf;
 
 abstract readonly class BaseResource
 {
@@ -63,15 +60,5 @@ abstract readonly class BaseResource
         }
 
         throw new RuntimeException($error->getMessage(), $response->getStatusCode());
-    }
-
-    /**
-     * @param non-empty-string $action
-     *
-     * @return non-empty-string
-     */
-    protected function buildModelUrl(Model $model, string $action): string
-    {
-        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $action));
     }
 }
