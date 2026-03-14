@@ -63,15 +63,17 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             }
         } catch (LlmSdkExceptionInterface $e) {
             throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server failed to generate the signed upload URL: %s.', $request->getName(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
+        } finally {
+            $response = null;
         }
 
         // Set the chunk size to the amount preferred by the server
         if (is_numeric($headers[self::HEADER_CHUNK_SIZE][0] ?? null)) {
-            $uploadChunkSize = $headers[self::HEADER_CHUNK_SIZE][0];
+            $uploadChunkSize = (int) $headers[self::HEADER_CHUNK_SIZE][0];
         }
 
-        // Use the default chunk size (8MB) if the server did not return the header
-        $uploadChunkSize = max(1, (int) ($uploadChunkSize ?? self::DEFAULT_CHUNK_SIZE));
+        // Use the default chunk size (8MB) if the server did not return one
+        $uploadChunkSize = max(1, ($uploadChunkSize ?? self::DEFAULT_CHUNK_SIZE));
 
         try {
             $uploadOffset = 0;
@@ -89,7 +91,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                     $uploadCommand = self::UPLOAD_COMMAND_FINALIZE;
                 }
 
-                $content = $this->doPostRequest($uploadUrl, [
+                $response = $this->doRequest('POST', $uploadUrl, [
                     'headers' => $this->buildHeaders([
                         'content-length' => $request->getSize(),
                         'x-goog-upload-offset' => $uploadOffset,
@@ -101,12 +103,14 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 // Account for unevenly divided file sizes
                 $uploadOffset = $uploadOffset + $chunkSize;
             }
+
+            if (null === $response || empty($response->getContent())) {
+                throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server returned an empty response.', $request->getName()));
+            }
+
+            $content = $response->toArray();
         } catch (LlmSdkExceptionInterface $e) {
             throw new RuntimeException(sprintf('The file "%s" was rejected at byte %d of %d by the server: %s.', $request->getName(), $uploadOffset, $request->getSize(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
-        }
-
-        if (!isset($content)) {
-            throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server returned an empty response.', $request->getName()));
         }
 
         $file = $this->doDenormalize($content, File::class, [
