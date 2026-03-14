@@ -2,16 +2,42 @@
 
 namespace OneToMany\LlmSdk\Tests\Request\Query;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+
+use function random_int;
 
 #[Group('UnitTests')]
 #[Group('RequestTests')]
 #[Group('QueryTests')]
 final class CompileRequestTest extends TestCase
 {
+    public function testUsingDimensionsRequiresEmbeddingModel(): void
+    {
+        $model = Model::Mock;
+        $this->assertFalse($model->isEmbedding());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model "mock" does not support changing the output dimensions.');
+
+        new CompileRequest($model)->usingDimensions(random_int(1, 1024));
+    }
+
+    public function testUsingSchemaRequiresNonEmbeddingModel(): void
+    {
+        $model = Model::MockEmbedding;
+        $this->assertTrue($model->isEmbedding());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model "mock-embedding" does not support structured output.');
+
+        new CompileRequest($model)->usingSchema(['title' => 'JsonSchema']);
+    }
+
     public function testUsingSchemaExtractsNameFromTitle(): void
     {
         // Arrange: JSON Schema
