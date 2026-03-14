@@ -60,12 +60,14 @@ trait HttpResourceTrait
             /** @var ResponseInterface $response */
             $response = $this->httpClient->request($method, $url, $options);
 
-            // This line prevents the destructor of the
-            // HttpClient class from throwing an exception
-            $httpStatusCode = $response->getStatusCode();
+            // This line indicates to the HttpClient
+            // that we will handle errors and to not
+            // throw an exception during destruction
+            $statusCode = $response->getStatusCode();
 
             try {
-                // Cache and validate the content
+                // Force the full response to be returned so
+                // it can be cached, validated, and decoded
                 if ($content = $response->getContent()) {
                     if (json_validate($content, 512)) {
                         $response->toArray(true);
