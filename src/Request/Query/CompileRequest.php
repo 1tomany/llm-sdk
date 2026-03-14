@@ -40,7 +40,7 @@ class CompileRequest extends BaseRequest
     private ?int $dimensions = null;
     private ?SchemaComponent $schema = null;
 
-    public function withBatchKey(?string $batchKey): static
+    public function usingBatchKey(?string $batchKey): static
     {
         $this->batchKey = trim($batchKey ?? '') ?: null;
 

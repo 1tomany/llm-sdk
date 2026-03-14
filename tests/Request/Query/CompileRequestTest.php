@@ -17,6 +17,15 @@ use function uniqid;
 #[Group('QueryTests')]
 final class CompileRequestTest extends TestCase
 {
+    public function testUsingBatchKeyNullifiesEmptyTrimmedBatchKeys(): void
+    {
+        $compileRequest = new CompileRequest();
+        $this->assertNull($compileRequest->getBatchKey());
+
+        $compileRequest->usingBatchKey(' ');
+        $this->assertNull($compileRequest->getBatchKey());
+    }
+
     public function testWithFileUriRequiresModelToSupportFileInputs(): void
     {
         $model = Model::GptEmbedding3Large;
