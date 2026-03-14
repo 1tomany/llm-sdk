@@ -15,13 +15,6 @@ class BaseRequest
         $this->model = Model::create($model);
     }
 
-    public function forModel(string|Model|null $model): static
-    {
-        $this->model = Model::create($model);
-
-        return $this;
-    }
-
     public function getModel(): Model
     {
         return $this->model;
