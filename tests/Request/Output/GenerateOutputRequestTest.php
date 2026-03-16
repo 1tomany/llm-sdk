@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Tests\Request\Output;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use PHPUnit\Framework\TestCase;
 
