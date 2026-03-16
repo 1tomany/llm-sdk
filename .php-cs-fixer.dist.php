@@ -12,30 +12,28 @@ $finder->in([
     './src/',
     './tests/',
 ]);
-
-$finder->exclude([
-    'vendor',
-]);
+// ->exclude([
+//     'vendor',
+// ]);
 
 $config = new Config()
+    ->setFinder($finder)
+    ->setParallelConfig(new ParallelConfig(4))
     ->setCacheFile('./.build/php-cs-fixer.cache')
-    ->setParallelConfig(new ParallelConfig(4));
-
-$config->setFinder($finder);
-$config->setRules([
-    '@Symfony' => true,
-    'global_namespace_import' => [
-        'import_classes' => false,
-        'import_constants' => true,
-        'import_functions' => true,
-    ],
-    'operator_linebreak' => [
-        'only_booleans' => true,
-        'position' => 'end',
-    ],
-    'phpdoc_align' => [
-        'align' => 'left',
-    ],
-]);
+    ->setRules([
+        '@Symfony' => true,
+        'global_namespace_import' => [
+            'import_classes' => false,
+            'import_constants' => true,
+            'import_functions' => true,
+        ],
+        'operator_linebreak' => [
+            'only_booleans' => true,
+            'position' => 'end',
+        ],
+        'phpdoc_align' => [
+            'align' => 'left',
+        ],
+    ]);
 
 return $config;
