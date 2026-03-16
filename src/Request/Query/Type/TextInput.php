@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\Query\Input;
+namespace OneToMany\LlmSdk\Request\Query\Type;
 
-use OneToMany\LlmSdk\Request\Query\Input\Enum\Role;
+use OneToMany\LlmSdk\Request\Query\Type\Enum\Role;
 
 final readonly class TextInput
 {

@@ -4,11 +4,11 @@ namespace OneToMany\LlmSdk\Request\Query;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
-use OneToMany\LlmSdk\Request\Query\Input\DimensionsInput;
-use OneToMany\LlmSdk\Request\Query\Input\Enum\Role;
-use OneToMany\LlmSdk\Request\Query\Input\FileInput;
-use OneToMany\LlmSdk\Request\Query\Input\SchemaInput;
-use OneToMany\LlmSdk\Request\Query\Input\TextInput;
+use OneToMany\LlmSdk\Request\Query\Type\DimensionsInput;
+use OneToMany\LlmSdk\Request\Query\Type\Enum\Role;
+use OneToMany\LlmSdk\Request\Query\Type\FileInput;
+use OneToMany\LlmSdk\Request\Query\Type\SchemaInput;
+use OneToMany\LlmSdk\Request\Query\Type\TextInput;
 
 use function count;
 use function is_string;

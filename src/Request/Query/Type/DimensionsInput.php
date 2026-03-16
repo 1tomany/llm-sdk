@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\Query\Input;
+namespace OneToMany\LlmSdk\Request\Query\Type;
 
 use function is_object;
 use function max;
