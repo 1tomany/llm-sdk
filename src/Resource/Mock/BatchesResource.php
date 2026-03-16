@@ -7,8 +7,8 @@ use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Resource\Mock\Type\Batch\Status;
-use OneToMany\LlmSdk\Response\Batch\CreateResponse;
-use OneToMany\LlmSdk\Response\Batch\ReadResponse;
+use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
+use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
 
 final readonly class BatchesResource implements BatchesResourceInterface
 {
@@ -21,16 +21,16 @@ final readonly class BatchesResource implements BatchesResourceInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
-    public function create(CreateRequest $request): CreateResponse
+    public function create(CreateRequest $request): CreateBatchResponse
     {
-        return new CreateResponse($request->getModel(), $this->generateId('batch'), Status::Processing->getValue());
+        return new CreateBatchResponse($request->getModel(), $this->generateId('batch'), Status::Processing->getValue());
     }
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
-    public function read(ReadRequest $request): ReadResponse
+    public function read(ReadRequest $request): ReadBatchResponse
     {
-        return new ReadResponse($request->getModel(), $request->getUri(), Status::Completed->getValue(), $this->generateId('file'));
+        return new ReadBatchResponse($request->getModel(), $request->getUri(), Status::Completed->getValue(), $this->generateId('file'));
     }
 }

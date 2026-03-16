@@ -6,8 +6,8 @@ use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Batch\Batch;
-use OneToMany\LlmSdk\Response\Batch\CreateResponse;
-use OneToMany\LlmSdk\Response\Batch\ReadResponse;
+use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
+use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
 
 use function sprintf;
 
@@ -16,7 +16,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
-    public function create(CreateRequest $request): CreateResponse
+    public function create(CreateRequest $request): CreateBatchResponse
     {
         $url = $this->buildUrl($this->getApiVersion(), sprintf('models/%s:%s', $request->getModel()->getId(), $request->getModel()->isEmbedding() ? 'asyncBatchEmbedContent' : 'batchGenerateContent'));
 
@@ -34,13 +34,13 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
 
         $object = $this->doDenormalize($content, Batch::class);
 
-        return new CreateResponse($request->getModel(), $object->name, $object->metadata->state->getValue());
+        return new CreateBatchResponse($request->getModel(), $object->name, $object->metadata->state->getValue());
     }
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
-    public function read(ReadRequest $request): ReadResponse
+    public function read(ReadRequest $request): ReadBatchResponse
     {
         $url = $this->buildUrl($this->getApiVersion(), $request->getUri());
 
@@ -50,6 +50,6 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
 
         $batch = $this->doDenormalize($content, Batch::class);
 
-        return new ReadResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
+        return new ReadBatchResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
     }
 }
