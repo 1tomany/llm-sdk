@@ -6,9 +6,11 @@ use OneToMany\LlmSdk\Client\BaseClient;
 use OneToMany\LlmSdk\Contract\Client\ClientInterface;
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Resource\Gemini\BatchesResource;
+use OneToMany\LlmSdk\Resource\Gemini\EmbeddingsResource;
 use OneToMany\LlmSdk\Resource\Gemini\FilesResource;
 use OneToMany\LlmSdk\Resource\Gemini\QueriesResource;
 
@@ -38,6 +40,16 @@ final class GeminiClient extends BaseClient implements ClientInterface
         $this->batches ??= new BatchesResource($this->httpClient, $this->serializer, $this->getApiKey(), $this->getApiVersion());
 
         return $this->batches;
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
+    public function embeddings(): EmbeddingsResourceInterface
+    {
+        $this->embeddings ??= new EmbeddingsResource($this->httpClient, $this->serializer, $this->getApiKey(), $this->getApiVersion());
+
+        return $this->embeddings;
     }
 
     /**
