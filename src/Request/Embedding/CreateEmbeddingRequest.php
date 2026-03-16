@@ -6,6 +6,8 @@ use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 
+use function sprintf;
+
 class CreateEmbeddingRequest extends BaseRequest
 {
     /**
@@ -18,7 +20,7 @@ class CreateEmbeddingRequest extends BaseRequest
         private array $request,
     ) {
         if (!$model->isEmbedding()) {
-            throw new InvalidArgumentException(\sprintf('The model "%s" is not an embedding model.', $model->getValue()));
+            throw new InvalidArgumentException(sprintf('The model "%s" is not an embedding model.', $model->getValue()));
         }
 
         parent::__construct($model);

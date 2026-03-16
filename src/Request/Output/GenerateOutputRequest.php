@@ -6,6 +6,8 @@ use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 
+use function sprintf;
+
 class GenerateOutputRequest extends BaseRequest
 {
     /**
@@ -20,7 +22,7 @@ class GenerateOutputRequest extends BaseRequest
         private readonly array $request,
     ) {
         if ($model->isEmbedding()) {
-            throw new InvalidArgumentException(\sprintf('The model "%s" is not a generative model.', $model->getName()));
+            throw new InvalidArgumentException(sprintf('The model "%s" is not a generative model.', $model->getName()));
         }
 
         parent::__construct($model);
