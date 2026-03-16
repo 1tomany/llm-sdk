@@ -2,6 +2,7 @@
 
 use OneToMany\LlmSdk\Action\File\UploadFileAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 
@@ -17,14 +18,16 @@ if (!is_file($path)) {
 $vendor = trim($argv[2] ?? '') ?: 'mock';
 
 try {
+    if (!$format = mime_content_type($path)) {
+        throw new RuntimeException(sprintf('The format of the file "%s" could not be determined.', $path));
+    }
+
     // Create a request to upload the file
-    $uploadRequest = new UploadRequest($vendor)->atPath($path)->withFormat(...[
-        'format' => mime_content_type($path) ?: 'application/octet-stream',
-    ]);
+    $uploadFileRequest = new UploadRequest($vendor)->atPath($path)->withFormat($format);
 
     // Upload the file to the LLM vendor
     $response = new UploadFileAction($clientFactory)->act(...[
-        'request' => $uploadRequest,
+        'request' => $uploadFileRequest,
     ]);
 
     successMessage('The file "%s" was successfully uploaded to %s with URI "%s".', basename($path), $response->getVendor()->getName(), $response->getUri());
