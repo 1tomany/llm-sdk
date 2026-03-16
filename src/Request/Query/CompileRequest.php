@@ -33,7 +33,7 @@ class CompileRequest extends BaseRequest
     /**
      * @throws InvalidArgumentException when the model does not support changing the output dimensions
      */
-    public function usingDimensions(string|DimensionsInput|null $dimensions): static
+    public function usingDimensions(int|DimensionsInput|null $dimensions): static
     {
         if (null === $dimensions) {
             $this->dimensions = null;
@@ -133,5 +133,10 @@ class CompileRequest extends BaseRequest
     public function getTextInputs(): array
     {
         return $this->textInputs;
+    }
+
+    public function hasComponents(): bool
+    {
+        return 0 !== \count($this->fileInputs) || 0 !== \count($this->textInputs);
     }
 }
