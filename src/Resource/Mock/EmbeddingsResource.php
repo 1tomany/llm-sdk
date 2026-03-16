@@ -6,6 +6,8 @@ use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
 
+use function assert;
+use function count;
 use function random_int;
 
 final readonly class EmbeddingsResource implements EmbeddingsResourceInterface
@@ -27,6 +29,8 @@ final readonly class EmbeddingsResource implements EmbeddingsResourceInterface
         for ($i = 0; $i < $request->getDimensions(); ++$i) {
             $embedding[] = $this->faker->randomFloat();
         }
+
+        assert(count($embedding) === $request->getDimensions());
 
         return new CreateEmbeddingResponse($request->getModel(), $embedding, random_int(100, 10000));
     }

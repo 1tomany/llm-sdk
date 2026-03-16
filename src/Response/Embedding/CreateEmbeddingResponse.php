@@ -7,13 +7,14 @@ use OneToMany\LlmSdk\Response\BaseResponse;
 
 use function array_map;
 use function array_sum;
+use function count;
 use function max;
 use function sqrt;
 
 final readonly class CreateEmbeddingResponse extends BaseResponse
 {
     /**
-     * @param list<float> $embedding
+     * @param non-empty-list<float> $embedding
      */
     public function __construct(
         Model $model,
@@ -24,7 +25,15 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
     }
 
     /**
-     * @return list<float>
+     * @return positive-int
+     */
+    public function getDimensions(): int
+    {
+        return count($this->embedding);
+    }
+
+    /**
+     * @return non-empty-list<float>
      */
     public function getEmbedding(): array
     {
