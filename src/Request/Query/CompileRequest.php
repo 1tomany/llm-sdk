@@ -30,7 +30,13 @@ class CompileRequest extends BaseRequest
     public function usingBatchKey(string|BatchKeyInput|null $batchKey): static
     {
         if (!$batchKey instanceof BatchKeyInput) {
-            if ($batchKey = trim($batchKey ?? '') ?: null) {
+            $batchKey = trim($batchKey ?? '') ?: null;
+        }
+
+        if (null === $batchKey) {
+            $this->batchKey = null;
+        } else {
+            if (!$batchKey instanceof BatchKeyInput) {
                 $batchKey = new BatchKeyInput($batchKey);
             }
 
