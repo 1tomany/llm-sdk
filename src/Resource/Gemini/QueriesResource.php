@@ -34,6 +34,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ];
 
+        /*
         // File Prompt Components
         foreach ($request->getFileInputs() as $file) {
             $requestContent[$contentKey]['parts'][] = [
@@ -61,6 +62,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 ],
             ];
         }
+        */
 
         // Embedding Dimensions Component
         if ($dimensionality = $request->getDimensions()) {
@@ -77,72 +79,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ];
         }
 
-        return new CompileResponse($request->getModel(), $this->buildModelUrl($request->getModel()), $this->convertIfBatchRequest($request->getBatchKey(), $requestContent));
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
-     *
-     * @throws RuntimeException when the model fails to generate any output
-     */
-    public function generate(ExecuteRequest $request): GenerateResponse
-    {
-        $timer = new Stopwatch(true)->start('generate');
-
-        /** @var array<string, mixed> $content */
-        $content = $this->doPostRequest($request->getUrl(), [
-            'headers' => $this->buildHeaders(),
-            'json' => [
-                ...$request->getRequest(),
-            ],
-        ]);
-
-        $generation = $this->doDenormalize($content, Generation::class);
-
-        if (!$output = $generation->getOutput()) {
-            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $request->getModel()->getName()));
-        }
-
-        return new GenerateResponse($request->getModel(), $generation->responseId, $output, $content, $timer->getDuration(), new UsageResponse($generation->usageMetadata->promptTokenCount, $generation->usageMetadata->cachedContentTokenCount, $generation->usageMetadata->outputTokenCount));
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
-     */
-    public function embed(ExecuteRequest $request): EmbedResponse
-    {
-        $timer = new Stopwatch(true)->start('embed');
-
-        $content = $this->doPostRequest($request->getUrl(), [
-            'headers' => $this->buildHeaders(),
-            'json' => [
-                ...$request->getRequest(),
-            ],
-        ]);
-
-        $embedding = $this->doDenormalize($content, Embedding::class, [
-            UnwrappingDenormalizer::UNWRAP_PATH => '[embedding]',
-        ]);
-
-        return new EmbedResponse($request->getModel(), $embedding->values, $timer->getDuration());
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    private function buildModelUrl(Model $model): string
-    {
-        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $model->isEmbedding() ? 'embedContent' : 'generateContent'));
-    }
-
-    /**
-     * @param ?non-empty-string $batchKey
-     * @param array<string, mixed> $request
-     *
-     * @return array<string, mixed>
-     */
-    private function convertIfBatchRequest(?string $batchKey, array $request): array
-    {
-        return null === $batchKey ? $request : ['key' => $batchKey, 'request' => $request];
+        return new CompileResponse($request->getModel(), $requestContent);
     }
 }

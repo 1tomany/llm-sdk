@@ -11,14 +11,12 @@ use function sprintf;
 class GenerateOutputRequest extends BaseRequest
 {
     /**
-     * @param non-empty-string $url
      * @param array<string, mixed> $request
      *
      * @throws InvalidArgumentException when the model is not a generative model
      */
     public function __construct(
         string|Model|null $model,
-        private readonly string $url,
         private readonly array $request,
     ) {
         $model = Model::create($model);
@@ -28,14 +26,6 @@ class GenerateOutputRequest extends BaseRequest
         }
 
         parent::__construct($model);
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    public function getUrl(): string
-    {
-        return $this->url;
     }
 
     /**
