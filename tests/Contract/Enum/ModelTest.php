@@ -9,6 +9,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
+use function uniqid;
+
 #[Group('UnitTests')]
 #[Group('ContractTests')]
 #[Group('EnumTests')]
@@ -19,6 +21,16 @@ final class ModelTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The model name cannot be empty.');
+
+        Model::create($model);
+    }
+
+    public function testCreatingModelRequiresValidName(): void
+    {
+        $model = uniqid('model_');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model name "'.$model.'" is not valid.');
 
         Model::create($model);
     }
