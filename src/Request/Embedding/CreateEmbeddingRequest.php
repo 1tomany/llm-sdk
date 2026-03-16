@@ -19,7 +19,7 @@ class CreateEmbeddingRequest extends BaseRequest
         string|Model|null $model,
         private array $request,
     ) {
-        if (!$model->isEmbedding()) {
+        if (!($model = Model::create($model))->isEmbedding()) {
             throw new InvalidArgumentException(sprintf('The model "%s" is not an embedding model.', $model->getValue()));
         }
 
