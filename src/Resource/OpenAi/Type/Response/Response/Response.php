@@ -3,8 +3,8 @@
 namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
 
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Output\Output;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response\Enum\Status;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response\Output\Output;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Usage\Usage;
 
 use function array_map;
