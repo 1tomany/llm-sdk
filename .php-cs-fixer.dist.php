@@ -17,9 +17,9 @@ $finder->exclude([
     'vendor',
 ]);
 
-$config = new Config()->setParallelConfig(...[
-    'config' => new ParallelConfig(4),
-]);
+$config = new Config()
+    ->setCacheFile('./.build/php-cs-fixer.cache')
+    ->setParallelConfig(new ParallelConfig(4));
 
 $config->setFinder($finder);
 $config->setRules([
