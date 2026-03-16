@@ -42,6 +42,8 @@ class CompileRequest extends BaseRequest
 
             $this->batchKey = $batchKey;
         }
+
+        return $this;
     }
 
     public function getBatchKey(): ?BatchKeyInput

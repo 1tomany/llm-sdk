@@ -2,6 +2,8 @@
 
 namespace OneToMany\LlmSdk\Request\Query\Input;
 
+use function trim;
+
 final readonly class BatchKeyInput
 {
     /**
@@ -10,6 +12,17 @@ final readonly class BatchKeyInput
     public function __construct(
         private string $key,
     ) {
+    }
+
+    public static function create(string|self|null $batchKey): ?self
+    {
+        if (!$batchKey instanceof self) {
+            if ($batchKey = trim($batchKey ?? '')) {
+                $batchKey = new self($batchKey);
+            }
+        }
+
+        return $batchKey ? $batchKey : null;
     }
 
     /**
