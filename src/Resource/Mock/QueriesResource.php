@@ -25,8 +25,8 @@ final readonly class QueriesResource implements QueriesResourceInterface
         ];
 
         // Dimensions Input
-        if ($dimensions = $request->getDimensions()) {
-            $requestContent['dimensions'] = $dimensions;
+        if (null !== $dimensions = $request->getDimensions()) {
+            $requestContent['dimensions'] = $dimensions->toArray();
         }
 
         // File Inputs
@@ -45,7 +45,7 @@ final readonly class QueriesResource implements QueriesResourceInterface
 
         // System Instructions Input
         if (null !== $text = $request->getInstructions()) {
-            $requestContent['instructions'] = $text->getText();
+            $requestContent['instructions'] = $text->toArray();
         }
 
         // Schema Input

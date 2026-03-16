@@ -32,4 +32,16 @@ final readonly class DimensionsInput
     {
         return $this->dimensions;
     }
+
+    /**
+     * @return array{
+     *   dimensions: positive-int,
+     * }
+     */
+    public function toArray(): array
+    {
+        return [
+            'dimensions' => $this->dimensions,
+        ];
+    }
 }

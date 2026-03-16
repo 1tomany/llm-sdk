@@ -4,7 +4,10 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
+
+use function array_merge;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
@@ -13,32 +16,28 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileRequest $request): CompileResponse
     {
-        // $url = $this->buildUrl($request->getModel()->isEmbedding() ? 'embeddings' : 'responses');
-
         $requestContent = [
             'model' => $request->getModel()->getId(),
         ];
 
-        /*
         if ($request->getModel()->isEmbedding()) {
-            // Text Prompt Components
-            foreach ($request->getPrompts() as $prompt) {
-                $requestContent['input'] = $prompt->getPrompt();
+            // Text Inputs
+            foreach ($request->getTextInputs() as $text) {
+                $requestContent['input'] = $text->getText();
             }
 
-            // Embedding Dimensions Component
+            // Dimensions Input
             if ($dimensions = $request->getDimensions()) {
-                $requestContent['dimensions'] = $dimensions;
+                $requestContent = array_merge($requestContent, [
+                    'dimensions' => $dimensions->getDimensions(),
+                ]);
             }
         } else {
             $requestContent['input'] = [];
 
-            // File Prompt Components
+            // File Inputs
             foreach ($request->getFileInputs() as $file) {
-                $type = match ($file->isImage()) {
-                    true => Type::Image,
-                    false => Type::File,
-                };
+                $type = $file->isImage() ? Type::Image : Type::File;
 
                 $requestContent['input'][] = [
                     'content' => [
@@ -51,25 +50,24 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 ];
             }
 
-            // Text Prompt Components
-            foreach ($request->getPrompts() as $prompt) {
-                $type = Type::Text;
+            // Text Inputs
+            $type = Type::Text;
 
+            foreach ($request->getTextInputs() as $text) {
                 $requestContent['input'][] = [
                     'content' => [
                         [
+                            'text' => $text->getText(),
                             'type' => $type->getValue(),
-                            'text' => $prompt->getPrompt(),
                         ],
                     ],
-                    'role' => $prompt->getRole()->getValue(),
+                    'role' => $text->getRole()->getValue(),
                 ];
             }
 
-            // Schema Prompt Component
+            // Schema Input
+            $type = Type::Schema;
             if ($schema = $request->getSchema()) {
-                $type = Type::Schema;
-
                 $requestContent['text'] = [
                     'format' => [
                         'type' => $type->getValue(),
@@ -80,7 +78,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 ];
             }
         }
-        */
 
         return new CompileResponse($request->getModel(), $requestContent);
     }

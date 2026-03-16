@@ -2,6 +2,8 @@
 
 namespace OneToMany\LlmSdk\Request\Query\Input;
 
+use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
+
 use function in_array;
 
 final readonly class FileInput
@@ -13,6 +15,7 @@ final readonly class FileInput
     public function __construct(
         private string $uri,
         private string $format,
+        private Role $role = Role::User,
     ) {
     }
 
@@ -32,6 +35,11 @@ final readonly class FileInput
         return $this->format;
     }
 
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
     public function isImage(): bool
     {
         return in_array($this->format, [
@@ -46,6 +54,7 @@ final readonly class FileInput
      * @return array{
      *   uri: non-empty-string,
      *   format: non-empty-lowercase-string,
+     *   role: non-empty-lowercase-string,
      * }
      */
     public function toArray(): array
@@ -53,6 +62,7 @@ final readonly class FileInput
         return [
             'uri' => $this->uri,
             'format' => $this->format,
+            'role' => $this->role->getValue(),
         ];
     }
 }
