@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Request\Query;
 use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
-use OneToMany\LlmSdk\Request\Query\Component\JsonSchemaInput;
+use OneToMany\LlmSdk\Request\Query\Input\SchemaInput;
 use OneToMany\LlmSdk\Request\Query\Input\DimensionsInput;
 use OneToMany\LlmSdk\Request\Query\Input\FileInput;
 use OneToMany\LlmSdk\Request\Query\Input\TextInput;
@@ -18,7 +18,7 @@ use function trim;
 class CompileRequest extends BaseRequest
 {
     private ?DimensionsInput $dimensions = null;
-    private ?JsonSchemaInput $jsonSchema = null;
+    private ?SchemaInput $schema = null;
     private ?TextInput $instructions = null;
 
     /**
@@ -55,28 +55,29 @@ class CompileRequest extends BaseRequest
     }
 
     /**
+     * @param array<string, mixed>|SchemaInput|null $schema
      * @param ?non-empty-string $name
      *
      * @throws InvalidArgumentException when the model does not support structured output
      */
-    public function usingJsonSchema(array|JsonSchemaInput|null $jsonSchema, ?string $name): static
+    public function usingSchema(array|SchemaInput|null $schema, ?string $name = null): static
     {
-        if (null === $jsonSchema) {
-            $this->jsonSchema = null;
+        if (null === $schema) {
+            $this->schema = null;
         } else {
             if (!$this->getModel()->isGenerative()) {
                 throw new InvalidArgumentException(sprintf('The model "%s" does not support structured output.', $this->getModel()->getValue()));
             }
 
-            $this->jsonSchema = JsonSchemaInput::create($jsonSchema, $name);
+            $this->schema = SchemaInput::create($schema, $name);
         }
 
         return $this;
     }
 
-    public function getJsonSchema(): ?JsonSchemaInput
+    public function getSchema(): ?SchemaInput
     {
-        return $this->jsonSchema;
+        return $this->schema;
     }
 
     /**
@@ -149,6 +150,11 @@ class CompileRequest extends BaseRequest
     public function getTextInputs(): array
     {
         return $this->textInputs;
+    }
+
+    public function usingInstructions(string|TextInput|null $instructions): static
+    {
+        return $this->withText($instructions, Role::System);
     }
 
     public function getInstructions(): ?TextInput

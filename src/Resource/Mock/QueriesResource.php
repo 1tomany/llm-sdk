@@ -64,7 +64,7 @@ final readonly class QueriesResource implements QueriesResourceInterface
         }
 
         // Schema Prompt Component
-        if ($schema = $request->getJsonSchema()) {
+        if ($schema = $request->getSchema()) {
             $requestContent['schema'] = [
                 'name' => $schema->getName(),
                 'schema' => $schema->getSchema(),

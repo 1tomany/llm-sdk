@@ -1,12 +1,12 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\Query\Component;
+namespace OneToMany\LlmSdk\Request\Query\Input;
 
 use function is_object;
 use function is_string;
 use function trim;
 
-final readonly class JsonSchemaInput
+final readonly class SchemaInput
 {
     /**
      * @param array<string, mixed> $schema
@@ -20,7 +20,7 @@ final readonly class JsonSchemaInput
     }
 
     /**
-     * @param array<string, mixed>|JsonSchemaInput $schema
+     * @param array<string, mixed>|SchemaInput $schema
      */
     public static function create(array|self $schema, ?string $name): self
     {

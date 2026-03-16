@@ -82,7 +82,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
 
             // Schema Prompt Component
-            if ($schema = $request->getJsonSchema()) {
+            if ($schema = $request->getSchema()) {
                 $type = Type::Schema;
 
                 $requestContent['text'] = [

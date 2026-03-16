@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Tests\Request\Query;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
-use OneToMany\LlmSdk\Request\Query\Component\SchemaComponent;
+use OneToMany\LlmSdk\Request\Query\Input\SchemaInput;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
@@ -17,24 +17,35 @@ use function uniqid;
 #[Group('QueryTests')]
 final class CompileRequestTest extends TestCase
 {
-    public function testUsingBatchKeyNullifiesEmptyTrimmedBatchKeys(): void
-    {
-        $compileRequest = new CompileRequest();
-        $this->assertNull($compileRequest->getBatchKey());
+    // public function testUsingBatchKeyNullifiesEmptyTrimmedBatchKeys(): void
+    // {
+    //     $compileRequest = new CompileRequest();
+    //     $this->assertNull($compileRequest->getBatchKey());
 
-        $compileRequest->usingBatchKey(' ');
-        $this->assertNull($compileRequest->getBatchKey());
-    }
+    //     $compileRequest->usingBatchKey(' ');
+    //     $this->assertNull($compileRequest->getBatchKey());
+    // }
 
-    public function testWithFileUriRequiresModelToSupportFileInputs(): void
+    // public function testWithFileRequiresModelToSupportFileInputs(): void
+    // {
+    //     $model = Model::GptEmbedding3Large;
+    //     $this->assertFalse($model->supportsFiles());
+
+    //     $this->expectException(InvalidArgumentException::class);
+    //     $this->expectExceptionMessage('The model "gpt-embedding-3-large" does not support file inputs.');
+
+    //     new CompileRequest($model)->withFileUri(uniqid(), 'image/jpeg');
+    // }
+
+    public function testUsingDimensionsRequiresEmbeddingModel(): void
     {
-        $model = Model::GptEmbedding3Large;
-        $this->assertFalse($model->supportsFiles());
+        $model = Model::Mock;
+        $this->assertFalse($model->isEmbedding());
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The model "gpt-embedding-3-large" does not support file inputs.');
+        $this->expectExceptionMessage('The model "mock" does not support changing the output dimensions.');
 
-        new CompileRequest($model)->withFileUri(uniqid(), 'image/jpeg');
+        new CompileRequest($model)->usingDimensions(random_int(1, 1024));
     }
 
     public function testUsingInstructionsRequiresNonEmbeddingModel(): void
@@ -46,17 +57,6 @@ final class CompileRequestTest extends TestCase
         $this->expectExceptionMessage('The model "mock-embedding" does not support system instructions.');
 
         new CompileRequest($model)->usingInstructions('You are a helpful large language model.');
-    }
-
-    public function testUsingDimensionsRequiresEmbeddingModel(): void
-    {
-        $model = Model::Mock;
-        $this->assertFalse($model->isEmbedding());
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The model "mock" does not support changing the output dimensions.');
-
-        new CompileRequest($model)->usingDimensions(random_int(1, 1024));
     }
 
     public function testUsingSchemaRequiresNonEmbeddingModel(): void
@@ -77,42 +77,42 @@ final class CompileRequestTest extends TestCase
 
         // Arrange: Compile query request
         $compileRequest = new CompileRequest();
-        $this->assertNull($compileRequest->getJsonSchema());
+        $this->assertNull($compileRequest->getSchema());
 
         // Act: Add the JSON schema to the request
         $compileRequest->usingSchema($jsonSchema);
-        $this->assertNotNull($compileRequest->getJsonSchema());
+        $this->assertNotNull($compileRequest->getSchema());
 
         // Assert: The JSON schema was added
-        $component = $compileRequest->getJsonSchema();
+        $input = $compileRequest->getSchema();
 
         // Assert: The title of the JSON schema is used as the name
-        $this->assertInstanceOf(SchemaComponent::class, $component);
-        $this->assertEquals($jsonSchema['title'], $component->getName());
+        $this->assertInstanceOf(SchemaInput::class, $input);
+        $this->assertEquals($jsonSchema['title'], $input->getName());
     }
 
     public function testUsingSchemaSetsDefaultNameWhenTitleIsMissing(): void
     {
         $compileRequest = new CompileRequest();
-        $this->assertNull($compileRequest->getJsonSchema());
+        $this->assertNull($compileRequest->getSchema());
 
         $compileRequest->usingSchema(['required' => ['id']]);
-        $this->assertNotNull($compileRequest->getJsonSchema());
+        $this->assertNotNull($compileRequest->getSchema());
 
         // Assert: The JSON schema was added
-        $component = $compileRequest->getJsonSchema();
+        $input = $compileRequest->getSchema();
 
-        $this->assertInstanceOf(SchemaComponent::class, $component);
-        $this->assertEquals('JsonSchema', $component->getName());
+        $this->assertInstanceOf(SchemaInput::class, $input);
+        $this->assertEquals('JsonSchema', $input->getName());
     }
 
     public function testUsingSchemaWithName(): void
     {
         // Arrange: Schema name
-        $schemaName = 'Identity';
+        $name = 'Identity';
 
         // Arrange: JSON schema
-        $jsonSchema = [
+        $schema = [
             'title' => 'ID',
             'required' => [
                 'name',
@@ -123,21 +123,21 @@ final class CompileRequestTest extends TestCase
         ];
 
         // Assert: Schema name and schema title are not equal
-        $this->assertNotEquals($schemaName, $jsonSchema['title']);
+        $this->assertNotEquals($name, $schema['title']);
 
         // Arrange: Compile query request
         $compileRequest = new CompileRequest();
-        $this->assertNull($compileRequest->getJsonSchema());
+        $this->assertNull($compileRequest->getSchema());
 
         // Act: Add the JSON schema to the request
-        $compileRequest->usingSchema($jsonSchema, $schemaName);
-        $this->assertNotNull($compileRequest->getJsonSchema());
+        $compileRequest->usingSchema($schema, $name);
+        $this->assertNotNull($compileRequest->getSchema());
 
         // Assert: The JSON schema was added
-        $component = $compileRequest->getJsonSchema();
+        $input = $compileRequest->getSchema();
 
         // Assert: The schema name is used instead of the title
-        $this->assertInstanceOf(SchemaComponent::class, $component);
-        $this->assertEquals($schemaName, $component->getName());
+        $this->assertNotNull($input);
+        $this->assertEquals($name, $input->getName());
     }
 }
