@@ -7,14 +7,10 @@ use PhpCsFixer\Runner\Parallel\ParallelConfig;
 $finder = new Finder();
 
 $finder->in([
-    './',
     './examples',
     './src/',
     './tests/',
 ]);
-// ->exclude([
-//     'vendor',
-// ]);
 
 $config = new Config()
     ->setFinder($finder)
