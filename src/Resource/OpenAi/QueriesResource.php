@@ -67,6 +67,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
 
             // Schema Input
             $type = Type::Schema;
+
             if ($schema = $request->getSchema()) {
                 $requestContent['text'] = [
                     'format' => [
