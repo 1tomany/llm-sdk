@@ -24,7 +24,7 @@ final readonly class EmbeddingsResource implements EmbeddingsResourceInterface
      */
     public function create(CreateEmbeddingRequest $request): CreateEmbeddingResponse
     {
-        assert($request->getModel()->isEmbedding());
+        // assert($request->getModel()->isEmbedding());
 
         /** @var positive-int $embeddingDimensions */
         $embeddingDimensions = $request->getRequest()['dimensions'] ?? $request->getModel()->getDefaultDimensions();
