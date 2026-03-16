@@ -30,8 +30,7 @@ final readonly class CompileResponse extends BaseResponse
 
     public function toCreateEmbeddingRequest(): CreateEmbeddingRequest
     {
-        throw new RuntimeException('Not implemented!');
-        // return new CreateEmbeddingRequest($this->getModel(), $this->request);
+        return new CreateEmbeddingRequest($this->getModel(), $this->request);
     }
 
     public function toGenerateOutputRequest(): GenerateOutputRequest
