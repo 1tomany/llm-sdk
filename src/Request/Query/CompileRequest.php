@@ -10,15 +10,16 @@ use OneToMany\LlmSdk\Request\Query\Input\DimensionsInput;
 use OneToMany\LlmSdk\Request\Query\Input\FileInput;
 use OneToMany\LlmSdk\Request\Query\Input\TextInput;
 
+use function count;
 use function is_string;
 use function sprintf;
 use function trim;
 
 class CompileRequest extends BaseRequest
 {
-    // private ?BatchKeyInput $batchKey = null;
     private ?DimensionsInput $dimensions = null;
     private ?JsonSchemaInput $jsonSchema = null;
+    private ?TextInput $instructions = null;
 
     /**
      * @var list<FileInput>
@@ -108,6 +109,9 @@ class CompileRequest extends BaseRequest
         return $this->fileInputs;
     }
 
+    /**
+     * @throws InvalidArgumentException when the model does not support system instructions
+     */
     public function withText(string|TextInput|null $text, Role $role = Role::User): static
     {
         if (is_string($text)) {
@@ -122,7 +126,19 @@ class CompileRequest extends BaseRequest
             $text = new TextInput($text, $role);
         }
 
-        $this->textInputs[] = $text;
+        if ($this->getModel()->isEmbedding()) {
+            if ($text->getRole()->isSystem()) {
+                throw new InvalidArgumentException(sprintf('The model "%s" does not support system instructions.', $this->getModel()->getValue()));
+            }
+
+            $this->textInputs = [$text];
+        } else {
+            if ($text->getRole()->isSystem()) {
+                $this->instructions = $text;
+            } else {
+                $this->textInputs[] = $text;
+            }
+        }
 
         return $this;
     }
@@ -135,8 +151,13 @@ class CompileRequest extends BaseRequest
         return $this->textInputs;
     }
 
+    public function getInstructions(): ?TextInput
+    {
+        return $this->instructions;
+    }
+
     public function hasComponents(): bool
     {
-        return 0 !== \count($this->fileInputs) || 0 !== \count($this->textInputs);
+        return 0 !== count($this->fileInputs) || 0 !== count($this->textInputs);
     }
 }
