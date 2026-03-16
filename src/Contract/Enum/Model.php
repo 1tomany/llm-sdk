@@ -161,6 +161,9 @@ enum Model: string
         return $vendor;
     }
 
+    /**
+     * @phpstan-assert-if-true false $this->isGenerative()
+     */
     public function isEmbedding(): bool
     {
         return in_array($this, [
@@ -171,6 +174,14 @@ enum Model: string
             self::GptEmbedding3Small,
             self::GptEmbedding3Large,
         ]);
+    }
+
+    /**
+     * @phpstan-assert-if-true false $this->isEmbedding()
+     */
+    public function isGenerative(): bool
+    {
+        return !$this->isEmbedding();
     }
 
     public function supportsFiles(): bool
