@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\Query;
 
+use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 use OneToMany\LlmSdk\Request\Query\Component\JsonSchemaInput;
@@ -10,7 +11,9 @@ use OneToMany\LlmSdk\Request\Query\Input\DimensionsInput;
 use OneToMany\LlmSdk\Request\Query\Input\FileInput;
 use OneToMany\LlmSdk\Request\Query\Input\TextInput;
 
+use function is_string;
 use function sprintf;
+use function trim;
 
 class CompileRequest extends BaseRequest
 {
@@ -76,8 +79,15 @@ class CompileRequest extends BaseRequest
         return $this->jsonSchema;
     }
 
+    /**
+     * @param ?non-empty-lowercase-string $format
+     */
     public function withFile(string|FileInput|null $file, ?string $format): static
     {
+        if (is_string($file)) {
+            $file = trim($file);
+        }
+
         if (!$file || !$format) {
             return $this;
         }
@@ -97,6 +107,25 @@ class CompileRequest extends BaseRequest
     public function getFileInputs(): array
     {
         return $this->fileInputs;
+    }
+
+    public function withText(string|TextInput|null $text, Role $role = Role::User): static
+    {
+        if (is_string($text)) {
+            $text = trim($text);
+        }
+
+        if (empty($text)) {
+            return $this;
+        }
+
+        if (!$text instanceof TextInput) {
+            $text = new TextInput($text, $role);
+        }
+
+        $this->textInputs[] = $text;
+
+        return $this;
     }
 
     /**
