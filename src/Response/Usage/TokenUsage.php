@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Response\Output\Usage;
+namespace OneToMany\LlmSdk\Response\Usage;
 
 final readonly class TokenUsage
 {

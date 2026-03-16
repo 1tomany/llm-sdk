@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
-use OneToMany\LlmSdk\Response\Output\Usage\TokenUsage;
+use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 
 use function assert;
 use function is_string;

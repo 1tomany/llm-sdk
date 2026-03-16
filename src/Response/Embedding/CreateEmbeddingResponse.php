@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Response\Embedding;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Response\BaseResponse;
-use OneToMany\LlmSdk\Response\Output\Usage\TokenUsage;
+use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 
 use function array_map;
 use function array_sum;

@@ -14,10 +14,29 @@ use function trim;
 
 class UploadRequest extends FileRequest
 {
+    /**
+     * @var ?non-empty-string
+     */
     private ?string $path = null;
+
+    /**
+     * @var ?non-empty-string
+     */
     private ?string $name = null;
+
+    /**
+     * @var ?non-negative-int
+     */
     private ?int $size = null;
+
+    /**
+     * @var ?non-empty-lowercase-string
+     */
     private ?string $format = null;
+
+    /**
+     * @var ?non-empty-lowercase-string
+     */
     private ?string $purpose = null;
 
     /**
@@ -56,7 +75,7 @@ class UploadRequest extends FileRequest
      */
     public function getName(): ?string
     {
-        return $this->name ?: null;
+        return $this->name;
     }
 
     /**
@@ -65,7 +84,7 @@ class UploadRequest extends FileRequest
     public function getSize(): int
     {
         if (null === $this->size) {
-            $this->size = @filesize((string) $this->path) ?: throw new RuntimeException(sprintf('Calculating the size of the file "%s" failed.', $this->getName()));
+            $this->size = @filesize($this->getPath()) ?: throw new RuntimeException(sprintf('Calculating the size of the file "%s" failed.', $this->getName()));
         }
 
         return $this->size;
@@ -83,12 +102,12 @@ class UploadRequest extends FileRequest
      */
     public function getFormat(): ?string
     {
-        return $this->format ?: null;
+        return $this->format;
     }
 
     public function withPurpose(?string $purpose): static
     {
-        $this->purpose = trim($purpose ?? '') ?: null;
+        $this->purpose = strtolower(trim($purpose ?? '')) ?: null;
 
         return $this;
     }

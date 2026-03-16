@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response\Response;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
-use OneToMany\LlmSdk\Response\Output\Usage\TokenUsage;
+use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 final readonly class OutputsResource extends BaseResource implements OutputsResourceInterface

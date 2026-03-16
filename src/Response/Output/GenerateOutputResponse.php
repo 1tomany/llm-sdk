@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Response\Output;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Response\BaseResponse;
-use OneToMany\LlmSdk\Response\Output\Usage\TokenUsage;
+use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 
 use function json_decode;
 use function max;
