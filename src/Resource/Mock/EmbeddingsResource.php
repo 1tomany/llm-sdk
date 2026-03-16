@@ -6,8 +6,6 @@ use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
 
-use function is_int;
-use function max;
 use function random_int;
 
 final readonly class EmbeddingsResource implements EmbeddingsResourceInterface
@@ -26,13 +24,7 @@ final readonly class EmbeddingsResource implements EmbeddingsResourceInterface
     {
         $embedding = [];
 
-        if (isset($request->getRequest()['dimensions'])) {
-            $dimensions = $request->getRequest()['dimensions'];
-        }
-
-        $dimensions = !is_int($dimensions ?? null) ? 1024 : max(1, $dimensions);
-
-        for ($i = 0; $i < $dimensions; ++$i) {
+        for ($i = 0; $i < $request->getDimensions(); ++$i) {
             $embedding[] = $this->faker->randomFloat();
         }
 
