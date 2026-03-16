@@ -3,7 +3,6 @@
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Generation;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
@@ -15,8 +14,6 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface
-     *
-     * @throws RuntimeException when the model fails to generate any output
      */
     public function generate(GenerateOutputRequest $request): GenerateOutputResponse
     {
@@ -33,15 +30,11 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
                 ],
             ]);
 
-            $generation = $this->doDenormalize($response, Generation::class);
-
-            if (!$output = $generation->getOutput()) {
-                throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $request->getModel()->getValue()));
-            }
+            $object = $this->doDenormalize($response, Generation::class);
         } finally {
             $timer->stop();
         }
 
-        return new GenerateOutputResponse($request->getModel(), $generation->responseId, $response, $output, $timer->getDuration()); // , new UsageResponse($generation->usageMetadata->promptTokenCount, $generation->usageMetadata->cachedContentTokenCount, $generation->usageMetadata->outputTokenCount));
+        return new GenerateOutputResponse($request->getModel(), $object->responseId, $response, $object->getOutput(), null, $timer->getDuration()); // , new UsageResponse($generation->usageMetadata->promptTokenCount, $generation->usageMetadata->cachedContentTokenCount, $generation->usageMetadata->outputTokenCount));
     }
 }

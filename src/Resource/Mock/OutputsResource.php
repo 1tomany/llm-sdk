@@ -52,6 +52,6 @@ final readonly class OutputsResource implements OutputsResourceInterface
 
         assert(is_string($output) && !empty($output));
 
-        return new GenerateOutputResponse($request->getModel(), $response['id'], $response, $output, random_int(100, 10000), new TokenUsage(strlen($requestContent), 0, strlen($output)));
+        return new GenerateOutputResponse($request->getModel(), $response['id'], $response, $output, null, random_int(100, 10000), new TokenUsage(strlen($requestContent), 0, strlen($output)));
     }
 }

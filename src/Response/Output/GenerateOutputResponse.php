@@ -23,7 +23,8 @@ final readonly class GenerateOutputResponse extends BaseResponse
         Model $model,
         private string $uri,
         private array $response,
-        private string $output,
+        private ?string $output,
+        private ?string $error = null,
         private int|float $runtime = 0,
         private TokenUsage $usage = new TokenUsage(),
     ) {
@@ -46,9 +47,14 @@ final readonly class GenerateOutputResponse extends BaseResponse
         return $this->response;
     }
 
-    public function getOutput(): string
+    public function getOutput(): ?string
     {
         return $this->output;
+    }
+
+    public function getError(): ?string
+    {
+        return $this->error;
     }
 
     /**
@@ -67,15 +73,15 @@ final readonly class GenerateOutputResponse extends BaseResponse
     /**
      * @return list<array<string, mixed>>|array<string, mixed>
      *
-     * @throws RuntimeException when decoding the output fails
+     * @throws RuntimeException when converting the output from a JSON string to a record fails
      */
     public function toRecord(): array
     {
         try {
             /** @var list<array<string, mixed>>|array<string, mixed> $record */
-            $record = json_decode(trim($this->output), true, 512, JSON_THROW_ON_ERROR);
+            $record = json_decode(trim($this->output ?? ''), true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw new RuntimeException('Decoding the output failed.', previous: $e);
+            throw new RuntimeException('Converting the output from a JSON string to a record failed.', previous: $e);
         }
 
         return $record;

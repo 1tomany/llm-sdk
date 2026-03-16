@@ -40,7 +40,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         $fileHandle = $request->openFile();
 
         try {
-            $url = $this->buildUrl('upload', $this->apiVersion, 'files');
+            $url = $this->buildUrl(\sprintf('upload/%s/files', $this->getApiVersion()));
 
             $response = $this->doRequest('POST', $url, [
                 'headers' => $this->buildHeaders([
