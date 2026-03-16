@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Batch\Enum;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Batch\Enum;
 
 enum Status: string
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Batch;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Batch;
 
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Batch\Enum\Status;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Batch\Enum\Status;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Error\Error;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Usage\Usage;
 

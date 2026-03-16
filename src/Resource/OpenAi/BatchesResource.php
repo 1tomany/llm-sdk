@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Batch\Batch;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Batch\Batch;
 use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
 
