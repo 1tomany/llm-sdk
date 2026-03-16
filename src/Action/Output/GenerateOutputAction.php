@@ -28,9 +28,11 @@ final readonly class GenerateOutputAction extends BaseAction implements Generate
         // }
 
         if ($request instanceof CompileRequest) {
-            $request = $this->compileQuery($request)->toExecuteRequest();
+            $response = $this->compileQuery($request);
+            $request = new GenerateOutputRequest($response->getModel(), $response->getRequest());
         }
 
+        return $this->createClient($request->getVendor())->outputs()->generate($request);
         // return $this->createClient($request->getVendor())->queries()->generate($request);
     }
 }
