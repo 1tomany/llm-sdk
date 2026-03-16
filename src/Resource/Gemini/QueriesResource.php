@@ -2,22 +2,12 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
-use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Generation;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Embedding\Embedding;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
-use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
-use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
-use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
-use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
-use Symfony\Component\Stopwatch\Stopwatch;
 
 use function array_merge;
-use function sprintf;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {

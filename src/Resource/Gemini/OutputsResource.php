@@ -13,7 +13,6 @@ use function sprintf;
 
 final readonly class OutputsResource extends BaseResource implements OutputsResourceInterface
 {
-
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface
      *
@@ -43,6 +42,6 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
             $timer->stop();
         }
 
-        return new GenerateOutputResponse($request->getModel(), $generation->responseId, $output, $response, $timer->getDuration()); //, new UsageResponse($generation->usageMetadata->promptTokenCount, $generation->usageMetadata->cachedContentTokenCount, $generation->usageMetadata->outputTokenCount));
+        return new GenerateOutputResponse($request->getModel(), $generation->responseId, $output, $response, $timer->getDuration()); // , new UsageResponse($generation->usageMetadata->promptTokenCount, $generation->usageMetadata->cachedContentTokenCount, $generation->usageMetadata->outputTokenCount));
     }
 }

@@ -8,9 +8,7 @@ use OneToMany\LlmSdk\Contract\Action\Output\GenerateOutputActionInterface;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
-use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
-use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 
 use function sprintf;
 
