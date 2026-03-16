@@ -68,8 +68,8 @@ final readonly class SchemaInput
 
     /**
      * @return array{
-     *   name: non-empty-string
-     *   schema: array<string, mixed>
+     *   name: non-empty-string,
+     *   schema: array<string, mixed>,
      *   format: non-empty-lowercase-string,
      *   isStrict: bool,
      * }
