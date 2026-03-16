@@ -1,7 +1,7 @@
 <?php
 
 use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
-use OneToMany\LlmSdk\Action\Query\EmbedContentAction;
+use OneToMany\LlmSdk\Action\Embedding\CreateEmbeddingAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
@@ -23,7 +23,7 @@ try {
     ]);
 
     // Send the compiled request payload to the LLM server
-    $response = new EmbedContentAction($clientFactory)->act(...[
+    $response = new CreateEmbeddingAction($clientFactory)->act(...[
         'request' => $response->toExecuteRequest(),
     ]);
 
