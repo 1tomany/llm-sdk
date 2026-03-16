@@ -71,4 +71,20 @@ class CompileRequest extends BaseRequest
     {
         return $this->jsonSchema;
     }
+
+    /**
+     * @return list<FileInput>
+     */
+    public function getFileInputs(): array
+    {
+        return $this->fileInputs;
+    }
+
+    /**
+     * @return list<TextInput>
+     */
+    public function getTextInputs(): array
+    {
+        return $this->textInputs;
+    }
 }
