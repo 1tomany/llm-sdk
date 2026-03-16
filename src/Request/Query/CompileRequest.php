@@ -52,7 +52,6 @@ class CompileRequest extends BaseRequest
     }
 
     /**
-     * @param array<string, mixed>|JsonSchemaInput|null $schema
      * @param ?non-empty-string $name
      *
      * @throws InvalidArgumentException when the model does not support structured output

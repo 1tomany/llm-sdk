@@ -2,6 +2,8 @@
 
 namespace OneToMany\LlmSdk\Request\Query\Component;
 
+use function is_object;
+use function is_string;
 use function trim;
 
 final readonly class JsonSchemaInput
@@ -13,7 +15,7 @@ final readonly class JsonSchemaInput
     public function __construct(
         private array $schema,
         private string $name,
-        private bool $isStrict = true
+        private bool $isStrict = true,
     ) {
     }
 
@@ -22,11 +24,11 @@ final readonly class JsonSchemaInput
      */
     public static function create(array|self $schema, ?string $name): self
     {
-        if (\is_object($schema)) {
+        if (is_object($schema)) {
             return $schema;
         }
 
-        if (\is_string($schema['title'] ?? null)) {
+        if (is_string($schema['title'] ?? null)) {
             $name = trim($name ?? $schema['title']);
         }
 
