@@ -16,7 +16,7 @@ final readonly class DimensionsInput
     ) {
     }
 
-    public static function create(string|self $dimensions): self
+    public static function create(int|self $dimensions): self
     {
         if (is_object($dimensions)) {
             return $dimensions;

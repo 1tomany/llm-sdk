@@ -6,7 +6,6 @@ use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 use OneToMany\LlmSdk\Request\Query\Component\JsonSchemaInput;
-use OneToMany\LlmSdk\Request\Query\Input\BatchKeyInput;
 use OneToMany\LlmSdk\Request\Query\Input\DimensionsInput;
 use OneToMany\LlmSdk\Request\Query\Input\FileInput;
 use OneToMany\LlmSdk\Request\Query\Input\TextInput;
