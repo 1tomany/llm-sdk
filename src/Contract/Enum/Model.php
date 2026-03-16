@@ -2,7 +2,11 @@
 
 namespace OneToMany\LlmSdk\Contract\Enum;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+
 use function in_array;
+use function is_object;
+use function sprintf;
 use function strtolower;
 use function trim;
 
@@ -45,13 +49,21 @@ enum Model: string
     case GptEmbedding3Small = 'gpt-embedding-3-small';
     case GptEmbedding3Large = 'gpt-embedding-3-large';
 
+    /**
+     * @throws InvalidArgumentException when the model name is empty
+     * @throws InvalidArgumentException when the model is invalid
+     */
     public static function create(string|self|null $model): self
     {
-        if ($model instanceof self) {
+        if (is_object($model)) {
             return $model;
         }
 
-        return self::tryFrom(strtolower(trim($model ?? ''))) ?? self::Mock;
+        if (!$model = trim($model ?? '')) {
+            throw new InvalidArgumentException('The model name cannot be empty.');
+        }
+
+        return self::tryFrom(strtolower($model)) ?? throw new InvalidArgumentException(sprintf('The model "%s" is not valid.', $model));
     }
 
     /**
