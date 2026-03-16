@@ -17,7 +17,7 @@ final readonly class SchemaInput
         private string $name,
         private array $schema,
         private string $format = 'application/json',
-        private bool $isStrict = true,
+        private bool $strict = true,
     ) {
     }
 
@@ -63,7 +63,7 @@ final readonly class SchemaInput
 
     public function isStrict(): bool
     {
-        return $this->isStrict;
+        return $this->strict;
     }
 
     /**
@@ -71,7 +71,7 @@ final readonly class SchemaInput
      *   name: non-empty-string,
      *   schema: array<string, mixed>,
      *   format: non-empty-lowercase-string,
-     *   isStrict: bool,
+     *   strict: bool,
      * }
      */
     public function toArray(): array
@@ -80,7 +80,7 @@ final readonly class SchemaInput
             'name' => $this->name,
             'schema' => $this->schema,
             'format' => $this->format,
-            'isStrict' => $this->isStrict,
+            'strict' => $this->strict,
         ];
     }
 }
