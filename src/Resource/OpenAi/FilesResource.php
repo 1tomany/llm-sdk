@@ -5,13 +5,11 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Request\File\File as FileRequest;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\DeletedFile;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\Enum\Purpose;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\File;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\File as FileResponse;
 use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
 use OneToMany\LlmSdk\Response\File\UploadFileResponse;
-
-use function array_merge;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
@@ -20,32 +18,21 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function upload(UploadRequest $request): UploadFileResponse
     {
-        $requestContent = [
-            'file' => $request->openFile(),
-        ];
-
-        if ($purpose = $request->getPurpose()) {
-            $purpose = Purpose::tryFrom($purpose);
-        }
-
-        if (!$purpose instanceof Purpose) {
-            $purpose = Purpose::UserData;
-        }
-
-        $requestContent = array_merge($requestContent, [
-            'purpose' => $purpose->getValue(),
-        ]);
+        $object = new FileRequest(
+            $request->getPath(),
+            $request->getPurpose(),
+        );
 
         $content = $this->doPostRequest($this->buildUrl('files'), [
             'auth_bearer' => $this->getApiKey(),
             'body' => [
-                ...$requestContent,
+                ...$object->toArray(),
             ],
         ]);
 
-        $file = $this->doDenormalize($content, File::class);
+        $object = $this->doDenormalize($content, FileResponse::class);
 
-        return new UploadFileResponse($request->getVendor(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
+        return new UploadFileResponse($request->getVendor(), $object->id, $object->filename, $object->purpose->getValue(), $object->getExpiresAt());
     }
 
     /**
