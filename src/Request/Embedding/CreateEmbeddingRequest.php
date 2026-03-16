@@ -11,12 +11,14 @@ use function sprintf;
 class CreateEmbeddingRequest extends BaseRequest
 {
     /**
+     * @param positive-int $dimensions
      * @param array<string, mixed> $request
      *
      * @throws InvalidArgumentException when the model is not an embedding model
      */
     public function __construct(
         string|Model|null $model,
+        private int $dimensions,
         private array $request,
     ) {
         $model = Model::create($model);
@@ -26,6 +28,14 @@ class CreateEmbeddingRequest extends BaseRequest
         }
 
         parent::__construct($model);
+    }
+
+    /**
+     * @return positive-int
+     */
+    public function getDimensions(): int
+    {
+        return $this->dimensions;
     }
 
     /**
