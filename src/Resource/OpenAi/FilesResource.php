@@ -11,6 +11,8 @@ use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
 use OneToMany\LlmSdk\Response\File\UploadFileResponse;
 
+use function array_merge;
+
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     /**
@@ -18,13 +20,26 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function upload(UploadRequest $request): UploadFileResponse
     {
-        $purpose = Purpose::tryFrom((string) $request->getPurpose()) ?? Purpose::UserData;
+        $requestContent = [
+            'file' => $request->openFile(),
+        ];
+
+        if ($purpose = $request->getPurpose()) {
+            $purpose = Purpose::tryFrom($purpose);
+        }
+
+        if (!$purpose instanceof Purpose) {
+            $purpose = Purpose::UserData;
+        }
+
+        $requestContent = array_merge($requestContent, [
+            'purpose' => $purpose->getValue(),
+        ]);
 
         $content = $this->doPostRequest($this->buildUrl('files'), [
             'auth_bearer' => $this->getApiKey(),
             'body' => [
-                'file' => $request->openFile(),
-                'purpose' => $purpose->getValue(),
+                ...$requestContent,
             ],
         ]);
 
