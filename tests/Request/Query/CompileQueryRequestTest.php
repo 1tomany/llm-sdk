@@ -14,26 +14,15 @@ use function random_int;
 #[Group('UnitTests')]
 #[Group('RequestTests')]
 #[Group('QueryTests')]
-final class CompileRequestTest extends TestCase
+final class CompileQueryRequestTest extends TestCase
 {
-    public function testUsingDimensionsRequiresEmbeddingModel(): void
-    {
-        $model = Model::Mock;
-        $this->assertFalse($model->isEmbedding());
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The model "mock" does not support changing the output dimensions.');
-
-        new CompileQueryRequest($model)->usingDimensions(random_int(1, 1024));
-    }
-
     public function testUsingInstructionsRequiresNonEmbeddingModel(): void
     {
         $model = Model::MockEmbedding;
         $this->assertTrue($model->isEmbedding());
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The model "mock-embedding" does not support system instructions.');
+        $this->expectExceptionMessage('The model "'.$model->getValue().'" does not support system prompts.');
 
         new CompileQueryRequest($model)->usingInstructions('You are a helpful large language model.');
     }
@@ -44,7 +33,7 @@ final class CompileRequestTest extends TestCase
         $this->assertTrue($model->isEmbedding());
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The model "mock-embedding" does not support structured output.');
+        $this->expectExceptionMessage('The model "'.$model->getValue().'" does not support structured output.');
 
         new CompileQueryRequest($model)->usingSchema(null, ['title' => 'JsonSchema']);
     }
@@ -55,15 +44,15 @@ final class CompileRequestTest extends TestCase
         $jsonSchema = ['title' => 'Identify'];
 
         // Arrange: Compile query request
-        $compileRequest = new CompileQueryRequest();
-        $this->assertNull($compileRequest->getSchema());
+        $request = new CompileQueryRequest();
+        $this->assertNull($request->getSchema());
 
         // Act: Add the JSON schema to the request
-        $compileRequest->usingSchema(null, $jsonSchema);
-        $this->assertNotNull($compileRequest->getSchema());
+        $request->usingSchema(null, $jsonSchema);
+        $this->assertNotNull($request->getSchema());
 
         // Assert: The JSON schema was added
-        $input = $compileRequest->getSchema();
+        $input = $request->getSchema();
 
         // Assert: The title of the JSON schema is used as the name
         $this->assertInstanceOf(Schema::class, $input);
@@ -72,23 +61,20 @@ final class CompileRequestTest extends TestCase
 
     public function testUsingSchemaSetsDefaultNameWhenTitleIsMissing(): void
     {
-        $compileRequest = new CompileQueryRequest();
-        $this->assertNull($compileRequest->getSchema());
+        $request = new CompileQueryRequest();
+        $this->assertNull($request->getSchema());
 
-        $compileRequest->usingSchema(null, ['required' => ['id']]);
-        $this->assertNotNull($compileRequest->getSchema());
+        $request->usingSchema(null, ['required' => ['id']]);
+        $this->assertInstanceOf(Schema::class, $request->getSchema());
 
-        // Assert: The JSON schema was added
-        $input = $compileRequest->getSchema();
-
-        $this->assertInstanceOf(Schema::class, $input);
-        $this->assertEquals('JsonSchema', $input->getName());
+        // Assert: The default schema name is used
+        $this->assertEquals('JsonSchema', $request->getSchema()->getName());
     }
 
     public function testUsingSchemaWithName(): void
     {
         // Arrange: Schema name
-        $name = 'Identity';
+        $schemaName = 'Identity';
 
         // Arrange: JSON schema
         $schema = [
@@ -102,20 +88,30 @@ final class CompileRequestTest extends TestCase
         ];
 
         // Assert: Schema name and schema title are not equal
-        $this->assertNotEquals($name, $schema['title']);
+        $this->assertNotEquals($schemaName, $schema['title']);
 
         // Arrange: Compile query request
-        $compileRequest = new CompileQueryRequest();
-        $this->assertNull($compileRequest->getSchema());
+        $request = new CompileQueryRequest();
+        $this->assertNull($request->getSchema());
 
-        // Act: Add the JSON schema to the request
-        $compileRequest->usingSchema($name, $schema);
-        $this->assertNotNull($compileRequest->getSchema());
+        // Act: Add the schema to the request
+        $request->usingSchema($schemaName, $schema);
 
-        // Assert: The JSON schema was added
-        $input = $compileRequest->getSchema();
+        // Assert: The schema was added to the request
+        $this->assertInstanceOf(Schema::class, $request->getSchema());
 
-        // Assert: The schema name is used
-        $this->assertEquals($name, $input->getName());
+        // Assert: The original schema name is used
+        $this->assertEquals($schemaName, $request->getSchema()->getName());
+    }
+
+    public function testUsingDimensionsRequiresEmbeddingModel(): void
+    {
+        $model = Model::Mock;
+        $this->assertFalse($model->isEmbedding());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model "mock" does not support changing the output dimensions.');
+
+        new CompileQueryRequest($model)->usingDimensions(random_int(1, 1024));
     }
 }
