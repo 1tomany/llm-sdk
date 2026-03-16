@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
-use OneToMany\LlmSdk\Request\Query\CompileRequest;
+use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
@@ -11,7 +11,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
-    public function compile(CompileRequest $request): CompileQueryResponse
+    public function compile(CompileQueryRequest $request): CompileQueryResponse
     {
         $contentKey = $request->getModel()->isEmbedding() ? 'content' : 'contents';
 

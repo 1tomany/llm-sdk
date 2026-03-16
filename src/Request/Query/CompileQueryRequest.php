@@ -15,7 +15,7 @@ use function is_string;
 use function sprintf;
 use function trim;
 
-class CompileRequest extends BaseRequest
+class CompileQueryRequest extends BaseRequest
 {
     private ?DimensionsInput $dimensions = null;
     private ?SchemaInput $schema = null;

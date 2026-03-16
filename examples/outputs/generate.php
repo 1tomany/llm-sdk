@@ -4,7 +4,7 @@ use OneToMany\LlmSdk\Action\Output\GenerateOutputAction;
 use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
-use OneToMany\LlmSdk\Request\Query\CompileRequest;
+use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
@@ -15,7 +15,7 @@ try {
     $prompt = 'Write a short summary of the history of PHP.';
 
     // Build a request of individual query components
-    $compileQueryRequest = new CompileRequest($model)->withText($prompt);
+    $compileQueryRequest = new CompileQueryRequest($model)->withText($prompt);
 
     // Compile the query into a request that can be sent to the LLM
     $response = new CompileQueryAction($clientFactory)->act(...[

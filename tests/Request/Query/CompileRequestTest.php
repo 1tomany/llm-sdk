@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Tests\Request\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Request\Query\CompileRequest;
+use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 use OneToMany\LlmSdk\Request\Query\Input\SchemaInput;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ final class CompileRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The model "mock" does not support changing the output dimensions.');
 
-        new CompileRequest($model)->usingDimensions(random_int(1, 1024));
+        new CompileQueryRequest($model)->usingDimensions(random_int(1, 1024));
     }
 
     public function testUsingInstructionsRequiresNonEmbeddingModel(): void
@@ -35,7 +35,7 @@ final class CompileRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The model "mock-embedding" does not support system instructions.');
 
-        new CompileRequest($model)->usingInstructions('You are a helpful large language model.');
+        new CompileQueryRequest($model)->usingInstructions('You are a helpful large language model.');
     }
 
     public function testUsingSchemaRequiresNonEmbeddingModel(): void
@@ -46,7 +46,7 @@ final class CompileRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The model "mock-embedding" does not support structured output.');
 
-        new CompileRequest($model)->usingSchema(null, ['title' => 'JsonSchema']);
+        new CompileQueryRequest($model)->usingSchema(null, ['title' => 'JsonSchema']);
     }
 
     public function testUsingSchemaExtractsNameFromTitle(): void
@@ -55,7 +55,7 @@ final class CompileRequestTest extends TestCase
         $jsonSchema = ['title' => 'Identify'];
 
         // Arrange: Compile query request
-        $compileRequest = new CompileRequest();
+        $compileRequest = new CompileQueryRequest();
         $this->assertNull($compileRequest->getSchema());
 
         // Act: Add the JSON schema to the request
@@ -72,7 +72,7 @@ final class CompileRequestTest extends TestCase
 
     public function testUsingSchemaSetsDefaultNameWhenTitleIsMissing(): void
     {
-        $compileRequest = new CompileRequest();
+        $compileRequest = new CompileQueryRequest();
         $this->assertNull($compileRequest->getSchema());
 
         $compileRequest->usingSchema(null, ['required' => ['id']]);
@@ -105,7 +105,7 @@ final class CompileRequestTest extends TestCase
         $this->assertNotEquals($name, $schema['title']);
 
         // Arrange: Compile query request
-        $compileRequest = new CompileRequest();
+        $compileRequest = new CompileQueryRequest();
         $this->assertNull($compileRequest->getSchema());
 
         // Act: Add the JSON schema to the request

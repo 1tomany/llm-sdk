@@ -2,10 +2,10 @@
 
 namespace OneToMany\LlmSdk\Contract\Resource;
 
-use OneToMany\LlmSdk\Request\Query\CompileRequest;
+use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
 interface QueriesResourceInterface
 {
-    public function compile(CompileRequest $request): CompileQueryResponse;
+    public function compile(CompileQueryRequest $request): CompileQueryResponse;
 }
