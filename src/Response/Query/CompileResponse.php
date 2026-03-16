@@ -3,6 +3,7 @@
 namespace OneToMany\LlmSdk\Response\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
 final readonly class CompileResponse extends BaseResponse
@@ -23,6 +24,11 @@ final readonly class CompileResponse extends BaseResponse
     public function getRequest(): array
     {
         return $this->request;
+    }
+
+    public function toGenerateOutputRequest(): GenerateOutputRequest
+    {
+        return new GenerateOutputRequest($this->getModel(), $this->request);
     }
 
     // public function toExecuteRequest(): ExecuteRequest

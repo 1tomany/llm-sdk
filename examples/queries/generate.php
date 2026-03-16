@@ -4,7 +4,6 @@ use OneToMany\LlmSdk\Action\Output\GenerateOutputAction;
 use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
-use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 
 /** @var ClientFactory $clientFactory */
@@ -24,10 +23,8 @@ try {
     ]);
 
     // Send the compiled request payload to the LLM server
-    $generateOutputRequest = new GenerateOutputRequest($model, $response->getRequest());
-
     $response = new GenerateOutputAction($clientFactory)->act(...[
-        'request' => $generateOutputRequest,
+        'request' => $response->toGenerateOutputRequest(),
     ]);
 
     successMessage('The model "%s" generated the following output for the prompt "%s":', $response->getModel()->getValue(), $prompt);

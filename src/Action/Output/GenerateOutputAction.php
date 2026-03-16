@@ -5,12 +5,9 @@ namespace OneToMany\LlmSdk\Action\Output;
 use OneToMany\LlmSdk\Action\BaseAction;
 use OneToMany\LlmSdk\Action\Query\Trait\CompileQueryTrait;
 use OneToMany\LlmSdk\Contract\Action\Output\GenerateOutputActionInterface;
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
-
-use function sprintf;
 
 final readonly class GenerateOutputAction extends BaseAction implements GenerateOutputActionInterface
 {
@@ -18,21 +15,13 @@ final readonly class GenerateOutputAction extends BaseAction implements Generate
 
     /**
      * @see OneToMany\LlmSdk\Contract\Action\Output\GenerateOutputActionInterface
-     *
-     * @throws InvalidArgumentException when the model is an embedding model
      */
     public function act(CompileRequest|GenerateOutputRequest $request): GenerateOutputResponse
     {
-        // if ($request->getModel()->isEmbedding()) {
-        //     throw new InvalidArgumentException(sprintf('Generating output failed because the model "%s" is an embedding model.', $request->getModel()->getValue()));
-        // }
-
         if ($request instanceof CompileRequest) {
-            $response = $this->compileQuery($request);
-            $request = new GenerateOutputRequest($response->getModel(), $response->getRequest());
+            $request = $this->compileQuery($request)->toGenerateOutputRequest();
         }
 
         return $this->createClient($request->getVendor())->outputs()->generate($request);
-        // return $this->createClient($request->getVendor())->queries()->generate($request);
     }
 }
