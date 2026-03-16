@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
+use function strtoupper;
 use function uniqid;
 
 #[Group('UnitTests')]
@@ -49,6 +50,14 @@ final class ModelTest extends TestCase
         ];
 
         return $provider;
+    }
+
+    public function testCreatingModel(): void
+    {
+        /** @var Model $model */
+        $model = new \Random\Randomizer()->shuffleArray(Model::cases())[0];
+
+        $this->assertSame($model, Model::create(strtoupper($model->getValue())));
     }
 
     #[DataProvider('providerModelAndVendor')]
