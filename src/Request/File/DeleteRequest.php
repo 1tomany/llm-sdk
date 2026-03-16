@@ -32,6 +32,6 @@ class DeleteRequest extends FileRequest
      */
     public function getUri(): string
     {
-        return $this->uri ?? throw new RuntimeException('The URI is empty.');
+        return $this->uri ?: throw new RuntimeException('The URI is empty.');
     }
 }
