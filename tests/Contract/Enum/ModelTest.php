@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Tests\Contract\Enum;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -13,6 +14,31 @@ use PHPUnit\Framework\TestCase;
 #[Group('EnumTests')]
 final class ModelTest extends TestCase
 {
+    #[DataProvider('providerEmptyModelName')]
+    public function testCreatingModelRequiresNonEmptyModelName(?string $model): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model name cannot be empty.');
+
+        Model::create($model);
+    }
+
+    /**
+     * @return non-empty-list<non-empty-list<?string>>
+     */
+    public static function providerEmptyModelName(): array
+    {
+        $provider = [
+            [null],
+            [''],
+            [' '],
+            ["\n"],
+            [" \t\n "],
+        ];
+
+        return $provider;
+    }
+
     #[DataProvider('providerModelAndVendor')]
     public function testGettingVendor(Model $model, Vendor $vendor): void
     {
