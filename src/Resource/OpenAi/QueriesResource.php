@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 use OneToMany\LlmSdk\Request\Query\Type\FileUri;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Request\Response\Enum\Type;
 use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
 use function array_merge;
@@ -36,13 +36,13 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         } else {
             $requestContent['input'] = [];
 
-            $fileTyper = function (FileUri $file): Type {
+            // File Inputs
+            $fileTypeResolver = function (FileUri $file): Type {
                 return $file->isImage() ? Type::Image : Type::File;
             };
 
-            // File Inputs
             foreach ($request->getFiles() as $file) {
-                $type = $fileTyper($file);
+                $type = $fileTypeResolver($file);
 
                 if ($file instanceof FileUri) {
                     $requestContent['input'][] = [

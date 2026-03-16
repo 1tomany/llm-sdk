@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\OpenAi\Type\File;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File;
 
 final readonly class DeletedFile
 {
