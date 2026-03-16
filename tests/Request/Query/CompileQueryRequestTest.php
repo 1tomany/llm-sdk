@@ -40,31 +40,33 @@ final class CompileQueryRequestTest extends TestCase
 
     public function testUsingSchemaExtractsNameFromTitle(): void
     {
-        // Arrange: JSON Schema
-        $jsonSchema = ['title' => 'Identify'];
+        // Arrange: Schema with title
+        $schema = ['title' => 'Identify'];
 
         // Arrange: Compile query request
         $request = new CompileQueryRequest();
         $this->assertNull($request->getSchema());
 
-        // Act: Add the JSON schema to the request
-        $request->usingSchema(null, $jsonSchema);
-        $this->assertNotNull($request->getSchema());
+        // Act: Add the schema to the request
+        $request->usingSchema(null, $schema);
 
-        // Assert: The JSON schema was added
-        $input = $request->getSchema();
+        // Assert: The schema was added to the request
+        $this->assertInstanceOf(Schema::class, $request->getSchema());
 
-        // Assert: The title of the JSON schema is used as the name
-        $this->assertInstanceOf(Schema::class, $input);
-        $this->assertEquals($jsonSchema['title'], $input->getName());
+        // Assert: The schema name is equal to the title property of the schema
+        $this->assertEquals($schema['title'], $request->getSchema()->getName());
     }
 
     public function testUsingSchemaSetsDefaultNameWhenTitleIsMissing(): void
     {
+        // Arrange: Compile query request
         $request = new CompileQueryRequest();
         $this->assertNull($request->getSchema());
 
+        // Act: Add a nameless schema to the request
         $request->usingSchema(null, ['required' => ['id']]);
+
+        // Assert: The schema was added to the request
         $this->assertInstanceOf(Schema::class, $request->getSchema());
 
         // Assert: The default schema name is used
