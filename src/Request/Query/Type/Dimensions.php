@@ -6,7 +6,7 @@ use function is_object;
 use function max;
 use function min;
 
-final readonly class DimensionsInput
+final readonly class Dimensions
 {
     /**
      * @param positive-int $dimensions

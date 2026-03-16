@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Tests\Request\Query;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
-use OneToMany\LlmSdk\Request\Query\Type\SchemaInput;
+use OneToMany\LlmSdk\Request\Query\Type\Schema;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
@@ -66,7 +66,7 @@ final class CompileRequestTest extends TestCase
         $input = $compileRequest->getSchema();
 
         // Assert: The title of the JSON schema is used as the name
-        $this->assertInstanceOf(SchemaInput::class, $input);
+        $this->assertInstanceOf(Schema::class, $input);
         $this->assertEquals($jsonSchema['title'], $input->getName());
     }
 
@@ -81,7 +81,7 @@ final class CompileRequestTest extends TestCase
         // Assert: The JSON schema was added
         $input = $compileRequest->getSchema();
 
-        $this->assertInstanceOf(SchemaInput::class, $input);
+        $this->assertInstanceOf(Schema::class, $input);
         $this->assertEquals('JsonSchema', $input->getName());
     }
 

@@ -6,7 +6,7 @@ use function is_object;
 use function is_string;
 use function trim;
 
-final readonly class SchemaInput
+final readonly class Schema
 {
     /**
      * @param non-empty-string $name
@@ -22,7 +22,7 @@ final readonly class SchemaInput
     }
 
     /**
-     * @param array<string, mixed>|SchemaInput $schema
+     * @param array<string, mixed>|Schema $schema
      */
     public static function create(?string $name, array|self $schema): self
     {

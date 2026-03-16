@@ -4,11 +4,11 @@ namespace OneToMany\LlmSdk\Request\Query;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
-use OneToMany\LlmSdk\Request\Query\Type\DimensionsInput;
+use OneToMany\LlmSdk\Request\Query\Type\Dimensions;
 use OneToMany\LlmSdk\Request\Query\Type\Enum\Role;
-use OneToMany\LlmSdk\Request\Query\Type\FileInput;
-use OneToMany\LlmSdk\Request\Query\Type\SchemaInput;
-use OneToMany\LlmSdk\Request\Query\Type\TextInput;
+use OneToMany\LlmSdk\Request\Query\Type\FileUri;
+use OneToMany\LlmSdk\Request\Query\Type\Schema;
+use OneToMany\LlmSdk\Request\Query\Type\Prompt;
 
 use function count;
 use function is_string;
@@ -17,24 +17,24 @@ use function trim;
 
 class CompileQueryRequest extends BaseRequest
 {
-    private ?DimensionsInput $dimensions = null;
-    private ?SchemaInput $schema = null;
-    private ?TextInput $instructions = null;
+    private ?Dimensions $dimensions = null;
+    private ?Schema $schema = null;
+    private ?Prompt $instructions = null;
 
     /**
-     * @var list<FileInput>
+     * @var list<FileUri>
      */
-    private array $fileInputs = [];
+    private array $files = [];
 
     /**
-     * @var list<TextInput>
+     * @var list<Prompt>
      */
-    private array $textInputs = [];
+    private array $prompts = [];
 
     /**
      * @throws InvalidArgumentException when the model does not support changing the output dimensions
      */
-    public function usingDimensions(int|DimensionsInput|null $dimensions): static
+    public function usingDimensions(int|Dimensions|null $dimensions): static
     {
         if (null === $dimensions) {
             $this->dimensions = null;
@@ -43,24 +43,24 @@ class CompileQueryRequest extends BaseRequest
                 throw new InvalidArgumentException(sprintf('The model "%s" does not support changing the output dimensions.', $this->getModel()->getValue()));
             }
 
-            $this->dimensions = DimensionsInput::create($dimensions);
+            $this->dimensions = Dimensions::create($dimensions);
         }
 
         return $this;
     }
 
-    public function getDimensions(): ?DimensionsInput
+    public function getDimensions(): ?Dimensions
     {
         return $this->dimensions;
     }
 
     /**
      * @param ?non-empty-string $name
-     * @param array<string, mixed>|SchemaInput|null $schema
+     * @param array<string, mixed>|Schema|null $schema
      *
      * @throws InvalidArgumentException when the model does not support structured output
      */
-    public function usingSchema(?string $name, array|SchemaInput|null $schema): static
+    public function usingSchema(?string $name, array|Schema|null $schema): static
     {
         if (null === $schema) {
             $this->schema = null;
@@ -69,13 +69,13 @@ class CompileQueryRequest extends BaseRequest
                 throw new InvalidArgumentException(sprintf('The model "%s" does not support structured output.', $this->getModel()->getValue()));
             }
 
-            $this->schema = SchemaInput::create($name, $schema);
+            $this->schema = Schema::create($name, $schema);
         }
 
         return $this;
     }
 
-    public function getSchema(): ?SchemaInput
+    public function getSchema(): ?Schema
     {
         return $this->schema;
     }
@@ -83,7 +83,7 @@ class CompileQueryRequest extends BaseRequest
     /**
      * @param ?non-empty-lowercase-string $format
      */
-    public function withFile(string|FileInput|null $file, ?string $format): static
+    public function withFile(string|FileUri|null $file, ?string $format): static
     {
         if (is_string($file)) {
             $file = trim($file);
@@ -93,27 +93,27 @@ class CompileQueryRequest extends BaseRequest
             return $this;
         }
 
-        if (!$file instanceof FileInput) {
-            $file = new FileInput($file, $format);
+        if (!$file instanceof FileUri) {
+            $file = new FileUri($file, $format);
         }
 
-        $this->fileInputs[] = $file;
+        $this->files[] = $file;
 
         return $this;
     }
 
     /**
-     * @return list<FileInput>
+     * @return list<FileUri>
      */
-    public function getFileInputs(): array
+    public function getFiles(): array
     {
-        return $this->fileInputs;
+        return $this->files;
     }
 
     /**
      * @throws InvalidArgumentException when the model does not support system instructions
      */
-    public function withText(string|TextInput|null $text, Role $role = Role::User): static
+    public function withText(string|Prompt|null $text, Role $role = Role::User): static
     {
         if (is_string($text)) {
             $text = trim($text);
@@ -123,8 +123,8 @@ class CompileQueryRequest extends BaseRequest
             return $this;
         }
 
-        if (!$text instanceof TextInput) {
-            $text = new TextInput($text, $role);
+        if (!$text instanceof Prompt) {
+            $text = new Prompt($text, $role);
         }
 
         if ($this->getModel()->isEmbedding()) {
@@ -132,12 +132,12 @@ class CompileQueryRequest extends BaseRequest
                 throw new InvalidArgumentException(sprintf('The model "%s" does not support system instructions.', $this->getModel()->getValue()));
             }
 
-            $this->textInputs = [$text];
+            $this->prompts = [$text];
         } else {
             if ($text->getRole()->isSystem()) {
                 $this->instructions = $text;
             } else {
-                $this->textInputs[] = $text;
+                $this->prompts[] = $text;
             }
         }
 
@@ -145,25 +145,25 @@ class CompileQueryRequest extends BaseRequest
     }
 
     /**
-     * @return list<TextInput>
+     * @return list<Prompt>
      */
-    public function getTextInputs(): array
+    public function getPrompts(): array
     {
-        return $this->textInputs;
+        return $this->prompts;
     }
 
-    public function usingInstructions(string|TextInput|null $instructions): static
+    public function usingInstructions(string|Prompt|null $instructions): static
     {
         return $this->withText($instructions, Role::System);
     }
 
-    public function getInstructions(): ?TextInput
+    public function getInstructions(): ?Prompt
     {
         return $this->instructions;
     }
 
     public function hasComponents(): bool
     {
-        return 0 !== count($this->fileInputs) || 0 !== count($this->textInputs);
+        return 0 !== count($this->files) || 0 !== count($this->prompts);
     }
 }

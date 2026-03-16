@@ -22,7 +22,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         ];
 
         // File Inputs
-        foreach ($request->getFileInputs() as $file) {
+        foreach ($request->getFiles() as $file) {
             $requestContent[$contentKey]['parts'][] = [
                 'fileData' => [
                     'fileUri' => $file->getUri(),
@@ -32,7 +32,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         }
 
         // Text Inputs
-        foreach ($request->getTextInputs() as $text) {
+        foreach ($request->getPrompts() as $text) {
             $requestContent[$contentKey]['parts'][] = [
                 'text' => $text->getText(),
             ];

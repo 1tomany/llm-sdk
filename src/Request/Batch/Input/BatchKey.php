@@ -7,7 +7,7 @@ use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use function is_object;
 use function trim;
 
-final readonly class BatchKeyInput
+final readonly class BatchKey
 {
     /**
      * @param non-empty-string $key

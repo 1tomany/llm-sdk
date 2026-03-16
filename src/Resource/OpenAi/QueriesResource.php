@@ -22,7 +22,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
 
         if ($request->getModel()->isEmbedding()) {
             // Text Inputs
-            foreach ($request->getTextInputs() as $text) {
+            foreach ($request->getPrompts() as $text) {
                 $requestContent['input'] = $text->getText();
             }
 
@@ -36,7 +36,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             $requestContent['input'] = [];
 
             // File Inputs
-            foreach ($request->getFileInputs() as $file) {
+            foreach ($request->getFiles() as $file) {
                 $type = $file->isImage() ? Type::Image : Type::File;
 
                 $requestContent['input'][] = [
@@ -53,7 +53,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             // Text Inputs
             $type = Type::Text;
 
-            foreach ($request->getTextInputs() as $text) {
+            foreach ($request->getPrompts() as $text) {
                 $requestContent['input'][] = [
                     'content' => [
                         [

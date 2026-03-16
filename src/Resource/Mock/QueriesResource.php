@@ -34,15 +34,15 @@ final readonly class QueriesResource implements QueriesResourceInterface
         }
 
         // File Inputs
-        foreach ($request->getFileInputs() as $file) {
-            $requestContent['fileInputs'][] = [
+        foreach ($request->getFiles() as $file) {
+            $requestContent['files'][] = [
                 ...$file->toArray(),
             ];
         }
 
         // Text Inputs
-        foreach ($request->getTextInputs() as $text) {
-            $requestContent['textInputs'][] = [
+        foreach ($request->getPrompts() as $text) {
+            $requestContent['prompts'][] = [
                 ...$text->toArray(),
             ];
         }

@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Request\Query\Type\Enum\Role;
 
 use function in_array;
 
-final readonly class FileInput
+final readonly class FileUri
 {
     /**
      * @param non-empty-string $uri

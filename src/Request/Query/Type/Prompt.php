@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Request\Query\Type;
 
 use OneToMany\LlmSdk\Request\Query\Type\Enum\Role;
 
-final readonly class TextInput
+final readonly class Prompt
 {
     /**
      * @param non-empty-string $text
