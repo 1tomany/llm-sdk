@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Action\Output;
 
 use OneToMany\LlmSdk\Action\BaseAction;
-use OneToMany\LlmSdk\Action\Query\Trait\CompileQueryTrait;
+use OneToMany\LlmSdk\Action\Trait\CompileQueryTrait;
 use OneToMany\LlmSdk\Contract\Action\Output\GenerateOutputActionInterface;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;

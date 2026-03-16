@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Action\Query\Trait;
+namespace OneToMany\LlmSdk\Action\Trait;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;

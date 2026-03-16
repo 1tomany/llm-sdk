@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Action\Embedding;
 
 use OneToMany\LlmSdk\Action\BaseAction;
-use OneToMany\LlmSdk\Action\Query\Trait\CompileQueryTrait;
+use OneToMany\LlmSdk\Action\Trait\CompileQueryTrait;
 use OneToMany\LlmSdk\Contract\Action\Embedding\CreateEmbeddingActionInterface;
 use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
