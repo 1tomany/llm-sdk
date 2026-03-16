@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Response\Batch;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
-readonly class BatchResponse extends BaseResponse
+readonly class BaseBatchResponse extends BaseResponse
 {
     /**
      * @param non-empty-string $uri

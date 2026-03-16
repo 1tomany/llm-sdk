@@ -2,6 +2,6 @@
 
 namespace OneToMany\LlmSdk\Response\Batch;
 
-final readonly class CreateBatchResponse extends BatchResponse
+final readonly class CreateBatchResponse extends BaseBatchResponse
 {
 }
