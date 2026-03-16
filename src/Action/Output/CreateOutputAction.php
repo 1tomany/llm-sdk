@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Action\Output;
 
 use OneToMany\LlmSdk\Action\BaseAction;
 use OneToMany\LlmSdk\Action\Query\Trait\CompileQueryTrait;
-use OneToMany\LlmSdk\Contract\Action\Output\GenerateOutputActionInterface;
+use OneToMany\LlmSdk\Contract\Action\Output\CreateOutputActionInterface;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
@@ -12,12 +12,12 @@ use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 
 use function sprintf;
 
-final readonly class GenerateOutputAction extends BaseAction implements GenerateOutputActionInterface
+final readonly class CreateOutputAction extends BaseAction implements CreateOutputActionInterface
 {
     use CompileQueryTrait;
 
     /**
-     * @see OneToMany\LlmSdk\Contract\Action\Output\GenerateOutputActionInterface
+     * @see OneToMany\LlmSdk\Contract\Action\Output\CreateOutputActionInterface
      *
      * @throws InvalidArgumentException when the model is an embedding model
      */

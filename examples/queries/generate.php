@@ -1,6 +1,6 @@
 <?php
 
-use OneToMany\LlmSdk\Action\Output\GenerateOutputAction;
+use OneToMany\LlmSdk\Action\Output\CreateOutputAction;
 use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
@@ -23,7 +23,7 @@ try {
     ]);
 
     // Send the compiled request payload to the LLM server
-    $response = new GenerateOutputAction($clientFactory)->act(...[
+    $response = new CreateOutputAction($clientFactory)->act(...[
         'request' => $response->toExecuteRequest(),
     ]);
 

@@ -9,7 +9,7 @@ use OneToMany\LlmSdk\Response\Query\CompileResponse;
 trait CompileQueryTrait
 {
     /**
-     * @throws InvalidArgumentException when the request does not have any user components
+     * @throws InvalidArgumentException when the query does not have any user components
      */
     private function compileQuery(CompileRequest $request): CompileResponse
     {

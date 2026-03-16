@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
 use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
 
-interface GenerateOutputActionInterface
+interface CreateOutputActionInterface
 {
     public function act(CompileRequest|ExecuteRequest $request): GenerateResponse;
 }
