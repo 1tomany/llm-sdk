@@ -16,8 +16,8 @@ final readonly class BatchKeyInput
 
     public static function create(string|self|null $batchKey): ?self
     {
-        if (!$batchKey instanceof self) {
-            if ($batchKey = trim($batchKey ?? '')) {
+        if (\is_string($batchKey)) {
+            if ($batchKey = trim($batchKey)) {
                 $batchKey = new self($batchKey);
             }
         }
