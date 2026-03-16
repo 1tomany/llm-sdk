@@ -8,8 +8,8 @@ use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\File\File;
-use OneToMany\LlmSdk\Response\File\DeleteResponse;
-use OneToMany\LlmSdk\Response\File\UploadResponse;
+use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
+use OneToMany\LlmSdk\Response\File\UploadFileResponse;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 
 use function fread;
@@ -34,7 +34,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      * @throws RuntimeException when generating a signed URL fails
      * @throws RuntimeException when uploading a file chunk fails
      */
-    public function upload(UploadRequest $request): UploadResponse
+    public function upload(UploadRequest $request): UploadFileResponse
     {
         // Ensure the file can be opened
         $fileHandle = $request->openFile();
@@ -115,18 +115,18 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
         ]);
 
-        return new UploadResponse($request->getVendor(), $object->uri, $object->name, null, $object->expirationTime);
+        return new UploadFileResponse($request->getVendor(), $object->uri, $object->name, null, $object->expirationTime);
     }
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function delete(DeleteRequest $request): DeleteResponse
+    public function delete(DeleteRequest $request): DeleteFileResponse
     {
         $this->doDeleteRequest($request->getUri(), [
             'headers' => $this->buildHeaders(),
         ]);
 
-        return new DeleteResponse($request->getVendor(), $request->getUri());
+        return new DeleteFileResponse($request->getVendor(), $request->getUri());
     }
 }

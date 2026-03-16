@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 use function strtolower;
 
-final readonly class UploadResponse extends FileResponse
+final readonly class UploadFileResponse
 {
     /**
      * @param non-empty-string $uri
@@ -14,13 +14,17 @@ final readonly class UploadResponse extends FileResponse
      * @param ?non-empty-string $purpose
      */
     public function __construct(
-        Vendor $vendor,
+        private Vendor $vendor,
         private string $uri,
         private ?string $name = null,
         private ?string $purpose = null,
         private ?\DateTimeImmutable $expiresAt = null,
     ) {
-        parent::__construct($vendor);
+    }
+
+    public function getVendor(): Vendor
+    {
+        return $this->vendor;
     }
 
     /**

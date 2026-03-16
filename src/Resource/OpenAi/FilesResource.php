@@ -8,15 +8,15 @@ use OneToMany\LlmSdk\Request\File\UploadRequest;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\File\DeletedFile;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\File\Enum\Purpose;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\File\File;
-use OneToMany\LlmSdk\Response\File\DeleteResponse;
-use OneToMany\LlmSdk\Response\File\UploadResponse;
+use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
+use OneToMany\LlmSdk\Response\File\UploadFileResponse;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function upload(UploadRequest $request): UploadResponse
+    public function upload(UploadRequest $request): UploadFileResponse
     {
         $purpose = Purpose::create($request->getPurpose());
 
@@ -30,13 +30,13 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
         $file = $this->doDenormalize($content, File::class);
 
-        return new UploadResponse($request->getVendor(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
+        return new UploadFileResponse($request->getVendor(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
     }
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function delete(DeleteRequest $request): DeleteResponse
+    public function delete(DeleteRequest $request): DeleteFileResponse
     {
         $url = $this->buildUrl('files', $request->getUri());
 
@@ -46,6 +46,6 @@ final readonly class FilesResource extends BaseResource implements FilesResource
 
         $file = $this->doDenormalize($content, DeletedFile::class);
 
-        return new DeleteResponse($request->getVendor(), $file->id);
+        return new DeleteFileResponse($request->getVendor(), $file->id);
     }
 }
