@@ -1,9 +1,9 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Usage;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Usage;
 
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Usage\Details\InputTokensDetails;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Usage\Details\OutputTokensDetails;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Usage\Details\InputTokensDetails;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Usage\Details\OutputTokensDetails;
 
 final readonly class Usage
 {
