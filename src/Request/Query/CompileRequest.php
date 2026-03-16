@@ -14,7 +14,7 @@ use function sprintf;
 
 class CompileRequest extends BaseRequest
 {
-    private ?BatchKeyInput $batchKey = null;
+    // private ?BatchKeyInput $batchKey = null;
     private ?DimensionsInput $dimensions = null;
     private ?JsonSchemaInput $jsonSchema = null;
 
@@ -27,22 +27,6 @@ class CompileRequest extends BaseRequest
      * @var list<TextInput>
      */
     private array $textInputs = [];
-
-    public function usingBatchKey(string|BatchKeyInput|null $batchKey): static
-    {
-        if (null === $batchKey) {
-            $this->batchKey = null;
-        } else {
-            $this->batchKey = BatchKeyInput::create($batchKey);
-        }
-
-        return $this;
-    }
-
-    public function getBatchKey(): ?BatchKeyInput
-    {
-        return $this->batchKey;
-    }
 
     /**
      * @throws InvalidArgumentException when the model does not support changing the output dimensions
@@ -65,6 +49,27 @@ class CompileRequest extends BaseRequest
     public function getDimensions(): ?DimensionsInput
     {
         return $this->dimensions;
+    }
+
+    /**
+     * @param array<string, mixed>|JsonSchemaInput|null $schema
+     * @param ?non-empty-string $name
+     *
+     * @throws InvalidArgumentException when the model does not support structured output
+     */
+    public function usingJsonSchema(array|JsonSchemaInput|null $jsonSchema, ?string $name): static
+    {
+        if (null === $jsonSchema) {
+            $this->jsonSchema = null;
+        } else {
+            if (!$this->getModel()->isGenerative()) {
+                throw new InvalidArgumentException(sprintf('The model "%s" does not support structured output.', $this->getModel()->getValue()));
+            }
+
+            $this->jsonSchema = JsonSchemaInput::create($jsonSchema, $name);
+        }
+
+        return $this;
     }
 
     public function getJsonSchema(): ?JsonSchemaInput

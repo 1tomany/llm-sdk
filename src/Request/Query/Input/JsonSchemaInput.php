@@ -2,21 +2,35 @@
 
 namespace OneToMany\LlmSdk\Request\Query\Component;
 
-use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
-
 use function trim;
 
 final readonly class JsonSchemaInput
 {
     /**
      * @param array<string, mixed> $schema
+     * @param non-empty-string $name
      */
     public function __construct(
         private array $schema,
-        private ?string $name,
-        private bool $isStrict = true,
-        private Role $role = Role::User,
+        private string $name,
+        private bool $isStrict = true
     ) {
+    }
+
+    /**
+     * @param array<string, mixed>|JsonSchemaInput $schema
+     */
+    public static function create(array|self $schema, ?string $name): self
+    {
+        if (\is_object($schema)) {
+            return $schema;
+        }
+
+        if (\is_string($schema['title'] ?? null)) {
+            $name = trim($name ?? $schema['title']);
+        }
+
+        return new self($schema, $name ?: 'JsonSchema');
     }
 
     /**
@@ -24,7 +38,7 @@ final readonly class JsonSchemaInput
      */
     public function getName(): string
     {
-        return trim($this->name ?? '') ?: 'JsonSchema';
+        return $this->name;
     }
 
     /**
@@ -46,10 +60,5 @@ final readonly class JsonSchemaInput
     public function isStrict(): bool
     {
         return $this->isStrict;
-    }
-
-    public function getRole(): Role
-    {
-        return $this->role;
     }
 }
