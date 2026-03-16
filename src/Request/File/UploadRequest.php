@@ -6,10 +6,8 @@ use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 
 use function basename;
-use function fclose;
 use function filesize;
 use function fopen;
-use function is_resource;
 use function sprintf;
 use function strtolower;
 use function trim;
@@ -21,12 +19,6 @@ class UploadRequest extends FileRequest
     private ?int $size = null;
     private ?string $format = null;
     private ?string $purpose = null;
-    private mixed $fileHandle = null;
-
-    public function __destruct()
-    {
-        $this->closeFile();
-    }
 
     /**
      * @throws InvalidArgumentException when the trimmed path is empty
@@ -116,23 +108,6 @@ class UploadRequest extends FileRequest
      */
     public function openFile(): mixed
     {
-        if (!is_resource($this->fileHandle)) {
-            $this->fileHandle = @fopen((string) $this->path, 'r');
-        }
-
-        if (!is_resource($this->fileHandle)) {
-            throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->getName()));
-        }
-
-        return $this->fileHandle;
-    }
-
-    public function closeFile(): void
-    {
-        if (is_resource($this->fileHandle)) {
-            @fclose($this->fileHandle);
-        }
-
-        $this->fileHandle = null;
+        return @fopen($this->getPath(), 'r') ?: throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->getPath()));
     }
 }
