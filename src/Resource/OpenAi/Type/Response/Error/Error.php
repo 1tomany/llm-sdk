@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Error;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Error;
 
 final readonly class Error
 {

@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Batch;
 
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Batch\Enum\Status;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Error\Error;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Usage\Usage;
 
 final readonly class Batch

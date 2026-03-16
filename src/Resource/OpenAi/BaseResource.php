@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Error\Error;
 use OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

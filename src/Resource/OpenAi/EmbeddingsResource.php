@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Embedding\Embedding;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Embedding\Embedding;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Stopwatch\Stopwatch;

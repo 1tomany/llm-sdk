@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Embedding;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Embedding;
 
 final readonly class Embedding
 {
