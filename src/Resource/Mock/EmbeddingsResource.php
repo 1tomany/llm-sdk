@@ -20,7 +20,7 @@ final readonly class EmbeddingsResource implements EmbeddingsResourceInterface
     }
 
     /**
-     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface
      */
     public function create(CreateEmbeddingRequest $request): CreateEmbeddingResponse
     {

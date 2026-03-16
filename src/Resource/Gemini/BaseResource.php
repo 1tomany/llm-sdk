@@ -31,6 +31,14 @@ abstract readonly class BaseResource
     }
 
     /**
+     * @return non-empty-string
+     */
+    public function getApiVersion(): string
+    {
+        return $this->apiVersion;
+    }
+
+    /**
      * @see OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait
      */
     public function getBaseUrl(): string
