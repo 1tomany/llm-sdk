@@ -1,7 +1,11 @@
 <?php
 
+namespace OneToMany\LlmSdk\Response\Embedding;
+
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Response\BaseResponse;
+
+use function max;
 
 final readonly class CreateEmbeddingResponse extends BaseResponse
 {
@@ -29,6 +33,6 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
      */
     public function getRuntime(): int
     {
-        return \max(0, (int) $this->runtime);
+        return max(0, (int) $this->runtime);
     }
 }
