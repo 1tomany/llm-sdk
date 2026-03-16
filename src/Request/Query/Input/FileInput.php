@@ -2,9 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\Query\Input;
 
-use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
-
-use function str_starts_with;
+use function in_array;
 
 final readonly class FileInput
 {
@@ -15,7 +13,6 @@ final readonly class FileInput
     public function __construct(
         private string $uri,
         private string $format,
-        private Role $role = Role::User,
     ) {
     }
 
@@ -37,11 +34,11 @@ final readonly class FileInput
 
     public function isImage(): bool
     {
-        return str_starts_with($this->format, 'image/');
-    }
-
-    public function getRole(): Role
-    {
-        return $this->role;
+        return in_array($this->format, [
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/webp',
+        ]);
     }
 }

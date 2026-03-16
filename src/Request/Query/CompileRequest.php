@@ -76,6 +76,21 @@ class CompileRequest extends BaseRequest
         return $this->jsonSchema;
     }
 
+    public function withFile(string|FileInput|null $file, ?string $format): static
+    {
+        if (!$file || !$format) {
+            return $this;
+        }
+
+        if (!$file instanceof FileInput) {
+            $file = new FileInput($file, $format);
+        }
+
+        $this->fileInputs[] = $file;
+
+        return $this;
+    }
+
     /**
      * @return list<FileInput>
      */
