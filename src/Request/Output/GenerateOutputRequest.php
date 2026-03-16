@@ -15,8 +15,7 @@ class GenerateOutputRequest extends BaseRequest
         string|Model|null $model,
         private readonly string $url,
         private readonly array $request,
-    )
-    {
+    ) {
         parent::__construct($model);
     }
 
