@@ -111,11 +111,11 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server returned an empty response.', $request->getName()));
         }
 
-        $file = $this->doDenormalize($response->toArray(), File::class, [
+        $object = $this->doDenormalize($response->toArray(), File::class, [
             UnwrappingDenormalizer::UNWRAP_PATH => '[file]',
         ]);
 
-        return new UploadResponse($request->getVendor(), $file->uri, $file->name, null, $file->expirationTime);
+        return new UploadResponse($request->getVendor(), $object->uri, $object->name, null, $object->expirationTime);
     }
 
     /**

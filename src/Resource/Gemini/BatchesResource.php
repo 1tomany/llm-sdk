@@ -2,13 +2,14 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Batch\Batch;
 use OneToMany\LlmSdk\Response\Batch\CreateResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadResponse;
+
+use function sprintf;
 
 final readonly class BatchesResource extends BaseResource implements BatchesResourceInterface
 {
@@ -17,7 +18,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function create(CreateRequest $request): CreateResponse
     {
-        $url = $this->buildModelUrl($request->getModel());
+        $url = $this->buildUrl($this->getApiVersion(), sprintf('models/%s:%s', $request->getModel()->getId(), $request->getModel()->isEmbedding() ? 'asyncBatchEmbedContent' : 'batchGenerateContent'));
 
         $content = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders(),
@@ -31,9 +32,9 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
             ],
         ]);
 
-        $batch = $this->doDenormalize($content, Batch::class);
+        $object = $this->doDenormalize($content, Batch::class);
 
-        return new CreateResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
+        return new CreateResponse($request->getModel(), $object->name, $object->metadata->state->getValue());
     }
 
     /**
@@ -41,7 +42,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function read(ReadRequest $request): ReadResponse
     {
-        $url = $this->buildUrl($this->apiVersion, $request->getUri());
+        $url = $this->buildUrl($this->getApiVersion(), $request->getUri());
 
         $content = $this->doGetRequest($url, [
             'headers' => $this->buildHeaders(),
@@ -50,13 +51,5 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
         $batch = $this->doDenormalize($content, Batch::class);
 
         return new ReadResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    private function buildModelUrl(Model $model): string
-    {
-        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $model->isEmbedding() ? 'asyncBatchEmbedContent' : 'batchGenerateContent'));
     }
 }
