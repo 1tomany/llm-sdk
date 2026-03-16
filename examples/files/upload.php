@@ -8,20 +8,18 @@ use OneToMany\LlmSdk\Request\File\UploadRequest;
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
-$filePath = trim($argv[1] ?? '');
+$path = trim($argv[1] ?? '');
 
-if (!is_file($filePath)) {
-    errorMessage('Usage: php %s <file-path> <model>', basename(__FILE__));
+if (!is_file($path)) {
+    errorMessage('Usage: php %s <path> <vendor>', basename(__FILE__));
 }
 
 $vendor = trim($argv[2] ?? '') ?: 'mock';
 
 try {
-    $fileName = basename($filePath);
-
     // Create a request to upload the file
-    $uploadRequest = new UploadRequest($vendor)->atPath($filePath)->withFormat(...[
-        'format' => mime_content_type($filePath) ?: 'application/octet-stream',
+    $uploadRequest = new UploadRequest($vendor)->atPath($path)->withFormat(...[
+        'format' => mime_content_type($path) ?: 'application/octet-stream',
     ]);
 
     // Upload the file to the LLM vendor
@@ -29,7 +27,7 @@ try {
         'request' => $uploadRequest,
     ]);
 
-    successMessage('The file "%s" was successfully uploaded to %s with URI "%s".', $fileName, $response->getVendor()->getName(), $response->getUri());
+    successMessage('The file "%s" was successfully uploaded to %s with URI "%s".', basename($path), $response->getVendor()->getName(), $response->getUri());
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }

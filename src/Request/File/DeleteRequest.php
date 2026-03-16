@@ -3,15 +3,13 @@
 namespace OneToMany\LlmSdk\Request\File;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 
 use function trim;
 
 class DeleteRequest extends FileRequest
 {
-    /**
-     * @var non-empty-string
-     */
-    private string $uri = 'mock-uri';
+    private ?string $uri = null;
 
     /**
      * @throws InvalidArgumentException when the trimmed URI is empty
@@ -29,9 +27,11 @@ class DeleteRequest extends FileRequest
 
     /**
      * @return non-empty-string
+     *
+     * @throws RuntimeException when the URI is empty
      */
     public function getUri(): string
     {
-        return $this->uri;
+        return $this->uri ?? throw new RuntimeException('The URI is empty.');
     }
 }
