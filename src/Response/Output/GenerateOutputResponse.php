@@ -8,6 +8,7 @@ use OneToMany\LlmSdk\Response\BaseResponse;
 use OneToMany\LlmSdk\Response\Output\Usage\TokenUsage;
 
 use function json_decode;
+use function max;
 use function trim;
 
 use const JSON_THROW_ON_ERROR;
@@ -55,7 +56,7 @@ final readonly class GenerateOutputResponse extends BaseResponse
      */
     public function getRuntime(): int
     {
-        return \max(0, (int) $this->runtime);
+        return max(0, (int) $this->runtime);
     }
 
     public function getUsage(): TokenUsage
