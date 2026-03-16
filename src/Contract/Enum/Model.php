@@ -174,6 +174,24 @@ enum Model: string
     }
 
     /**
+     * @return non-negative-int
+     */
+    public function getDefaultDimensions(): int
+    {
+        $dimensions = match($this) {
+            self::GeminiEmbedding001 => 3072,
+            self::GeminiEmbedding2Preview => 3072,
+            self::MockEmbedding => 1024,
+            self::GptEmbeddingAda002 => 1536,
+            self::GptEmbedding3Small => 1536,
+            self::GptEmbedding3Large => 3072,
+            default => 0,
+        };
+
+        return $dimensions;
+    }
+
+    /**
      * @phpstan-assert-if-true false $this->isGenerative()
      */
     public function isEmbedding(): bool
@@ -194,16 +212,6 @@ enum Model: string
     public function isGenerative(): bool
     {
         return !$this->isEmbedding();
-    }
-
-    public function supportsFiles(): bool
-    {
-        return !in_array($this, [
-            self::GeminiEmbedding001,
-            self::GptEmbeddingAda002,
-            self::GptEmbedding3Small,
-            self::GptEmbedding3Large,
-        ]);
     }
 
     public function usesVendor(Vendor $vendor): bool
