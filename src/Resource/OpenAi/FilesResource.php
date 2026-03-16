@@ -5,8 +5,8 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Request\File\DeleteRequest;
 use OneToMany\LlmSdk\Request\File\UploadRequest;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\File\Enum\Purpose;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\DeletedFile;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\Enum\Purpose;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
 use OneToMany\LlmSdk\Response\File\UploadFileResponse;
@@ -18,7 +18,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function upload(UploadRequest $request): UploadFileResponse
     {
-        $purpose = Purpose::create($request->getPurpose());
+        $purpose = Purpose::tryFrom((string) $request->getPurpose()) ?? Purpose::UserData;
 
         $content = $this->doPostRequest($this->buildUrl('files'), [
             'auth_bearer' => $this->getApiKey(),

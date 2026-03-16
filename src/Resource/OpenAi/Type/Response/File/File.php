@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File;
 
-use OneToMany\LlmSdk\Resource\OpenAi\Type\File\Enum\Purpose;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\Enum\Purpose;
 
 final readonly class File
 {

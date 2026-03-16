@@ -1,9 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\OpenAi\Type\File\Enum;
-
-use function strtolower;
-use function trim;
+namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\Enum;
 
 enum Purpose: string
 {
@@ -13,11 +10,6 @@ enum Purpose: string
     case FineTune = 'fine-tune';
     case UserData = 'user_data';
     case Vision = 'vision';
-
-    public static function create(?string $purpose): self
-    {
-        return self::tryFrom(strtolower(trim($purpose ?? ''))) ?: self::UserData;
-    }
 
     /**
      * @return non-empty-string
