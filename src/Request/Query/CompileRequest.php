@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\Query;
 
-use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
+use OneToMany\LlmSdk\Request\Query\Input\Enum\Role;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 use OneToMany\LlmSdk\Request\Query\Input\DimensionsInput;

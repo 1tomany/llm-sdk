@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\Query\Input;
 
-use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
+use OneToMany\LlmSdk\Request\Query\Input\Enum\Role;
 
 final readonly class TextInput
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Contract\Request\Query\Component\Enum;
+namespace OneToMany\LlmSdk\Request\Query\Input\Enum;
 
 enum Role: string
 {
