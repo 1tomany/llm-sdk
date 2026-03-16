@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\Query\Input;
 
+use function is_string;
 use function trim;
 
 final readonly class BatchKeyInput
@@ -16,7 +17,7 @@ final readonly class BatchKeyInput
 
     public static function create(string|self|null $batchKey): ?self
     {
-        if (\is_string($batchKey)) {
+        if (is_string($batchKey)) {
             if ($batchKey = trim($batchKey)) {
                 $batchKey = new self($batchKey);
             }
