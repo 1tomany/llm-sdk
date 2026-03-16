@@ -17,7 +17,7 @@ final readonly class DimensionsInput
     }
 
     /**
-     * @throws ExceptionInvalidArgumentException when the output dimensions is not positive
+     * @throws InvalidArgumentException when the output dimensions is not positive
      */
     public static function create(string|self $dimensions): self
     {
