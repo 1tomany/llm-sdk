@@ -178,7 +178,7 @@ enum Model: string
      */
     public function getDefaultDimensions(): int
     {
-        $dimensions = match($this) {
+        $dimensions = match ($this) {
             self::GeminiEmbedding001 => 3072,
             self::GeminiEmbedding2Preview => 3072,
             self::MockEmbedding => 1024,
