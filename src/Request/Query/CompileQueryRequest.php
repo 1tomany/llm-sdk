@@ -17,10 +17,6 @@ use function trim;
 
 class CompileQueryRequest extends BaseRequest
 {
-    private ?Dimensions $dimensions = null;
-    private ?Schema $schema = null;
-    private ?Prompt $instructions = null;
-
     /**
      * @var list<FileUri>
      */
@@ -32,53 +28,19 @@ class CompileQueryRequest extends BaseRequest
     private array $prompts = [];
 
     /**
-     * @throws InvalidArgumentException when the model does not support changing the output dimensions
+     * A system prompt or instructions.
      */
-    public function usingDimensions(int|Dimensions|null $dimensions): static
-    {
-        if (null === $dimensions) {
-            $this->dimensions = null;
-        } else {
-            if (!$this->getModel()->isEmbedding()) {
-                throw new InvalidArgumentException(sprintf('The model "%s" does not support changing the output dimensions.', $this->getModel()->getValue()));
-            }
-
-            $this->dimensions = Dimensions::create($dimensions);
-        }
-
-        return $this;
-    }
-
-    public function getDimensions(): ?Dimensions
-    {
-        return $this->dimensions;
-    }
+    private ?Prompt $instructions = null;
 
     /**
-     * @param ?non-empty-string $name
-     * @param array<string, mixed>|Schema|null $schema
-     *
-     * @throws InvalidArgumentException when the model does not support structured output
+     * Output schema for generative models that support structured outputs.
      */
-    public function usingSchema(?string $name, array|Schema|null $schema): static
-    {
-        if (null === $schema) {
-            $this->schema = null;
-        } else {
-            if (!$this->getModel()->isGenerative()) {
-                throw new InvalidArgumentException(sprintf('The model "%s" does not support structured output.', $this->getModel()->getValue()));
-            }
+    private ?Schema $schema = null;
 
-            $this->schema = Schema::create($name, $schema);
-        }
-
-        return $this;
-    }
-
-    public function getSchema(): ?Schema
-    {
-        return $this->schema;
-    }
+    /**
+     * Output dimensions for embedding models.
+     */
+    private ?Dimensions $dimensions = null;
 
     /**
      * @param ?non-empty-lowercase-string $format
@@ -111,37 +73,42 @@ class CompileQueryRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the model does not support system instructions
+     * @throws InvalidArgumentException when the model does not support system prompts
      */
-    public function withText(string|Prompt|null $text, Role $role = Role::User): static
+    public function withPrompt(string|Prompt|null $prompt, Role $role = Role::User): static
     {
-        if (is_string($text)) {
-            $text = trim($text);
+        if (is_string($prompt)) {
+            $prompt = trim($prompt);
         }
 
-        if (empty($text)) {
+        if (empty($prompt)) {
             return $this;
         }
 
-        if (!$text instanceof Prompt) {
-            $text = new Prompt($text, $role);
+        if (!$prompt instanceof Prompt) {
+            $prompt = new Prompt($prompt, $role);
         }
 
         if ($this->getModel()->isEmbedding()) {
-            if ($text->getRole()->isSystem()) {
-                throw new InvalidArgumentException(sprintf('The model "%s" does not support system instructions.', $this->getModel()->getValue()));
+            if ($prompt->getRole()->isSystem()) {
+                throw new InvalidArgumentException(sprintf('The model "%s" does not support system prompts.', $this->getModel()->getValue()));
             }
 
-            $this->prompts = [$text];
+            $this->prompts = [$prompt];
         } else {
-            if ($text->getRole()->isSystem()) {
-                $this->instructions = $text;
+            if ($prompt->getRole()->isSystem()) {
+                $this->instructions = $prompt;
             } else {
-                $this->prompts[] = $text;
+                $this->prompts[] = $prompt;
             }
         }
 
         return $this;
+    }
+
+    public function withUserPrompt(string|Prompt|null $prompt): static
+    {
+        return $this->withPrompt($prompt, Role::User);
     }
 
     /**
@@ -154,12 +121,66 @@ class CompileQueryRequest extends BaseRequest
 
     public function usingInstructions(string|Prompt|null $instructions): static
     {
-        return $this->withText($instructions, Role::System);
+        return $this->withPrompt($instructions, Role::System);
+    }
+
+    public function usingSystemPrompt(string|Prompt|null $systemPrompt): static
+    {
+        return $this->usingInstructions($systemPrompt);
     }
 
     public function getInstructions(): ?Prompt
     {
         return $this->instructions;
+    }
+
+    /**
+     * @param ?non-empty-string $name
+     * @param array<string, mixed>|Schema|null $schema
+     *
+     * @throws InvalidArgumentException when the model does not support structured output
+     */
+    public function usingSchema(?string $name, array|Schema|null $schema): static
+    {
+        if (null === $schema) {
+            $this->schema = null;
+        } else {
+            if (!$this->getModel()->isGenerative()) {
+                throw new InvalidArgumentException(sprintf('The model "%s" does not support structured output.', $this->getModel()->getValue()));
+            }
+
+            $this->schema = Schema::create($name, $schema);
+        }
+
+        return $this;
+    }
+
+    public function getSchema(): ?Schema
+    {
+        return $this->schema;
+    }
+
+    /**
+     * @throws InvalidArgumentException when the model does not support changing the output dimensions
+     */
+    public function usingDimensions(int|Dimensions|null $dimensions): static
+    {
+        if (null === $dimensions) {
+            $this->dimensions = null;
+        } else {
+            if (!$this->getModel()->isEmbedding()) {
+                throw new InvalidArgumentException(sprintf('The model "%s" does not support changing the output dimensions.', $this->getModel()->getValue()));
+            }
+
+            $this->dimensions = Dimensions::create($dimensions);
+        }
+
+        return $this;
+    }
+
+    public function getDimensions(): ?Dimensions
+    {
+        return $this->dimensions;
     }
 
     public function hasComponents(): bool
