@@ -8,10 +8,12 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Resource\OpenAi\BatchesResource;
 use OneToMany\LlmSdk\Resource\OpenAi\EmbeddingsResource;
 use OneToMany\LlmSdk\Resource\OpenAi\FilesResource;
+use OneToMany\LlmSdk\Resource\OpenAi\OutputsResource;
 use OneToMany\LlmSdk\Resource\OpenAi\QueriesResource;
 
 final class OpenAiClient extends BaseClient implements ClientInterface
@@ -52,6 +54,16 @@ final class OpenAiClient extends BaseClient implements ClientInterface
         $this->files ??= new FilesResource($this->httpClient, $this->serializer, $this->getApiKey());
 
         return $this->files;
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
+    public function outputs(): OutputsResourceInterface
+    {
+        $this->outputs ??= new OutputsResource($this->httpClient, $this->serializer, $this->getApiKey());
+
+        return $this->outputs;
     }
 
     /**
