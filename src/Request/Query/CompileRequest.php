@@ -29,19 +29,7 @@ class CompileRequest extends BaseRequest
 
     public function usingBatchKey(string|BatchKeyInput|null $batchKey): static
     {
-        if (!$batchKey instanceof BatchKeyInput) {
-            $batchKey = trim($batchKey ?? '') ?: null;
-        }
-
-        if (null === $batchKey) {
-            $this->batchKey = null;
-        } else {
-            if (!$batchKey instanceof BatchKeyInput) {
-                $batchKey = new BatchKeyInput($batchKey);
-            }
-
-            $this->batchKey = $batchKey;
-        }
+        $this->batchKey = BatchKeyInput::create($batchKey);
 
         return $this;
     }
