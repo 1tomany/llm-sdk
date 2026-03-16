@@ -21,7 +21,9 @@ class GenerateOutputRequest extends BaseRequest
         private readonly string $url,
         private readonly array $request,
     ) {
-        if (!($model = Model::create($model))->isGenerative()) {
+        $model = Model::create($model);
+
+        if (!$model->isGenerative()) {
             throw new InvalidArgumentException(sprintf('The model "%s" is not a generative model.', $model->getName()));
         }
 
