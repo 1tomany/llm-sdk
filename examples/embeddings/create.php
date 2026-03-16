@@ -15,16 +15,16 @@ try {
     $prompt = 'Write a short summary of the history of PHP.';
 
     // Build a request of individual query components
-    $compileRequest = new CompileRequest($model)->withPrompt($prompt)->usingDimensions(768);
+    $compileQueryRequest = new CompileRequest($model)->withText($prompt)->usingDimensions(768);
 
     // Compile the query into a request that can be sent to the LLM
     $response = new CompileQueryAction($clientFactory)->act(...[
-        'request' => $compileRequest,
+        'request' => $compileQueryRequest,
     ]);
 
     // Send the compiled request payload to the LLM server
     $response = new CreateEmbeddingAction($clientFactory)->act(...[
-        'request' => $response->toExecuteRequest(),
+        'request' => $response->toCreateEmbeddingRequest(),
     ]);
 
     successMessage(sprintf('The model "%s" generated an embedding with %d %s.', $response->getModel()->getValue(), $response->getDimensions(), 1 === $response->getDimensions() ? 'dimension' : 'dimensions'));

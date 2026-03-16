@@ -3,6 +3,8 @@
 namespace OneToMany\LlmSdk\Response\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Exception\RuntimeException;
+use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
@@ -26,13 +28,14 @@ final readonly class CompileResponse extends BaseResponse
         return $this->request;
     }
 
+    public function toCreateEmbeddingRequest(): CreateEmbeddingRequest
+    {
+        throw new RuntimeException('Not implemented!');
+        // return new CreateEmbeddingRequest($this->getModel(), $this->request);
+    }
+
     public function toGenerateOutputRequest(): GenerateOutputRequest
     {
         return new GenerateOutputRequest($this->getModel(), $this->request);
     }
-
-    // public function toExecuteRequest(): ExecuteRequest
-    // {
-    //     return new ExecuteRequest($this->getModel())->withUrl($this->getUrl())->withRequest($this->getRequest());
-    // }
 }

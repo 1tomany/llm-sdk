@@ -21,6 +21,6 @@ final class GenerateOutputRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The model "'.$model->getValue().'" is not a generative model.');
 
-        new GenerateOutputRequest($model, 'https://mock-llm.service', []);
+        new GenerateOutputRequest($model, []);
     }
 }
