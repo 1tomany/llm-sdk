@@ -3,7 +3,6 @@
 namespace OneToMany\LlmSdk\Response\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Response\BaseResponse;

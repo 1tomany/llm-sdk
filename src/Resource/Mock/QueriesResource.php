@@ -7,6 +7,8 @@ use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
 
+use function array_merge;
+
 final readonly class QueriesResource implements QueriesResourceInterface
 {
     use GenerateIdTrait;
@@ -26,7 +28,9 @@ final readonly class QueriesResource implements QueriesResourceInterface
 
         // Dimensions Input
         if (null !== $dimensions = $request->getDimensions()) {
-            $requestContent['dimensions'] = $dimensions->toArray();
+            $requestContent = array_merge($requestContent, [
+                'dimensions' => $dimensions->getDimensions(),
+            ]);
         }
 
         // File Inputs

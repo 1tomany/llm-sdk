@@ -173,21 +173,6 @@ enum Model: string
         return $vendor;
     }
 
-    public function getDimensions(): ?int
-    {
-        $dimensions = match ($this) {
-            self::GeminiEmbedding2Preview => 3072,
-            self::GeminiEmbedding001 => 3072,
-            self::MockEmbedding => 1024,
-            self::GptEmbeddingAda002 => 1536,
-            self::GptEmbedding3Large => 3072,
-            self::GptEmbedding3Small => 1536,
-            default => null,
-        };
-
-        return $dimensions;
-    }
-
     /**
      * @phpstan-assert-if-true false $this->isGenerative()
      */
