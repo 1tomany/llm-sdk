@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\Query\Input;
 
-use OneToMany\LlmSdk\Exception\InvalidArgumentException as ExceptionInvalidArgumentException;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 
 use function is_object;
 use function trim;
@@ -18,7 +18,7 @@ final readonly class BatchKeyInput
     }
 
     /**
-     * @throws ExceptionInvalidArgumentException when the batch key is empty
+     * @throws InvalidArgumentException when the batch key is empty
      */
     public static function create(string|self $batchKey): self
     {
@@ -27,7 +27,7 @@ final readonly class BatchKeyInput
         }
 
         if (!$batchKey = trim($batchKey)) {
-            throw new \InvalidArgumentException('The batch key cannot be empty.');
+            throw new InvalidArgumentException('The batch key cannot be empty.');
         }
 
         return new self($batchKey);

@@ -10,33 +10,12 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 use function random_int;
-use function uniqid;
 
 #[Group('UnitTests')]
 #[Group('RequestTests')]
 #[Group('QueryTests')]
 final class CompileRequestTest extends TestCase
 {
-    // public function testUsingBatchKeyNullifiesEmptyTrimmedBatchKeys(): void
-    // {
-    //     $compileRequest = new CompileRequest();
-    //     $this->assertNull($compileRequest->getBatchKey());
-
-    //     $compileRequest->usingBatchKey(' ');
-    //     $this->assertNull($compileRequest->getBatchKey());
-    // }
-
-    // public function testWithFileRequiresModelToSupportFileInputs(): void
-    // {
-    //     $model = Model::GptEmbedding3Large;
-    //     $this->assertFalse($model->supportsFiles());
-
-    //     $this->expectException(InvalidArgumentException::class);
-    //     $this->expectExceptionMessage('The model "gpt-embedding-3-large" does not support file inputs.');
-
-    //     new CompileRequest($model)->withFileUri(uniqid(), 'image/jpeg');
-    // }
-
     public function testUsingDimensionsRequiresEmbeddingModel(): void
     {
         $model = Model::Mock;
@@ -136,8 +115,7 @@ final class CompileRequestTest extends TestCase
         // Assert: The JSON schema was added
         $input = $compileRequest->getSchema();
 
-        // Assert: The schema name is used instead of the title
-        $this->assertNotNull($input);
+        // Assert: The schema name is used
         $this->assertEquals($name, $input->getName());
     }
 }

@@ -5,9 +5,9 @@ namespace OneToMany\LlmSdk\Request\Query;
 use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
-use OneToMany\LlmSdk\Request\Query\Input\SchemaInput;
 use OneToMany\LlmSdk\Request\Query\Input\DimensionsInput;
 use OneToMany\LlmSdk\Request\Query\Input\FileInput;
+use OneToMany\LlmSdk\Request\Query\Input\SchemaInput;
 use OneToMany\LlmSdk\Request\Query\Input\TextInput;
 
 use function count;
