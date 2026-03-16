@@ -3,6 +3,7 @@
 namespace OneToMany\LlmSdk\Request\Output;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 
 class GenerateOutputRequest extends BaseRequest
@@ -10,12 +11,18 @@ class GenerateOutputRequest extends BaseRequest
     /**
      * @param non-empty-string $url
      * @param array<string, mixed> $request
+     *
+     * @throws InvalidArgumentException when the model is not a generative model
      */
     public function __construct(
         string|Model|null $model,
         private readonly string $url,
         private readonly array $request,
     ) {
+        if ($model->isEmbedding()) {
+            throw new InvalidArgumentException(\sprintf('The model "%s" is not a generative model.', $model->getName()));
+        }
+
         parent::__construct($model);
     }
 
