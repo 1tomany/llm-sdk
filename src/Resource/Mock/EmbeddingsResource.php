@@ -24,10 +24,12 @@ final readonly class EmbeddingsResource implements EmbeddingsResourceInterface
      */
     public function create(CreateEmbeddingRequest $request): CreateEmbeddingResponse
     {
-        $embedding = [];
+        assert($request->getModel()->isEmbedding());
 
         /** @var positive-int $embeddingDimensions */
         $embeddingDimensions = $request->getRequest()['dimensions'] ?? $request->getModel()->getDefaultDimensions();
+
+        $embedding = [];
 
         for ($i = 0; $i < $embeddingDimensions; ++$i) {
             $embedding[] = $this->faker->randomFloat();

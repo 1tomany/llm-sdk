@@ -192,6 +192,7 @@ enum Model: string
     }
 
     /**
+     * @phpstan-assert-if-true positive-int $this->getDefaultDimensions()
      * @phpstan-assert-if-true false $this->isGenerative()
      */
     public function isEmbedding(): bool
