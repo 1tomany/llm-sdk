@@ -9,6 +9,9 @@ use function trim;
 
 class DeleteRequest extends FileRequest
 {
+    /**
+     * @var ?non-empty-string
+     */
     private ?string $uri = null;
 
     /**
@@ -32,6 +35,6 @@ class DeleteRequest extends FileRequest
      */
     public function getUri(): string
     {
-        return $this->uri ?: throw new RuntimeException('The URI is empty.');
+        return $this->uri ?? throw new RuntimeException('The URI is empty.');
     }
 }
