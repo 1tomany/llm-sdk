@@ -1,10 +1,10 @@
 <?php
 
-namespace OneToMany\LlmSdk\Action\Query;
+namespace OneToMany\LlmSdk\Action\Output;
 
 use OneToMany\LlmSdk\Action\BaseAction;
 use OneToMany\LlmSdk\Action\Query\Trait\CompileQueryTrait;
-use OneToMany\LlmSdk\Contract\Action\Query\GenerateOutputActionInterface;
+use OneToMany\LlmSdk\Contract\Action\Output\GenerateOutputActionInterface;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
@@ -17,7 +17,7 @@ final readonly class GenerateOutputAction extends BaseAction implements Generate
     use CompileQueryTrait;
 
     /**
-     * @see OneToMany\LlmSdk\Contract\Action\Query\GenerateOutputActionInterface
+     * @see OneToMany\LlmSdk\Contract\Action\Output\GenerateOutputActionInterface
      *
      * @throws InvalidArgumentException when the model is an embedding model
      */

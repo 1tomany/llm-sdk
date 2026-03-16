@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Contract\Action\Query;
+namespace OneToMany\LlmSdk\Contract\Action\Output;
 
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
