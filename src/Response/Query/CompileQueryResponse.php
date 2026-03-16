@@ -7,7 +7,7 @@ use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
-final readonly class CompileResponse extends BaseResponse
+final readonly class CompileQueryResponse extends BaseResponse
 {
     /**
      * @param array<string, mixed> $request

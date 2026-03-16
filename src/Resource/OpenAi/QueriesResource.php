@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type;
-use OneToMany\LlmSdk\Response\Query\CompileResponse;
+use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
 use function array_merge;
 
@@ -14,7 +14,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
-    public function compile(CompileRequest $request): CompileResponse
+    public function compile(CompileRequest $request): CompileQueryResponse
     {
         $requestContent = [
             'model' => $request->getModel()->getId(),
@@ -80,6 +80,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-        return new CompileResponse($request->getModel(), $requestContent);
+        return new CompileQueryResponse($request->getModel(), $requestContent);
     }
 }

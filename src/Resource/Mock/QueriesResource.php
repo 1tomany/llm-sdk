@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Resource\Mock;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
-use OneToMany\LlmSdk\Response\Query\CompileResponse;
+use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
 use function array_merge;
 
@@ -20,7 +20,7 @@ final readonly class QueriesResource implements QueriesResourceInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
-    public function compile(CompileRequest $request): CompileResponse
+    public function compile(CompileRequest $request): CompileQueryResponse
     {
         $requestContent = [
             'model' => $request->getModel()->getId(),
@@ -57,6 +57,6 @@ final readonly class QueriesResource implements QueriesResourceInterface
             $requestContent['schema'] = $schema->toArray();
         }
 
-        return new CompileResponse($request->getModel(), $requestContent);
+        return new CompileQueryResponse($request->getModel(), $requestContent);
     }
 }
