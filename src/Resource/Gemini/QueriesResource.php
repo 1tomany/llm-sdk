@@ -4,10 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Embedding\Embedding;
 use OneToMany\LlmSdk\Response\Query\CompileResponse;
-
-use function array_merge;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
@@ -24,8 +21,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ],
         ];
 
-        /*
-        // File Prompt Components
+        // File Inputs
         foreach ($request->getFileInputs() as $file) {
             $requestContent[$contentKey]['parts'][] = [
                 'fileData' => [
@@ -35,33 +31,30 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ];
         }
 
-        // Text Prompt Components
-        foreach ($request->getPrompts() as $prompt) {
+        // Text Inputs
+        foreach ($request->getTextInputs() as $text) {
             $requestContent[$contentKey]['parts'][] = [
-                'text' => $prompt->getPrompt(),
+                'text' => $text->getText(),
             ];
         }
 
-        // Instructions Prompt Component
-        if ($prompt = $request->getInstructions()) {
+        // Instructions Input
+        if ($text = $request->getInstructions()) {
             $requestContent['systemInstruction'] = [
                 'parts' => [
                     [
-                        'text' => $prompt->getPrompt(),
+                        'text' => $text->getText(),
                     ],
                 ],
             ];
         }
-        */
 
-        // Embedding Dimensions Component
-        if ($dimensionality = $request->getDimensions()) {
-            $requestContent = array_merge($requestContent, [
-                'outputDimensionality' => $dimensionality,
-            ]);
+        // Dimensions Input
+        if ($dimensions = $request->getDimensions()?->getDimensions()) {
+            $requestContent['outputDimensionality'] = $dimensions;
         }
 
-        // Schema Prompt Component
+        // Schema Input
         if ($schema = $request->getSchema()) {
             $requestContent['generationConfig'] = [
                 'responseMimeType' => $schema->getFormat(),
