@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
+use OneToMany\LlmSdk\Request\Query\Type\FileUri;
 use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
@@ -23,12 +24,14 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
 
         // File Inputs
         foreach ($request->getFiles() as $file) {
-            $requestContent[$contentKey]['parts'][] = [
-                'fileData' => [
-                    'fileUri' => $file->getUri(),
-                    'mimeType' => $file->getFormat(),
-                ],
-            ];
+            if ($file instanceof FileUri) {
+                $requestContent[$contentKey]['parts'][] = [
+                    'fileData' => [
+                        'fileUri' => $file->getUri(),
+                        'mimeType' => $file->getFormat(),
+                    ],
+                ];
+            }
         }
 
         // Text Inputs

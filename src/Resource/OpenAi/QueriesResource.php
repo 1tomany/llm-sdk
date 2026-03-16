@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
+use OneToMany\LlmSdk\Request\Query\Type\FileUri;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type;
 use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
@@ -35,19 +36,25 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         } else {
             $requestContent['input'] = [];
 
+            $fileTyper = function (FileUri $file): Type {
+                return $file->isImage() ? Type::Image : Type::File;
+            };
+
             // File Inputs
             foreach ($request->getFiles() as $file) {
-                $type = $file->isImage() ? Type::Image : Type::File;
+                $type = $fileTyper($file);
 
-                $requestContent['input'][] = [
-                    'content' => [
-                        [
-                            'type' => $type->getValue(),
-                            'file_id' => $file->getUri(),
+                if ($file instanceof FileUri) {
+                    $requestContent['input'][] = [
+                        'content' => [
+                            [
+                                'type' => $type->getValue(),
+                                'file_id' => $file->getUri(),
+                            ],
                         ],
-                    ],
-                    'role' => $file->getRole()->getValue(),
-                ];
+                        'role' => $file->getRole()->getValue(),
+                    ];
+                }
             }
 
             // Text Inputs
