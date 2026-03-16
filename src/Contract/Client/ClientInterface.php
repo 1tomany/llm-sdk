@@ -6,6 +6,7 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 
 interface ClientInterface
@@ -17,6 +18,8 @@ interface ClientInterface
     public function embeddings(): EmbeddingsResourceInterface;
 
     public function files(): FilesResourceInterface;
+
+    public function outputs(): OutputsResourceInterface;
 
     public function queries(): QueriesResourceInterface;
 }
