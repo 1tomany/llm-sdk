@@ -5,8 +5,12 @@ namespace OneToMany\LlmSdk\Tests\Request\Output;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
+#[Group('UnitTests')]
+#[Group('RequestTests')]
+#[Group('OutputTests')]
 final class GenerateOutputRequestTest extends TestCase
 {
     public function testConstructorRequiresGenerativeModel(): void

@@ -3,6 +3,7 @@
 namespace OneToMany\LlmSdk\Response\Embedding;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
 use function array_map;
@@ -21,6 +22,10 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
         private array $embedding,
         private int|float $runtime = 0,
     ) {
+        if ([] === $embedding) {
+            throw new InvalidArgumentException('The embedding vector cannot be empty.');
+        }
+
         parent::__construct($model);
     }
 

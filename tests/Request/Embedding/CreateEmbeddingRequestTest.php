@@ -5,10 +5,14 @@ namespace OneToMany\LlmSdk\Tests\Request\Embedding;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 use function random_int;
 
+#[Group('UnitTests')]
+#[Group('RequestTests')]
+#[Group('EmbeddingTests')]
 final class CreateEmbeddingRequestTest extends TestCase
 {
     public function testConstructorRequiresEmbeddingModel(): void
