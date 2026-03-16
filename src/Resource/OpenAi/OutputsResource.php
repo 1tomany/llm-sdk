@@ -8,7 +8,7 @@ use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
-use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
+use OneToMany\LlmSdk\Response\Output\Usage\TokenUsage;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 use function sprintf;
@@ -49,6 +49,6 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
             $timer->stop();
         }
 
-        return new GenerateOutputResponse($request->getModel(), $response->id, $content, $output, $timer->getDuration()); // , new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
+        return new GenerateOutputResponse($request->getModel(), $response->id, $content, $output, $timer->getDuration(), new TokenUsage($response->usage->getInputTokens(), $response->usage->getCachedTokens(), $response->usage->getOutputTokens()));
     }
 }

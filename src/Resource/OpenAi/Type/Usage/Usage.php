@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Usage;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Usage\Details\InputTokensDetails;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Usage\Details\OutputTokensDetails;
 
-final class Usage
+final readonly class Usage
 {
     /**
      * @param non-negative-int $input_tokens
@@ -13,18 +13,35 @@ final class Usage
      * @param non-negative-int $total_tokens
      */
     public function __construct(
-        public readonly int $input_tokens = 0,
-        public readonly int $output_tokens = 0,
-        public readonly int $total_tokens = 0,
-        public readonly InputTokensDetails $input_tokens_details = new InputTokensDetails(),
-        public readonly OutputTokensDetails $output_tokens_details = new OutputTokensDetails(),
+        public int $input_tokens = 0,
+        public int $output_tokens = 0,
+        public int $total_tokens = 0,
+        public InputTokensDetails $input_tokens_details = new InputTokensDetails(),
+        public OutputTokensDetails $output_tokens_details = new OutputTokensDetails(),
     ) {
     }
 
     /**
-     * @var non-negative-int
+     * @return non-negative-int
      */
-    public int $cached_tokens {
-        get => $this->input_tokens_details->cached_tokens;
+    public function getInputTokens(): int
+    {
+        return $this->input_tokens;
+    }
+
+    /**
+     * @return non-negative-int
+     */
+    public function getCachedTokens(): int
+    {
+        return $this->input_tokens_details->cached_tokens;
+    }
+
+    /**
+     * @return non-negative-int
+     */
+    public function getOutputTokens(): int
+    {
+        return $this->output_tokens;
     }
 }
