@@ -5,7 +5,10 @@ namespace OneToMany\LlmSdk\Response\Embedding;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
+use function array_map;
+use function array_sum;
 use function max;
+use function sqrt;
 
 final readonly class CreateEmbeddingResponse extends BaseResponse
 {
@@ -26,6 +29,11 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
     public function getEmbedding(): array
     {
         return $this->embedding;
+    }
+
+    public function getL2Norm(): float
+    {
+        return sqrt(array_sum(array_map(fn ($e) => $e * $e, $this->embedding)));
     }
 
     /**
