@@ -1,6 +1,7 @@
-/vendor
+/.build
 /.phpunit.cache
 /.php-cs-fixer.cache
+/vendor
 *.swp
 .DS_Store
 composer.lock
