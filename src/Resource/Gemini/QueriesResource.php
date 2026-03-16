@@ -70,7 +70,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         }
 
         // Schema Prompt Component
-        if ($schema = $request->getSchema()) {
+        if ($schema = $request->getJsonSchema()) {
             $requestContent['generationConfig'] = [
                 'responseMimeType' => $schema->getFormat(),
                 'responseJsonSchema' => $schema->getSchema(),

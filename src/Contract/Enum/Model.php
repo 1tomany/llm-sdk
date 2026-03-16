@@ -3,7 +3,6 @@
 namespace OneToMany\LlmSdk\Contract\Enum;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 
 use function in_array;
 use function is_object;
@@ -176,7 +175,7 @@ enum Model: string
 
     public function getDimensions(): ?int
     {
-        $dimensions = match($this) {
+        $dimensions = match ($this) {
             self::GeminiEmbedding2Preview => 3072,
             self::GeminiEmbedding001 => 3072,
             self::MockEmbedding => 1024,

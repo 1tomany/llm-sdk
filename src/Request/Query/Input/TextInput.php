@@ -1,10 +1,10 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\Query\Component;
+namespace OneToMany\LlmSdk\Request\Query\Input;
 
 use OneToMany\LlmSdk\Contract\Request\Query\Component\Enum\Role;
 
-final readonly class Text
+final readonly class TextInput
 {
     /**
      * @param non-empty-string $text
@@ -23,9 +23,6 @@ final readonly class Text
         return $this->text;
     }
 
-    /**
-     * @see OneToMany\LlmSdk\Contract\Request\Query\Component\ComponentInterface
-     */
     public function getRole(): Role
     {
         return $this->role;

@@ -77,14 +77,14 @@ final class CompileRequestTest extends TestCase
 
         // Arrange: Compile query request
         $compileRequest = new CompileRequest();
-        $this->assertNull($compileRequest->getSchema());
+        $this->assertNull($compileRequest->getJsonSchema());
 
         // Act: Add the JSON schema to the request
         $compileRequest->usingSchema($jsonSchema);
-        $this->assertNotNull($compileRequest->getSchema());
+        $this->assertNotNull($compileRequest->getJsonSchema());
 
         // Assert: The JSON schema was added
-        $component = $compileRequest->getSchema();
+        $component = $compileRequest->getJsonSchema();
 
         // Assert: The title of the JSON schema is used as the name
         $this->assertInstanceOf(SchemaComponent::class, $component);
@@ -94,13 +94,13 @@ final class CompileRequestTest extends TestCase
     public function testUsingSchemaSetsDefaultNameWhenTitleIsMissing(): void
     {
         $compileRequest = new CompileRequest();
-        $this->assertNull($compileRequest->getSchema());
+        $this->assertNull($compileRequest->getJsonSchema());
 
         $compileRequest->usingSchema(['required' => ['id']]);
-        $this->assertNotNull($compileRequest->getSchema());
+        $this->assertNotNull($compileRequest->getJsonSchema());
 
         // Assert: The JSON schema was added
-        $component = $compileRequest->getSchema();
+        $component = $compileRequest->getJsonSchema();
 
         $this->assertInstanceOf(SchemaComponent::class, $component);
         $this->assertEquals('JsonSchema', $component->getName());
@@ -127,14 +127,14 @@ final class CompileRequestTest extends TestCase
 
         // Arrange: Compile query request
         $compileRequest = new CompileRequest();
-        $this->assertNull($compileRequest->getSchema());
+        $this->assertNull($compileRequest->getJsonSchema());
 
         // Act: Add the JSON schema to the request
         $compileRequest->usingSchema($jsonSchema, $schemaName);
-        $this->assertNotNull($compileRequest->getSchema());
+        $this->assertNotNull($compileRequest->getJsonSchema());
 
         // Assert: The JSON schema was added
-        $component = $compileRequest->getSchema();
+        $component = $compileRequest->getJsonSchema();
 
         // Assert: The schema name is used instead of the title
         $this->assertInstanceOf(SchemaComponent::class, $component);
