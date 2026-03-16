@@ -30,13 +30,13 @@ final readonly class EmbeddingsResource extends BaseResource implements Embeddin
                 ],
             ]);
 
-            $embedding = $this->doDenormalize($content, Embedding::class, [
+            $object = $this->doDenormalize($content, Embedding::class, [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[embedding]',
             ]);
         } finally {
             $timer->stop();
         }
 
-        return new CreateEmbeddingResponse($request->getModel(), $embedding->values, $timer->getDuration());
+        return new CreateEmbeddingResponse($request->getModel(), $object->values, $timer->getDuration());
     }
 }

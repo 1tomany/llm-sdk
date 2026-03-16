@@ -5,6 +5,7 @@ namespace OneToMany\LlmSdk\Response\Embedding;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Response\BaseResponse;
+use OneToMany\LlmSdk\Response\Output\Usage\TokenUsage;
 
 use function array_map;
 use function array_sum;
@@ -21,6 +22,7 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
         Model $model,
         private array $embedding,
         private int|float $runtime = 0,
+        private TokenUsage $usage = new TokenUsage(),
     ) {
         if ([] === $embedding) {
             throw new InvalidArgumentException('The embedding vector cannot be empty.');
@@ -56,5 +58,10 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
     public function getRuntime(): int
     {
         return max(0, (int) $this->runtime);
+    }
+
+    public function getUsage(): TokenUsage
+    {
+        return $this->usage;
     }
 }
