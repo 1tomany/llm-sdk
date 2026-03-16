@@ -41,4 +41,18 @@ final readonly class FileInput
             'image/webp',
         ]);
     }
+
+    /**
+     * @return array{
+     *   uri: non-empty-string,
+     *   format: non-empty-lowercase-string,
+     * }
+     */
+    public function toArray(): array
+    {
+        return [
+            'uri' => $this->uri,
+            'format' => $this->format,
+        ];
+    }
 }

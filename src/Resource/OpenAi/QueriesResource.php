@@ -49,7 +49,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             $requestContent['input'] = [];
 
             // File Prompt Components
-            foreach ($request->getFiles() as $file) {
+            foreach ($request->getFileInputs() as $file) {
                 $type = match ($file->isImage()) {
                     true => Type::Image,
                     false => Type::File,

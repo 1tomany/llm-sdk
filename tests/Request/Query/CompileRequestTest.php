@@ -46,7 +46,7 @@ final class CompileRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The model "mock-embedding" does not support structured output.');
 
-        new CompileRequest($model)->usingSchema(['title' => 'JsonSchema']);
+        new CompileRequest($model)->usingSchema(null, ['title' => 'JsonSchema']);
     }
 
     public function testUsingSchemaExtractsNameFromTitle(): void
@@ -59,7 +59,7 @@ final class CompileRequestTest extends TestCase
         $this->assertNull($compileRequest->getSchema());
 
         // Act: Add the JSON schema to the request
-        $compileRequest->usingSchema($jsonSchema);
+        $compileRequest->usingSchema(null, $jsonSchema);
         $this->assertNotNull($compileRequest->getSchema());
 
         // Assert: The JSON schema was added
@@ -75,7 +75,7 @@ final class CompileRequestTest extends TestCase
         $compileRequest = new CompileRequest();
         $this->assertNull($compileRequest->getSchema());
 
-        $compileRequest->usingSchema(['required' => ['id']]);
+        $compileRequest->usingSchema(null, ['required' => ['id']]);
         $this->assertNotNull($compileRequest->getSchema());
 
         // Assert: The JSON schema was added
@@ -109,7 +109,7 @@ final class CompileRequestTest extends TestCase
         $this->assertNull($compileRequest->getSchema());
 
         // Act: Add the JSON schema to the request
-        $compileRequest->usingSchema($schema, $name);
+        $compileRequest->usingSchema($name, $schema);
         $this->assertNotNull($compileRequest->getSchema());
 
         // Assert: The JSON schema was added

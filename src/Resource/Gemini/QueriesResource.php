@@ -35,7 +35,7 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         ];
 
         // File Prompt Components
-        foreach ($request->getFiles() as $file) {
+        foreach ($request->getFileInputs() as $file) {
             $requestContent[$contentKey]['parts'][] = [
                 'fileData' => [
                     'fileUri' => $file->getUri(),

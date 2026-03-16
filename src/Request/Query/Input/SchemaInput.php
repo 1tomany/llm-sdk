@@ -9,12 +9,14 @@ use function trim;
 final readonly class SchemaInput
 {
     /**
-     * @param array<string, mixed> $schema
      * @param non-empty-string $name
+     * @param array<string, mixed> $schema
+     * @param non-empty-lowercase-string $format
      */
     public function __construct(
-        private array $schema,
         private string $name,
+        private array $schema,
+        private string $format = 'application/json',
         private bool $isStrict = true,
     ) {
     }
@@ -22,7 +24,7 @@ final readonly class SchemaInput
     /**
      * @param array<string, mixed>|SchemaInput $schema
      */
-    public static function create(array|self $schema, ?string $name): self
+    public static function create(?string $name, array|self $schema): self
     {
         if (is_object($schema)) {
             return $schema;
@@ -32,7 +34,7 @@ final readonly class SchemaInput
             $name = trim($name ?? $schema['title']);
         }
 
-        return new self($schema, $name ?: 'JsonSchema');
+        return new self($name ?: 'JsonSchema', $schema);
     }
 
     /**
@@ -56,11 +58,29 @@ final readonly class SchemaInput
      */
     public function getFormat(): string
     {
-        return 'application/json';
+        return $this->format;
     }
 
     public function isStrict(): bool
     {
         return $this->isStrict;
+    }
+
+    /**
+     * @return array{
+     *   name: non-empty-string
+     *   schema: array<string, mixed>
+     *   format: non-empty-lowercase-string,
+     *   isStrict: bool,
+     * }
+     */
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'schema' => $this->schema,
+            'format' => $this->format,
+            'isStrict' => $this->isStrict,
+        ];
     }
 }

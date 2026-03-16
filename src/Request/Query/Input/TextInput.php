@@ -27,4 +27,18 @@ final readonly class TextInput
     {
         return $this->role;
     }
+
+    /**
+     * @return array{
+     *   text: non-empty-string,
+     *   role: non-empty-lowercase-string,
+     * }
+     */
+    public function toArray(): array
+    {
+        return [
+            'text' => $this->text,
+            'role' => $this->role->getValue(),
+        ];
+    }
 }
