@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Batch;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\Batch;
 
 final readonly class Response
 {
