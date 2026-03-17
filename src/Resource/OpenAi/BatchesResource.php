@@ -2,7 +2,6 @@
 
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
-use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;

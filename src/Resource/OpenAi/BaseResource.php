@@ -12,6 +12,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+use function sprintf;
+
 abstract readonly class BaseResource
 {
     use HttpResourceTrait;
@@ -49,7 +51,7 @@ abstract readonly class BaseResource
      */
     public function getBaseUrl(): string
     {
-        return \sprintf('https://api.openai.com/%s', $this->getApiVersion());
+        return sprintf('https://api.openai.com/%s', $this->getApiVersion());
     }
 
     /**

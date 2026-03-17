@@ -3,11 +3,8 @@
 namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Request\Batch;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 
-use function parse_url;
-
-use const PHP_URL_PATH;
+use function sprintf;
 
 final readonly class CreateBatch
 {
@@ -27,7 +24,7 @@ final readonly class CreateBatch
         public string $inputFileId,
         public string $completionWindow = '24h',
     ) {
-        $this->endpoint = \sprintf('/%s/%s', $apiVersion, $model->isEmbedding() ? 'embeddings' : 'responses');
+        $this->endpoint = sprintf('/%s/%s', $apiVersion, $model->isEmbedding() ? 'embeddings' : 'responses');
     }
 
     /**
