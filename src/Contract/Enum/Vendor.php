@@ -56,6 +56,6 @@ enum Vendor: string
      */
     public function getModels(): array
     {
-        return array_values(array_filter(Model::cases(), fn ($m): bool => $m->usesVendor($this)));
+        return array_values(array_filter(Model::cases(), fn (Model $m): bool => $m->usesVendor($this)));
     }
 }
