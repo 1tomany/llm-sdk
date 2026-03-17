@@ -4,9 +4,9 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Embedding\Embedding;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Embedding\EmbeddingList;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
-use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
+use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 final readonly class EmbeddingsResource extends BaseResource implements EmbeddingsResourceInterface
@@ -21,20 +21,18 @@ final readonly class EmbeddingsResource extends BaseResource implements Embeddin
         try {
             $url = $this->buildUrl('embeddings');
 
-            $content = $this->doPostRequest($url, [
+            $response = $this->doPostRequest($url, [
                 'auth_bearer' => $this->getApiKey(),
                 'json' => [
                     ...$request->getRequest(),
                 ],
             ]);
 
-            $embedding = $this->doDenormalize($content, Embedding::class, [
-                UnwrappingDenormalizer::UNWRAP_PATH => '[data][0]',
-            ]);
+            $object = $this->doDenormalize($response, EmbeddingList::class);
         } finally {
             $timer->stop();
         }
 
-        return new CreateEmbeddingResponse($request->getModel(), $embedding->embedding, $timer->getDuration());
+        return new CreateEmbeddingResponse($request->getModel(), $object->data[0]->embedding, $timer->getDuration(), new TokenUsage($object->usage->getInputTokens()));
     }
 }

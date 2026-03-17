@@ -9,6 +9,8 @@ use OneToMany\LlmSdk\Factory\ClientFactory;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\PropertyInfo\Extractor\ConstructorExtractor;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\Extractor\PhpStanExtractor;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -26,6 +28,8 @@ require_once __DIR__.'/functions.php';
 $typeExtractor = new PropertyInfoExtractor([], [
     new ConstructorExtractor([
         new PhpDocExtractor(),
+        new PhpStanExtractor(),
+        new ReflectionExtractor(),
     ]),
 ]);
 

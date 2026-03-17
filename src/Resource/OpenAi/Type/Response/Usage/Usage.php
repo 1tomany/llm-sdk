@@ -9,11 +9,13 @@ final readonly class Usage
 {
     /**
      * @param non-negative-int $input_tokens
+     * @param non-negative-int $prompt_tokens
      * @param non-negative-int $output_tokens
      * @param non-negative-int $total_tokens
      */
     public function __construct(
         public int $input_tokens = 0,
+        public int $prompt_tokens = 0,
         public int $output_tokens = 0,
         public int $total_tokens = 0,
         public InputTokensDetails $input_tokens_details = new InputTokensDetails(),
@@ -26,7 +28,7 @@ final readonly class Usage
      */
     public function getInputTokens(): int
     {
-        return $this->input_tokens;
+        return $this->input_tokens + $this->prompt_tokens;
     }
 
     /**
