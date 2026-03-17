@@ -7,6 +7,9 @@ use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 
+use function is_string;
+use function trim;
+
 class CreateRequest extends BaseRequest
 {
     /**
@@ -25,7 +28,7 @@ class CreateRequest extends BaseRequest
     ) {
         parent::__construct($model);
 
-        if (!$name = \trim($name)) {
+        if (!$name = trim($name)) {
             throw new InvalidArgumentException('The name cannot be empty.');
         }
 
@@ -46,8 +49,8 @@ class CreateRequest extends BaseRequest
         if (null === $file) {
             $this->file = null;
         } else {
-            if (\is_string($file)) {
-                if (!$file = \trim($file)) {
+            if (is_string($file)) {
+                if (!$file = trim($file)) {
                     throw new InvalidArgumentException('The file cannot be empty.');
                 }
 
