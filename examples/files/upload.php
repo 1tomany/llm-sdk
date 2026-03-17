@@ -16,12 +16,12 @@ if (!$path = trim($argv[1] ?? '')) {
 $vendor = trim($argv[2] ?? '') ?: 'mock';
 
 try {
-    if (!$format = mime_content_type($path)) {
-        throw new RuntimeException(sprintf('The format of the file "%s" could not be determined.', $path));
-    }
-
     // Create a request to upload the file
-    $uploadFileRequest = new UploadFileRequest($vendor, $path)->withFormat($format);
+    $uploadFileRequest = new UploadFileRequest($vendor, $path);
+
+    if ($format = mime_content_type($path)) {
+        $uploadFileRequest->withFormat($format);
+    }
 
     // Upload the file to the LLM vendor
     $response = new UploadFileAction($clientFactory)->act(...[
