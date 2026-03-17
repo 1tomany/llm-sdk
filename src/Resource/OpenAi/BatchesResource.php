@@ -42,8 +42,8 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
             'auth_header' => $this->getApiKey(),
         ]);
 
-        $batch = $this->doDenormalize($content, Batch::class);
+        $object = $this->doDenormalize($content, Batch::class);
 
-        return new ReadBatchResponse($request->getModel(), $batch->id, $batch->status->getValue(), $batch->output_file_id);
+        return new ReadBatchResponse($request->getModel(), $object->id, $object->status->getValue(), $object->output_file_id);
     }
 }

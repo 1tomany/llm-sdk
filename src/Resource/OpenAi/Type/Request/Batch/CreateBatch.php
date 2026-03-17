@@ -2,6 +2,8 @@
 
 namespace OneToMany\LlmSdk\Resource\OpenAi\Type\Request\Batch;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+
 use function parse_url;
 
 use const PHP_URL_PATH;
@@ -20,10 +22,12 @@ final readonly class CreateBatch
         public string $inputFileId,
         public string $completionWindow = '24h',
     ) {
-        $this->endpoint = parse_url($endpoint, PHP_URL_PATH);
-    }
+        if (!$endpoint = parse_url($endpoint, PHP_URL_PATH)) {
+            throw new InvalidArgumentException('The endpoint cannot be empty.');
+        }
 
-    // public function getWindow(): string
+        $this->endpoint = $endpoint;
+    }
 
     /**
      * @return array{

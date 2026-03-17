@@ -30,8 +30,7 @@ final readonly class FileName
 
     /**
      * @return array{
-     *   uri: non-empty-string,
-     *   format: non-empty-lowercase-string,
+     *   name: non-empty-string,
      *   role: non-empty-lowercase-string,
      * }
      */
