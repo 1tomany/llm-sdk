@@ -12,7 +12,7 @@ $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 $model = trim($argv[1] ?? '') ?: 'mock-embedding';
 
 try {
-    $prompt = 'Write a short summary of the history of PHP.';
+    $prompt = trim($argv[2] ?? '') ?: 'Write a short summary of the history of PHP.';
 
     // Build a request of individual query components
     $compileQueryRequest = new CompileQueryRequest($model)->withPrompt($prompt)->usingDimensions(768);
@@ -27,7 +27,9 @@ try {
         'request' => $response->toCreateEmbeddingRequest(),
     ]);
 
-    printf("The model '%s' generated an embedding with %d %s.\n", $response->getModel()->getValue(), $response->getDimensions(), 1 === $response->getDimensions() ? 'dimension' : 'dimensions');
+    $embedding = $response->getEmbedding();
+
+    printf("The model '%s' generated an embedding with %d %s: [%.8f ... %.8f].\n", $response->getModel()->getValue(), $response->getDimensions(), 1 === $response->getDimensions() ? 'dimension' : 'dimensions', $embedding[array_key_first($embedding)], $embedding[array_key_last($embedding)]);
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }
