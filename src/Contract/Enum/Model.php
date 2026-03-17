@@ -63,7 +63,7 @@ enum Model: string
             throw new InvalidArgumentException('The model name cannot be empty.');
         }
 
-        return self::tryFrom(strtolower($model)) ?? throw new InvalidArgumentException(sprintf('The model name "%s" is not valid.', $model));
+        return self::tryFrom(strtolower($model)) ?? throw new InvalidArgumentException(sprintf('The model "%s" is not valid.', $model));
     }
 
     /**

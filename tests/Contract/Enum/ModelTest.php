@@ -26,16 +26,6 @@ final class ModelTest extends TestCase
         Model::create($model);
     }
 
-    public function testCreatingModelRequiresValidName(): void
-    {
-        $model = uniqid('model_');
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The model name "'.$model.'" is not valid.');
-
-        Model::create($model);
-    }
-
     /**
      * @return non-empty-list<non-empty-list<?string>>
      */
@@ -50,6 +40,16 @@ final class ModelTest extends TestCase
         ];
 
         return $provider;
+    }
+
+    public function testCreatingModelRequiresValidName(): void
+    {
+        $model = uniqid('model_');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model "'.$model.'" is not valid.');
+
+        Model::create($model);
     }
 
     public function testCreatingModel(): void
