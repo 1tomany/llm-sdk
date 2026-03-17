@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
-use OneToMany\LlmSdk\Request\Batch\ReadRequest;
+use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Batch\Batch;
 use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
@@ -35,7 +35,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
-    public function read(ReadRequest $request): ReadBatchResponse
+    public function read(ReadBatchRequest $request): ReadBatchResponse
     {
         $url = $this->buildUrl('batches', $request->getUri());
 

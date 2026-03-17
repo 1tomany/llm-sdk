@@ -2,10 +2,10 @@
 
 namespace OneToMany\LlmSdk\Contract\Action\Batch;
 
-use OneToMany\LlmSdk\Request\Batch\ReadRequest;
+use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
 use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
 
 interface ReadBatchActionInterface
 {
-    public function act(ReadRequest $request): ReadBatchResponse;
+    public function act(ReadBatchRequest $request): ReadBatchResponse;
 }

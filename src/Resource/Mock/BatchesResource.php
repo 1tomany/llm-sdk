@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
-use OneToMany\LlmSdk\Request\Batch\ReadRequest;
+use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Resource\Mock\Type\Batch\Status;
 use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
@@ -29,7 +29,7 @@ final readonly class BatchesResource implements BatchesResourceInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
-    public function read(ReadRequest $request): ReadBatchResponse
+    public function read(ReadBatchRequest $request): ReadBatchResponse
     {
         return new ReadBatchResponse($request->getModel(), $request->getUri(), Status::Completed->getValue(), $this->generateId('file'));
     }
