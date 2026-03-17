@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
-use OneToMany\LlmSdk\Resource\Mock\Type\Batch\Status;
+use OneToMany\LlmSdk\Resource\Mock\Type\Response\Batch\Enum\Status;
 use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
 
