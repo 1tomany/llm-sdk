@@ -19,10 +19,8 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
         $timer = new Stopwatch(true)->start('generate');
 
         try {
-            $url = $this->buildUrl('responses');
-
             /** @var array<string, mixed> $response */
-            $response = $this->doPostRequest($url, [
+            $response = $this->doPostRequest($request->getUrl(), [
                 'auth_bearer' => $this->getApiKey(),
                 'json' => [
                     ...$request->getRequest(),

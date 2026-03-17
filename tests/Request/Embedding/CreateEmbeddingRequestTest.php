@@ -21,6 +21,6 @@ final class CreateEmbeddingRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The model "'.$model->getValue().'" is not an embedding model.');
 
-        new CreateEmbeddingRequest($model, []);
+        new CreateEmbeddingRequest($model, 'https://mock-llm.service/embeddings', []);
     }
 }

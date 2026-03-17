@@ -87,6 +87,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-        return new CompileQueryResponse($request->getModel(), $requestContent);
+        return new CompileQueryResponse($request->getModel(), $this->buildUrl($request->getModel()->isEmbedding() ? 'embeddings' : 'responses'), $requestContent);
     }
 }
