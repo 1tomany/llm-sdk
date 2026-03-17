@@ -10,15 +10,8 @@ use function assert;
 use function count;
 use function random_int;
 
-final readonly class EmbeddingsResource implements EmbeddingsResourceInterface
+final readonly class EmbeddingsResource extends BaseResource implements EmbeddingsResourceInterface
 {
-    private \Faker\Generator $faker;
-
-    public function __construct()
-    {
-        $this->faker = \Faker\Factory::create();
-    }
-
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface
      */

@@ -4,19 +4,12 @@ namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
-use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
 use function array_merge;
 
-final readonly class QueriesResource implements QueriesResourceInterface
+final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
-    use GenerateIdTrait;
-
-    public function __construct()
-    {
-    }
-
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
