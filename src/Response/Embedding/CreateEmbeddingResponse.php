@@ -19,6 +19,8 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
 
     /**
      * @param non-empty-list<float> $embedding
+     *
+     * @throws InvalidArgumentException when the embedding vector is empty
      */
     public function __construct(
         Model $model,
@@ -26,6 +28,8 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
         private int|float $runtime = 0,
         private TokenUsage $usage = new TokenUsage(),
     ) {
+        parent::__construct($model);
+
         if ([] === $embedding) {
             throw new InvalidArgumentException('The embedding vector cannot be empty.');
         }
@@ -33,8 +37,6 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
         $this->l2Norm = $this->calculateL2Norm(...[
             'vector' => $this->embedding,
         ]);
-
-        parent::__construct($model);
     }
 
     /**
