@@ -19,13 +19,14 @@ There are two ways to use this library:
 
 **Note:** A [Symfony bundle](https://github.com/1tomany/llm-sdk-bundle) is available if you wish to integrate this library into your Symfony applications with autowiring and configuration support.
 
-I learn best by looking at actual code samples, so lets take a look at the two methods first.
+You can learn how to use this library by reviewing the examples below while I'm working on thoroughly documenting it.
 
 ### Examples
 
 - [`examples/files/upload.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/upload.php) Uploads a file to an LLM vendor
-- [`examples/queries/embed.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/queries/embed.php) Embeds content to a high dimensionality vector
-- [`examples/queries/generate.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/queries/generate.php) Generates output from a prompt sent to an LLM
+- [`examples/files/deletes.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/delete.php) Deletes a file from an LLM vendor
+- [`examples/embeddings/create.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/embeddings/create.php) Creates an embedding vector from a prompt sent to an LLEM (large language embedding model)
+- [`examples/outputs/generate.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/outputs/generate.php) Generates output from a prompt sent to an LLM
 
 ## Supported platforms
 
@@ -36,26 +37,33 @@ I learn best by looking at actual code samples, so lets take a look at the two m
 
 ### Platform feature support
 
-**Note:** Each platform refers to running model inference differently; OpenAI uses the word "Responses" while Gemini uses the word "Content". I've decided the word "Query" is the most succinct term to describe interacting with an LLM. The "Embeddings" and "Queries" sections below refers to the ability to compile a query and use it to generate output from an LLM.
+**Note:** Each platform refers to generating output (inference) differently; OpenAI uses the word "Responses" while Gemini uses the word "Content". I've decided the word "Output" best represents what a large language model produces in the case of generative models, and "Embedding" in the case of embedding models.
 
-| Feature         | Anthropic | Gemini | Mock | OpenAI |
-| --------------- | :-------: | :----: | :--: | :----: |
-| **Batches**     |           |        |      |        |
-| Create          |    ❌     |   ✅   |  ✅  |   ✅   |
-| Read            |    ❌     |   ✅   |  ✅  |   ✅   |
-| Cancel          |    ❌     |   ❌   |  ❌  |   ❌   |
-| **Embeddings**  |           |        |      |        |
-| Compile         |    ❌     |   ✅   |  ✅  |   ✅   |
-| Embed Content   |    ❌     |   ✅   |  ✅  |   ✅   |
-| **Files**       |           |        |      |        |
-| Upload          |    ✅     |   ✅   |  ✅  |   ✅   |
-| Read            |    ❌     |   ❌   |  ❌  |   ❌   |
-| List            |    ❌     |   ❌   |  ❌  |   ❌   |
-| Download        |    ❌     |   ❌   |  ❌  |   ❌   |
-| Delete          |    ✅     |   ✅   |  ✅  |   ✅   |
-| **Queries**     |           |        |      |        |
-| Compile         |    ❌     |   ✅   |  ✅  |   ✅   |
-| Generate Output |    ❌     |   ✅   |  ✅  |   ✅   |
+To generate output or create an embedding, you must first compile a "Query". A query is made up of different input components: text prompts, files, a JSON schema, and/or system instructions.
+
+This library allows you to compile a query before sending it to the model for two reasons:
+
+1. You can log/analyze the request payload before sending it to the model.
+2. You can compile individual requests for batching.
+
+| Feature        | Anthropic | Gemini | Mock | OpenAI |
+| -------------- | :-------: | :----: | :--: | :----: |
+| **Batches**    |           |        |      |        |
+| Create         |    ❌     |   ✅   |  ✅  |   ✅   |
+| Read           |    ❌     |   ✅   |  ✅  |   ✅   |
+| Cancel         |    ❌     |   ❌   |  ❌  |   ❌   |
+| **Embeddings** |           |        |      |        |
+| Create         |    ❌     |   ✅   |  ✅  |   ✅   |
+| **Files**      |           |        |      |        |
+| Upload         |    ✅     |   ✅   |  ✅  |   ✅   |
+| Read           |    ❌     |   ❌   |  ❌  |   ❌   |
+| List           |    ❌     |   ❌   |  ❌  |   ❌   |
+| Download       |    ❌     |   ❌   |  ❌  |   ❌   |
+| Delete         |    ✅     |   ✅   |  ✅  |   ✅   |
+| **Outputs**    |           |        |      |        |
+| Generate       |    ❌     |   ✅   |  ✅  |   ✅   |
+| **Queries**    |           |        |      |        |
+| Compile        |    ❌     |   ✅   |  ✅  |   ✅   |
 
 ## Credits
 

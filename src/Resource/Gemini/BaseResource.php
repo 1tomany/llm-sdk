@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Error\Error;
 use OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -28,6 +28,14 @@ abstract readonly class BaseResource
         protected string $apiKey,
         protected string $apiVersion,
     ) {
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getApiVersion(): string
+    {
+        return $this->apiVersion;
     }
 
     /**

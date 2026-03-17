@@ -2,17 +2,10 @@
 
 namespace OneToMany\LlmSdk\Contract\Resource;
 
-use OneToMany\LlmSdk\Request\Query\CompileRequest;
-use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
-use OneToMany\LlmSdk\Response\Query\CompileResponse;
-use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
-use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
+use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
+use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
 interface QueriesResourceInterface
 {
-    public function compile(CompileRequest $request): CompileResponse;
-
-    public function generate(ExecuteRequest $request): GenerateResponse;
-
-    public function embed(ExecuteRequest $request): EmbedResponse;
+    public function compile(CompileQueryRequest $request): CompileQueryResponse;
 }

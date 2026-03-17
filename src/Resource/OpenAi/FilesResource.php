@@ -3,49 +3,48 @@
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
-use OneToMany\LlmSdk\Request\File\DeleteRequest;
-use OneToMany\LlmSdk\Request\File\UploadRequest;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\File\DeletedFile;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\File\Enum\Purpose;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\File\File;
-use OneToMany\LlmSdk\Response\File\DeleteResponse;
-use OneToMany\LlmSdk\Response\File\UploadResponse;
+use OneToMany\LlmSdk\Request\File\DeleteFileRequest;
+use OneToMany\LlmSdk\Request\File\UploadFileRequest;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Request\File\UploadFile;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\DeletedFile;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\File\File;
+use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
+use OneToMany\LlmSdk\Response\File\UploadFileResponse;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function upload(UploadRequest $request): UploadResponse
+    public function upload(UploadFileRequest $request): UploadFileResponse
     {
-        $purpose = Purpose::create($request->getPurpose());
+        $uploadFile = new UploadFile($request->getPath(), $request->getPurpose());
 
-        $content = $this->doPostRequest($this->buildUrl('files'), [
+        $response = $this->doPostRequest($this->buildUrl('files'), [
             'auth_bearer' => $this->getApiKey(),
             'body' => [
-                'file' => $request->openFile(),
-                'purpose' => $purpose->getValue(),
+                ...$uploadFile->toArray(),
             ],
         ]);
 
-        $file = $this->doDenormalize($content, File::class);
+        $object = $this->doDenormalize($response, File::class);
 
-        return new UploadResponse($request->getVendor(), $file->id, $file->filename, $file->purpose->getValue(), $file->getExpiresAt());
+        return new UploadFileResponse($request->getVendor(), $object->id, $object->filename, $object->purpose->getValue(), $object->getExpiresAt());
     }
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function delete(DeleteRequest $request): DeleteResponse
+    public function delete(DeleteFileRequest $request): DeleteFileResponse
     {
         $url = $this->buildUrl('files', $request->getUri());
 
-        $content = $this->doDeleteRequest($url, [
+        $response = $this->doDeleteRequest($url, [
             'auth_bearer' => $this->getApiKey(),
         ]);
 
-        $file = $this->doDenormalize($content, DeletedFile::class);
+        $object = $this->doDenormalize($response, DeletedFile::class);
 
-        return new DeleteResponse($request->getVendor(), $file->id);
+        return new DeleteFileResponse($request->getVendor(), $object->id);
     }
 }

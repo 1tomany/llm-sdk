@@ -3,7 +3,9 @@
 namespace OneToMany\LlmSdk\Client;
 
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -13,7 +15,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class BaseClient
 {
     protected ?BatchesResourceInterface $batches = null;
+    protected ?EmbeddingsResourceInterface $embeddings = null;
     protected ?FilesResourceInterface $files = null;
+    protected ?OutputsResourceInterface $outputs = null;
     protected ?QueriesResourceInterface $queries = null;
 
     /**

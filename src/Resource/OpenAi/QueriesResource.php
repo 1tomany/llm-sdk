@@ -3,88 +3,79 @@
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
-use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Request\Query\CompileRequest;
-use OneToMany\LlmSdk\Request\Query\ExecuteRequest;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Embedding\Embedding;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Error\Error;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Input\Enum\Type;
-use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response;
-use OneToMany\LlmSdk\Response\Query\CompileResponse;
-use OneToMany\LlmSdk\Response\Query\Content\EmbedResponse;
-use OneToMany\LlmSdk\Response\Query\Content\GenerateResponse;
-use OneToMany\LlmSdk\Response\Query\Usage\UsageResponse;
-use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
-use Symfony\Component\Stopwatch\Stopwatch;
+use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
+use OneToMany\LlmSdk\Request\Type\File\FileUri;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Request\Response\Enum\Type;
+use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
-use function parse_url;
-use function sprintf;
-
-use const PHP_URL_PATH;
+use function array_merge;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
      */
-    public function compile(CompileRequest $request): CompileResponse
+    public function compile(CompileQueryRequest $request): CompileQueryResponse
     {
-        $url = $this->buildUrl($request->getModel()->isEmbedding() ? 'embeddings' : 'responses');
-
         $requestContent = [
             'model' => $request->getModel()->getId(),
         ];
 
         if ($request->getModel()->isEmbedding()) {
-            // Text Prompt Components
-            foreach ($request->getPrompts() as $prompt) {
-                $requestContent['input'] = $prompt->getPrompt();
+            // Text Inputs
+            foreach ($request->getPrompts() as $text) {
+                $requestContent['input'] = $text->getText();
             }
 
-            // Embedding Dimensions Component
+            // Dimensions Input
             if ($dimensions = $request->getDimensions()) {
-                $requestContent['dimensions'] = $dimensions;
+                $requestContent = array_merge($requestContent, [
+                    'dimensions' => $dimensions->getDimensions(),
+                ]);
             }
         } else {
             $requestContent['input'] = [];
 
-            // File Prompt Components
+            // File Inputs
+            $fileTypeResolver = function (FileUri $file): Type {
+                return $file->isImage() ? Type::Image : Type::File;
+            };
+
             foreach ($request->getFiles() as $file) {
-                $type = match ($file->isImage()) {
-                    true => Type::Image,
-                    false => Type::File,
-                };
+                $type = $fileTypeResolver($file);
 
+                if ($file instanceof FileUri) {
+                    $requestContent['input'][] = [
+                        'content' => [
+                            [
+                                'type' => $type->getValue(),
+                                'file_id' => $file->getUri(),
+                            ],
+                        ],
+                        'role' => $file->getRole()->getValue(),
+                    ];
+                }
+            }
+
+            // Text Inputs
+            $type = Type::Text;
+
+            foreach ($request->getPrompts() as $text) {
                 $requestContent['input'][] = [
                     'content' => [
                         [
+                            'text' => $text->getText(),
                             'type' => $type->getValue(),
-                            'file_id' => $file->getUri(),
                         ],
                     ],
-                    'role' => $file->getRole()->getValue(),
+                    'role' => $text->getRole()->getValue(),
                 ];
             }
 
-            // Text Prompt Components
-            foreach ($request->getPrompts() as $prompt) {
-                $type = Type::Text;
+            // Schema Input
+            $type = Type::Schema;
 
-                $requestContent['input'][] = [
-                    'content' => [
-                        [
-                            'type' => $type->getValue(),
-                            'text' => $prompt->getPrompt(),
-                        ],
-                    ],
-                    'role' => $prompt->getRole()->getValue(),
-                ];
-            }
-
-            // Schema Prompt Component
             if ($schema = $request->getSchema()) {
-                $type = Type::Schema;
-
                 $requestContent['text'] = [
                     'format' => [
                         'type' => $type->getValue(),
@@ -96,76 +87,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-        return new CompileResponse($request->getModel(), $url, $this->convertIfBatchRequest($request->getBatchKey(), $url, $requestContent));
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
-     *
-     * @throws RuntimeException when the model returns an error
-     * @throws RuntimeException when the model fails to generate any output
-     */
-    public function generate(ExecuteRequest $request): GenerateResponse
-    {
-        $timer = new Stopwatch(true)->start('generate');
-
-        /** @var array<string, mixed> $content */
-        $content = $this->doPostRequest($request->getUrl(), [
-            'auth_bearer' => $this->getApiKey(),
-            'json' => [
-                ...$request->getRequest(),
-            ],
-        ]);
-
-        $response = $this->doDenormalize($content, Response::class);
-
-        if ($response->error instanceof Error) {
-            throw new RuntimeException($response->error->message);
-        }
-
-        if (!$output = $response->getOutput()) {
-            throw new RuntimeException(sprintf('The model "%s" failed to generate any output.', $request->getModel()->getValue()));
-        }
-
-        return new GenerateResponse($request->getModel(), $response->id, $output, $content, $timer->getDuration(), new UsageResponse($response->usage->input_tokens, $response->usage->cached_tokens, $response->usage->output_tokens));
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
-     */
-    public function embed(ExecuteRequest $request): EmbedResponse
-    {
-        $timer = new Stopwatch(true)->start('embed');
-
-        $content = $this->doPostRequest($request->getUrl(), [
-            'auth_bearer' => $this->getApiKey(),
-            'json' => [
-                ...$request->getRequest(),
-            ],
-        ]);
-
-        $embedding = $this->doDenormalize($content, Embedding::class, [
-            UnwrappingDenormalizer::UNWRAP_PATH => '[data][0]',
-        ]);
-
-        return new EmbedResponse($request->getModel(), $embedding->embedding, $timer->getDuration());
-    }
-
-    /**
-     * @param ?non-empty-string $batchKey
-     * @param non-empty-string $url
-     * @param array<string, mixed> $request
-     *
-     * @return array<string, mixed>
-     */
-    private function convertIfBatchRequest(?string $batchKey, string $url, array $request): array
-    {
-        $url = parse_url($url, PHP_URL_PATH);
-
-        if (!$batchKey || !$url) {
-            return $request;
-        }
-
-        return ['custom_id' => $batchKey, 'method' => 'POST', 'url' => $url, 'body' => $request];
+        return new CompileQueryResponse($request->getModel(), $this->buildUrl($request->getModel()->isEmbedding() ? 'embeddings' : 'responses'), $requestContent);
     }
 }

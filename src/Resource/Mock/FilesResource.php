@@ -3,33 +3,26 @@
 namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
-use OneToMany\LlmSdk\Request\File\DeleteRequest;
-use OneToMany\LlmSdk\Request\File\UploadRequest;
-use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
-use OneToMany\LlmSdk\Response\File\DeleteResponse;
-use OneToMany\LlmSdk\Response\File\UploadResponse;
+use OneToMany\LlmSdk\Request\File\DeleteFileRequest;
+use OneToMany\LlmSdk\Request\File\UploadFileRequest;
+use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
+use OneToMany\LlmSdk\Response\File\UploadFileResponse;
 
-final readonly class FilesResource implements FilesResourceInterface
+final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
-    use GenerateIdTrait;
-
-    public function __construct()
+    /**
+     * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
+     */
+    public function upload(UploadFileRequest $request): UploadFileResponse
     {
+        return new UploadFileResponse($request->getVendor(), $this->generateId('file'));
     }
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function upload(UploadRequest $request): UploadResponse
+    public function delete(DeleteFileRequest $request): DeleteFileResponse
     {
-        return new UploadResponse($request->getVendor(), $this->generateId('file'));
-    }
-
-    /**
-     * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
-     */
-    public function delete(DeleteRequest $request): DeleteResponse
-    {
-        return new DeleteResponse($request->getVendor(), $request->getUri());
+        return new DeleteFileResponse($request->getVendor(), $request->getUri());
     }
 }

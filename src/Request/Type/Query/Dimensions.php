@@ -1,0 +1,47 @@
+<?php
+
+namespace OneToMany\LlmSdk\Request\Type\Query;
+
+use function is_object;
+use function max;
+use function min;
+
+final readonly class Dimensions
+{
+    /**
+     * @param positive-int $dimensions
+     */
+    public function __construct(
+        private int $dimensions,
+    ) {
+    }
+
+    public static function create(int|self $dimensions): self
+    {
+        if (is_object($dimensions)) {
+            return $dimensions;
+        }
+
+        return new self(min(max(1, $dimensions), 4096));
+    }
+
+    /**
+     * @return positive-int
+     */
+    public function getDimensions(): int
+    {
+        return $this->dimensions;
+    }
+
+    /**
+     * @return array{
+     *   dimensions: positive-int,
+     * }
+     */
+    public function toArray(): array
+    {
+        return [
+            'dimensions' => $this->dimensions,
+        ];
+    }
+}

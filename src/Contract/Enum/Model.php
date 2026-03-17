@@ -2,7 +2,11 @@
 
 namespace OneToMany\LlmSdk\Contract\Enum;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+
 use function in_array;
+use function is_object;
+use function sprintf;
 use function strtolower;
 use function trim;
 
@@ -45,13 +49,21 @@ enum Model: string
     case GptEmbedding3Small = 'gpt-embedding-3-small';
     case GptEmbedding3Large = 'gpt-embedding-3-large';
 
+    /**
+     * @throws InvalidArgumentException when the model name is empty
+     * @throws InvalidArgumentException when the model name is not valid
+     */
     public static function create(string|self|null $model): self
     {
-        if ($model instanceof self) {
+        if (is_object($model)) {
             return $model;
         }
 
-        return self::tryFrom(strtolower(trim($model ?? ''))) ?? self::Mock;
+        if (!$model = trim($model ?? '')) {
+            throw new InvalidArgumentException('The model name cannot be empty.');
+        }
+
+        return self::tryFrom(strtolower($model)) ?? throw new InvalidArgumentException(sprintf('The model name "%s" is not valid.', $model));
     }
 
     /**
@@ -161,6 +173,28 @@ enum Model: string
         return $vendor;
     }
 
+    /**
+     * @return non-negative-int
+     */
+    public function getDefaultDimensions(): int
+    {
+        $dimensions = match ($this) {
+            self::GeminiEmbedding001 => 3072,
+            self::GeminiEmbedding2Preview => 3072,
+            self::MockEmbedding => 1024,
+            self::GptEmbeddingAda002 => 1536,
+            self::GptEmbedding3Small => 1536,
+            self::GptEmbedding3Large => 3072,
+            default => 0,
+        };
+
+        return $dimensions;
+    }
+
+    /**
+     * @phpstan-assert-if-true positive-int $this->getDefaultDimensions()
+     * @phpstan-assert-if-true false $this->isGenerative()
+     */
     public function isEmbedding(): bool
     {
         return in_array($this, [
@@ -173,14 +207,12 @@ enum Model: string
         ]);
     }
 
-    public function supportsFiles(): bool
+    /**
+     * @phpstan-assert-if-true false $this->isEmbedding()
+     */
+    public function isGenerative(): bool
     {
-        return !in_array($this, [
-            self::GeminiEmbedding001,
-            self::GptEmbeddingAda002,
-            self::GptEmbedding3Small,
-            self::GptEmbedding3Large,
-        ]);
+        return !$this->isEmbedding();
     }
 
     public function usesVendor(Vendor $vendor): bool

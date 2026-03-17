@@ -2,61 +2,52 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
-use OneToMany\LlmSdk\Request\Batch\CreateRequest;
-use OneToMany\LlmSdk\Request\Batch\ReadRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Batch\Batch;
-use OneToMany\LlmSdk\Response\Batch\CreateResponse;
-use OneToMany\LlmSdk\Response\Batch\ReadResponse;
+use OneToMany\LlmSdk\Request\Batch\CreateBatchRequest;
+use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Batch\CreateBatch;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Batch\Batch;
+use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
+use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
+
+use function sprintf;
 
 final readonly class BatchesResource extends BaseResource implements BatchesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
-    public function create(CreateRequest $request): CreateResponse
+    public function create(CreateBatchRequest $request): CreateBatchResponse
     {
-        $url = $this->buildModelUrl($request->getModel());
+        $createBatch = new CreateBatch($request->getName(), $request->getFileUri()->getUri());
 
-        $content = $this->doPostRequest($url, [
+        $url = $this->buildUrl($this->getApiVersion(), sprintf('models/%s:%s', $request->getModel()->getId(), $request->getModel()->isEmbedding() ? 'asyncBatchEmbedContent' : 'batchGenerateContent'));
+
+        $response = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders(),
             'json' => [
-                'batch' => [
-                    'displayName' => $request->getName(),
-                    'inputConfig' => [
-                        'fileName' => $request->getFileName(),
-                    ],
-                ],
+                ...$createBatch->toArray(),
             ],
         ]);
 
-        $batch = $this->doDenormalize($content, Batch::class);
+        $object = $this->doDenormalize($response, Batch::class);
 
-        return new CreateResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
+        return new CreateBatchResponse($request->getModel(), $object->name, $object->metadata->state->getValue());
     }
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
-    public function read(ReadRequest $request): ReadResponse
+    public function read(ReadBatchRequest $request): ReadBatchResponse
     {
-        $url = $this->buildUrl($this->apiVersion, $request->getUri());
+        $url = $this->buildUrl($this->getApiVersion(), $request->getUri());
 
-        $content = $this->doGetRequest($url, [
+        $response = $this->doGetRequest($url, [
             'headers' => $this->buildHeaders(),
         ]);
 
-        $batch = $this->doDenormalize($content, Batch::class);
+        $object = $this->doDenormalize($response, Batch::class);
 
-        return new ReadResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    private function buildModelUrl(Model $model): string
-    {
-        return $this->buildUrl($this->apiVersion, 'models', sprintf('%s:%s', $model->getId(), $model->isEmbedding() ? 'asyncBatchEmbedContent' : 'batchGenerateContent'));
+        return new ReadBatchResponse($request->getModel(), $object->name, $object->metadata->state->getValue());
     }
 }

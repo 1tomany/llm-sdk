@@ -3,23 +3,23 @@
 namespace OneToMany\LlmSdk\Resource\Anthropic;
 
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
-use OneToMany\LlmSdk\Request\File\DeleteRequest;
-use OneToMany\LlmSdk\Request\File\UploadRequest;
-use OneToMany\LlmSdk\Resource\Anthropic\Type\File\DeletedFile;
-use OneToMany\LlmSdk\Resource\Anthropic\Type\File\File;
-use OneToMany\LlmSdk\Response\File\DeleteResponse;
-use OneToMany\LlmSdk\Response\File\UploadResponse;
+use OneToMany\LlmSdk\Request\File\DeleteFileRequest;
+use OneToMany\LlmSdk\Request\File\UploadFileRequest;
+use OneToMany\LlmSdk\Resource\Anthropic\Type\Response\File\DeletedFile;
+use OneToMany\LlmSdk\Resource\Anthropic\Type\Response\File\File;
+use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
+use OneToMany\LlmSdk\Response\File\UploadFileResponse;
 
 final readonly class FilesResource extends BaseResource implements FilesResourceInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function upload(UploadRequest $request): UploadResponse
+    public function upload(UploadFileRequest $request): UploadFileResponse
     {
         $url = $this->buildUrl('files');
 
-        $content = $this->doPostRequest($url, [
+        $response = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders([
                 'anthropic-beta' => $this->filesVersion,
             ]),
@@ -28,26 +28,26 @@ final readonly class FilesResource extends BaseResource implements FilesResource
             ],
         ]);
 
-        $file = $this->doDenormalize($content, File::class);
+        $object = $this->doDenormalize($response, File::class);
 
-        return new UploadResponse($request->getVendor(), $file->id, $file->filename);
+        return new UploadFileResponse($request->getVendor(), $object->id, $object->filename);
     }
 
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function delete(DeleteRequest $request): DeleteResponse
+    public function delete(DeleteFileRequest $request): DeleteFileResponse
     {
         $url = $this->buildUrl('files', $request->getUri());
 
-        $content = $this->doDeleteRequest($url, [
+        $response = $this->doDeleteRequest($url, [
             'headers' => $this->buildHeaders([
                 'anthropic-beta' => $this->filesVersion,
             ]),
         ]);
 
-        $file = $this->doDenormalize($content, DeletedFile::class);
+        $object = $this->doDenormalize($response, DeletedFile::class);
 
-        return new DeleteResponse($request->getVendor(), $file->id);
+        return new DeleteFileResponse($request->getVendor(), $object->id);
     }
 }
