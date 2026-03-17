@@ -16,10 +16,10 @@ $vendor = trim($argv[2] ?? '') ?: 'mock';
 
 try {
     // Create a request to upload the file
-    $uploadFileRequest = new UploadFileRequest($vendor, $path);
+    $uploadFileRequest = new UploadFileRequest($vendor, $path)->usingPurpose($argv[3] ?? null);
 
     if ($format = mime_content_type($path)) {
-        $uploadFileRequest->withFormat($format);
+        $uploadFileRequest->usingFormat($format);
     }
 
     // Upload the file to the LLM vendor
@@ -27,7 +27,7 @@ try {
         'request' => $uploadFileRequest,
     ]);
 
-    printf("The file \"%s\" was successfully uploaded to %s with the URI: %s.\n", basename($path), $response->getVendor()->getName(), $response->getUri());
+    printf("The file '%s' was successfully uploaded to %s with the URI: %s\n", basename($path), $response->getVendor()->getName(), $response->getUri());
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }

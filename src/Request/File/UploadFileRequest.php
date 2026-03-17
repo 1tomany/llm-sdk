@@ -44,7 +44,7 @@ class UploadFileRequest
         private readonly string $path,
     ) {
         $this->vendor = Vendor::create($vendor);
-        $this->withName(null);
+        $this->usingName(null);
     }
 
     public function getVendor(): Vendor
@@ -60,7 +60,7 @@ class UploadFileRequest
         return $this->path;
     }
 
-    public function withName(?string $name): static
+    public function usingName(?string $name): static
     {
         if (!$name = trim($name ?? '')) {
             $name = basename($this->path);
@@ -91,7 +91,7 @@ class UploadFileRequest
         return $this->size;
     }
 
-    public function withFormat(?string $format): static
+    public function usingFormat(?string $format): static
     {
         $this->format = strtolower(trim($format ?? '')) ?: null;
 
@@ -106,7 +106,7 @@ class UploadFileRequest
         return $this->format;
     }
 
-    public function withPurpose(?string $purpose): static
+    public function usingPurpose(?string $purpose): static
     {
         $this->purpose = strtolower(trim($purpose ?? '')) ?: null;
 
