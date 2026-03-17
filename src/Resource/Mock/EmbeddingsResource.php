@@ -7,8 +7,6 @@ use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 
-use function assert;
-use function count;
 use function json_encode;
 use function random_int;
 use function strlen;
@@ -34,8 +32,6 @@ final readonly class EmbeddingsResource extends BaseResource implements Embeddin
         for ($i = 0; $i < $embeddingDimensions; ++$i) {
             $embedding[] = $this->faker->randomFloat();
         }
-
-        assert(count($embedding) === $embeddingDimensions);
 
         return new CreateEmbeddingResponse($request->getModel(), $embedding, random_int(100, 10000), new TokenUsage(strlen($requestContent)));
     }
