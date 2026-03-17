@@ -22,7 +22,7 @@ final class UploadRequestTest extends TestCase
         $this->assertFileExists($path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__'));
 
         // Arrange: Create the request to upload the file
-        $uploadRequest = new UploadFileRequest()->atPath($path);
+        $uploadRequest = new UploadFileRequest('mock', $path);
 
         // Assert: File must exist to calculate the size
         $this->expectException(RuntimeException::class);

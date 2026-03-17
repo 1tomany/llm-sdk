@@ -11,13 +11,13 @@ final readonly class DeleteFileRequest
     /**
      * @param Vendor $vendor
      * @param non-empty-string $uri
+     *
      * @return void
      */
     public function __construct(
         string|Vendor $vendor,
         private string $uri,
-    )
-    {
+    ) {
         $this->vendor = Vendor::create($vendor);
     }
 

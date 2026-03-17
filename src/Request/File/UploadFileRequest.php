@@ -3,7 +3,6 @@
 namespace OneToMany\LlmSdk\Request\File;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 
 use function basename;
@@ -15,7 +14,7 @@ use function trim;
 
 class UploadFileRequest
 {
-    private Vendor $vendor;
+    private readonly Vendor $vendor;
 
     /**
      * @var ?non-empty-string
@@ -42,9 +41,8 @@ class UploadFileRequest
      */
     public function __construct(
         string|Vendor $vendor,
-        private string $path,
-    )
-    {
+        private readonly string $path,
+    ) {
         $this->vendor = Vendor::create($vendor);
         $this->withName(null);
     }
@@ -64,7 +62,11 @@ class UploadFileRequest
 
     public function withName(?string $name): static
     {
-        $this->name = trim($name ?? '') ?: basename($this->getPath());
+        if (!$name = trim($name ?? '')) {
+            $name = basename($this->path);
+        }
+
+        $this->name = $name ?: null;
 
         return $this;
     }

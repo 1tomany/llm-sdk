@@ -23,7 +23,7 @@ try {
     }
 
     // Create a request to upload the file
-    $uploadFileRequest = new UploadFileRequest($vendor)->atPath($path)->withFormat($format);
+    $uploadFileRequest = new UploadFileRequest($vendor, $path)->withFormat($format);
 
     // Upload the file to the LLM vendor
     $response = new UploadFileAction($clientFactory)->act(...[
