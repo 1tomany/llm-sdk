@@ -2,7 +2,6 @@
 
 use OneToMany\LlmSdk\Action\File\UploadFileAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 
