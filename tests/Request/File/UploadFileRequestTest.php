@@ -14,7 +14,7 @@ use function unlink;
 #[Group('UnitTests')]
 #[Group('RequestTests')]
 #[Group('FileTests')]
-final class UploadRequestTest extends TestCase
+final class UploadFileRequestTest extends TestCase
 {
     public function testGettingSizeRequiresFileToExist(): void
     {
@@ -22,17 +22,17 @@ final class UploadRequestTest extends TestCase
         $this->assertFileExists($path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__'));
 
         // Arrange: Create the request to upload the file
-        $uploadRequest = new UploadFileRequest('mock', $path);
+        $request = new UploadFileRequest('mock', $path);
 
         // Assert: File must exist to calculate the size
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Calculating the size of the file "'.$uploadRequest->getName().'" failed.');
+        $this->expectExceptionMessage('Calculating the size of the file "'.$request->getName().'" failed.');
 
         // Act: Delete the file
         $this->assertTrue(unlink($path));
         $this->assertFileDoesNotExist($path);
 
         // Act: Get the size
-        $uploadRequest->getSize();
+        $request->getSize();
     }
 }
