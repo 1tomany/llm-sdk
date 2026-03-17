@@ -24,7 +24,7 @@ try {
 
     // Send the compiled request payload to the LLM server
     $response = new CreateEmbeddingAction($clientFactory)->act(...[
-        'request' => $response->toCreateEmbeddingRequest(),
+        'request' => $response->toProcessQueryRequest(),
     ]);
 
     $embedding = $response->getEmbedding();

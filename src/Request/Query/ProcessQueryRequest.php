@@ -1,20 +1,15 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\Output;
+namespace OneToMany\LlmSdk\Request\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 
-use function sprintf;
-
-class GenerateOutputRequest extends BaseRequest
+class ProcessQueryRequest extends BaseRequest
 {
     /**
      * @param non-empty-string $url
      * @param array<string, mixed> $request
-     *
-     * @throws InvalidArgumentException when the model is not a generative model
      */
     public function __construct(
         string|Model|null $model,
@@ -22,10 +17,6 @@ class GenerateOutputRequest extends BaseRequest
         private readonly array $request,
     ) {
         parent::__construct($model);
-
-        if (!$this->getModel()->isGenerative()) {
-            throw new InvalidArgumentException(sprintf('The model "%s" is not a generative model.', $this->getModel()->getValue()));
-        }
     }
 
     /**

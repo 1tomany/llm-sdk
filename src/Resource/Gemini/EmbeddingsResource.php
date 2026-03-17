@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
-use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
+use OneToMany\LlmSdk\Request\Query\ProcessQueryRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Embedding\Embedding;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
@@ -14,7 +14,7 @@ final readonly class EmbeddingsResource extends BaseResource implements Embeddin
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface
      */
-    public function create(CreateEmbeddingRequest $request): CreateEmbeddingResponse
+    public function create(ProcessQueryRequest $request): CreateEmbeddingResponse
     {
         $timer = new Stopwatch(true)->start('create');
 
