@@ -15,6 +15,8 @@ use function sqrt;
 
 final readonly class CreateEmbeddingResponse extends BaseResponse
 {
+    private float $l2Norm;
+
     /**
      * @param non-empty-list<float> $embedding
      */
@@ -27,6 +29,10 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
         if ([] === $embedding) {
             throw new InvalidArgumentException('The embedding vector cannot be empty.');
         }
+
+        $this->l2Norm = $this->calculateL2Norm(...[
+            'vector' => $this->embedding,
+        ]);
 
         parent::__construct($model);
     }
@@ -47,9 +53,17 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
         return $this->embedding;
     }
 
+    /**
+     * @return non-empty-list<float>
+     */
+    public function getNormalizedEmbedding(): array
+    {
+        return array_map(fn ($e): float => $e / $this->l2Norm, $this->embedding);
+    }
+
     public function getL2Norm(): float
     {
-        return sqrt(array_sum(array_map(fn ($e) => $e * $e, $this->embedding)));
+        return $this->l2Norm;
     }
 
     /**
@@ -63,5 +77,13 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
     public function getUsage(): TokenUsage
     {
         return $this->usage;
+    }
+
+    /**
+     * @param non-empty-list<float> $vector
+     */
+    private function calculateL2Norm(array $vector): float
+    {
+        return sqrt(array_sum(array_map(fn ($e) => $e * $e, $vector)));
     }
 }

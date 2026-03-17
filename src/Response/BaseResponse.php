@@ -3,6 +3,7 @@
 namespace OneToMany\LlmSdk\Response;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 readonly class BaseResponse
 {
@@ -13,5 +14,10 @@ readonly class BaseResponse
     public function getModel(): Model
     {
         return $this->model;
+    }
+
+    public function getVendor(): Vendor
+    {
+        return $this->model->getVendor();
     }
 }

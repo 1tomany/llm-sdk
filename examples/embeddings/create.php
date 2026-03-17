@@ -27,7 +27,7 @@ try {
         'request' => $response->toCreateEmbeddingRequest(),
     ]);
 
-    printf("The model \"%s\" generated an embedding with %d %s.\n", $response->getModel()->getValue(), $response->getDimensions(), 1 === $response->getDimensions() ? 'dimension' : 'dimensions');
+    printf("The model '%s' generated an embedding with %d %s.\n", $response->getModel()->getValue(), $response->getDimensions(), 1 === $response->getDimensions() ? 'dimension' : 'dimensions');
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }
