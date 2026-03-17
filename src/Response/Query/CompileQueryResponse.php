@@ -37,6 +37,16 @@ final readonly class CompileQueryResponse extends BaseResponse
         return $this->request;
     }
 
+    /**
+     *
+     * @param string $id
+     * @return string
+     */
+    public function generateHash(string $id): string
+    {
+        return \hash('sha256', \implode('-', [$id, $this->getModel()->getValue(), \json_encode($this->request)]));
+    }
+
     public function toCreateEmbeddingRequest(): CreateEmbeddingRequest
     {
         return new CreateEmbeddingRequest($this->getModel(), $this->url, $this->request);
