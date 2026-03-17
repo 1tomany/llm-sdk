@@ -23,14 +23,14 @@ final readonly class EmbeddingsResource extends BaseResource implements Embeddin
         try {
             $url = $this->buildUrl($this->getApiVersion(), sprintf('models/%s:embedContent', $request->getModel()->getId()));
 
-            $content = $this->doPostRequest($url, [
+            $response = $this->doPostRequest($url, [
                 'headers' => $this->buildHeaders(),
                 'json' => [
                     ...$request->getRequest(),
                 ],
             ]);
 
-            $object = $this->doDenormalize($content, Embedding::class, [
+            $object = $this->doDenormalize($response, Embedding::class, [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[embedding]',
             ]);
         } finally {

@@ -23,14 +23,14 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
 
         $url = $this->buildUrl($this->getApiVersion(), sprintf('models/%s:%s', $request->getModel()->getId(), $request->getModel()->isEmbedding() ? 'asyncBatchEmbedContent' : 'batchGenerateContent'));
 
-        $content = $this->doPostRequest($url, [
+        $response = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders(),
             'json' => [
                 ...$createBatch->toArray(),
             ],
         ]);
 
-        $object = $this->doDenormalize($content, Batch::class);
+        $object = $this->doDenormalize($response, Batch::class);
 
         return new CreateBatchResponse($request->getModel(), $object->name, $object->metadata->state->getValue());
     }
@@ -42,12 +42,12 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
     {
         $url = $this->buildUrl($this->getApiVersion(), $request->getUri());
 
-        $content = $this->doGetRequest($url, [
+        $response = $this->doGetRequest($url, [
             'headers' => $this->buildHeaders(),
         ]);
 
-        $batch = $this->doDenormalize($content, Batch::class);
+        $object = $this->doDenormalize($response, Batch::class);
 
-        return new ReadBatchResponse($request->getModel(), $batch->name, $batch->metadata->state->getValue());
+        return new ReadBatchResponse($request->getModel(), $object->name, $object->metadata->state->getValue());
     }
 }
