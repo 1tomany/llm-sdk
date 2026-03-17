@@ -1,9 +1,9 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\File;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\File;
 
-use OneToMany\LlmSdk\Resource\Gemini\Type\File\Enum\Source;
-use OneToMany\LlmSdk\Resource\Gemini\Type\File\Enum\State;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\File\Enum\Source;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\File\Enum\State;
 
 final readonly class File
 {

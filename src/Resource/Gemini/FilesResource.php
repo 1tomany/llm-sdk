@@ -7,7 +7,7 @@ use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\File\DeleteFileRequest;
 use OneToMany\LlmSdk\Request\File\UploadFileRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\File\File;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
 use OneToMany\LlmSdk\Response\File\UploadFileResponse;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;

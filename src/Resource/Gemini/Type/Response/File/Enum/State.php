@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\File\Enum;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\File\Enum;
 
 enum State: string
 {
