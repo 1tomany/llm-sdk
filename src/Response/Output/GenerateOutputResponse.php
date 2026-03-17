@@ -20,7 +20,7 @@ final readonly class GenerateOutputResponse extends BaseResponse
      * @param array<string, mixed> $response
      */
     public function __construct(
-        Model $model,
+        string|Model $model,
         private string $uri,
         private array $response,
         private ?string $output,

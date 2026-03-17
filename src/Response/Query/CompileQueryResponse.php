@@ -18,7 +18,7 @@ final readonly class CompileQueryResponse extends BaseResponse
      * @param array<string, mixed> $request
      */
     public function __construct(
-        Model $model,
+        string|Model $model,
         private string $url,
         private array $request,
     ) {

@@ -6,13 +6,16 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 final readonly class DeleteFileResponse
 {
+    private Vendor $vendor;
+
     /**
      * @param non-empty-string $uri
      */
     public function __construct(
-        private Vendor $vendor,
+        string|Vendor $vendor,
         private string $uri,
     ) {
+        $this->vendor = Vendor::create($vendor);
     }
 
     public function getVendor(): Vendor
