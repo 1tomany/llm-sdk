@@ -24,7 +24,7 @@ try {
 
     // Send the compiled request payload to the LLM server
     $response = new GenerateOutputAction($clientFactory)->act(...[
-        'request' => $response->toGenerateOutputRequest(),
+        'request' => $response->toProcessQueryRequest(),
     ]);
 
     printf("The model '%s' generated the following output for the prompt '%s':\n\n", $response->getModel()->getValue(), $prompt);

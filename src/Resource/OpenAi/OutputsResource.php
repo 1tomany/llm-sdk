@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
-use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
+use OneToMany\LlmSdk\Request\Query\ProcessQueryRequest;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Response\Response;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
@@ -14,7 +14,7 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface
      */
-    public function generate(GenerateOutputRequest $request): GenerateOutputResponse
+    public function generate(ProcessQueryRequest $request): GenerateOutputResponse
     {
         $timer = new Stopwatch(true)->start('generate');
 

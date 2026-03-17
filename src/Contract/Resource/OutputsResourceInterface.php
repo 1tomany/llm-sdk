@@ -2,10 +2,10 @@
 
 namespace OneToMany\LlmSdk\Contract\Resource;
 
-use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
+use OneToMany\LlmSdk\Request\Query\ProcessQueryRequest;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
 
 interface OutputsResourceInterface
 {
-    public function generate(GenerateOutputRequest $request): GenerateOutputResponse;
+    public function generate(ProcessQueryRequest $request): GenerateOutputResponse;
 }
