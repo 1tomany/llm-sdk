@@ -4,9 +4,9 @@ namespace OneToMany\LlmSdk\Request\Query;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\BaseRequest;
-use OneToMany\LlmSdk\Request\Type\Query\Dimensions;
 use OneToMany\LlmSdk\Request\Type\Enum\Role;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
+use OneToMany\LlmSdk\Request\Type\Query\Dimensions;
 use OneToMany\LlmSdk\Request\Type\Query\Prompt;
 use OneToMany\LlmSdk\Request\Type\Query\Schema;
 

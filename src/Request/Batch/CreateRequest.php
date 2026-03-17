@@ -3,11 +3,7 @@
 namespace OneToMany\LlmSdk\Request\Batch;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\BaseRequest;
-
-use function trim;
 
 class CreateRequest extends BaseRequest
 {
@@ -17,8 +13,7 @@ class CreateRequest extends BaseRequest
     public function __construct(
         string|Model|null $model,
         private readonly string $name,
-    )
-    {
+    ) {
         parent::__construct($model);
     }
 
