@@ -11,13 +11,13 @@ use OneToMany\LlmSdk\Request\Type\File\FileUri;
 use function is_string;
 use function trim;
 
-class CreateRequest extends BaseRequest
+class CreateBatchRequest extends BaseRequest
 {
     /**
      * @var non-empty-string
      */
     private readonly string $name;
-    private ?FileUri $file = null;
+    private ?FileUri $fileUri = null;
 
     /**
      * @param non-empty-string $name
@@ -50,20 +50,20 @@ class CreateRequest extends BaseRequest
     /**
      * @throws InvalidArgumentException when the trimmed file is empty
      */
-    public function usingFile(string|FileUri|null $file): static
+    public function usingFile(string|FileUri|null $fileUri): static
     {
-        if (null === $file) {
-            $this->file = null;
+        if (null === $fileUri) {
+            $this->fileUri = null;
         } else {
-            if (is_string($file)) {
-                if (!$file = trim($file)) {
+            if (is_string($fileUri)) {
+                if (!$fileUri = trim($fileUri)) {
                     throw new InvalidArgumentException('The file cannot be empty.');
                 }
 
-                $file = new FileUri($file, 'application/jsonl');
+                $fileUri = new FileUri($fileUri, 'application/jsonl');
             }
 
-            $this->file = $file;
+            $this->fileUri = $fileUri;
         }
 
         return $this;
@@ -72,8 +72,8 @@ class CreateRequest extends BaseRequest
     /**
      * @throws RuntimeException when the file is missing
      */
-    public function getFile(): FileUri
+    public function getFileUri(): FileUri
     {
-        return $this->file ?? throw new RuntimeException('The file is missing.');
+        return $this->fileUri ?? throw new RuntimeException('The file is missing.');
     }
 }

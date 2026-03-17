@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
-use OneToMany\LlmSdk\Request\Batch\CreateRequest;
+use OneToMany\LlmSdk\Request\Batch\CreateBatchRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
 use OneToMany\LlmSdk\Resource\Mock\Type\Response\Batch\Enum\Status;
 use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
@@ -14,7 +14,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface
      */
-    public function create(CreateRequest $request): CreateBatchResponse
+    public function create(CreateBatchRequest $request): CreateBatchResponse
     {
         return new CreateBatchResponse($request->getModel(), $this->generateId('batch'), Status::Processing->getValue());
     }
