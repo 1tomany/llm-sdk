@@ -2,6 +2,11 @@
 
 namespace OneToMany\LlmSdk\Resource\Mock;
 
+use function bin2hex;
+use function random_bytes;
+use function sprintf;
+use function strtolower;
+
 readonly class BaseResource
 {
     protected \Faker\Generator $faker;
