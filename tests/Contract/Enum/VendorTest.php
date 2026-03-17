@@ -41,9 +41,9 @@ final class VendorTest extends TestCase
         return $provider;
     }
 
-    public function testCreatingVendorRequiresValidName(): void
+    public function testCreatingVendorRequiresValidVendor(): void
     {
-        $vendor = uniqid('model_');
+        $vendor = uniqid('vendor_');
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The vendor "'.$vendor.'" is not valid.');

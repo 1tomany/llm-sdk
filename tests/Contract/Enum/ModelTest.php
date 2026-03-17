@@ -42,7 +42,7 @@ final class ModelTest extends TestCase
         return $provider;
     }
 
-    public function testCreatingModelRequiresValidName(): void
+    public function testCreatingModelRequiresValidModel(): void
     {
         $model = uniqid('model_');
 
