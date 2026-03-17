@@ -18,11 +18,13 @@ abstract readonly class BaseResource
 
     /**
      * @param non-empty-string $apiKey
+     * @param non-empty-string $apiVersion
      */
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected DenormalizerInterface&NormalizerInterface&SerializerInterface $serializer,
         protected string $apiKey,
+        protected string $apiVersion = 'v1',
     ) {
     }
 
@@ -35,11 +37,19 @@ abstract readonly class BaseResource
     }
 
     /**
+     * @return non-empty-string
+     */
+    public function getApiVersion(): string
+    {
+        return $this->apiVersion;
+    }
+
+    /**
      * @see OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait
      */
     public function getBaseUrl(): string
     {
-        return 'https://api.openai.com/v1';
+        return \sprintf('https://api.openai.com/%s', $this->getApiVersion());
     }
 
     /**

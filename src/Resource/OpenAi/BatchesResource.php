@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
@@ -17,7 +18,7 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function create(CreateRequest $request): CreateBatchResponse
     {
-        $createBatch = new CreateBatch($this->buildUrl($request->getModel()->isEmbedding() ? 'embeddings' : 'responses'), $request->getFile()->getUri());
+        $createBatch = new CreateBatch($request->getModel(), $this->getApiVersion(), $request->getFile()->getUri());
 
         $content = $this->doPostRequest($this->buildUrl('batches'), [
             'auth_header' => $this->getApiKey(),
