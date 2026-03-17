@@ -6,6 +6,7 @@ use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 
 use function array_filter;
 use function array_values;
+use function is_object;
 use function sprintf;
 use function strtolower;
 use function trim;
@@ -18,21 +19,20 @@ enum Vendor: string
     case OpenAI = 'openai';
 
     /**
-     * @throws InvalidArgumentException when the vendor does not exist
+     * @throws InvalidArgumentException when the vendor name is empty
+     * @throws InvalidArgumentException when the vendor is not valid
      */
     public static function create(string|self|null $vendor): self
     {
-        if ($vendor instanceof self) {
+        if (is_object($vendor)) {
             return $vendor;
         }
 
-        $vendor = trim($vendor ?? '');
-
-        try {
-            return self::from(strtolower($vendor));
-        } catch (\TypeError|\ValueError $e) {
-            throw new InvalidArgumentException(sprintf('The vendor "%s" does not exist.', $vendor), previous: $e);
+        if (!$vendor = trim($vendor ?? '')) {
+            throw new InvalidArgumentException('The vendor name cannot be empty.');
         }
+
+        return self::tryFrom(strtolower($vendor)) ?? throw new InvalidArgumentException(sprintf('The vendor "%s" is not valid.', $vendor));
     }
 
     /**
@@ -56,6 +56,6 @@ enum Vendor: string
      */
     public function getModels(): array
     {
-        return array_values(array_filter(Model::cases(), fn ($m): bool => $m->usesVendor($this)));
+        return array_values(array_filter(Model::cases(), fn (Model $m): bool => $m->usesVendor($this)));
     }
 }

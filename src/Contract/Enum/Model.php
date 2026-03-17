@@ -51,7 +51,7 @@ enum Model: string
 
     /**
      * @throws InvalidArgumentException when the model name is empty
-     * @throws InvalidArgumentException when the model name is not valid
+     * @throws InvalidArgumentException when the model is not valid
      */
     public static function create(string|self|null $model): self
     {
@@ -63,7 +63,7 @@ enum Model: string
             throw new InvalidArgumentException('The model name cannot be empty.');
         }
 
-        return self::tryFrom(strtolower($model)) ?? throw new InvalidArgumentException(sprintf('The model name "%s" is not valid.', $model));
+        return self::tryFrom(strtolower($model)) ?? throw new InvalidArgumentException(sprintf('The model "%s" is not valid.', $model));
     }
 
     /**

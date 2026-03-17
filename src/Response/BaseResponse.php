@@ -7,8 +7,11 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 readonly class BaseResponse
 {
-    public function __construct(private Model $model)
+    private Model $model;
+
+    public function __construct(string|Model $model)
     {
+        $this->model = Model::create($model);
     }
 
     public function getModel(): Model
