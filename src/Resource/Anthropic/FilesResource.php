@@ -3,8 +3,8 @@
 namespace OneToMany\LlmSdk\Resource\Anthropic;
 
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
-use OneToMany\LlmSdk\Request\File\DeleteRequest;
-use OneToMany\LlmSdk\Request\File\UploadRequest;
+use OneToMany\LlmSdk\Request\File\DeleteFileRequest;
+use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 use OneToMany\LlmSdk\Resource\Anthropic\Type\File\DeletedFile;
 use OneToMany\LlmSdk\Resource\Anthropic\Type\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
@@ -15,7 +15,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function upload(UploadRequest $request): UploadFileResponse
+    public function upload(UploadFileRequest $request): UploadFileResponse
     {
         $url = $this->buildUrl('files');
 
@@ -36,7 +36,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function delete(DeleteRequest $request): DeleteFileResponse
+    public function delete(DeleteFileRequest $request): DeleteFileResponse
     {
         $url = $this->buildUrl('files', $request->getUri());
 

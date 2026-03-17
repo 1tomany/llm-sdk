@@ -4,7 +4,7 @@ use OneToMany\LlmSdk\Action\File\UploadFileAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Factory\ClientFactory;
-use OneToMany\LlmSdk\Request\File\UploadRequest;
+use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
@@ -23,7 +23,7 @@ try {
     }
 
     // Create a request to upload the file
-    $uploadFileRequest = new UploadRequest($vendor)->atPath($path)->withFormat($format);
+    $uploadFileRequest = new UploadFileRequest($vendor)->atPath($path)->withFormat($format);
 
     // Upload the file to the LLM vendor
     $response = new UploadFileAction($clientFactory)->act(...[

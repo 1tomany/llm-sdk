@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Tests\Request\File;
 
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Request\File\UploadRequest;
+use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +22,7 @@ final class UploadRequestTest extends TestCase
         $this->assertFileExists($path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__'));
 
         // Arrange: Create the request to upload the file
-        $uploadRequest = new UploadRequest()->atPath($path);
+        $uploadRequest = new UploadFileRequest()->atPath($path);
 
         // Assert: File must exist to calculate the size
         $this->expectException(RuntimeException::class);

@@ -3,8 +3,8 @@
 namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
-use OneToMany\LlmSdk\Request\File\DeleteRequest;
-use OneToMany\LlmSdk\Request\File\UploadRequest;
+use OneToMany\LlmSdk\Request\File\DeleteFileRequest;
+use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 use OneToMany\LlmSdk\Resource\Mock\Trait\GenerateIdTrait;
 use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
 use OneToMany\LlmSdk\Response\File\UploadFileResponse;
@@ -20,7 +20,7 @@ final readonly class FilesResource implements FilesResourceInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function upload(UploadRequest $request): UploadFileResponse
+    public function upload(UploadFileRequest $request): UploadFileResponse
     {
         return new UploadFileResponse($request->getVendor(), $this->generateId('file'));
     }
@@ -28,7 +28,7 @@ final readonly class FilesResource implements FilesResourceInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface
      */
-    public function delete(DeleteRequest $request): DeleteFileResponse
+    public function delete(DeleteFileRequest $request): DeleteFileResponse
     {
         return new DeleteFileResponse($request->getVendor(), $request->getUri());
     }

@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Request\File;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-class FileRequest
+class BaseFileRequest
 {
     private readonly Vendor $vendor;
 
