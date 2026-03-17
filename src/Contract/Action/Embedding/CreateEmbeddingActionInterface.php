@@ -9,8 +9,5 @@ use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
 
 interface CreateEmbeddingActionInterface
 {
-    /**
-     * @throws InvalidArgumentException when the model is not an embedding model
-     */
     public function act(CompileQueryRequest|CreateEmbeddingRequest $request): CreateEmbeddingResponse;
 }
