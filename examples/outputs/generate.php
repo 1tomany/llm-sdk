@@ -28,9 +28,9 @@ try {
     ]);
 
     successMessage('The model "%s" generated the following output for the prompt "%s":', $response->getModel()->getValue(), $prompt);
-    successMessage(sprintf("\n%s", $response->getOutput()));
+    // successMessage(sprintf("\n%s", $response->getOutput()));
 
-    print_r($response->getUsage());
+    print_r($response);
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }

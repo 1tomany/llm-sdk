@@ -6,6 +6,7 @@ use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Content\Generation;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
+use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 use function sprintf;
@@ -35,6 +36,6 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
             $timer->stop();
         }
 
-        return new GenerateOutputResponse($request->getModel(), $object->responseId, $response, $object->getOutput(), null, $timer->getDuration()); // , new UsageResponse($generation->usageMetadata->promptTokenCount, $generation->usageMetadata->cachedContentTokenCount, $generation->usageMetadata->outputTokenCount));
+        return new GenerateOutputResponse($request->getModel(), $object->responseId, $response, $object->getOutput(), null, $timer->getDuration(), new TokenUsage($object->usageMetadata->promptTokenCount, $object->usageMetadata->cachedContentTokenCount, $object->usageMetadata->outputTokenCount));
     }
 }
