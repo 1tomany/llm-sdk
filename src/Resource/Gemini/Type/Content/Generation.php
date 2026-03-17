@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content;
 
 use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Candidate\Candidate;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Usage\UsageMetadata;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Usage\UsageMetadata;
 
 use function array_map;
 use function implode;

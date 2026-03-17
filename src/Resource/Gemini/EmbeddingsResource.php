@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Embedding\Embedding;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Embedding\Embedding;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Stopwatch\Stopwatch;
