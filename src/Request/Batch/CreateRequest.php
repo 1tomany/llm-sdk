@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Request\Batch;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\BaseRequest;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 
@@ -20,6 +21,8 @@ class CreateRequest extends BaseRequest
 
     /**
      * @param non-empty-string $name
+     *
+     * @throws InvalidArgumentException when the trimmed name is empty
      */
     public function __construct(
         string|Model|null $model,
@@ -44,6 +47,9 @@ class CreateRequest extends BaseRequest
         return $this->name;
     }
 
+    /**
+     * @throws InvalidArgumentException when the trimmed file is empty
+     */
     public function usingFile(string|FileUri|null $file): static
     {
         if (null === $file) {
@@ -63,8 +69,11 @@ class CreateRequest extends BaseRequest
         return $this;
     }
 
-    public function getFile(): ?FileUri
+    /**
+     * @throws RuntimeException when the file is missing
+     */
+    public function getFile(): FileUri
     {
-        return $this->file;
+        return $this->file ?? throw new RuntimeException('The file is missing.');
     }
 }
