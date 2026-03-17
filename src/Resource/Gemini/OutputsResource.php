@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Generation;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Content\Generation;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
 use Symfony\Component\Stopwatch\Stopwatch;
 

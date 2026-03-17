@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\Content;
 
-use OneToMany\LlmSdk\Resource\Gemini\Type\Content\Candidate\Candidate;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Content\Candidate\Candidate;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Usage\UsageMetadata;
 
 use function array_map;

@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Content\Candidate\Part;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\Content\Candidate\Part;
 
 final readonly class TextPart
 {
