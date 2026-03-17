@@ -6,6 +6,7 @@ use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Batch\Batch;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Batch\CreateBatch;
 use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
 
@@ -18,17 +19,14 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function create(CreateRequest $request): CreateBatchResponse
     {
+        $createBatch = new CreateBatch($request->getName(), $request->getFile()->getUri());
+
         $url = $this->buildUrl($this->getApiVersion(), sprintf('models/%s:%s', $request->getModel()->getId(), $request->getModel()->isEmbedding() ? 'asyncBatchEmbedContent' : 'batchGenerateContent'));
 
         $content = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders(),
             'json' => [
-                'batch' => [
-                    'displayName' => $request->getName(),
-                    'inputConfig' => [
-                        'fileName' => $request->getFileName(),
-                    ],
-                ],
+                ...$createBatch->toArray(),
             ],
         ]);
 
