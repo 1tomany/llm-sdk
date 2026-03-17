@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\Query\Type;
+namespace OneToMany\LlmSdk\Request\Type\File;
 
-use OneToMany\LlmSdk\Request\Query\Type\Enum\Role;
+use OneToMany\LlmSdk\Request\Type\Enum\Role;
 
 use function in_array;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\Query\Type;
+namespace OneToMany\LlmSdk\Request\Type\Query;
 
-use OneToMany\LlmSdk\Request\Query\Type\Enum\Role;
+use OneToMany\LlmSdk\Request\Type\Enum\Role;
 
 final readonly class Prompt
 {

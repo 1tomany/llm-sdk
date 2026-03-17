@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
-use OneToMany\LlmSdk\Request\Query\Type\FileUri;
+use OneToMany\LlmSdk\Request\Type\File\FileUri;
 use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface

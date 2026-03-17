@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
-use OneToMany\LlmSdk\Request\Query\Type\FileUri;
+use OneToMany\LlmSdk\Request\Type\File\FileUri;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Request\Response\Enum\Type;
 use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 

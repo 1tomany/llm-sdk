@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\Batch\Type;
+namespace OneToMany\LlmSdk\Request\Type\Batch;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 

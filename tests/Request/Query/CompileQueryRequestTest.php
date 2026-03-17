@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Tests\Request\Query;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
-use OneToMany\LlmSdk\Request\Query\Type\Schema;
+use OneToMany\LlmSdk\Request\Type\Query\Schema;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
