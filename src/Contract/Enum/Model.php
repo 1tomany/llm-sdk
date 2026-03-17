@@ -51,7 +51,7 @@ enum Model: string
 
     /**
      * @throws InvalidArgumentException when the model name is empty
-     * @throws InvalidArgumentException when the model name is not valid
+     * @throws InvalidArgumentException when the model is not valid
      */
     public static function create(string|self|null $model): self
     {

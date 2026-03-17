@@ -20,7 +20,7 @@ enum Vendor: string
 
     /**
      * @throws InvalidArgumentException when the vendor name is empty
-     * @throws InvalidArgumentException when the vendor name is not valid
+     * @throws InvalidArgumentException when the vendor is not valid
      */
     public static function create(string|self|null $vendor): self
     {
