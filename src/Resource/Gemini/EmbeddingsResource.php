@@ -3,7 +3,6 @@
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
-use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Request\Query\ProcessQueryRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Embedding\Embedding;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;

@@ -3,7 +3,6 @@
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
-use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Request\Query\ProcessQueryRequest;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Embedding\EmbeddingList;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;

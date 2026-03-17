@@ -3,7 +3,6 @@
 namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
-use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Request\Query\ProcessQueryRequest;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
