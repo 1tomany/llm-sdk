@@ -13,7 +13,7 @@ readonly class BaseBatchResponse extends BaseResponse
      * @param ?non-empty-string $fileUri
      */
     public function __construct(
-        Model $model,
+        string|Model $model,
         private string $uri,
         private string $status,
         private ?string $fileUri = null,

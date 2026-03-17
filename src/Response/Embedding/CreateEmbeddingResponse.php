@@ -23,7 +23,7 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
      * @throws InvalidArgumentException when the embedding vector is empty
      */
     public function __construct(
-        Model $model,
+        string|Model $model,
         private array $embedding,
         private int|float $runtime = 0,
         private TokenUsage $usage = new TokenUsage(),
