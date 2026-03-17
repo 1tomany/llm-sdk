@@ -9,9 +9,7 @@ use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
-$path = trim($argv[1] ?? '');
-
-if (!is_file($path)) {
+if (!$path = trim($argv[1] ?? '')) {
     errorMessage('Usage: php %s <path> <vendor>', basename(__FILE__));
 }
 
