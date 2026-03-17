@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Resource\Anthropic;
 
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Resource\Anthropic\Type\Error\Error;
+use OneToMany\LlmSdk\Resource\Anthropic\Type\Response\Error\Error;
 use OneToMany\LlmSdk\Resource\Trait\HttpResourceTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

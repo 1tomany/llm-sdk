@@ -5,8 +5,8 @@ namespace OneToMany\LlmSdk\Resource\Anthropic;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Request\File\DeleteFileRequest;
 use OneToMany\LlmSdk\Request\File\UploadFileRequest;
-use OneToMany\LlmSdk\Resource\Anthropic\Type\File\DeletedFile;
-use OneToMany\LlmSdk\Resource\Anthropic\Type\File\File;
+use OneToMany\LlmSdk\Resource\Anthropic\Type\Response\File\DeletedFile;
+use OneToMany\LlmSdk\Resource\Anthropic\Type\Response\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
 use OneToMany\LlmSdk\Response\File\UploadFileResponse;
 
