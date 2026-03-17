@@ -7,6 +7,7 @@ use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\File\DeleteFileRequest;
 use OneToMany\LlmSdk\Request\File\UploadFileRequest;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Request\File\UploadFile;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\File\File;
 use OneToMany\LlmSdk\Response\File\DeleteFileResponse;
 use OneToMany\LlmSdk\Response\File\UploadFileResponse;
@@ -36,8 +37,9 @@ final readonly class FilesResource extends BaseResource implements FilesResource
      */
     public function upload(UploadFileRequest $request): UploadFileResponse
     {
-        // Ensure the file can be opened
-        $fileHandle = $request->openFile();
+        $uploadFile = new UploadFile(...[
+            'name' => $request->getName(),
+        ]);
 
         try {
             $url = $this->buildUrl(sprintf('upload/%s/files', $this->getApiVersion()));
@@ -49,11 +51,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                     'x-goog-upload-header-content-length' => $request->getSize(),
                     'x-goog-upload-header-content-type' => $request->getFormat(),
                 ]),
-                'json' => [
-                    'file' => [
-                        'displayName' => $request->getName(),
-                    ],
-                ],
+                'json' => $uploadFile->toArray(),
             ]);
 
             $headers = $response->getHeaders(false);
@@ -66,6 +64,9 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         } finally {
             $response = null;
         }
+
+        // Ensure the file can be opened
+        $fileHandle = $request->openFile();
 
         // Set the chunk size to the amount preferred by the server
         if (is_numeric($headers[self::HEADER_CHUNK_SIZE][0] ?? null)) {
