@@ -9,8 +9,6 @@ use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-use function sprintf;
-
 final readonly class EmbeddingsResource extends BaseResource implements EmbeddingsResourceInterface
 {
     /**

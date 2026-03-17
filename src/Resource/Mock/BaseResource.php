@@ -3,7 +3,10 @@
 namespace OneToMany\LlmSdk\Resource\Mock;
 
 use function bin2hex;
+use function implode;
+use function ltrim;
 use function random_bytes;
+use function rtrim;
 use function sprintf;
 use function strtolower;
 
@@ -29,7 +32,7 @@ readonly class BaseResource
      */
     protected function buildUrl(string ...$paths): string
     {
-        return sprintf('%s/%s', \rtrim($this->getBaseUrl(), '/'), \ltrim(\implode('/', $paths), '/'));
+        return sprintf('%s/%s', rtrim($this->getBaseUrl(), '/'), ltrim(implode('/', $paths), '/'));
     }
 
     /**

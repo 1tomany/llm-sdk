@@ -7,6 +7,8 @@ use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
+use function sprintf;
+
 final readonly class QueriesResource extends BaseResource implements QueriesResourceInterface
 {
     /**
@@ -65,6 +67,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             ];
         }
 
-        return new CompileQueryResponse($request->getModel(), $this->buildUrl($this->getApiVersion(), \sprintf('models/%s:%s', $request->getModel()->getId(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent')), $requestContent);
+        return new CompileQueryResponse($request->getModel(), $this->buildUrl($this->getApiVersion(), sprintf('models/%s:%s', $request->getModel()->getId(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent')), $requestContent);
     }
 }
