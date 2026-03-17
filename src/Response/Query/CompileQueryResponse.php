@@ -38,9 +38,7 @@ final readonly class CompileQueryResponse extends BaseResponse
     }
 
     /**
-     *
-     * @param string $id
-     * @return string
+     * @param non-empty-string $id
      */
     public function generateHash(string $id): string
     {
