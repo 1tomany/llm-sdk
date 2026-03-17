@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Mock;
 
 use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
+use OneToMany\LlmSdk\Request\Query\ProcessQueryRequest;
 use OneToMany\LlmSdk\Response\Embedding\CreateEmbeddingResponse;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 
@@ -18,7 +19,7 @@ final readonly class EmbeddingsResource extends BaseResource implements Embeddin
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface
      */
-    public function create(CreateEmbeddingRequest $request): CreateEmbeddingResponse
+    public function create(ProcessQueryRequest $request): CreateEmbeddingResponse
     {
         $embedding = [];
 

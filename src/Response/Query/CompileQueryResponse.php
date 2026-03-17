@@ -5,6 +5,7 @@ namespace OneToMany\LlmSdk\Response\Query;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
+use OneToMany\LlmSdk\Request\Query\ProcessQueryRequest;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
 use function hash;
@@ -51,9 +52,9 @@ final readonly class CompileQueryResponse extends BaseResponse
         return hash('sha256', implode('-', [$id, $this->getModel()->getValue(), json_encode($this->request)]));
     }
 
-    public function toCreateEmbeddingRequest(): CreateEmbeddingRequest
+    public function toProcessQueryRequest(): ProcessQueryRequest
     {
-        return new CreateEmbeddingRequest($this->getModel(), $this->url, $this->request);
+        return new ProcessQueryRequest($this->getModel(), $this->url, $this->request);
     }
 
     public function toGenerateOutputRequest(): GenerateOutputRequest

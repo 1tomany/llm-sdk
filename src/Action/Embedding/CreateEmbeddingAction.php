@@ -21,7 +21,7 @@ final readonly class CreateEmbeddingAction extends BaseAction implements CreateE
     public function act(CompileQueryRequest|ProcessQueryRequest $request): CreateEmbeddingResponse
     {
         if ($request instanceof CompileQueryRequest) {
-            $request = $this->compileQuery($request)->toCreateEmbeddingRequest();
+            $request = $this->compileQuery($request)->toProcessQueryRequest();
         }
 
         if (!$request->getModel()->isEmbedding()) {
