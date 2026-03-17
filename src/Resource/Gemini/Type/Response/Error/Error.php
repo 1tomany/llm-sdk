@@ -1,10 +1,11 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Error;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\Error;
 
 use function array_filter;
 use function explode;
 use function implode;
+use function ltrim;
 
 final class Error
 {
