@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Batch\Batch;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Batch\Batch;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Batch\CreateBatch;
 use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
