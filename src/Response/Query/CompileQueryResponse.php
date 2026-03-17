@@ -7,6 +7,10 @@ use OneToMany\LlmSdk\Request\Embedding\CreateEmbeddingRequest;
 use OneToMany\LlmSdk\Request\Output\GenerateOutputRequest;
 use OneToMany\LlmSdk\Response\BaseResponse;
 
+use function hash;
+use function implode;
+use function json_encode;
+
 final readonly class CompileQueryResponse extends BaseResponse
 {
     /**
@@ -35,6 +39,16 @@ final readonly class CompileQueryResponse extends BaseResponse
     public function getRequest(): array
     {
         return $this->request;
+    }
+
+    /**
+     * @param non-empty-string $id
+     *
+     * @return non-empty-lowercase-string
+     */
+    public function generateHash(string $id): string
+    {
+        return hash('sha256', implode('-', [$id, $this->getModel()->getValue(), json_encode($this->request)]));
     }
 
     public function toCreateEmbeddingRequest(): CreateEmbeddingRequest
