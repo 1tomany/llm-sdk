@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 #[Group('QueryTests')]
 final class CompileQueryResponseTest extends TestCase
 {
-    public function testGeneratingId(): void
+    public function testGeneratingHash(): void
     {
         $response = new CompileQueryResponse(Model::Mock, 'https://mock-llm.service/outputs', ['id' => 1, 'name' => 'Vic']);
 
