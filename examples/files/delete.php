@@ -23,7 +23,7 @@ try {
         'request' => $deleteFileRequest,
     ]);
 
-    successMessage('The file "%s" was successfully deleted from %s.', $response->getUri(), $response->getVendor()->getName());
+    printf("The file \"%s\" was successfully deleted from %s.\n", $response->getUri(), $response->getVendor()->getName());
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }

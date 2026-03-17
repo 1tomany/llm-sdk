@@ -11,21 +11,29 @@ use function sprintf;
 class GenerateOutputRequest extends BaseRequest
 {
     /**
+     * @param non-empty-string $url
      * @param array<string, mixed> $request
      *
      * @throws InvalidArgumentException when the model is not a generative model
      */
     public function __construct(
         string|Model|null $model,
+        private readonly string $url,
         private readonly array $request,
     ) {
-        $model = Model::create($model);
-
-        if (!$model->isGenerative()) {
-            throw new InvalidArgumentException(sprintf('The model "%s" is not a generative model.', $model->getValue()));
-        }
-
         parent::__construct($model);
+
+        if (!$this->getModel()->isGenerative()) {
+            throw new InvalidArgumentException(sprintf('The model "%s" is not a generative model.', $this->getModel()->getValue()));
+        }
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
     }
 
     /**

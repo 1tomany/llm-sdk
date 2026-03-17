@@ -21,9 +21,7 @@ final readonly class EmbeddingsResource extends BaseResource implements Embeddin
         $timer = new Stopwatch(true)->start('create');
 
         try {
-            $url = $this->buildUrl($this->getApiVersion(), sprintf('models/%s:embedContent', $request->getModel()->getId()));
-
-            $response = $this->doPostRequest($url, [
+            $response = $this->doPostRequest($request->getUrl(), [
                 'headers' => $this->buildHeaders(),
                 'json' => [
                     ...$request->getRequest(),

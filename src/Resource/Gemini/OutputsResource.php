@@ -9,8 +9,6 @@ use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-use function sprintf;
-
 final readonly class OutputsResource extends BaseResource implements OutputsResourceInterface
 {
     /**
@@ -21,10 +19,8 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
         $timer = new Stopwatch(true)->start('generate');
 
         try {
-            $url = $this->buildUrl($this->getApiVersion(), sprintf('models/%s:generateContent', $request->getModel()->getId()));
-
             /** @var array<string, mixed> $response */
-            $response = $this->doPostRequest($url, [
+            $response = $this->doPostRequest($request->getUrl(), [
                 'headers' => $this->buildHeaders(),
                 'json' => [
                     ...$request->getRequest(),

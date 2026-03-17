@@ -10,13 +10,23 @@ use OneToMany\LlmSdk\Response\BaseResponse;
 final readonly class CompileQueryResponse extends BaseResponse
 {
     /**
+     * @param non-empty-string $url
      * @param array<string, mixed> $request
      */
     public function __construct(
         Model $model,
+        private string $url,
         private array $request,
     ) {
         parent::__construct($model);
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
     }
 
     /**
@@ -29,11 +39,11 @@ final readonly class CompileQueryResponse extends BaseResponse
 
     public function toCreateEmbeddingRequest(): CreateEmbeddingRequest
     {
-        return new CreateEmbeddingRequest($this->getModel(), $this->request);
+        return new CreateEmbeddingRequest($this->getModel(), $this->url, $this->request);
     }
 
     public function toGenerateOutputRequest(): GenerateOutputRequest
     {
-        return new GenerateOutputRequest($this->getModel(), $this->request);
+        return new GenerateOutputRequest($this->getModel(), $this->url, $this->request);
     }
 }

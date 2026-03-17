@@ -12,7 +12,7 @@ $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 $model = trim($argv[1] ?? '') ?: 'mock';
 
 try {
-    $prompt = 'Write a short summary of the history of PHP.';
+    $prompt = trim($argv[2] ?? '') ?: 'Write a short summary of the history of PHP.';
 
     // Build a request of individual query components
     $compileQueryRequest = new CompileQueryRequest($model)->withPrompt($prompt);
@@ -27,10 +27,8 @@ try {
         'request' => $response->toGenerateOutputRequest(),
     ]);
 
-    successMessage('The model "%s" generated the following output for the prompt "%s":', $response->getModel()->getValue(), $prompt);
-    // successMessage(sprintf("\n%s", $response->getOutput()));
-
-    print_r($response);
+    printf("The model '%s' generated the following output for the prompt '%s':\n\n", $response->getModel()->getValue(), $prompt);
+    printf("%s\n", $response->getOutput());
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }

@@ -17,6 +17,22 @@ readonly class BaseResource
     }
 
     /**
+     * @return non-empty-string
+     */
+    public function getBaseUrl(): string
+    {
+        return 'https://mock-llm.service';
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    protected function buildUrl(string ...$paths): string
+    {
+        return sprintf('%s/%s', \rtrim($this->getBaseUrl(), '/'), \ltrim(\implode('/', $paths), '/'));
+    }
+
+    /**
      * @param non-empty-string $prefix
      * @param positive-int $suffixLength
      *

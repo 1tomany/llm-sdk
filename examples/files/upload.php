@@ -27,7 +27,7 @@ try {
         'request' => $uploadFileRequest,
     ]);
 
-    successMessage('The file "%s" was successfully uploaded to %s with URI "%s".', basename($path), $response->getVendor()->getName(), $response->getUri());
+    printf("The file \"%s\" was successfully uploaded to %s with the URI: %s.\n", basename($path), $response->getVendor()->getName(), $response->getUri());
 } catch (LlmSdkExceptionInterface $e) {
     errorMessage($e->getMessage());
 }

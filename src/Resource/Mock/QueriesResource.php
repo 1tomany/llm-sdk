@@ -15,6 +15,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
      */
     public function compile(CompileQueryRequest $request): CompileQueryResponse
     {
+        $url = $this->buildUrl($request->getModel()->isEmbedding() ? 'embeddings' : 'outputs');
+
         $requestContent = [
             'model' => $request->getModel()->getId(),
         ];
@@ -50,6 +52,6 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             $requestContent['schema'] = $schema->toArray();
         }
 
-        return new CompileQueryResponse($request->getModel(), $requestContent);
+        return new CompileQueryResponse($request->getModel(), $url, $requestContent);
     }
 }
