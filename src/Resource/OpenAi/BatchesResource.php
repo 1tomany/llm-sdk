@@ -5,6 +5,7 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Request\Batch\CreateRequest;
 use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
+use OneToMany\LlmSdk\Resource\OpenAi\Type\Request\Batch\CreateBatch;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Response\Batch\Batch;
 use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
 use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
@@ -16,20 +17,18 @@ final readonly class BatchesResource extends BaseResource implements BatchesReso
      */
     public function create(CreateRequest $request): CreateBatchResponse
     {
-        $url = $this->buildUrl('batches');
+        $createBatch = new CreateBatch($this->buildUrl($request->getModel()->isEmbedding() ? 'embeddings' : 'responses'), 'abc123');
 
-        $content = $this->doPostRequest($url, [
+        $content = $this->doPostRequest($this->buildUrl('batches'), [
             'auth_header' => $this->getApiKey(),
             'json' => [
-                'endpoint' => $request->getEndpoint(),
-                'completion_window' => $request->getWindow(),
-                'input_file_id' => $request->getFileUri(),
+                ...$createBatch->toArray(),
             ],
         ]);
 
-        $batch = $this->doDenormalize($content, Batch::class);
+        $object = $this->doDenormalize($content, Batch::class);
 
-        return new CreateBatchResponse($request->getModel(), $batch->id, $batch->status->getValue(), $batch->output_file_id);
+        return new CreateBatchResponse($request->getModel(), $object->id, $object->status->getValue(), $object->output_file_id);
     }
 
     /**

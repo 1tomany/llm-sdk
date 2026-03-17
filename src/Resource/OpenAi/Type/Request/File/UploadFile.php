@@ -9,7 +9,7 @@ use function fopen;
 use function sprintf;
 use function strtolower;
 
-final readonly class File
+final readonly class UploadFile
 {
     /**
      * @param non-empty-string $path
