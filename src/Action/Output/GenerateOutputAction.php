@@ -20,7 +20,7 @@ final readonly class GenerateOutputAction extends BaseAction implements Generate
     public function act(CompileQueryRequest|ProcessQueryRequest $request): GenerateOutputResponse
     {
         if (!$request->getModel()->isGenerative()) {
-            throw new InvalidArgumentException(sprintf('Generating output failed because the model "%s" is not a generative model.', $request->getModel()->getValue()));
+            throw new InvalidArgumentException(sprintf('The model "%s" is not a generative model.', $request->getModel()->getValue()));
         }
 
         if ($request instanceof CompileQueryRequest) {
