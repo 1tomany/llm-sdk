@@ -36,27 +36,22 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             }
         }
 
-        // Text Inputs
-        foreach ($request->getPrompts() as $text) {
+        // Prompt Inputs
+        foreach ($request->getPrompts() as $prompt) {
             $requestContent[$contentKey]['parts'][] = [
-                'text' => $text->getText(),
+                'text' => $prompt->getText(),
             ];
         }
 
         // Instructions Input
-        if ($text = $request->getInstructions()) {
+        if ($prompt = $request->getInstructions()) {
             $requestContent['systemInstruction'] = [
                 'parts' => [
                     [
-                        'text' => $text->getText(),
+                        'text' => $prompt->getText(),
                     ],
                 ],
             ];
-        }
-
-        // Dimensions Input
-        if ($dimensions = $request->getDimensions()?->getDimensions()) {
-            $requestContent['outputDimensionality'] = $dimensions;
         }
 
         // Schema Input
@@ -65,6 +60,11 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 'responseMimeType' => $schema->getFormat(),
                 'responseJsonSchema' => $schema->getSchema(),
             ];
+        }
+
+        // Dimensions Input
+        if ($dimensions = $request->getDimensions()?->getDimensions()) {
+            $requestContent['outputDimensionality'] = $dimensions;
         }
 
         return new CompileQueryResponse($request->getModel(), $this->buildUrl($this->getApiVersion(), sprintf('models/%s:%s', $request->getModel()->getId(), $request->getModel()->isEmbedding() ? 'embedContent' : 'generateContent')), $requestContent);

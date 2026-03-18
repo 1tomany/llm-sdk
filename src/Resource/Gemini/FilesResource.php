@@ -110,7 +110,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         }
 
         if (null === $response || empty($response->getContent())) {
-            throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server returned an empty response.', $request->getName()));
+            throw new RuntimeException('The server returned an empty response.');
         }
 
         $object = $this->doDenormalize($response->toArray(), File::class, [
