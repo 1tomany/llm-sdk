@@ -63,7 +63,7 @@ final class CompileQueryRequestTest extends TestCase
         $this->assertFalse($model->isEmbedding());
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The model "mock" does not support changing the output dimensions.');
+        $this->expectExceptionMessage('The model "'.$model->getValue().'" does not support changing the output dimensions.');
 
         new CompileQueryRequest($model)->usingDimensions(random_int(1, 1024));
     }
