@@ -20,9 +20,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         $url = $this->buildUrl('files');
 
         $response = $this->doPostRequest($url, [
-            'headers' => $this->buildHeaders([
-                'anthropic-beta' => $this->filesVersion,
-            ]),
+            'headers' => $this->buildFileHeaders(),
             'body' => [
                 'file' => $request->openFile(),
             ],
@@ -41,13 +39,19 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         $url = $this->buildUrl('files', $request->getUri());
 
         $response = $this->doDeleteRequest($url, [
-            'headers' => $this->buildHeaders([
-                'anthropic-beta' => $this->filesVersion,
-            ]),
+            'headers' => $this->buildFileHeaders(),
         ]);
 
         $object = $this->doDenormalize($response, DeletedFile::class);
 
         return new DeleteFileResponse($request->getVendor(), $object->id);
+    }
+
+    /**
+     * @return array<string, int|string|null>
+     */
+    private function buildFileHeaders(): array
+    {
+        return $this->buildHeaders(['anthropic-beta' => $this->getFilesApiVersion()]);
     }
 }
