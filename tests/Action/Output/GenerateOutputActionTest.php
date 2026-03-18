@@ -24,6 +24,6 @@ final class GenerateOutputActionTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The model "'.$model->getValue().'" is not a generative model.');
 
-        new GenerateOutputAction(new ClientFactory(new ClientContainer()))->act(new CompileQueryRequest($model));
+        new GenerateOutputAction(new ClientFactory())->act(new CompileQueryRequest($model));
     }
 }

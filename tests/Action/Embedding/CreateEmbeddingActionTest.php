@@ -24,6 +24,6 @@ final class CreateEmbeddingActionTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The model "'.$model->getValue().'" is not an embedding model.');
 
-        new CreateEmbeddingAction(new ClientFactory(new ClientContainer()))->act(new CompileQueryRequest($model));
+        new CreateEmbeddingAction(new ClientFactory())->act(new CompileQueryRequest($model));
     }
 }

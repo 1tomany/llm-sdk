@@ -18,6 +18,6 @@ final class ClientFactoryTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The vendor "'.$vendor->getValue().'" does not have a client registered for it.');
 
-        new ClientFactory(new ClientContainer())->create($vendor);
+        new ClientFactory()->create($vendor);
     }
 }

@@ -12,7 +12,9 @@ use function sprintf;
 
 final readonly class ClientFactory
 {
-    public function __construct(private ContainerInterface $container)
+    public function __construct(
+        private ContainerInterface $container = new ClientContainer(),
+    )
     {
     }
 
