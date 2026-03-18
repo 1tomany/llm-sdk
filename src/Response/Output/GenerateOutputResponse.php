@@ -81,7 +81,7 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
     /**
      * @return list<array<string, mixed>>|array<string, mixed>
      *
-     * @throws RuntimeException when decoding the output from JSON to a record fails
+     * @throws RuntimeException when decoding the output fails
      */
     public function toRecord(): array
     {
@@ -89,7 +89,7 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
             /** @var list<array<string, mixed>>|array<string, mixed> $record */
             $record = json_decode(trim($this->output ?? ''), true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw new RuntimeException('Decoding the output from JSON to a record failed.', previous: $e);
+            throw new RuntimeException('Decoding the output failed.', previous: $e);
         }
 
         return $record;
