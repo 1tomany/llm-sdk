@@ -31,4 +31,4 @@ try {
 }
 
 printf("%s\n", json_encode($response, JSON_PRETTY_PRINT));
-exit($response instanceof \Throwable ? 1 : 0);
+exit($response instanceof Throwable ? 1 : 0);
