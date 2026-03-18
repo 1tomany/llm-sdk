@@ -2,6 +2,8 @@
 
 namespace OneToMany\LlmSdk\Request\Type\Query;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+
 use function is_object;
 use function is_string;
 use function trim;
@@ -9,32 +11,43 @@ use function trim;
 final readonly class Schema
 {
     /**
-     * @param non-empty-string $name
+     * @var non-empty-string
+     */
+    private string $name;
+
+    /**
      * @param array<string, mixed> $schema
      * @param non-empty-lowercase-string $format
+     *
+     * @throws InvalidArgumentException when the schema is missing the "title" property
+     * @throws InvalidArgumentException when the trimmed "title" property is empty
      */
     public function __construct(
-        private string $name,
         private array $schema,
         private string $format = 'application/json',
         private bool $strict = true,
     ) {
+        if (!is_string($schema['title'] ?? null)) {
+            throw new InvalidArgumentException('The schema requires the "title" property.');
+        }
+
+        if (!$name = trim($schema['title'])) {
+            throw new InvalidArgumentException('The "title" property cannot be empty.');
+        }
+
+        $this->name = $name;
     }
 
     /**
      * @param array<string, mixed>|Schema $schema
      */
-    public static function create(?string $name, array|self $schema): self
+    public static function create(array|self $schema): self
     {
         if (is_object($schema)) {
             return $schema;
         }
 
-        if (is_string($schema['title'] ?? null)) {
-            $name = trim($name ?? $schema['title']);
-        }
-
-        return new self($name ?: 'JsonSchema', $schema);
+        return new self($schema);
     }
 
     /**

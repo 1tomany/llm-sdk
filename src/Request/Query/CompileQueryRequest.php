@@ -135,12 +135,11 @@ class CompileQueryRequest extends BaseRequest
     }
 
     /**
-     * @param ?non-empty-string $name
      * @param array<string, mixed>|Schema|null $schema
      *
      * @throws InvalidArgumentException when the model does not support structured output
      */
-    public function usingSchema(?string $name, array|Schema|null $schema): static
+    public function usingSchema(array|Schema|null $schema): static
     {
         if (null === $schema) {
             $this->schema = null;
@@ -149,7 +148,7 @@ class CompileQueryRequest extends BaseRequest
                 throw new InvalidArgumentException(sprintf('The model "%s" does not support structured output.', $this->getModel()->getValue()));
             }
 
-            $this->schema = Schema::create($name, $schema);
+            $this->schema = Schema::create($schema);
         }
 
         return $this;
