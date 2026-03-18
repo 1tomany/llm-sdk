@@ -13,7 +13,7 @@ use function trim;
 
 use const JSON_THROW_ON_ERROR;
 
-final readonly class GenerateOutputResponse extends BaseResponse
+final readonly class GenerateOutputResponse extends BaseResponse implements \JsonSerializable
 {
     /**
      * @param non-empty-string $uri
@@ -85,5 +85,31 @@ final readonly class GenerateOutputResponse extends BaseResponse
         }
 
         return $record;
+    }
+
+    /**
+     * @see \JsonSerializable
+     *
+     * @return array{
+     *   model: non-empty-lowercase-string,
+     *   vendor: non-empty-lowercase-string,
+     *   uri: non-empty-string,
+     *   output: ?non-empty-string,
+     *   error: ?non-empty-string,
+     *   runtime: non-negative-int,
+     *   usage: TokenUsage,
+     * }
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'model' => $this->getModel()->getValue(),
+            'vendor' => $this->getVendor()->getValue(),
+            'uri' => $this->getUri(),
+            'output' => $this->getOutput(),
+            'error' => $this->getError(),
+            'runtime' => $this->getRuntime(),
+            'usage' => $this->getUsage(),
+        ];
     }
 }
