@@ -15,6 +15,9 @@ final readonly class Schema
     /**
      * @param array<string, mixed> $schema
      * @param non-empty-lowercase-string $format
+     *
+     * @throws InvalidArgumentException when the schema is missing the "title" property
+     * @throws InvalidArgumentException when the trimmed "title" property is empty
      */
     public function __construct(
         private array $schema,
