@@ -26,8 +26,8 @@ try {
     $response = new UploadFileAction($clientFactory)->act(...[
         'request' => $uploadFileRequest,
     ]);
-
-    printf("%s\n", json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 } catch (LlmSdkExceptionInterface $e) {
-    printf("%s\n", json_encode($e, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+    $response = $e;
 }
+
+printf("%s\n", json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

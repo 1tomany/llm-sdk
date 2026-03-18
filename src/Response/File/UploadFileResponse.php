@@ -60,6 +60,8 @@ final readonly class UploadFileResponse implements \JsonSerializable
     }
 
     /**
+     * @see \JsonSerializable
+     *
      * @return array{
      *   vendor: non-empty-lowercase-string,
      *   uri: non-empty-string,

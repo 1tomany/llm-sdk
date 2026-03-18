@@ -22,8 +22,8 @@ try {
     $response = new DeleteFileAction($clientFactory)->act(...[
         'request' => $deleteFileRequest,
     ]);
-
-    printf("The file '%s' was successfully deleted from %s.\n", $response->getUri(), $response->getVendor()->getName());
 } catch (LlmSdkExceptionInterface $e) {
-    errorMessage($e->getMessage());
+    $response = $e;
 }
+
+printf("%s\n", json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
