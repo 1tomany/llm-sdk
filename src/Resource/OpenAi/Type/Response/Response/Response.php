@@ -44,6 +44,9 @@ final readonly class Response
         return trim(implode('', array_map(fn ($o) => $o->getOutput(), $this->output ?? []))) ?: null;
     }
 
+    /**
+     * @return ?non-empty-string
+     */
     public function getError(): ?string
     {
         return $this->error?->message;

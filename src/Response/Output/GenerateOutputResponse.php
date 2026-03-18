@@ -18,6 +18,8 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
     /**
      * @param non-empty-string $uri
      * @param array<string, mixed> $response
+     * @param ?non-empty-string $output
+     * @param ?non-empty-string $error
      */
     public function __construct(
         string|Model $model,
@@ -47,11 +49,17 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
         return $this->response;
     }
 
+    /**
+     * @return ?non-empty-string
+     */
     public function getOutput(): ?string
     {
         return $this->output;
     }
 
+    /**
+     * @return ?non-empty-string
+     */
     public function getError(): ?string
     {
         return $this->error;
