@@ -8,7 +8,6 @@ use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-use function assert;
 use function sys_get_temp_dir;
 use function tempnam;
 use function unlink;
@@ -20,7 +19,7 @@ final class UploadFileRequestTest extends TestCase
 {
     public function testGettingSizeRequiresFileToExist(): void
     {
-        // Arrange: Create a file
+        // Arrange: Create a temporary file
         $path = $this->createTemporaryFile();
 
         // Arrange: Create the request to upload the file
@@ -40,7 +39,7 @@ final class UploadFileRequestTest extends TestCase
 
     public function testOpeningFileRequiresFileToExist(): void
     {
-        // Arrange: Create a file
+        // Arrange: Create a temporary file
         $path = $this->createTemporaryFile();
 
         // Arrange: Create the request to upload the file
