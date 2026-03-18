@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 use function assert;
-use function strlen;
 use function sys_get_temp_dir;
 use function tempnam;
 use function unlink;
@@ -19,18 +18,6 @@ use function unlink;
 #[Group('FileTests')]
 final class UploadFileRequestTest extends TestCase
 {
-    /**
-     * @var ?non-empty-string
-     */
-    private ?string $path = null;
-
-    protected function tearDown(): void
-    {
-        if (null !== $this->path) {
-            @unlink($this->path);
-        }
-    }
-
     public function testGettingSizeRequiresFileToExist(): void
     {
         // Arrange: Create a file
@@ -76,13 +63,8 @@ final class UploadFileRequestTest extends TestCase
      */
     private function createTemporaryFile(): string
     {
-        if (null === $this->path) {
-            $this->path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__');
-        }
+        $this->assertFileExists($path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__'));
 
-        assert(strlen($this->path) > 0);
-        $this->assertFileExists($this->path);
-
-        return $this->path;
+        return $path;
     }
 }
