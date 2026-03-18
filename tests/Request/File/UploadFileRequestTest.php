@@ -8,6 +8,8 @@ use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
+use function assert;
+use function strlen;
 use function sys_get_temp_dir;
 use function tempnam;
 use function unlink;
@@ -17,10 +19,22 @@ use function unlink;
 #[Group('FileTests')]
 final class UploadFileRequestTest extends TestCase
 {
+    /**
+     * @var ?non-empty-string
+     */
+    private ?string $path = null;
+
+    protected function tearDown(): void
+    {
+        if (null !== $this->path) {
+            @unlink($this->path);
+        }
+    }
+
     public function testGettingSizeRequiresFileToExist(): void
     {
         // Arrange: Create a file
-        $path = $this->createFile();
+        $path = $this->createTemporaryFile();
 
         // Arrange: Create the request to upload the file
         $request = new UploadFileRequest(Vendor::Mock, $path);
@@ -40,7 +54,7 @@ final class UploadFileRequestTest extends TestCase
     public function testOpeningFileRequiresFileToExist(): void
     {
         // Arrange: Create a file
-        $path = $this->createFile();
+        $path = $this->createTemporaryFile();
 
         // Arrange: Create the request to upload the file
         $request = new UploadFileRequest(Vendor::Mock, $path);
@@ -60,10 +74,15 @@ final class UploadFileRequestTest extends TestCase
     /**
      * @return non-empty-string
      */
-    private function createFile(): string
+    private function createTemporaryFile(): string
     {
-        $this->assertFileExists($path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__'));
+        if (null === $this->path) {
+            $this->path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__');
+        }
 
-        return $path;
+        assert(strlen($this->path) > 0);
+        $this->assertFileExists($this->path);
+
+        return $this->path;
     }
 }
