@@ -10,6 +10,9 @@ use function trim;
 
 final readonly class Schema
 {
+    /**
+     * @var non-empty-string
+     */
     private string $name;
 
     /**
