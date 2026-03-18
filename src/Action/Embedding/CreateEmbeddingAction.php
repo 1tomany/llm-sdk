@@ -22,7 +22,7 @@ final readonly class CreateEmbeddingAction extends BaseAction implements CreateE
     public function act(CompileQueryRequest|ProcessQueryRequest $request): CreateEmbeddingResponse
     {
         if (!$request->getModel()->isEmbedding()) {
-            throw new InvalidArgumentException(sprintf('Creating the embedding failed because the model "%s" is not an embedding model.', $request->getModel()->getValue()));
+            throw new InvalidArgumentException(sprintf('The model "%s" is not an embedding model.', $request->getModel()->getValue()));
         }
 
         if ($request instanceof CompileQueryRequest) {
