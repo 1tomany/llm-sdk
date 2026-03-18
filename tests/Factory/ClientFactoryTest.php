@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Tests\Factory;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Factory\ClientContainer;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use PHPUnit\Framework\TestCase;
 
