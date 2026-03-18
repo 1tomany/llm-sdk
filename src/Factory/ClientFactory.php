@@ -18,7 +18,7 @@ final readonly class ClientFactory
     }
 
     /**
-     * @throws InvalidArgumentException when a vendor does not have a client registered for it
+     * @throws InvalidArgumentException when a vendor does not have a registered client
      */
     public function create(Vendor $vendor): ClientInterface
     {
@@ -28,7 +28,7 @@ final readonly class ClientFactory
         }
 
         if (!isset($client) || !$client instanceof ClientInterface) {
-            throw new InvalidArgumentException(sprintf('The vendor "%s" does not have a client registered for it.', $vendor->getValue()), previous: $e ?? null);
+            throw new InvalidArgumentException(sprintf('The vendor "%s" does not have a registered client.', $vendor->getValue()), previous: $e ?? null);
         }
 
         return $client;

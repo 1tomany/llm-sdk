@@ -15,7 +15,7 @@ final class ClientFactoryTest extends TestCase
         $vendor = new \Random\Randomizer()->shuffleArray(Vendor::cases())[0];
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The vendor "'.$vendor->getValue().'" does not have a client registered for it.');
+        $this->expectExceptionMessage('The vendor "'.$vendor->getValue().'" does not have a registered client.');
 
         new ClientFactory()->create($vendor);
     }
