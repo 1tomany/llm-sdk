@@ -132,6 +132,10 @@ class UploadFileRequest
      */
     public function openFile(): mixed
     {
-        return @fopen($this->getPath(), 'r') ?: throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->getName()));
+        if (false === $fh = @fopen($this->getPath(), 'r')) {
+            throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->getName()));
+        }
+
+        return $fh;
     }
 }
