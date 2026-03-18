@@ -30,5 +30,5 @@ try {
     $response = $e;
 }
 
-printf("%s\n", json_encode($response, JSON_PRETTY_PRINT));
+printf("%s\n", json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 exit($response instanceof Throwable ? 1 : 0);
