@@ -13,7 +13,7 @@ use function count;
 use function max;
 use function sqrt;
 
-final readonly class CreateEmbeddingResponse extends BaseResponse
+final readonly class CreateEmbeddingResponse extends BaseResponse implements \JsonSerializable
 {
     private float $l2Norm;
 
@@ -79,6 +79,32 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
     public function getUsage(): TokenUsage
     {
         return $this->usage;
+    }
+
+    /**
+     * @see \JsonSerializable
+     *
+     * @return array{
+     *   model: non-empty-lowercase-string,
+     *   vendor: non-empty-lowercase-string,
+     *   dimensions: positive-int,
+     *   embedding: non-empty-list<float>,
+     *   l2Norm: float,
+     *   runtime: non-negative-int,
+     *   usage: TokenUsage,
+     * }
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'model' => $this->getModel()->getValue(),
+            'vendor' => $this->getVendor()->getValue(),
+            'dimensions' => $this->getDimensions(),
+            'embedding' => $this->getEmbedding(),
+            'l2Norm' => $this->getL2Norm(),
+            'runtime' => $this->getRuntime(),
+            'usage' => $this->getUsage(),
+        ];
     }
 
     /**

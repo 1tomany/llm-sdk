@@ -85,7 +85,11 @@ class UploadFileRequest
     public function getSize(): int
     {
         if (null === $this->size) {
-            $this->size = @filesize($this->getPath()) ?: throw new RuntimeException(sprintf('Calculating the size of the file "%s" failed.', $this->getName()));
+            if (false === $size = @filesize($this->getPath())) {
+                throw new RuntimeException(sprintf('Calculating the size of the file "%s" failed.', $this->getName()));
+            }
+
+            $this->size = $size;
         }
 
         return $this->size;
@@ -128,6 +132,10 @@ class UploadFileRequest
      */
     public function openFile(): mixed
     {
-        return @fopen($this->getPath(), 'r') ?: throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->getPath()));
+        if (!$fileHandle = @fopen($this->getPath(), 'r')) {
+            throw new RuntimeException(sprintf('Opening the file "%s" failed.', $this->getName()));
+        }
+
+        return $fileHandle;
     }
 }

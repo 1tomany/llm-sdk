@@ -9,12 +9,12 @@ use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 trait CompileQueryTrait
 {
     /**
-     * @throws InvalidArgumentException when the query does not have any user components
+     * @throws InvalidArgumentException when the query does not have any input components
      */
     private function compileQuery(CompileQueryRequest $request): CompileQueryResponse
     {
         if (!$request->hasComponents()) {
-            throw new InvalidArgumentException('Compiling the query failed because no components have been added to it.');
+            throw new InvalidArgumentException('The query does not have any input components.');
         }
 
         return $this->createClient($request->getVendor())->queries()->compile($request);

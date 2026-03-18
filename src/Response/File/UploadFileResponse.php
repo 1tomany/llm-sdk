@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 use function strtolower;
 
-final readonly class UploadFileResponse
+final readonly class UploadFileResponse implements \JsonSerializable
 {
     private Vendor $vendor;
 
@@ -57,5 +57,27 @@ final readonly class UploadFileResponse
     public function getExpiresAt(): ?\DateTimeImmutable
     {
         return $this->expiresAt;
+    }
+
+    /**
+     * @see \JsonSerializable
+     *
+     * @return array{
+     *   vendor: non-empty-lowercase-string,
+     *   uri: non-empty-string,
+     *   name: ?non-empty-string,
+     *   purpose: ?non-empty-string,
+     *   expiresAt: ?non-empty-string,
+     * }
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'vendor' => $this->getVendor()->getValue(),
+            'uri' => $this->getUri(),
+            'name' => $this->getName(),
+            'purpose' => $this->getPurpose(),
+            'expiresAt' => $this->getExpiresAt()?->format('c'),
+        ];
     }
 }

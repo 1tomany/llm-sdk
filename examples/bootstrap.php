@@ -22,7 +22,6 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
-require_once __DIR__.'/functions.php';
 
 // Create the Symfony Serializer component
 $typeExtractor = new PropertyInfoExtractor([], [

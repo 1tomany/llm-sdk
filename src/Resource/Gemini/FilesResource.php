@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 
 use function fread;
 use function is_numeric;
+use function lcfirst;
 use function max;
 use function rtrim;
 use function sprintf;
@@ -60,7 +61,7 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 throw new RuntimeException(sprintf('The header "%s" was not sent in the response.', self::HEADER_UPLOAD_URL));
             }
         } catch (LlmSdkExceptionInterface $e) {
-            throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server failed to generate the signed upload URL: %s.', $request->getName(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
+            throw new RuntimeException(sprintf('Generating the resumable upload URL failed: %s.', lcfirst(rtrim($e->getMessage(), '.'))), $e->getCode(), $e);
         } finally {
             $response = null;
         }
@@ -105,11 +106,11 @@ final readonly class FilesResource extends BaseResource implements FilesResource
                 $uploadOffset = $uploadOffset + $chunkSize;
             }
         } catch (LlmSdkExceptionInterface $e) {
-            throw new RuntimeException(sprintf('The file "%s" was rejected at byte %d of %d by the server: %s.', $request->getName(), $uploadOffset, $request->getSize(), rtrim($e->getMessage(), '.')), $e->getCode(), $e);
+            throw new RuntimeException(sprintf('Byte %d of %d was rejected by the by the server: %s.', $uploadOffset, $request->getSize(), lcfirst(rtrim($e->getMessage(), '.'))), $e->getCode(), $e);
         }
 
         if (null === $response || empty($response->getContent())) {
-            throw new RuntimeException(sprintf('Uploading the file "%s" failed because the server returned an empty response.', $request->getName()));
+            throw new RuntimeException('The server returned an empty response.');
         }
 
         $object = $this->doDenormalize($response->toArray(), File::class, [

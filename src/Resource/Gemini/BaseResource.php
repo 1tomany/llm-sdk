@@ -33,6 +33,14 @@ abstract readonly class BaseResource
     /**
      * @return non-empty-string
      */
+    public function getApiKey(): string
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * @return non-empty-string
+     */
     public function getApiVersion(): string
     {
         return $this->apiVersion;
@@ -51,7 +59,7 @@ abstract readonly class BaseResource
      */
     protected function getBaseHeaders(): array
     {
-        return ['x-goog-api-key' => $this->apiKey];
+        return ['x-goog-api-key' => $this->getApiKey()];
     }
 
     /**

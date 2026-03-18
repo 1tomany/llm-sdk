@@ -13,11 +13,13 @@ use function trim;
 
 use const JSON_THROW_ON_ERROR;
 
-final readonly class GenerateOutputResponse extends BaseResponse
+final readonly class GenerateOutputResponse extends BaseResponse implements \JsonSerializable
 {
     /**
      * @param non-empty-string $uri
      * @param array<string, mixed> $response
+     * @param ?non-empty-string $output
+     * @param ?non-empty-string $error
      */
     public function __construct(
         string|Model $model,
@@ -47,11 +49,17 @@ final readonly class GenerateOutputResponse extends BaseResponse
         return $this->response;
     }
 
+    /**
+     * @return ?non-empty-string
+     */
     public function getOutput(): ?string
     {
         return $this->output;
     }
 
+    /**
+     * @return ?non-empty-string
+     */
     public function getError(): ?string
     {
         return $this->error;
@@ -73,7 +81,7 @@ final readonly class GenerateOutputResponse extends BaseResponse
     /**
      * @return list<array<string, mixed>>|array<string, mixed>
      *
-     * @throws RuntimeException when decoding the output from JSON to a record fails
+     * @throws RuntimeException when decoding the output fails
      */
     public function toRecord(): array
     {
@@ -81,9 +89,35 @@ final readonly class GenerateOutputResponse extends BaseResponse
             /** @var list<array<string, mixed>>|array<string, mixed> $record */
             $record = json_decode(trim($this->output ?? ''), true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw new RuntimeException('Decoding the output from JSON to a record failed.', previous: $e);
+            throw new RuntimeException('Decoding the output failed.', previous: $e);
         }
 
         return $record;
+    }
+
+    /**
+     * @see \JsonSerializable
+     *
+     * @return array{
+     *   model: non-empty-lowercase-string,
+     *   vendor: non-empty-lowercase-string,
+     *   uri: non-empty-string,
+     *   output: ?non-empty-string,
+     *   error: ?non-empty-string,
+     *   runtime: non-negative-int,
+     *   usage: TokenUsage,
+     * }
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'model' => $this->getModel()->getValue(),
+            'vendor' => $this->getVendor()->getValue(),
+            'uri' => $this->getUri(),
+            'output' => $this->getOutput(),
+            'error' => $this->getError(),
+            'runtime' => $this->getRuntime(),
+            'usage' => $this->getUsage(),
+        ];
     }
 }

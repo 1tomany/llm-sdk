@@ -26,9 +26,9 @@ try {
     $response = new GenerateOutputAction($clientFactory)->act(...[
         'request' => $response->toProcessQueryRequest(),
     ]);
-
-    printf("The model '%s' generated the following output for the prompt '%s':\n\n", $response->getModel()->getValue(), $prompt);
-    printf("%s\n", $response->getOutput());
 } catch (LlmSdkExceptionInterface $e) {
-    errorMessage($e->getMessage());
+    $response = $e;
 }
+
+printf("%s\n", json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+exit($response instanceof Throwable ? 1 : 0);

@@ -12,12 +12,13 @@ use function sprintf;
 
 final readonly class ClientFactory
 {
-    public function __construct(private ContainerInterface $container)
-    {
+    public function __construct(
+        private ContainerInterface $container = new ClientContainer(),
+    ) {
     }
 
     /**
-     * @throws InvalidArgumentException when the container does not have a client registered for the vendor
+     * @throws InvalidArgumentException when a vendor does not have a registered client
      */
     public function create(Vendor $vendor): ClientInterface
     {
@@ -27,7 +28,7 @@ final readonly class ClientFactory
         }
 
         if (!isset($client) || !$client instanceof ClientInterface) {
-            throw new InvalidArgumentException(sprintf('Creating a client failed because the container does not have one registered for the vendor "%s".', $vendor->getValue()), previous: $e ?? null);
+            throw new InvalidArgumentException(sprintf('The vendor "%s" does not have a registered client.', $vendor->getValue()), previous: $e ?? null);
         }
 
         return $client;

@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Tests\Request\File;
 
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 use PHPUnit\Framework\Attributes\Group;
@@ -19,10 +20,10 @@ final class UploadFileRequestTest extends TestCase
     public function testGettingSizeRequiresFileToExist(): void
     {
         // Arrange: Create a temporary file
-        $this->assertFileExists($path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__'));
+        $path = $this->createTemporaryFile();
 
         // Arrange: Create the request to upload the file
-        $request = new UploadFileRequest('mock', $path);
+        $request = new UploadFileRequest(Vendor::Mock, $path);
 
         // Assert: File must exist to calculate the size
         $this->expectException(RuntimeException::class);
@@ -34,5 +35,35 @@ final class UploadFileRequestTest extends TestCase
 
         // Act: Get the size
         $request->getSize();
+    }
+
+    public function testOpeningFileRequiresFileToExist(): void
+    {
+        // Arrange: Create a temporary file
+        $path = $this->createTemporaryFile();
+
+        // Arrange: Create the request to upload the file
+        $request = new UploadFileRequest(Vendor::Mock, $path);
+
+        // Assert: File must exist to open it
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Opening the file "'.$request->getName().'" failed.');
+
+        // Act: Delete the file
+        $this->assertTrue(unlink($path));
+        $this->assertFileDoesNotExist($path);
+
+        // Act: Open the file
+        $request->openFile();
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    private function createTemporaryFile(): string
+    {
+        $this->assertFileExists($path = tempnam(sys_get_temp_dir(), '__onetomany_llmsdk__'));
+
+        return $path;
     }
 }

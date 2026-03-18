@@ -3,6 +3,7 @@
 namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Request\Response\Enum\Type;
@@ -14,6 +15,8 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface
+     *
+     * @throws InvalidArgumentException when a query with no prompts for an embedding model is compiled
      */
     public function compile(CompileQueryRequest $request): CompileQueryResponse
     {
@@ -22,10 +25,12 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
         ];
 
         if ($request->getModel()->isEmbedding()) {
-            // Text Inputs
-            foreach ($request->getPrompts() as $text) {
-                $requestContent['input'] = $text->getText();
+            if (!$request->hasPrompts()) {
+                throw new InvalidArgumentException('At least one prompt is required.');
             }
+
+            // Prompt Input
+            $requestContent['input'] = $request->getPrompts()[0]->getText();
 
             // Dimensions Input
             if ($dimensions = $request->getDimensions()) {
@@ -57,18 +62,18 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
                 }
             }
 
-            // Text Inputs
+            // Prompt Inputs
             $type = Type::Text;
 
-            foreach ($request->getPrompts() as $text) {
+            foreach ($request->getPrompts() as $prompt) {
                 $requestContent['input'][] = [
                     'content' => [
                         [
-                            'text' => $text->getText(),
                             'type' => $type->getValue(),
+                            'text' => $prompt->getText(),
                         ],
                     ],
-                    'role' => $text->getRole()->getValue(),
+                    'role' => $prompt->getRole()->getValue(),
                 ];
             }
 

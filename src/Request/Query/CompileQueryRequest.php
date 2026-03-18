@@ -10,7 +10,6 @@ use OneToMany\LlmSdk\Request\Type\Query\Dimensions;
 use OneToMany\LlmSdk\Request\Type\Query\Prompt;
 use OneToMany\LlmSdk\Request\Type\Query\Schema;
 
-use function count;
 use function is_string;
 use function sprintf;
 use function trim;
@@ -182,8 +181,24 @@ class CompileQueryRequest extends BaseRequest
         return $this->dimensions;
     }
 
+    /**
+     * @phpstan-assert-if-true non-empty-list<FileUri> $this->getFiles()
+     */
+    public function hasFiles(): bool
+    {
+        return [] !== $this->files;
+    }
+
+    /**
+     * @phpstan-assert-if-true non-empty-list<Prompt> $this->getPrompts()
+     */
+    public function hasPrompts(): bool
+    {
+        return [] !== $this->prompts;
+    }
+
     public function hasComponents(): bool
     {
-        return 0 !== count($this->files) || 0 !== count($this->prompts);
+        return $this->hasFiles() || $this->hasPrompts();
     }
 }

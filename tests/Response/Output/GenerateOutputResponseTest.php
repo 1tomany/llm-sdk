@@ -16,7 +16,7 @@ final class GenerateOutputResponseTest extends TestCase
     public function testToRecordRequiresOutputToBeValidJson(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Decoding the output from JSON to a record failed.');
+        $this->expectExceptionMessage('Decoding the output failed.');
 
         new GenerateOutputResponse(Model::Mock, 'id_123', [], '{"invalid')->toRecord();
     }
