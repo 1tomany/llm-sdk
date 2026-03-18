@@ -2,7 +2,15 @@
 
 namespace OneToMany\LlmSdk\Response\Usage;
 
-final readonly class TokenUsage
+/**
+ * @phpstan-type SerializedTokenUsage array{
+ *   inputTokens: non-negative-int,
+ *   cachedTokens: non-negative-int,
+ *   outputTokens: non-negative-int,
+ *   totalTokens: non-negative-int,
+ * }
+ */
+final readonly class TokenUsage implements \JsonSerializable
 {
     /**
      * @param non-negative-int $inputTokens
@@ -46,5 +54,20 @@ final readonly class TokenUsage
     public function getTotalTokens(): int
     {
         return $this->inputTokens + $this->cachedTokens + $this->outputTokens;
+    }
+
+    /**
+     * @see \JsonSerializable
+     *
+     * @return SerializedTokenUsage
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'inputTokens' => $this->getInputTokens(),
+            'cachedTokens' => $this->getCachedTokens(),
+            'outputTokens' => $this->getOutputTokens(),
+            'totalTokens' => $this->getTotalTokens(),
+        ];
     }
 }

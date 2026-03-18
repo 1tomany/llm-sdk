@@ -26,10 +26,8 @@ try {
     $response = new CreateEmbeddingAction($clientFactory)->act(...[
         'request' => $response->toProcessQueryRequest(),
     ]);
-
-    $embedding = $response->getEmbedding();
-
-    printf("The model '%s' generated an embedding with %d %s: [%.8f ... %.8f].\n", $response->getModel()->getValue(), $response->getDimensions(), 1 === $response->getDimensions() ? 'dimension' : 'dimensions', $embedding[array_key_first($embedding)], $embedding[array_key_last($embedding)]);
 } catch (LlmSdkExceptionInterface $e) {
-    errorMessage($e->getMessage());
+    $response = $e;
 }
+
+printf("%s\n", json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

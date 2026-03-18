@@ -7,13 +7,16 @@ use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Response\BaseResponse;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 
+use function array_key_first;
+use function array_key_last;
 use function array_map;
 use function array_sum;
 use function count;
 use function max;
+use function sprintf;
 use function sqrt;
 
-final readonly class CreateEmbeddingResponse extends BaseResponse
+final readonly class CreateEmbeddingResponse extends BaseResponse implements \JsonSerializable, \Stringable
 {
     private float $l2Norm;
 
@@ -40,6 +43,16 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
     }
 
     /**
+     * @see \Stringable
+     *
+     * @return non-empty-string
+     */
+    public function __toString(): string
+    {
+        return $this->getEmbeddingLabel();
+    }
+
+    /**
      * @return positive-int
      */
     public function getDimensions(): int
@@ -53,6 +66,14 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
     public function getEmbedding(): array
     {
         return $this->embedding;
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getEmbeddingLabel(): string
+    {
+        return sprintf('[%.12f ... %.12f]', $this->embedding[array_key_first($this->embedding)], $this->embedding[array_key_last($this->embedding)]);
     }
 
     /**
@@ -79,6 +100,30 @@ final readonly class CreateEmbeddingResponse extends BaseResponse
     public function getUsage(): TokenUsage
     {
         return $this->usage;
+    }
+
+    /**
+     * @see \JsonSerializable
+     *
+     * @return array{
+     *   model: non-empty-lowercase-string,
+     *   vendor: non-empty-lowercase-string,
+     *   dimensions: positive-int,
+     *   embedding: non-empty-list<float>,
+     *   l2Norm: float,
+     *   usage: TokenUsage,
+     * }
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'model' => $this->getModel()->getValue(),
+            'vendor' => $this->getVendor()->getValue(),
+            'dimensions' => $this->getDimensions(),
+            'embedding' => $this->getEmbedding(),
+            'l2Norm' => $this->getL2Norm(),
+            'usage' => $this->getUsage(),
+        ];
     }
 
     /**
