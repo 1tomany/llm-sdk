@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Resource\OpenAi;
 
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 use OneToMany\LlmSdk\Resource\OpenAi\Type\Request\Response\Enum\Type;

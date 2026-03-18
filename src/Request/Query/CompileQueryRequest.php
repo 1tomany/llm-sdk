@@ -10,7 +10,6 @@ use OneToMany\LlmSdk\Request\Type\Query\Dimensions;
 use OneToMany\LlmSdk\Request\Type\Query\Prompt;
 use OneToMany\LlmSdk\Request\Type\Query\Schema;
 
-use function count;
 use function is_string;
 use function sprintf;
 use function trim;
