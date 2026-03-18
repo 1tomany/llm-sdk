@@ -7,8 +7,6 @@ use OneToMany\LlmSdk\Request\Query\ProcessQueryRequest;
 use OneToMany\LlmSdk\Response\Output\GenerateOutputResponse;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 
-use function assert;
-use function is_string;
 use function json_encode;
 use function random_int;
 use function strlen;
