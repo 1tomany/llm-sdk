@@ -20,9 +20,6 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
      */
     public function generate(ProcessQueryRequest $request): GenerateOutputResponse
     {
-        /** @var non-empty-string $requestContent */
-        $requestContent = json_encode($request->getRequest());
-
         /**
          * @var array{
          *   id: non-empty-string,
@@ -37,11 +34,10 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
         $output = $response['text'];
 
         if (isset($request->getRequest()['schema'])) {
+            /** @var non-empty-string $output */
             $output = json_encode(['output' => $output]);
         }
 
-        assert(is_string($output) && !empty($output));
-
-        return new GenerateOutputResponse($request->getModel(), $response['id'], $response, $output, null, random_int(100, 10000), new TokenUsage(strlen($requestContent), 0, strlen($output)));
+        return new GenerateOutputResponse($request->getModel(), $response['id'], $response, $output, null, random_int(100, 10000), new TokenUsage(strlen(json_encode($request->getRequest()) ?: ''), 0, strlen($output)));
     }
 }
