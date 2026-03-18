@@ -18,7 +18,7 @@ try {
     // Create a request to upload the file
     $uploadFileRequest = new UploadFileRequest($vendor, $path)->usingPurpose($argv[3] ?? null);
 
-    if ($format = mime_content_type($path)) {
+    if ($format = @mime_content_type($path)) {
         $uploadFileRequest->usingFormat($format);
     }
 
@@ -27,7 +27,7 @@ try {
         'request' => $uploadFileRequest,
     ]);
 
-    printf("%s\n", \json_encode($response, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
+    printf("%s\n", json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 } catch (LlmSdkExceptionInterface $e) {
-    errorMessage($e->getMessage());
+    printf("%s\n", json_encode($e, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 }
