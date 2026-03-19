@@ -15,7 +15,7 @@ final class CreateBatchTest extends TestCase
 {
     public function testConstructorRequiresFileUriToContainPathComponent(): void
     {
-        $fileUri = 'https://generativelanguage.googleapis.com';
+        $fileUri = 'https://googleapis.com';
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The file URI "'.$fileUri.'" does not contain a path component.');
@@ -25,10 +25,11 @@ final class CreateBatchTest extends TestCase
 
     public function testConstructorRequiresFileUriToContainFileId(): void
     {
-        $fileUri = 'https://generativelanguage.googleapis.com/';
+        $fileUri = 'https://googleapis.com/';
+        $urlPath = parse_url($fileUri, PHP_URL_PATH);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The path "'.parse_url($fileUri, PHP_URL_PATH).'" does not contain a file ID.');
+        $this->expectExceptionMessage('The path "'.$urlPath.'" does not contain a file ID.');
 
         new CreateBatch('TestBatch', $fileUri);
     }
