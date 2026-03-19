@@ -25,7 +25,7 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
         string|Model $model,
         private string $uri,
         private array $response,
-        private ?string $output,
+        private ?string $output = null,
         private ?string $error = null,
         private int|float $runtime = 0,
         private TokenUsage $usage = new TokenUsage(),
