@@ -40,6 +40,14 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
     }
 
     /**
+     * @return non-empty-list<float>
+     */
+    public function __invoke(): array
+    {
+        return $this->getEmbedding();
+    }
+
+    /**
      * @return positive-int
      */
     public function getDimensions(): int
