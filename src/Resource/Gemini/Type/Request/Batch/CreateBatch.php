@@ -23,11 +23,11 @@ final readonly class CreateBatch
         public string $name,
         string $fileUri,
     ) {
-        if (!$fileName = parse_url($fileUri, PHP_URL_PATH)) {
+        if (!$fileId = \basename(parse_url($fileUri, PHP_URL_PATH) ?: '')) {
             throw new InvalidArgumentException('The file URI cannot be empty.');
         }
 
-        $this->fileName = $fileName;
+        $this->fileName = \sprintf('files/%s', $fileId);
     }
 
     /**
