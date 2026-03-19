@@ -25,6 +25,14 @@ final readonly class CompileQueryResponse extends BaseResponse
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function __invoke(): array
+    {
+        return $this->getRequest();
+    }
+
+    /**
      * @return non-empty-string
      */
     public function getUrl(): string

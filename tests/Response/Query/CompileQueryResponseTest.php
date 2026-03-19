@@ -12,10 +12,21 @@ use PHPUnit\Framework\TestCase;
 #[Group('QueryTests')]
 final class CompileQueryResponseTest extends TestCase
 {
+    public function testInvokingCompileQueryResponseReturnsRequest(): void
+    {
+        $response = new CompileQueryResponse(Model::Mock, 'https://mock-llm.service/outputs', [
+            'prompt' => 'Give a brief history of PHP.',
+        ]);
+
+        $this->assertSame($response->getRequest(), $response());
+    }
+
     public function testGeneratingHash(): void
     {
-        $response = new CompileQueryResponse(Model::Mock, 'https://mock-llm.service/outputs', ['id' => 1, 'name' => 'Vic']);
+        $response = new CompileQueryResponse(Model::Mock, 'https://mock-llm.service/outputs', [
+            'prompt' => 'Give a brief history of PHP.',
+        ]);
 
-        $this->assertEquals('e6c5a928299d241125a89cf7c1fdab499671146a00dec1606c32e5b09f77bb9c', $response->generateHash('OTM1'));
+        $this->assertEquals('df435ce61a9490ad07a049bf3e482d8f8084fbd3d5df5da0e97bc34baca5cd2d', $response->generateHash('OTM1'));
     }
 }
