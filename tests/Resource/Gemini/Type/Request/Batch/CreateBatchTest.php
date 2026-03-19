@@ -4,6 +4,7 @@ namespace OneToMany\LlmSdk\Tests\Resource\Gemini\Type\Request\Batch;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Batch\CreateBatch;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 use function parse_url;
@@ -30,5 +31,25 @@ final class CreateBatchTest extends TestCase
         $this->expectExceptionMessage('The path "'.parse_url($fileUri, PHP_URL_PATH).'" does not contain a file ID.');
 
         new CreateBatch('TestBatch', $fileUri);
+    }
+
+    #[DataProvider('providerFileUriAndFileName')]
+    public function testConstructorGeneratesFileName(string $fileUri, string $fileName): void
+    {
+        $this->assertEquals($fileName, new CreateBatch('TestBatch', $fileUri)->fileName);
+    }
+
+    public static function providerFileUriAndFileName(): array
+    {
+        $provider = [
+            ['vh3dbpv1pq02', 'files/vh3dbpv1pq02'],
+            ['files/vh3dbpv1pq02', 'files/vh3dbpv1pq02'],
+            ['/files/vh3dbpv1pq02', 'files/vh3dbpv1pq02'],
+            ['v1beta/files/vh3dbpv1pq02', 'files/vh3dbpv1pq02'],
+            ['/v1beta/files/vh3dbpv1pq02', 'files/vh3dbpv1pq02'],
+            ['https://googleapis.com/v1beta/files/vh3dbpv1pq02', 'files/vh3dbpv1pq02'],
+        ];
+
+        return $provider;
     }
 }
