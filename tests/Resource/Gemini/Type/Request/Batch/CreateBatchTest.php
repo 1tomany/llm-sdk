@@ -33,12 +33,19 @@ final class CreateBatchTest extends TestCase
         new CreateBatch('TestBatch', $fileUri);
     }
 
+    /**
+     * @param non-empty-string $fileUri
+     * @param non-empty-string $fileName
+     */
     #[DataProvider('providerFileUriAndFileName')]
     public function testConstructorGeneratesFileName(string $fileUri, string $fileName): void
     {
         $this->assertEquals($fileName, new CreateBatch('TestBatch', $fileUri)->fileName);
     }
 
+    /**
+     * @return non-empty-list<non-empty-list<non-empty-string>>
+     */
     public static function providerFileUriAndFileName(): array
     {
         $provider = [
