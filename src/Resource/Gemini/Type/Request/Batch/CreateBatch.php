@@ -7,6 +7,7 @@ use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use function basename;
 use function parse_url;
 use function sprintf;
+use function trim;
 
 use const PHP_URL_PATH;
 
@@ -25,8 +26,12 @@ final readonly class CreateBatch
         public string $name,
         string $fileUri,
     ) {
-        if (!$fileId = basename(parse_url($fileUri, PHP_URL_PATH) ?: '')) {
-            throw new InvalidArgumentException('The file URI cannot be empty.');
+        if (!$urlPath = parse_url($fileUri, PHP_URL_PATH)) {
+            throw new InvalidArgumentException(sprintf('The file URI "%s" does not contain a path component.', $fileUri));
+        }
+
+        if (!$fileId = trim(basename($urlPath))) {
+            throw new InvalidArgumentException(sprintf('The path "%s" does not contain a file ID.', $urlPath));
         }
 
         $this->fileName = sprintf('files/%s', $fileId);

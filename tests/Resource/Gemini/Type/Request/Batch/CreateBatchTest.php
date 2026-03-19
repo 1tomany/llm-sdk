@@ -8,11 +8,23 @@ use PHPUnit\Framework\TestCase;
 
 final class CreateBatchTest extends TestCase
 {
-    public function testConstructorRequiresNonEmptyTrimmedFileUri(): void
+    public function testConstructorRequiresFileUriToContainPathComponent(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The file URI cannot be empty.');
+        $fileUri = 'https://generativelanguage.googleapis.com';
 
-        new CreateBatch('TestBatch', '  ');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The file URI "'.$fileUri.'" does not contain a path component.');
+
+        new CreateBatch('TestBatch', $fileUri);
+    }
+
+    public function testConstructorRequiresFileUriToContainFileId(): void
+    {
+        $fileUri = 'https://generativelanguage.googleapis.com/';
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The path "/" does not contain a file ID.');
+
+        new CreateBatch('TestBatch', $fileUri);
     }
 }
