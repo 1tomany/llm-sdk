@@ -34,6 +34,14 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function __invoke(): array
+    {
+        return $this->getResponse();
+    }
+
+    /**
      * @return non-empty-string
      */
     public function getUri(): string
