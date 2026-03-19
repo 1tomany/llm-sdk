@@ -4,7 +4,9 @@ namespace OneToMany\LlmSdk\Resource\Gemini\Type\Request\Batch;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 
+use function basename;
 use function parse_url;
+use function sprintf;
 
 use const PHP_URL_PATH;
 
@@ -23,11 +25,11 @@ final readonly class CreateBatch
         public string $name,
         string $fileUri,
     ) {
-        if (!$fileId = \basename(parse_url($fileUri, PHP_URL_PATH) ?: '')) {
+        if (!$fileId = basename(parse_url($fileUri, PHP_URL_PATH) ?: '')) {
             throw new InvalidArgumentException('The file URI cannot be empty.');
         }
 
-        $this->fileName = \sprintf('files/%s', $fileId);
+        $this->fileName = sprintf('files/%s', $fileId);
     }
 
     /**
