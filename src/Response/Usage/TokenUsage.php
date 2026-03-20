@@ -27,7 +27,7 @@ final readonly class TokenUsage implements \JsonSerializable, TokenUsageInterfac
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface
      */
     public function getInputTokens(): int
     {
@@ -35,7 +35,7 @@ final readonly class TokenUsage implements \JsonSerializable, TokenUsageInterfac
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface
      */
     public function getCachedTokens(): int
     {
@@ -43,7 +43,7 @@ final readonly class TokenUsage implements \JsonSerializable, TokenUsageInterfac
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface
      */
     public function getOutputTokens(): int
     {
@@ -51,7 +51,7 @@ final readonly class TokenUsage implements \JsonSerializable, TokenUsageInterfac
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface
      */
     public function getTotalTokens(): int
     {
