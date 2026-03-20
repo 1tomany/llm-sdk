@@ -3,6 +3,8 @@
 namespace OneToMany\LlmSdk\Response\Output;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface;
+use OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Response\BaseResponse;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
@@ -13,17 +15,17 @@ use function trim;
 
 use const JSON_THROW_ON_ERROR;
 
-final readonly class GenerateOutputResponse extends BaseResponse implements \JsonSerializable
+final readonly class GenerateOutputResponse extends BaseResponse implements \JsonSerializable, QueryResponseInterface
 {
     /**
-     * @param non-empty-string $uri
+     * @param ?non-empty-string $uri
      * @param array<string, mixed> $response
      * @param ?non-empty-string $output
      * @param ?non-empty-string $error
      */
     public function __construct(
         string|Model $model,
-        private string $uri,
+        private ?string $uri,
         private array $response,
         private ?string $output = null,
         private ?string $error = null,
@@ -34,7 +36,8 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
     }
 
     /**
-     * @return array<string, mixed>
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
+     *
      */
     public function __invoke(): array
     {
@@ -42,9 +45,9 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
     }
 
     /**
-     * @return non-empty-string
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
      */
-    public function getUri(): string
+    public function getUri(): ?string
     {
         return $this->uri;
     }
@@ -58,7 +61,7 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
     }
 
     /**
-     * @return ?non-empty-string
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
      */
     public function getOutput(): ?string
     {
@@ -66,7 +69,7 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
     }
 
     /**
-     * @return ?non-empty-string
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
      */
     public function getError(): ?string
     {
@@ -74,14 +77,17 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
      */
     public function getRuntime(): int
     {
         return max(0, (int) $this->runtime);
     }
 
-    public function getUsage(): TokenUsage
+    /**
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
+     */
+    public function getUsage(): TokenUsageInterface
     {
         return $this->usage;
     }
@@ -109,11 +115,11 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
      * @return array{
      *   model: non-empty-lowercase-string,
      *   vendor: non-empty-lowercase-string,
-     *   uri: non-empty-string,
+     *   uri: ?non-empty-string,
      *   output: ?non-empty-string,
      *   error: ?non-empty-string,
      *   runtime: non-negative-int,
-     *   usage: TokenUsage,
+     *   usage: TokenUsageInterface,
      * }
      */
     public function jsonSerialize(): array
