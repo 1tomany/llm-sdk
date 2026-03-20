@@ -2,15 +2,9 @@
 
 namespace OneToMany\LlmSdk\Response\Usage;
 
-/**
- * @phpstan-type SerializedTokenUsage array{
- *   inputTokens: non-negative-int,
- *   cachedTokens: non-negative-int,
- *   outputTokens: non-negative-int,
- *   totalTokens: non-negative-int,
- * }
- */
-final readonly class TokenUsage implements \JsonSerializable
+use OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface;
+
+final readonly class TokenUsage implements \JsonSerializable, TokenUsageInterface
 {
     /**
      * @param non-negative-int $inputTokens
@@ -25,7 +19,7 @@ final readonly class TokenUsage implements \JsonSerializable
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface
      */
     public function getInputTokens(): int
     {
@@ -33,7 +27,7 @@ final readonly class TokenUsage implements \JsonSerializable
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface
      */
     public function getCachedTokens(): int
     {
@@ -41,7 +35,7 @@ final readonly class TokenUsage implements \JsonSerializable
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface
      */
     public function getOutputTokens(): int
     {
@@ -49,7 +43,7 @@ final readonly class TokenUsage implements \JsonSerializable
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface
      */
     public function getTotalTokens(): int
     {
@@ -59,7 +53,12 @@ final readonly class TokenUsage implements \JsonSerializable
     /**
      * @see \JsonSerializable
      *
-     * @return SerializedTokenUsage
+     * @return array{
+     *   inputTokens: non-negative-int,
+     *   cachedTokens: non-negative-int,
+     *   outputTokens: non-negative-int,
+     *   totalTokens: non-negative-int,
+     * }
      */
     public function jsonSerialize(): array
     {

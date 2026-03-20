@@ -3,6 +3,8 @@
 namespace OneToMany\LlmSdk\Response\Embedding;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface;
+use OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Response\BaseResponse;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
@@ -10,21 +12,26 @@ use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 use function array_map;
 use function array_sum;
 use function count;
+use function json_encode;
 use function max;
 use function sqrt;
 
-final readonly class CreateEmbeddingResponse extends BaseResponse implements \JsonSerializable
+final readonly class CreateEmbeddingResponse extends BaseResponse implements \JsonSerializable, QueryResponseInterface
 {
     private float $l2Norm;
 
     /**
+     * @param ?non-empty-string $uri
      * @param non-empty-list<float> $embedding
+     * @param ?non-empty-string $error
      *
      * @throws InvalidArgumentException when the embedding vector is empty
      */
     public function __construct(
         string|Model $model,
+        private ?string $uri,
         private array $embedding,
+        private ?string $error = null,
         private int|float $runtime = 0,
         private TokenUsage $usage = new TokenUsage(),
     ) {
@@ -40,11 +47,21 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
     }
 
     /**
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
+     *
      * @return non-empty-list<float>
      */
     public function __invoke(): array
     {
         return $this->getEmbedding();
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
+     */
+    public function getUri(): ?string
+    {
+        return $this->uri;
     }
 
     /**
@@ -77,14 +94,33 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
     }
 
     /**
-     * @return non-negative-int
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
+     */
+    public function getOutput(): ?string
+    {
+        return json_encode($this->getEmbedding()) ?: null;
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
+     */
+    public function getError(): ?string
+    {
+        return $this->error;
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
      */
     public function getRuntime(): int
     {
         return max(0, (int) $this->runtime);
     }
 
-    public function getUsage(): TokenUsage
+    /**
+     * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
+     */
+    public function getUsage(): TokenUsageInterface
     {
         return $this->usage;
     }
@@ -95,11 +131,13 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
      * @return array{
      *   model: non-empty-lowercase-string,
      *   vendor: non-empty-lowercase-string,
+     *   uri: ?non-empty-string,
      *   dimensions: positive-int,
      *   embedding: non-empty-list<float>,
      *   l2Norm: float,
+     *   error: ?non-empty-string,
      *   runtime: non-negative-int,
-     *   usage: TokenUsage,
+     *   usage: TokenUsageInterface,
      * }
      */
     public function jsonSerialize(): array
@@ -107,9 +145,11 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
         return [
             'model' => $this->getModel()->getValue(),
             'vendor' => $this->getVendor()->getValue(),
+            'uri' => $this->getUri(),
             'dimensions' => $this->getDimensions(),
             'embedding' => $this->getEmbedding(),
             'l2Norm' => $this->getL2Norm(),
+            'error' => $this->getError(),
             'runtime' => $this->getRuntime(),
             'usage' => $this->getUsage(),
         ];
