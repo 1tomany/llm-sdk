@@ -12,6 +12,7 @@ use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 use function array_map;
 use function array_sum;
 use function count;
+use function json_encode;
 use function max;
 use function sqrt;
 
@@ -20,7 +21,9 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
     private float $l2Norm;
 
     /**
+     * @param ?non-empty-string $uri
      * @param non-empty-list<float> $embedding
+     * @param ?non-empty-string $error
      *
      * @throws InvalidArgumentException when the embedding vector is empty
      */
@@ -95,7 +98,7 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
      */
     public function getOutput(): ?string
     {
-        return \json_encode($this->getEmbedding());
+        return json_encode($this->getEmbedding()) ?: null;
     }
 
     /**

@@ -21,7 +21,7 @@ final class CreateEmbeddingResponseTest extends TestCase
     {
         $faker = \Faker\Factory::create();
 
-        $response = new CreateEmbeddingResponse(Model::Mock, [
+        $response = new CreateEmbeddingResponse(Model::Mock, null, [
             M_PI, M_EULER, M_2_SQRTPI,
         ]);
 
@@ -33,6 +33,6 @@ final class CreateEmbeddingResponseTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The embedding vector cannot be empty.');
 
-        new CreateEmbeddingResponse(Model::MockEmbedding, []); // @phpstan-ignore argument.type
+        new CreateEmbeddingResponse(Model::MockEmbedding, null, []); // @phpstan-ignore argument.type
     }
 }
