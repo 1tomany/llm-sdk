@@ -135,6 +135,7 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
      *   dimensions: positive-int,
      *   embedding: non-empty-list<float>,
      *   l2Norm: float,
+     *   error: ?non-empty-string,
      *   runtime: non-negative-int,
      *   usage: TokenUsageInterface,
      * }
@@ -148,6 +149,7 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
             'dimensions' => $this->getDimensions(),
             'embedding' => $this->getEmbedding(),
             'l2Norm' => $this->getL2Norm(),
+            'error' => $this->getError(),
             'runtime' => $this->getRuntime(),
             'usage' => $this->getUsage(),
         ];
