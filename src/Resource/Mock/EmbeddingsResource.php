@@ -31,6 +31,6 @@ final readonly class EmbeddingsResource extends BaseResource implements Embeddin
 
         assert(count($embedding) === $embeddingDimensions);
 
-        return new CreateEmbeddingResponse($request->getModel(), $this->generateId('embed'), $embedding, null, random_int(100, 10000), new TokenUsage(strlen(json_encode($request->getRequest()) ?: '')));
+        return new CreateEmbeddingResponse($request->getModel(), $this->generateId('embedding'), $embedding, null, random_int(100, 10000), new TokenUsage(strlen(json_encode($request->getRequest()) ?: '')));
     }
 }

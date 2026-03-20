@@ -25,7 +25,7 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
          * } $response
          */
         $response = [
-            'id' => $this->generateId('query'),
+            'id' => $this->generateId('output'),
             'text' => $this->faker->sentence(),
         ];
 
