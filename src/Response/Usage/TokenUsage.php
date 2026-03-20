@@ -4,14 +4,6 @@ namespace OneToMany\LlmSdk\Response\Usage;
 
 use OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface;
 
-/**
- * @phpstan-type SerializedTokenUsage array{
- *   inputTokens: non-negative-int,
- *   cachedTokens: non-negative-int,
- *   outputTokens: non-negative-int,
- *   totalTokens: non-negative-int,
- * }
- */
 final readonly class TokenUsage implements \JsonSerializable, TokenUsageInterface
 {
     /**
@@ -61,7 +53,12 @@ final readonly class TokenUsage implements \JsonSerializable, TokenUsageInterfac
     /**
      * @see \JsonSerializable
      *
-     * @return SerializedTokenUsage
+     * @return array{
+     *   inputTokens: non-negative-int,
+     *   cachedTokens: non-negative-int,
+     *   outputTokens: non-negative-int,
+     *   totalTokens: non-negative-int,
+     * }
      */
     public function jsonSerialize(): array
     {
