@@ -48,6 +48,11 @@ final readonly class CompileQueryResponse extends BaseResponse
         return $this->request;
     }
 
+    public function getHash(string $id): string
+    {
+        return $this->generateHash($id);
+    }
+
     /**
      * @param non-empty-string $id
      *
