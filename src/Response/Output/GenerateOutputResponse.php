@@ -37,7 +37,6 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
 
     /**
      * @see OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface
-     *
      */
     public function __invoke(): array
     {
