@@ -49,8 +49,14 @@ final readonly class CompileQueryResponse extends BaseResponse
     }
 
     /**
-     * @param non-empty-string $id
-     *
+     * @return non-empty-lowercase-string
+     */
+    public function getHash(string $id): string
+    {
+        return $this->generateHash($id);
+    }
+
+    /**
      * @return non-empty-lowercase-string
      */
     public function generateHash(string $id): string
