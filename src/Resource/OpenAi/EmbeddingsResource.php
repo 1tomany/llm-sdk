@@ -31,6 +31,6 @@ final readonly class EmbeddingsResource extends BaseResource implements Embeddin
             $timer->stop();
         }
 
-        return new CreateEmbeddingResponse($request->getModel(), $object->data[0]->embedding, $timer->getDuration(), new TokenUsage($object->usage->getInputTokens()));
+        return new CreateEmbeddingResponse($request->getModel(), null, $object->data[0]->embedding, null, $timer->getDuration(), new TokenUsage($object->usage->getInputTokens()));
     }
 }
