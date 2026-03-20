@@ -7,12 +7,14 @@ use OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface;
 interface QueryResponseInterface
 {
     /**
+     * The complete LLM API response body.
+     *
      * @return array<int|string, mixed>
      */
     public function __invoke(): array;
 
     /**
-     * Unique identifier provided by the LLM vendor.
+     * Unique identifier provided by the LLM API.
      *
      * @return ?non-empty-string
      */
@@ -33,14 +35,14 @@ interface QueryResponseInterface
     public function getError(): ?string;
 
     /**
-     * Total time in milliseconds it took the query to run.
+     * Total query runtime in milliseconds.
      *
      * @return non-negative-int
      */
     public function getRuntime(): int;
 
     /**
-     * Input, cached, and output tokens consumed by the query.
+     * Input, cached, and output tokens used by the query.
      */
     public function getUsage(): TokenUsageInterface;
 }
