@@ -50,13 +50,9 @@
         }
     },
     "scripts": {
-        "fix": "php-cs-fixer fix",
-        "phpstan:analyze": "phpstan @additional_args",
-        "phpunit:test": "phpunit @additional_args",
-        "test": [
-            "@phpunit:test",
-            "@phpstan:analyze"
-        ]
+        "fix": "php-cs-fixer fix @additional_args",
+        "stan": "phpstan @additional_args",
+        "test": "phpunit @additional_args"
     },
     "authors": [
         {
