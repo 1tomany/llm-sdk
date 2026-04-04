@@ -9,19 +9,19 @@ use function explode;
 use function sprintf;
 use function trim;
 
-trait FileNameTrait
+trait ExtractFileNameTrait
 {
     /**
      * @return non-empty-string
      *
-     * @throws InvalidArgumentException when a file name could not be found in the file URI
+     * @throws InvalidArgumentException when a file name could not be extracted from the file URI
      */
-    private function generateFileName(?string $fileUri): string
+    private function extractFileName(?string $fileUri): string
     {
         $fileUriBits = explode('/', trim((string) $fileUri));
 
         if (!$fileName = $fileUriBits[array_key_last($fileUriBits)]) {
-            throw new InvalidArgumentException(sprintf('A file name could not be found in the file URI "%s".', $fileUri));
+            throw new InvalidArgumentException(sprintf('A file name could not be extracted from the file URI "%s".', $fileUri));
         }
 
         return sprintf('files/%s', $fileName);

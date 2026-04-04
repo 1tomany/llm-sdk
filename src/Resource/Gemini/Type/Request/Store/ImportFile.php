@@ -2,11 +2,11 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store;
 
-use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Trait\FileNameTrait;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Trait\ExtractFileNameTrait;
 
 final readonly class ImportFile
 {
-    use FileNameTrait;
+    use ExtractFileNameTrait;
 
     /**
      * @var non-empty-string
@@ -19,7 +19,7 @@ final readonly class ImportFile
     public function __construct(
         ?string $fileUri,
     ) {
-        $this->fileName = $this->generateFileName($fileUri);
+        $this->fileName = $this->extractFileName($fileUri);
     }
 
     /**

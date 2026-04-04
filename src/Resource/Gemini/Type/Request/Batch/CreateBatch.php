@@ -2,17 +2,12 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini\Type\Request\Batch;
 
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-
-use function basename;
-use function parse_url;
-use function sprintf;
-use function trim;
-
-use const PHP_URL_PATH;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Trait\ExtractFileNameTrait;
 
 final readonly class CreateBatch
 {
+    use ExtractFileNameTrait;
+
     /**
      * @var non-empty-string
      */
@@ -20,21 +15,12 @@ final readonly class CreateBatch
 
     /**
      * @param non-empty-string $name
-     * @param non-empty-string $fileUri
      */
     public function __construct(
         public string $name,
-        string $fileUri,
+        ?string $fileUri,
     ) {
-        if (!$urlPath = parse_url($fileUri, PHP_URL_PATH)) {
-            throw new InvalidArgumentException(sprintf('The file URI "%s" does not contain a path component.', $fileUri));
-        }
-
-        if (!$fileId = trim(basename($urlPath))) {
-            throw new InvalidArgumentException(sprintf('The path "%s" does not contain a file ID.', $urlPath));
-        }
-
-        $this->fileName = sprintf('files/%s', $fileId);
+        $this->fileName = $this->extractFileName($fileUri);
     }
 
     /**
