@@ -8,7 +8,9 @@ use OneToMany\LlmSdk\Factory\ClientFactory;
 
 readonly class BaseAction
 {
-    public function __construct(protected ClientFactory $clientFactory)
+    public function __construct(
+        protected ClientFactory $clientFactory,
+    )
     {
     }
 
