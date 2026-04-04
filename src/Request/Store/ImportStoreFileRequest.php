@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\File\Search;
+namespace OneToMany\LlmSdk\Request\Store;
 
-final readonly class ImportFileRequest
+final readonly class ImportStoreFileRequest
 {
     /**
      * @param non-empty-string $storeUri

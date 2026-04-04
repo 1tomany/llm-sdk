@@ -9,7 +9,9 @@ readonly class BaseResponse
 {
     private Model $model;
 
-    public function __construct(string|Model $model)
+    public function __construct(
+        string|Model $model,
+    )
     {
         $this->model = Model::create($model);
     }

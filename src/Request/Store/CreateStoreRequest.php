@@ -1,12 +1,14 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\File\Search;
+namespace OneToMany\LlmSdk\Request\Store;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
-use OneToMany\LlmSdk\Request\File\BaseRequest;
+use OneToMany\LlmSdk\Request\Trait\RequiresVendorTrait;
 
-final class CreateStoreRequest extends BaseRequest
+final readonly class CreateStoreRequest
 {
+    use RequiresVendorTrait;
+
     /**
      * @param non-empty-string $name
      */
@@ -14,7 +16,7 @@ final class CreateStoreRequest extends BaseRequest
         string|Vendor $vendor,
         private readonly string $name,
     ) {
-        parent::__construct($vendor);
+        $this->vendor = Vendor::create($vendor);
     }
 
     /**
