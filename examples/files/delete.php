@@ -2,7 +2,6 @@
 
 use OneToMany\LlmSdk\Action\File\DeleteFileAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\File\DeleteFileRequest;
 
@@ -10,11 +9,12 @@ use OneToMany\LlmSdk\Request\File\DeleteFileRequest;
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
 try {
-    if (!$fileUri = trim($argv[1] ?? '')) {
-        throw new InvalidArgumentException(sprintf('Usage: php %s <file-uri> <vendor>', basename(__FILE__)));
-    }
+    $vendor = trim($argv[1] ?? '') ?: 'mock';
 
-    $vendor = trim($argv[2] ?? '') ?: 'mock';
+    if (!$fileUri = trim($argv[2] ?? '')) {
+        printf("Usage: php %s <vendor> <file-uri>\n", basename(__FILE__));
+        exit(1);
+    }
 
     // Create a request to delete the file
     $deleteFileRequest = new DeleteFileRequest($vendor, $fileUri);

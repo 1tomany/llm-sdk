@@ -1,7 +1,6 @@
 <?php
 
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Store\CreateStoreRequest;
 
@@ -12,7 +11,8 @@ try {
     $vendor = trim($argv[1] ?? '') ?: 'mock';
 
     if (!$name = trim($argv[2] ?? '')) {
-        throw new InvalidArgumentException(sprintf('Usage: php %s <vendor> <name>', basename(__FILE__)));
+        printf("Usage: php %s <vendor> <store-name>\n", basename(__FILE__));
+        exit(1);
     }
 
     // Create the file search store

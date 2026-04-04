@@ -10,14 +10,21 @@ use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
 try {
-    if (!$path = trim($argv[1] ?? '')) {
-        throw new InvalidArgumentException(sprintf('Usage: php %s <path> <vendor>', basename(__FILE__)));
+    $vendor = trim($argv[1] ?? '') ?: 'mock';
+
+    if (!$path = trim($argv[2] ?? '')) {
+        printf("Usage: php %s <vendor> <path> [<purpose>]\n", basename(__FILE__));
+        exit(1);
     }
 
-    $vendor = trim($argv[2] ?? '') ?: 'mock';
-
     // Create a request to upload the file
-    $uploadFileRequest = new UploadFileRequest($vendor, $path)->usingPurpose($argv[3] ?? null);
+    $uploadFileRequest = new UploadFileRequest($vendor, $path);
+
+    if ($purpose = $argv[3] ?? null) {
+        $uploadFileRequest->usingPurpose(...[
+            'purpose' => $purpose,
+        ]);
+    }
 
     if ($format = @mime_content_type($path)) {
         $uploadFileRequest->usingFormat($format);
