@@ -10,6 +10,7 @@ use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Anthropic\FilesResource;
 
@@ -69,6 +70,14 @@ final class AnthropicClient extends BaseClient implements ClientInterface
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
     public function queries(): QueriesResourceInterface
+    {
+        throw new RuntimeException('Not implemented!');
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
+    public function stores(): StoresResourceInterface
     {
         throw new RuntimeException('Not implemented!');
     }

@@ -9,6 +9,8 @@ use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Mock\BatchesResource;
 use OneToMany\LlmSdk\Resource\Mock\EmbeddingsResource;
 use OneToMany\LlmSdk\Resource\Mock\FilesResource;
@@ -72,5 +74,13 @@ final class MockClient implements ClientInterface
     public function queries(): QueriesResourceInterface
     {
         return $this->queries;
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
+    public function stores(): StoresResourceInterface
+    {
+        throw new RuntimeException('Not implemented!');
     }
 }
