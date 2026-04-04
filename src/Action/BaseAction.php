@@ -10,8 +10,7 @@ readonly class BaseAction
 {
     public function __construct(
         protected ClientFactory $clientFactory,
-    )
-    {
+    ) {
     }
 
     protected function createClient(Vendor $vendor): ClientInterface
