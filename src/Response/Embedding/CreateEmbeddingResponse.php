@@ -28,7 +28,7 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
      * @throws InvalidArgumentException when the embedding vector is empty
      */
     public function __construct(
-        string|Model $model,
+        Model $model,
         private ?string $uri,
         private array $embedding,
         private ?string $error = null,

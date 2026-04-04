@@ -24,7 +24,7 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
      * @param ?non-empty-string $error
      */
     public function __construct(
-        string|Model $model,
+        Model $model,
         private ?string $uri,
         private array $response,
         private ?string $output = null,

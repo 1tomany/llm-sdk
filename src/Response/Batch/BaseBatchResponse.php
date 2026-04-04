@@ -13,7 +13,7 @@ readonly class BaseBatchResponse extends BaseResponse implements \JsonSerializab
      * @param ?non-empty-string $file
      */
     public function __construct(
-        string|Model $model,
+        Model $model,
         private string $uri,
         private string $status,
         private ?string $file = null,
