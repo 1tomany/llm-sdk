@@ -31,6 +31,7 @@ final readonly class StoresResource extends BaseResource implements StoresResour
         $object = $this->doDenormalize($response, FileSearchStore::class);
 
         print_r($object);
+
         return new CreateStoreResponse($request->getVendor(), $object->name, $object->getSize());
     }
 }
