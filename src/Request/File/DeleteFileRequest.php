@@ -4,25 +4,16 @@ namespace OneToMany\LlmSdk\Request\File;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-final readonly class DeleteFileRequest
+final class DeleteFileRequest extends BaseRequest
 {
-    private Vendor $vendor;
-
     /**
      * @param non-empty-string $uri
-     *
-     * @return void
      */
     public function __construct(
         string|Vendor $vendor,
-        private string $uri,
+        private readonly string $uri,
     ) {
-        $this->vendor = Vendor::create($vendor);
-    }
-
-    public function getVendor(): Vendor
-    {
-        return $this->vendor;
+        parent::__construct($vendor);
     }
 
     /**

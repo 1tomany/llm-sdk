@@ -12,10 +12,8 @@ use function sprintf;
 use function strtolower;
 use function trim;
 
-class UploadFileRequest
+class UploadFileRequest extends BaseRequest
 {
-    private readonly Vendor $vendor;
-
     /**
      * @var ?non-empty-string
      */
@@ -43,13 +41,9 @@ class UploadFileRequest
         string|Vendor $vendor,
         private readonly string $path,
     ) {
-        $this->vendor = Vendor::create($vendor);
-        $this->usingName(null);
-    }
+        parent::__construct($vendor);
 
-    public function getVendor(): Vendor
-    {
-        return $this->vendor;
+        $this->usingName(null);
     }
 
     /**
