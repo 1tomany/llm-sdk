@@ -44,7 +44,7 @@ final class CompileQueryRequestTest extends TestCase
         $schema = ['title' => 'Identify'];
 
         // Arrange: Compile query request
-        $request = new CompileQueryRequest();
+        $request = new CompileQueryRequest('mock');
         $this->assertNull($request->getSchema());
 
         // Act: Add the schema

@@ -19,6 +19,6 @@ final class CompileQueryActionTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The query does not have any input components.');
 
-        new CompileQueryAction(new ClientFactory())->act(new CompileQueryRequest());
+        new CompileQueryAction(new ClientFactory())->act(new CompileQueryRequest('mock'));
     }
 }

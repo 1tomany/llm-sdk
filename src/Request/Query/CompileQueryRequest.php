@@ -45,7 +45,7 @@ class CompileQueryRequest
     private ?Dimensions $dimensions = null;
 
     public function __construct(
-        string|Model $model = Model::Mock,
+        string|Model $model,
     ) {
         $this->usingModel($model);
     }
@@ -53,21 +53,24 @@ class CompileQueryRequest
     /**
      * @param ?non-empty-lowercase-string $format
      */
-    public function withFile(string|FileUri|null $file, ?string $format): static
+    public function withFileUri(
+        string|FileUri|null $fileUri,
+        ?string $format = null,
+    ): static
     {
-        if (is_string($file)) {
-            $file = trim($file);
+        if (is_string($fileUri)) {
+            $fileUri = trim($fileUri);
         }
 
-        if (!$file || !$format) {
+        if (!$fileUri || !$format) {
             return $this;
         }
 
-        if (!$file instanceof FileUri) {
-            $file = new FileUri($file, $format);
+        if (!$fileUri instanceof FileUri) {
+            $fileUri = new FileUri($fileUri, $format);
         }
 
-        $this->files[] = $file;
+        $this->files[] = $fileUri;
 
         return $this;
     }
