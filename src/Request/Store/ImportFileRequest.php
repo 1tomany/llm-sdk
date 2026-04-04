@@ -2,10 +2,14 @@
 
 namespace OneToMany\LlmSdk\Request\Store;
 
+use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Request\Trait\UsesVendorTrait;
 
 class ImportFileRequest
 {
+    use UsesVendorTrait;
+
     /**
      * @var non-empty-string
      */
@@ -22,11 +26,13 @@ class ImportFileRequest
     private ?string $fileName;
 
     public function __construct(
+        string|Vendor $vendor,
         ?string $storeUri,
         ?string $fileUri,
         ?string $fileName,
     ) {
         $this
+            ->usingVendor($vendor)
             ->usingStoreUri($storeUri)
             ->usingFileUri($fileUri)
             ->usingFileName($fileName);
