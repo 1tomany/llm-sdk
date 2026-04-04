@@ -56,8 +56,7 @@ class CompileQueryRequest
     public function withFileUri(
         string|FileUri|null $fileUri,
         ?string $format = null,
-    ): static
-    {
+    ): static {
         if (is_string($fileUri)) {
             $fileUri = trim($fileUri);
         }
