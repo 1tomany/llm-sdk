@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Store\CreateStoreRequest;
 
 /** @var ClientFactory $clientFactory */
-$clientFactory = require dirname(__DIR__).'/../bootstrap.php';
+$clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
 try {
     $vendor = trim($argv[1] ?? '') ?: 'mock';
@@ -17,6 +17,8 @@ try {
 
     // Create the file search store
     $createStoreRequest = new CreateStoreRequest($vendor, $name);
+
+    print_r($createStoreRequest);
 
     // Upload the file to the LLM vendor
     // $response = new UploadFileAction($clientFactory)->act(...[

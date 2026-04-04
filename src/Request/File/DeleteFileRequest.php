@@ -6,6 +6,8 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Trait\RequiresVendorTrait;
 
+use function trim;
+
 class DeleteFileRequest
 {
     use RequiresVendorTrait;
@@ -35,7 +37,7 @@ class DeleteFileRequest
      */
     public function usingUri(?string $uri): static
     {
-        if (!$uri = \trim((string) $uri)) {
+        if (!$uri = trim((string) $uri)) {
             throw new InvalidArgumentException('The URI cannot be empty.');
         }
 

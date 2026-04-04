@@ -3,20 +3,25 @@
 namespace OneToMany\LlmSdk\Request\Store;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Trait\RequiresVendorTrait;
 
-final readonly class CreateStoreRequest
+use function trim;
+
+class CreateStoreRequest
 {
     use RequiresVendorTrait;
 
     /**
-     * @param non-empty-string $name
+     * @var non-empty-string
      */
+    private string $name;
+
     public function __construct(
         string|Vendor $vendor,
-        private readonly string $name,
+        ?string $name,
     ) {
-        $this->vendor = Vendor::create($vendor);
+        $this->usingVendor($vendor)->usingName($name);
     }
 
     /**
@@ -25,5 +30,19 @@ final readonly class CreateStoreRequest
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @throws InvalidArgumentException when the trimmed name is empty
+     */
+    public function usingName(?string $name): static
+    {
+        if (!$name = trim((string) $name)) {
+            throw new InvalidArgumentException('The name cannot be empty.');
+        }
+
+        $this->name = $name;
+
+        return $this;
     }
 }

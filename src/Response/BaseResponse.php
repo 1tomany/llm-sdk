@@ -11,8 +11,7 @@ readonly class BaseResponse
 
     public function __construct(
         string|Model $model,
-    )
-    {
+    ) {
         $this->model = Model::create($model);
     }
 
