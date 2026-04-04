@@ -2,10 +2,12 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store;
 
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Trait\FileNameTrait;
 
 final readonly class ImportFile
 {
+    use FileNameTrait;
+
     /**
      * @var non-empty-string
      */
@@ -17,13 +19,7 @@ final readonly class ImportFile
     public function __construct(
         ?string $fileUri,
     ) {
-        $fileUriBits = \explode('/', \trim((string) $fileUri));
-
-        if (!$fileName = $fileUriBits[\array_key_last($fileUriBits)]) {
-            throw new InvalidArgumentException('The file name could not be found from the URI.');
-        }
-
-        $this->fileName = $fileName;
+        $this->fileName = $this->generateFileName($fileUri);
     }
 
     /**
