@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Request\FileSearchStore;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store;
 
-final readonly class CreateFileSearchStore
+final readonly class CreateStore
 {
     /**
      * @param non-empty-string $name

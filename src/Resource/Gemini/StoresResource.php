@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
 use OneToMany\LlmSdk\Request\Store\CreateStoreRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Request\FileSearchStore\CreateFileSearchStore;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store\CreateStore;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\FileSearchStore;
 use OneToMany\LlmSdk\Response\Store\CreateStoreResponse;
 
@@ -15,7 +15,7 @@ final readonly class StoresResource extends BaseResource implements StoresResour
      */
     public function create(CreateStoreRequest $request): CreateStoreResponse
     {
-        $createFileSearchStore = new CreateFileSearchStore(...[
+        $createStore = new CreateStore(...[
             'name' => $request->getName(),
         ]);
 
@@ -24,7 +24,7 @@ final readonly class StoresResource extends BaseResource implements StoresResour
         $response = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders(),
             'json' => [
-                ...$createFileSearchStore->toArray(),
+                ...$createStore->toArray(),
             ],
         ]);
 
