@@ -12,6 +12,8 @@ use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\FileSearchSto
 use OneToMany\LlmSdk\Response\Store\CreateStoreResponse;
 use OneToMany\LlmSdk\Response\Store\ImportFileResponse;
 
+use function sprintf;
+
 final readonly class StoresResource extends BaseResource implements StoresResourceInterface
 {
     /**
@@ -46,7 +48,7 @@ final readonly class StoresResource extends BaseResource implements StoresResour
             'fileName' => $request->getFileName(),
         ]);
 
-        $url = $this->buildUrl($this->getApiVersion(), \sprintf('%s:importFile', $request->getStoreUri()));
+        $url = $this->buildUrl($this->getApiVersion(), sprintf('%s:importFile', $request->getStoreUri()));
 
         $response = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders(),
