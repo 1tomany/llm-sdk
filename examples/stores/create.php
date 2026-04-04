@@ -1,5 +1,6 @@
 <?php
 
+use OneToMany\LlmSdk\Action\Store\CreateStoreAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Store\CreateStoreRequest;
@@ -15,18 +16,16 @@ try {
         exit(1);
     }
 
-    // Create the file search store
+    // Create the search store request
     $createStoreRequest = new CreateStoreRequest($vendor, $name);
 
-    print_r($createStoreRequest);
-
-    // Upload the file to the LLM vendor
-    // $response = new UploadFileAction($clientFactory)->act(...[
-    //     'request' => $uploadFileRequest,
-    // ]);
+    // Create the search store
+    $response = new CreateStoreAction($clientFactory)->act(...[
+        'request' => $createStoreRequest,
+    ]);
 } catch (LlmSdkExceptionInterface $e) {
     $response = $e;
 }
 
-// printf("%s\n", json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-// exit($response instanceof Throwable ? 1 : 0);
+printf("%s\n", json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+exit($response instanceof Throwable ? 1 : 0);
