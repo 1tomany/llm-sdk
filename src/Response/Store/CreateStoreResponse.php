@@ -1,22 +1,25 @@
 <?php
 
-namespace OneToMany\LlmSdk\Response\File\Search;
+namespace OneToMany\LlmSdk\Response\Store;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
-use OneToMany\LlmSdk\Response\File\BaseResponse;
 
-final readonly class CreateStoreResponse extends BaseResponse implements \JsonSerializable
+final readonly class CreateStoreResponse implements \JsonSerializable
 {
     /**
      * @param non-empty-string $uri
      * @param non-negative-int $size
      */
     public function __construct(
-        string|Vendor $vendor,
+        private Vendor $vendor,
         private string $uri,
         private int $size,
     ) {
-        parent::__construct($vendor);
+    }
+
+    public function getVendor(): Vendor
+    {
+        return $this->vendor;
     }
 
     /**
