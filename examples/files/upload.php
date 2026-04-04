@@ -11,22 +11,18 @@ $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 try {
     $vendor = trim($argv[1] ?? '') ?: 'mock';
 
-    if (!$path = trim($argv[2] ?? '')) {
-        printf("Usage: php %s <vendor> <path> [<purpose>]\n", basename(__FILE__));
+    if (!isset($argv[2])) {
+        printf("Usage: php %s <vendor> <file-path> [<purpose>]\n", basename(__FILE__));
         exit(1);
     }
 
     // Create a request to upload the file
-    $uploadFileRequest = new UploadFileRequest($vendor, $path);
+    $uploadFileRequest = new UploadFileRequest($vendor, $argv[2])->usingFormat(...[
+        'format' => @mime_content_type($argv[2]) ?: null,
+    ]);
 
-    if ($purpose = $argv[3] ?? null) {
-        $uploadFileRequest->usingPurpose(...[
-            'purpose' => $purpose,
-        ]);
-    }
-
-    if ($format = @mime_content_type($path)) {
-        $uploadFileRequest->usingFormat($format);
+    if (null !== $purpose = $argv[3] ?? null) {
+        $uploadFileRequest->usingPurpose($purpose);
     }
 
     // Upload the file to the LLM vendor

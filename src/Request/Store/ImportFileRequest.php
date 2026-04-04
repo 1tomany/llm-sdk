@@ -31,7 +31,7 @@ class ImportFileRequest
         string|Vendor $vendor,
         ?string $storeUri,
         ?string $fileUri,
-        ?string $fileName,
+        ?string $fileName = null,
     ) {
         $this
             ->usingVendor($vendor)
