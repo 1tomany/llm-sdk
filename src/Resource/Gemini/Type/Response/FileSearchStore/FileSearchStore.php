@@ -2,6 +2,8 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore;
 
+use function max;
+
 final readonly class FileSearchStore
 {
     /**
@@ -21,8 +23,7 @@ final readonly class FileSearchStore
         public ?string $pendingDocumentsCount = null,
         public ?string $failedDocumentsCount = null,
         public ?string $sizeBytes = null,
-    )
-    {
+    ) {
     }
 
     /**
@@ -30,6 +31,6 @@ final readonly class FileSearchStore
      */
     public function getSize(): int
     {
-        return \max(0, (int) $this->sizeBytes);
+        return max(0, (int) $this->sizeBytes);
     }
 }

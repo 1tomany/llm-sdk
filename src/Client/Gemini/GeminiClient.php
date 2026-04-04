@@ -11,7 +11,6 @@ use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Gemini\BatchesResource;
 use OneToMany\LlmSdk\Resource\Gemini\EmbeddingsResource;
 use OneToMany\LlmSdk\Resource\Gemini\FilesResource;
