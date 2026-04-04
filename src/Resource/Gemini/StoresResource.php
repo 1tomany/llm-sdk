@@ -2,20 +2,11 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Contract\Resource\BatchesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
-use OneToMany\LlmSdk\Request\Batch\CreateBatchRequest;
-use OneToMany\LlmSdk\Request\Batch\ReadBatchRequest;
 use OneToMany\LlmSdk\Request\Store\CreateStoreRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Batch\CreateBatch;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\FileSearchStore\CreateFileSearchStore;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Response\Batch\Batch;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\FileSearchStore;
-use OneToMany\LlmSdk\Response\Batch\CreateBatchResponse;
-use OneToMany\LlmSdk\Response\Batch\ReadBatchResponse;
 use OneToMany\LlmSdk\Response\Store\CreateStoreResponse;
-
-use function sprintf;
 
 final readonly class StoresResource extends BaseResource implements StoresResourceInterface
 {

@@ -17,6 +17,7 @@ use OneToMany\LlmSdk\Resource\Gemini\EmbeddingsResource;
 use OneToMany\LlmSdk\Resource\Gemini\FilesResource;
 use OneToMany\LlmSdk\Resource\Gemini\OutputsResource;
 use OneToMany\LlmSdk\Resource\Gemini\QueriesResource;
+use OneToMany\LlmSdk\Resource\Gemini\StoresResource;
 
 final class GeminiClient extends BaseClient implements ClientInterface
 {
@@ -91,6 +92,8 @@ final class GeminiClient extends BaseClient implements ClientInterface
      */
     public function stores(): StoresResourceInterface
     {
-        throw new RuntimeException('Not implemented!');
+        $this->stores ??= new StoresResource($this->httpClient, $this->serializer, $this->getApiKey(), $this->getApiVersion());
+
+        return $this->stores;
     }
 }
