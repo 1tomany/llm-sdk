@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\Document;
 
 final readonly class Document
 {
@@ -9,7 +9,6 @@ final readonly class Document
      */
     public function __construct(
         public string $name,
-        public bool $done = false,
     ) {
     }
 }

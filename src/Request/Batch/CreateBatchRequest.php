@@ -24,12 +24,12 @@ class CreateBatchRequest
     public function __construct(
         string|Model $model,
         ?string $name,
-        ?string $file = null,
+        string|FileUri|null $fileUri = null,
     ) {
         $this
             ->usingModel($model)
             ->usingName($name)
-            ->usingFileUri($file);
+            ->usingFileUri($fileUri);
     }
 
     /**
@@ -64,13 +64,13 @@ class CreateBatchRequest
         } else {
             if (is_string($fileUri)) {
                 if (!$fileUri = trim($fileUri)) {
-                    throw new InvalidArgumentException('The file cannot be empty.');
+                    throw new InvalidArgumentException('The file URI cannot be empty.');
                 }
-
-                $fileUri = new FileUri($fileUri, 'application/jsonl');
+            } else {
+                $fileUri = $fileUri->getUri();
             }
 
-            $this->fileUri = $fileUri;
+            $this->fileUri = new FileUri($fileUri, 'application/jsonl');
         }
 
         return $this;
