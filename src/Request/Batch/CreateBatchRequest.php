@@ -5,38 +5,31 @@ namespace OneToMany\LlmSdk\Request\Batch;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Request\BaseRequest;
+use OneToMany\LlmSdk\Request\Trait\UsesModelTrait;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 
 use function is_string;
 use function trim;
 
-class CreateBatchRequest extends BaseRequest
+class CreateBatchRequest
 {
+    use UsesModelTrait;
+
     /**
      * @var non-empty-string
      */
-    private readonly string $name;
+    private string $name;
     private ?FileUri $fileUri = null;
 
-    /**
-     * @param non-empty-string $name
-     *
-     * @throws InvalidArgumentException when the trimmed name is empty
-     */
     public function __construct(
-        string|Model|null $model,
-        string $name,
+        string|Model $model,
+        ?string $name,
         ?string $file = null,
     ) {
-        parent::__construct($model);
-
-        if (!$name = trim($name)) {
-            throw new InvalidArgumentException('The name cannot be empty.');
-        }
-
-        $this->name = $name;
-        $this->usingFile($file);
+        $this
+            ->usingModel($model)
+            ->usingName($name)
+            ->usingFileUri($file);
     }
 
     /**
@@ -48,9 +41,23 @@ class CreateBatchRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the trimmed file is empty
+     * @throws InvalidArgumentException when the trimmed name is empty
      */
-    public function usingFile(string|FileUri|null $fileUri): static
+    public function usingName(?string $name): static
+    {
+        if (!$name = trim((string) $name)) {
+            throw new InvalidArgumentException('The name cannot be empty.');
+        }
+
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @throws InvalidArgumentException when the trimmed file URI is empty
+     */
+    public function usingFileUri(string|FileUri|null $fileUri): static
     {
         if (null === $fileUri) {
             $this->fileUri = null;
@@ -70,10 +77,10 @@ class CreateBatchRequest extends BaseRequest
     }
 
     /**
-     * @throws RuntimeException when the file is missing
+     * @throws RuntimeException when the file URI has not been set
      */
     public function getFileUri(): FileUri
     {
-        return $this->fileUri ?? throw new RuntimeException('The file is missing.');
+        return $this->fileUri ?? throw new RuntimeException('The file URI has not been set.');
     }
 }

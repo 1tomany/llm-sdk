@@ -4,13 +4,13 @@ namespace OneToMany\LlmSdk\Request\Store;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Request\Trait\RequiresVendorTrait;
+use OneToMany\LlmSdk\Request\Trait\UsesVendorTrait;
 
 use function trim;
 
 class CreateStoreRequest
 {
-    use RequiresVendorTrait;
+    use UsesVendorTrait;
 
     /**
      * @var non-empty-string

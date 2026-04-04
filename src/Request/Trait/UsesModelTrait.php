@@ -1,19 +1,13 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request;
+namespace OneToMany\LlmSdk\Request\Trait;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-class BaseRequest
+trait UsesModelTrait
 {
     private Model $model;
-
-    public function __construct(
-        string|Model $model = Model::Mock,
-    ) {
-        $this->usingModel($model);
-    }
 
     public function getModel(): Model
     {

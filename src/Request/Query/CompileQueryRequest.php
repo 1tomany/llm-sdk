@@ -2,8 +2,9 @@
 
 namespace OneToMany\LlmSdk\Request\Query;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Request\BaseRequest;
+use OneToMany\LlmSdk\Request\Trait\UsesModelTrait;
 use OneToMany\LlmSdk\Request\Type\Enum\Role;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 use OneToMany\LlmSdk\Request\Type\Query\Dimensions;
@@ -14,8 +15,10 @@ use function is_string;
 use function sprintf;
 use function trim;
 
-class CompileQueryRequest extends BaseRequest
+class CompileQueryRequest
 {
+    use UsesModelTrait;
+
     /**
      * @var list<FileUri>
      */
@@ -40,6 +43,12 @@ class CompileQueryRequest extends BaseRequest
      * Output dimensions for embedding models.
      */
     private ?Dimensions $dimensions = null;
+
+    public function __construct(
+        string|Model $model = Model::Mock,
+    ) {
+        $this->usingModel($model);
+    }
 
     /**
      * @param ?non-empty-lowercase-string $format

@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Request\File;
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Request\Trait\RequiresVendorTrait;
+use OneToMany\LlmSdk\Request\Trait\UsesVendorTrait;
 
 use function basename;
 use function filesize;
@@ -16,7 +16,7 @@ use function trim;
 
 class UploadFileRequest
 {
-    use RequiresVendorTrait;
+    use UsesVendorTrait;
 
     /**
      * @var non-empty-string

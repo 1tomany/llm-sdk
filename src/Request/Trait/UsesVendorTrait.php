@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Request\Trait;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-trait RequiresVendorTrait
+trait UsesVendorTrait
 {
     private Vendor $vendor;
 
