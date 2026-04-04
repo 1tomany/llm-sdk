@@ -6,6 +6,8 @@ use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Trait\UsesModelTrait;
 
+use function trim;
+
 class ReadBatchRequest
 {
     use UsesModelTrait;
@@ -32,7 +34,7 @@ class ReadBatchRequest
 
     public function usingUri(?string $uri): static
     {
-        if (!$uri = \trim((string) $uri)) {
+        if (!$uri = trim((string) $uri)) {
             throw new InvalidArgumentException('The URI cannot be empty.');
         }
 
