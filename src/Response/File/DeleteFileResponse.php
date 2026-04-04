@@ -4,10 +4,8 @@ namespace OneToMany\LlmSdk\Response\File;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-final readonly class DeleteFileResponse implements \JsonSerializable
+final readonly class DeleteFileResponse extends BaseResponse implements \JsonSerializable
 {
-    private Vendor $vendor;
-
     /**
      * @param non-empty-string $uri
      */
@@ -15,12 +13,7 @@ final readonly class DeleteFileResponse implements \JsonSerializable
         string|Vendor $vendor,
         private string $uri,
     ) {
-        $this->vendor = Vendor::create($vendor);
-    }
-
-    public function getVendor(): Vendor
-    {
-        return $this->vendor;
+        parent::__construct($vendor);
     }
 
     /**
