@@ -1,21 +1,21 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\File;
+namespace OneToMany\LlmSdk\Request\Store;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-final readonly class DeleteFileRequest
+final readonly class CreateStoreRequest
 {
     private Vendor $vendor;
 
     /**
-     * @param non-empty-string $uri
+     * @param non-empty-string $name
      *
      * @return void
      */
     public function __construct(
         string|Vendor $vendor,
-        private string $uri,
+        private string $name,
     ) {
         $this->vendor = Vendor::create($vendor);
     }
@@ -28,8 +28,8 @@ final readonly class DeleteFileRequest
     /**
      * @return non-empty-string
      */
-    public function getUri(): string
+    public function getName(): string
     {
-        return $this->uri;
+        return $this->name;
     }
 }
