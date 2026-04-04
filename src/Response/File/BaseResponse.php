@@ -10,8 +10,7 @@ readonly class BaseResponse
 
     public function __construct(
         string|Vendor $vendor,
-    )
-    {
+    ) {
         $this->vendor = Vendor::create($vendor);
     }
 

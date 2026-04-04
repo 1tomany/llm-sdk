@@ -6,10 +6,8 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 use function strtolower;
 
-final readonly class UploadFileResponse implements \JsonSerializable
+final readonly class UploadFileResponse extends BaseResponse implements \JsonSerializable
 {
-    private Vendor $vendor;
-
     /**
      * @param non-empty-string $uri
      * @param ?non-empty-string $name
@@ -22,12 +20,7 @@ final readonly class UploadFileResponse implements \JsonSerializable
         private ?string $purpose = null,
         private ?\DateTimeImmutable $expiresAt = null,
     ) {
-        $this->vendor = Vendor::create($vendor);
-    }
-
-    public function getVendor(): Vendor
-    {
-        return $this->vendor;
+        parent::__construct($vendor);
     }
 
     /**
