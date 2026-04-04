@@ -6,6 +6,8 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Trait\UsesVendorTrait;
 
+use function trim;
+
 class ImportFileRequest
 {
     use UsesVendorTrait;
@@ -51,7 +53,7 @@ class ImportFileRequest
      */
     public function usingStoreUri(?string $storeUri): static
     {
-        if (!$storeUri = \trim((string) $storeUri)) {
+        if (!$storeUri = trim((string) $storeUri)) {
             throw new InvalidArgumentException('The store URI cannot be empty.');
         }
 
@@ -73,7 +75,7 @@ class ImportFileRequest
      */
     public function usingFileUri(?string $fileUri): static
     {
-        if (!$fileUri = \trim((string) $fileUri)) {
+        if (!$fileUri = trim((string) $fileUri)) {
             throw new InvalidArgumentException('The file URI cannot be empty.');
         }
 
@@ -92,7 +94,7 @@ class ImportFileRequest
 
     public function usingFileName(?string $fileName): static
     {
-        $this->fileName = \trim((string) $fileName) ?: null;
+        $this->fileName = trim((string) $fileName) ?: null;
 
         return $this;
     }
