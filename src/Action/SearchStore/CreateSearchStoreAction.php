@@ -7,7 +7,7 @@ use OneToMany\LlmSdk\Contract\Action\SearchStore\CreateSearchStoreActionInterfac
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
 use OneToMany\LlmSdk\Response\SearchStore\CreateSearchStoreResponse;
 
-final readonly class CreateStoreAction extends BaseAction implements CreateSearchStoreActionInterface
+final readonly class CreateSearchStoreAction extends BaseAction implements CreateSearchStoreActionInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Action\SearchStore\CreateSearchStoreActionInterface

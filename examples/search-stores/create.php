@@ -1,6 +1,6 @@
 <?php
 
-use OneToMany\LlmSdk\Action\SearchStore\CreateStoreAction;
+use OneToMany\LlmSdk\Action\SearchStore\CreateSearchStoreAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
@@ -17,7 +17,7 @@ try {
     }
 
     // Create the search store
-    $response = new CreateStoreAction($clientFactory)->act(...[
+    $response = new CreateSearchStoreAction($clientFactory)->act(...[
         'request' => new CreateSearchStoreRequest($vendor, $name),
     ]);
 } catch (LlmSdkExceptionInterface $e) {

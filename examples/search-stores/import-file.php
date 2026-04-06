@@ -1,6 +1,6 @@
 <?php
 
-use OneToMany\LlmSdk\Action\SearchStore\ImportFileAction;
+use OneToMany\LlmSdk\Action\SearchStore\ImportUploadedFileAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
@@ -16,12 +16,9 @@ try {
         exit(1);
     }
 
-    // Create a request to import the file to the search store
-    $importUploadedFileRequest = new ImportUploadedFileRequest($vendor, $argv[2], $argv[1]);
-
-    // Import the file to the search store
-    $response = new ImportFileAction($clientFactory)->act(...[
-        'request' => $importUploadedFileRequest,
+    // Import the uploaded file to the search store
+    $response = new ImportUploadedFileAction($clientFactory)->act(...[
+        'request' => new ImportUploadedFileRequest($vendor, $argv[2], $argv[1]),
     ]);
 } catch (LlmSdkExceptionInterface $e) {
     $response = $e;

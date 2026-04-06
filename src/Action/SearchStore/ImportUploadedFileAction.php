@@ -7,7 +7,7 @@ use OneToMany\LlmSdk\Contract\Action\SearchStore\ImportUploadedFileActionInterfa
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
 use OneToMany\LlmSdk\Response\SearchStore\ImportUploadedFileResponse;
 
-final readonly class ImportFileAction extends BaseAction implements ImportUploadedFileActionInterface
+final readonly class ImportUploadedFileAction extends BaseAction implements ImportUploadedFileActionInterface
 {
     /**
      * @see OneToMany\LlmSdk\Contract\Action\SearchStore\ImportUploadedFileActionInterface
