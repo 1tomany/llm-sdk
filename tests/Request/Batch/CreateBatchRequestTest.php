@@ -14,6 +14,6 @@ final class CreateBatchRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The name cannot be empty.');
 
-        new CreateBatchRequest(Model::Mock, '  ');
+        new CreateBatchRequest(Model::Mock, '  ', null);
     }
 }

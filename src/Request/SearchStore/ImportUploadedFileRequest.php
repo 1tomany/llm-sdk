@@ -24,7 +24,10 @@ class ImportUploadedFileRequest
         ?string $uri,
         string|FileUri|null $fileUri,
     ) {
-        $this->usingVendor($vendor)->usingUri($uri)->usingFileUri($fileUri);
+        $this
+            ->usingVendor($vendor)
+            ->usingUri($uri)
+            ->usingFileUri($fileUri);
     }
 
     /**

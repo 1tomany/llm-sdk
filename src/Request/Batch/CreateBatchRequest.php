@@ -8,7 +8,6 @@ use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Trait\UsesModelTrait;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 
-use function is_string;
 use function trim;
 
 class CreateBatchRequest
@@ -19,12 +18,12 @@ class CreateBatchRequest
      * @var non-empty-string
      */
     private string $name;
-    private ?FileUri $fileUri = null;
+    private FileUri $fileUri;
 
     public function __construct(
         string|Model $model,
         ?string $name,
-        string|FileUri|null $fileUri = null,
+        string|FileUri|null $fileUri,
     ) {
         $this
             ->usingModel($model)
@@ -54,32 +53,18 @@ class CreateBatchRequest
         return $this;
     }
 
-    /**
-     * @throws RuntimeException when the file URI has not been set
-     */
     public function getFileUri(): FileUri
     {
-        return $this->fileUri ?? throw new RuntimeException('The file URI has not been set.');
+        return $this->fileUri;
     }
 
-    /**
-     * @throws InvalidArgumentException when the trimmed file URI is empty
-     */
     public function usingFileUri(string|FileUri|null $fileUri): static
     {
-        if (null === $fileUri) {
-            $this->fileUri = null;
-        } else {
-            if (is_string($fileUri)) {
-                if (!$fileUri = trim($fileUri)) {
-                    throw new InvalidArgumentException('The file URI cannot be empty.');
-                }
-            } else {
-                $fileUri = $fileUri->getUri();
-            }
-
-            $this->fileUri = new FileUri($fileUri, 'application/jsonl');
+        if ($fileUri instanceof FileUri) {
+            $fileUri = $fileUri->getUri();
         }
+
+        $this->fileUri = FileUri::create($fileUri, 'application/json');
 
         return $this;
     }
