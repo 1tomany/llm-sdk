@@ -23,6 +23,9 @@ final class FileUriTest extends TestCase
         FileUri::create(null);
     }
 
+    /**
+     * @param ?non-empty-lowercase-string $format
+     */
     #[DataProvider('providerFormatAndIsImage')]
     public function testIsImage(?string $format, bool $isImage): void
     {
@@ -30,7 +33,7 @@ final class FileUriTest extends TestCase
     }
 
     /**
-     * @return non-empty-list<non-empty-list<bool|string|null>>
+     * @return non-empty-list<non-empty-list<bool|non-empty-lowercase-string|null>>
      */
     public static function providerFormatAndIsImage(): array
     {
