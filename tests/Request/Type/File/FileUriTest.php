@@ -18,7 +18,7 @@ final class FileUriTest extends TestCase
     public function testCreatingFileUriRequiresNonEmptyTrimmedUri(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The URI cannot be empty.');
+        $this->expectExceptionMessage('The file URI cannot be empty.');
 
         FileUri::create(null);
     }

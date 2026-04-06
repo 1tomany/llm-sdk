@@ -12,7 +12,7 @@ final class CreateSearchStoreRequestTest extends TestCase
     public function testConstructorRequiresNonEmptyTrimmedName(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The name cannot be empty.');
+        $this->expectExceptionMessage('The search store name cannot be empty.');
 
         new CreateSearchStoreRequest(Vendor::Mock, '  ', null);
     }

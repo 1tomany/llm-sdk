@@ -12,7 +12,7 @@ final class CreateBatchRequestTest extends TestCase
     public function testConstructorRequiresNonEmptyTrimmedName(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The name cannot be empty.');
+        $this->expectExceptionMessage('The batch name cannot be empty.');
 
         new CreateBatchRequest(Model::Mock, '  ', null);
     }

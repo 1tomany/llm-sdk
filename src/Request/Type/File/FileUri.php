@@ -23,7 +23,7 @@ final readonly class FileUri
     }
 
     /**
-     * @throws InvalidArgumentException when the trimmed URI is empty
+     * @throws InvalidArgumentException when the trimmed file URI is empty
      */
     public static function create(
         string|self|null $uri,
@@ -32,7 +32,7 @@ final readonly class FileUri
     ): self {
         if (!$uri instanceof self) {
             if (!$uri = trim((string) $uri)) {
-                throw new InvalidArgumentException('The URI cannot be empty.');
+                throw new InvalidArgumentException('The file URI cannot be empty.');
             }
 
             $uri = new FileUri($uri, $format ? strtolower($format) : null, $role);

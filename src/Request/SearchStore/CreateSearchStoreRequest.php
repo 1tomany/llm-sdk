@@ -33,12 +33,12 @@ class CreateSearchStoreRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the trimmed name is empty
+     * @throws InvalidArgumentException when the trimmed search store name is empty
      */
     public function usingName(?string $name): static
     {
         if (!$name = trim((string) $name)) {
-            throw new InvalidArgumentException('The name cannot be empty.');
+            throw new InvalidArgumentException('The search store name cannot be empty.');
         }
 
         $this->name = $name;
