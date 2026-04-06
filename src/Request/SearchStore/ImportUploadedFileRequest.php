@@ -16,38 +16,38 @@ class ImportUploadedFileRequest
     /**
      * @var non-empty-string
      */
-    private string $uri;
+    private string $searchStoreUri;
     private FileUri $fileUri;
 
     public function __construct(
         string|Vendor $vendor,
-        ?string $uri,
+        ?string $searchStoreUri,
         string|FileUri|null $fileUri,
     ) {
         $this
             ->usingVendor($vendor)
-            ->usingUri($uri)
+            ->usingSearchStoreUri($searchStoreUri)
             ->usingFileUri($fileUri);
     }
 
     /**
      * @return non-empty-string
      */
-    public function getUri(): string
+    public function getSearchStoreUri(): string
     {
-        return $this->uri;
+        return $this->searchStoreUri;
     }
 
     /**
-     * @throws InvalidArgumentException when the trimmed URI is empty
+     * @throws InvalidArgumentException when the trimmed search store URI is empty
      */
-    public function usingUri(?string $uri): static
+    public function usingSearchStoreUri(?string $searchStoreUri): static
     {
-        if (!$uri = trim((string) $uri)) {
-            throw new InvalidArgumentException('The URI cannot be empty.');
+        if (!$searchStoreUri = trim((string) $searchStoreUri)) {
+            throw new InvalidArgumentException('The search store URI cannot be empty.');
         }
 
-        $this->uri = $uri;
+        $this->searchStoreUri = $searchStoreUri;
 
         return $this;
     }
