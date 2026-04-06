@@ -5,7 +5,6 @@ namespace OneToMany\LlmSdk\Request\SearchStore;
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Trait\UsesVendorTrait;
-use OneToMany\LlmSdk\Request\Type\File\FileUri;
 
 use function trim;
 
