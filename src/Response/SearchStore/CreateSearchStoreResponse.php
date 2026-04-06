@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Response\SearchStore;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-final readonly class CreateStoreResponse implements \JsonSerializable
+final readonly class CreateSearchStoreResponse implements \JsonSerializable
 {
     /**
      * @param non-empty-string $uri
