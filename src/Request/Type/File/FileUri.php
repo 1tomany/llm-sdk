@@ -6,6 +6,7 @@ use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Type\Enum\Role;
 
 use function in_array;
+use function trim;
 
 final readonly class FileUri
 {
@@ -27,14 +28,13 @@ final readonly class FileUri
         string|self|null $uri,
         ?string $format = null,
         Role $role = Role::User,
-    ): self
-    {
+    ): self {
         if (!$uri instanceof self) {
-            if (!$uri = \trim((string) $uri)) {
+            if (!$uri = trim((string) $uri)) {
                 throw new InvalidArgumentException('The URI cannot be empty.');
             }
 
-            $uri = new FileUri($uri, $format, $role);
+            $uri = new FileUri($uri, \strtolower((string) $format) ?: null, $role);
         }
 
         return $uri;

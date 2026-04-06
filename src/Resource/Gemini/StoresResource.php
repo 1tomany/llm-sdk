@@ -44,7 +44,7 @@ final readonly class StoresResource extends BaseResource implements StoresResour
      */
     public function importFile(ImportUploadedFileRequest $request): ImportFileResponse
     {
-        $importFile = new ImportFile($request->getFileUri());
+        $importFile = new ImportFile($request->getFileUri()->getUri());
 
         $url = $this->buildUrl($this->getApiVersion(), sprintf('%s:importFile', $request->getUri()));
 
