@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Contract\Action\Store;
+namespace OneToMany\LlmSdk\Contract\Action\SearchStore;
 
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
 use OneToMany\LlmSdk\Response\SearchStore\CreateSearchStoreResponse;

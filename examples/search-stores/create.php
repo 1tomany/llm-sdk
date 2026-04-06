@@ -12,16 +12,13 @@ try {
     $vendor = trim($argv[1] ?? '') ?: 'mock';
 
     if (!$name = trim($argv[2] ?? '')) {
-        printf("Usage: php %s <vendor> <store-name>\n", basename(__FILE__));
+        printf("Usage: php %s <vendor> <search-store-name>\n", basename(__FILE__));
         exit(1);
     }
 
-    // Create the search store request
-    $createSearchStoreRequest = new CreateSearchStoreRequest($vendor, $name);
-
     // Create the search store
     $response = new CreateStoreAction($clientFactory)->act(...[
-        'request' => $createSearchStoreRequest,
+        'request' => new CreateSearchStoreRequest($vendor, $name),
     ]);
 } catch (LlmSdkExceptionInterface $e) {
     $response = $e;

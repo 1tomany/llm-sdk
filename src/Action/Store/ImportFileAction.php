@@ -3,14 +3,14 @@
 namespace OneToMany\LlmSdk\Action\Store;
 
 use OneToMany\LlmSdk\Action\BaseAction;
-use OneToMany\LlmSdk\Contract\Action\Store\ImportFileActionInterface;
+use OneToMany\LlmSdk\Contract\Action\SearchStore\ImportFileActionInterface;
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
 use OneToMany\LlmSdk\Response\SearchStore\ImportUploadedFileResponse;
 
 final readonly class ImportFileAction extends BaseAction implements ImportFileActionInterface
 {
     /**
-     * @see OneToMany\LlmSdk\Contract\Action\Store\ImportFileActionInterface
+     * @see OneToMany\LlmSdk\Contract\Action\SearchStore\ImportFileActionInterface
      */
     public function act(ImportUploadedFileRequest $request): ImportUploadedFileResponse
     {

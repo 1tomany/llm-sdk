@@ -1,35 +1,23 @@
 <?php
 
-use OneToMany\LlmSdk\Action\File\UploadFileAction;
 use OneToMany\LlmSdk\Action\Store\ImportFileAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
-use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
 
 /** @var ClientFactory $clientFactory */
-$clientFactory = require dirname(__DIR__).'/../bootstrap.php';
+$clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
 try {
     $vendor = trim($argv[1] ?? '') ?: 'mock';
 
-    if (!isset($argv[2]) || !isset($argv[3])) {
-        printf("Usage: php %s <vendor> <store-uri> <file-path>\n", basename(__FILE__));
+    if (empty($argv[2] ?? null) || empty($argv[3] ?? null)) {
+        printf("Usage: php %s <vendor> <search-store-uri> <file-uri>\n", basename(__FILE__));
         exit(1);
     }
 
-    // Create a request to upload the file
-    $uploadFileRequest = new UploadFileRequest($vendor, $argv[3])->usingFormat(...[
-        'format' => @mime_content_type($argv[3]) ?: null,
-    ]);
-
-    // Upload the file to the LLM vendor
-    $response = new UploadFileAction($clientFactory)->act(...[
-        'request' => $uploadFileRequest,
-    ]);
-
     // Create a request to import the file to the search store
-    $importUploadedFileRequest = new ImportUploadedFileRequest($vendor, $argv[2], $response->getUri());
+    $importUploadedFileRequest = new ImportUploadedFileRequest($vendor, $argv[2], $argv[1]);
 
     // Import the file to the search store
     $response = new ImportFileAction($clientFactory)->act(...[
