@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Contract\Action\SearchStore;
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
 use OneToMany\LlmSdk\Response\SearchStore\ImportUploadedFileResponse;
 
-interface ImportFileActionInterface
+interface ImportUploadedFileActionInterface
 {
     public function act(ImportUploadedFileRequest $request): ImportUploadedFileResponse;
 }
