@@ -1,6 +1,6 @@
 <?php
 
-use OneToMany\LlmSdk\Action\Store\ImportFileAction;
+use OneToMany\LlmSdk\Action\SearchStore\ImportFileAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;

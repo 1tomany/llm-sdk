@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Action\Store;
+namespace OneToMany\LlmSdk\Action\SearchStore;
 
 use OneToMany\LlmSdk\Action\BaseAction;
 use OneToMany\LlmSdk\Contract\Action\SearchStore\CreateStoreActionInterface;

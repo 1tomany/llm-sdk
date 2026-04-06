@@ -1,6 +1,6 @@
 <?php
 
-use OneToMany\LlmSdk\Action\Store\CreateStoreAction;
+use OneToMany\LlmSdk\Action\SearchStore\CreateStoreAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
