@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Response\Batch;
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Response\Trait\HasModelTrait;
 
-readonly class BaseBatchResponse implements \JsonSerializable
+abstract readonly class AbstractBatchResponse implements \JsonSerializable
 {
     use HasModelTrait;
 

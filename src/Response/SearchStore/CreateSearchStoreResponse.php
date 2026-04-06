@@ -2,6 +2,6 @@
 
 namespace OneToMany\LlmSdk\Response\SearchStore;
 
-final readonly class CreateSearchStoreResponse extends BaseSearchStoreResponse
+final readonly class CreateSearchStoreResponse extends AbstractSearchStoreResponse
 {
 }
