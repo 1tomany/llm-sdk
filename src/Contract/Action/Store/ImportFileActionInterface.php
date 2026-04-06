@@ -2,10 +2,10 @@
 
 namespace OneToMany\LlmSdk\Contract\Action\Store;
 
-use OneToMany\LlmSdk\Request\SearchStore\ImportSearchStoreFileRequest;
+use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
 use OneToMany\LlmSdk\Response\Store\ImportFileResponse;
 
 interface ImportFileActionInterface
 {
-    public function act(ImportSearchStoreFileRequest $request): ImportFileResponse;
+    public function act(ImportUploadedFileRequest $request): ImportFileResponse;
 }

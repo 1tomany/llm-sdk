@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 
 use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
-use OneToMany\LlmSdk\Request\SearchStore\ImportSearchStoreFileRequest;
+use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store\CreateStore;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store\ImportFile;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\Document\Document;
@@ -42,13 +42,11 @@ final readonly class StoresResource extends BaseResource implements StoresResour
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface
      */
-    public function importFile(ImportSearchStoreFileRequest $request): ImportFileResponse
+    public function importFile(ImportUploadedFileRequest $request): ImportFileResponse
     {
-        $importFile = new ImportFile(...[
-            'fileUri' => $request->getFileUri(),
-        ]);
+        $importFile = new ImportFile($request->getFileUri());
 
-        $url = $this->buildUrl($this->getApiVersion(), sprintf('%s:importFile', $request->getStoreUri()));
+        $url = $this->buildUrl($this->getApiVersion(), sprintf('%s:importFile', $request->getUri()));
 
         $response = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders(),

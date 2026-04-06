@@ -55,6 +55,14 @@ class CreateBatchRequest
     }
 
     /**
+     * @throws RuntimeException when the file URI has not been set
+     */
+    public function getFileUri(): FileUri
+    {
+        return $this->fileUri ?? throw new RuntimeException('The file URI has not been set.');
+    }
+
+    /**
      * @throws InvalidArgumentException when the trimmed file URI is empty
      */
     public function usingFileUri(string|FileUri|null $fileUri): static
@@ -74,13 +82,5 @@ class CreateBatchRequest
         }
 
         return $this;
-    }
-
-    /**
-     * @throws RuntimeException when the file URI has not been set
-     */
-    public function getFileUri(): FileUri
-    {
-        return $this->fileUri ?? throw new RuntimeException('The file URI has not been set.');
     }
 }

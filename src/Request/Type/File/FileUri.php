@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Request\Type\File;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Type\Enum\Role;
 
 use function in_array;
@@ -17,6 +18,26 @@ final readonly class FileUri
         private ?string $format = null,
         private Role $role = Role::User,
     ) {
+    }
+
+    /**
+     * @throws InvalidArgumentException when the trimmed URI is empty
+     */
+    public static function create(
+        string|self|null $uri,
+        ?string $format = null,
+        Role $role = Role::User,
+    ): self
+    {
+        if (!$uri instanceof self) {
+            if (!$uri = \trim((string) $uri)) {
+                throw new InvalidArgumentException('The URI cannot be empty.');
+            }
+
+            $uri = new FileUri($uri, $format, $role);
+        }
+
+        return $uri;
     }
 
     /**
