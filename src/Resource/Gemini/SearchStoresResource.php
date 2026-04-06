@@ -5,12 +5,14 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 use OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface;
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
+use OneToMany\LlmSdk\Request\SearchStore\ReadSearchStoreRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\FileSearchStore\CreateFileSearchStore;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\FileSearchStore\ImportFile;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\FileSearchStore;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\ImportFileOperation;
 use OneToMany\LlmSdk\Response\SearchStore\CreateSearchStoreResponse;
 use OneToMany\LlmSdk\Response\SearchStore\ImportUploadedFileResponse;
+use OneToMany\LlmSdk\Response\SearchStore\ReadSearchStoreResponse;
 
 use function sprintf;
 
@@ -37,6 +39,22 @@ final readonly class SearchStoresResource extends BaseResource implements Search
         $object = $this->doDenormalize($response, FileSearchStore::class);
 
         return new CreateSearchStoreResponse($request->getVendor(), $object->name, $object->getSize());
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface
+     */
+    public function read(ReadSearchStoreRequest $request): ReadSearchStoreResponse
+    {
+        $url = $this->buildUrl($this->getApiVersion(), $request->getUri());
+
+        $response = $this->doGetRequest($url, [
+            'headers' => $this->buildHeaders(),
+        ]);
+
+        $object = $this->doDenormalize($response, FileSearchStore::class);
+
+        return new ReadSearchStoreResponse($request->getVendor(), $object->name, $object->getSize());
     }
 
     /**
