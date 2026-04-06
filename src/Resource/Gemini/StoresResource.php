@@ -9,8 +9,8 @@ use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store\CreateStore;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store\ImportFile;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\Document\Document;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\FileSearchStore;
-use OneToMany\LlmSdk\Response\Store\CreateStoreResponse;
-use OneToMany\LlmSdk\Response\Store\ImportFileResponse;
+use OneToMany\LlmSdk\Response\SearchStore\CreateStoreResponse;
+use OneToMany\LlmSdk\Response\SearchStore\ImportFileResponse;
 
 use function sprintf;
 

@@ -1,17 +1,19 @@
 <?php
 
-namespace OneToMany\LlmSdk\Response\Store;
+namespace OneToMany\LlmSdk\Response\SearchStore;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-final readonly class ImportFileResponse implements \JsonSerializable
+final readonly class CreateStoreResponse implements \JsonSerializable
 {
     /**
      * @param non-empty-string $uri
+     * @param non-negative-int $size
      */
     public function __construct(
         private Vendor $vendor,
         private string $uri,
+        private int $size,
     ) {
     }
 
@@ -29,11 +31,20 @@ final readonly class ImportFileResponse implements \JsonSerializable
     }
 
     /**
+     * @return non-negative-int
+     */
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    /**
      * @see \JsonSerializable
      *
      * @return array{
      *   vendor: non-empty-lowercase-string,
      *   uri: non-empty-string,
+     *   size: non-negative-int,
      * }
      */
     public function jsonSerialize(): array
@@ -41,6 +52,7 @@ final readonly class ImportFileResponse implements \JsonSerializable
         return [
             'vendor' => $this->getVendor()->getValue(),
             'uri' => $this->getUri(),
+            'size' => $this->getSize(),
         ];
     }
 }

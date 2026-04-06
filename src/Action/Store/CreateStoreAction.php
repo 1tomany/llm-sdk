@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Action\Store;
 use OneToMany\LlmSdk\Action\BaseAction;
 use OneToMany\LlmSdk\Contract\Action\Store\CreateStoreActionInterface;
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
-use OneToMany\LlmSdk\Response\Store\CreateStoreResponse;
+use OneToMany\LlmSdk\Response\SearchStore\CreateStoreResponse;
 
 final readonly class CreateStoreAction extends BaseAction implements CreateStoreActionInterface
 {

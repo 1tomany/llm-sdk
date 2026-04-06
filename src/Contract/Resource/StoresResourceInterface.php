@@ -4,8 +4,8 @@ namespace OneToMany\LlmSdk\Contract\Resource;
 
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
-use OneToMany\LlmSdk\Response\Store\CreateStoreResponse;
-use OneToMany\LlmSdk\Response\Store\ImportFileResponse;
+use OneToMany\LlmSdk\Response\SearchStore\CreateStoreResponse;
+use OneToMany\LlmSdk\Response\SearchStore\ImportFileResponse;
 
 interface StoresResourceInterface
 {

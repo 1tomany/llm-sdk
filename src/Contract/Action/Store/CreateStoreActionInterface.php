@@ -3,7 +3,7 @@
 namespace OneToMany\LlmSdk\Contract\Action\Store;
 
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
-use OneToMany\LlmSdk\Response\Store\CreateStoreResponse;
+use OneToMany\LlmSdk\Response\SearchStore\CreateStoreResponse;
 
 interface CreateStoreActionInterface
 {
