@@ -3,22 +3,23 @@
 namespace OneToMany\LlmSdk\Response\Batch;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
-use OneToMany\LlmSdk\Response\BaseResponse;
+use OneToMany\LlmSdk\Response\Trait\HasModelTrait;
 
-readonly class BaseBatchResponse extends BaseResponse implements \JsonSerializable
+readonly class BaseBatchResponse implements \JsonSerializable
 {
+    use HasModelTrait;
+
     /**
      * @param non-empty-string $uri
      * @param non-empty-string $status
      * @param ?non-empty-string $file
      */
     public function __construct(
-        Model $model,
+        private Model $model,
         private string $uri,
         private string $status,
         private ?string $file = null,
     ) {
-        parent::__construct($model);
     }
 
     /**
