@@ -4,7 +4,7 @@ namespace OneToMany\LlmSdk\Action\Store;
 
 use OneToMany\LlmSdk\Action\BaseAction;
 use OneToMany\LlmSdk\Contract\Action\Store\CreateStoreActionInterface;
-use OneToMany\LlmSdk\Request\Store\CreateStoreRequest;
+use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
 use OneToMany\LlmSdk\Response\Store\CreateStoreResponse;
 
 final readonly class CreateStoreAction extends BaseAction implements CreateStoreActionInterface
@@ -12,7 +12,7 @@ final readonly class CreateStoreAction extends BaseAction implements CreateStore
     /**
      * @see OneToMany\LlmSdk\Contract\Action\Store\CreateStoreActionInterface
      */
-    public function act(CreateStoreRequest $request): CreateStoreResponse
+    public function act(CreateSearchStoreRequest $request): CreateStoreResponse
     {
         return $this->createClient($request->getVendor())->stores()->create($request);
     }

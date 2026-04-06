@@ -3,7 +3,7 @@
 use OneToMany\LlmSdk\Action\Store\CreateStoreAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
-use OneToMany\LlmSdk\Request\Store\CreateStoreRequest;
+use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
 
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
@@ -17,11 +17,11 @@ try {
     }
 
     // Create the search store request
-    $createStoreRequest = new CreateStoreRequest($vendor, $name);
+    $createSearchStoreRequest = new CreateSearchStoreRequest($vendor, $name);
 
     // Create the search store
     $response = new CreateStoreAction($clientFactory)->act(...[
-        'request' => $createStoreRequest,
+        'request' => $createSearchStoreRequest,
     ]);
 } catch (LlmSdkExceptionInterface $e) {
     $response = $e;

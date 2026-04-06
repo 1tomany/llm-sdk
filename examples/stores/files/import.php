@@ -5,7 +5,7 @@ use OneToMany\LlmSdk\Action\Store\ImportFileAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\File\UploadFileRequest;
-use OneToMany\LlmSdk\Request\Store\ImportFileRequest;
+use OneToMany\LlmSdk\Request\SearchStore\ImportSearchStoreFileRequest;
 
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/../bootstrap.php';
@@ -29,13 +29,13 @@ try {
     ]);
 
     // Create a request to import the file to the search store
-    $importFileRequest = new ImportFileRequest($vendor, $argv[2], $response->getUri())->usingFileName(...[
+    $importSearchStoreFileRequest = new ImportSearchStoreFileRequest($vendor, $argv[2], $response->getUri())->usingFileName(...[
         'fileName' => $response->getName(),
     ]);
 
     // Import the file to the search store
     $response = new ImportFileAction($clientFactory)->act(...[
-        'request' => $importFileRequest,
+        'request' => $importSearchStoreFileRequest,
     ]);
 } catch (LlmSdkExceptionInterface $e) {
     $response = $e;

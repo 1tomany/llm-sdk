@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Request\Store;
+namespace OneToMany\LlmSdk\Request\SearchStore;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
@@ -8,7 +8,7 @@ use OneToMany\LlmSdk\Request\Trait\UsesVendorTrait;
 
 use function trim;
 
-class CreateStoreRequest
+class CreateSearchStoreRequest
 {
     use UsesVendorTrait;
 

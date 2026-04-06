@@ -2,14 +2,14 @@
 
 namespace OneToMany\LlmSdk\Contract\Resource;
 
-use OneToMany\LlmSdk\Request\Store\CreateStoreRequest;
-use OneToMany\LlmSdk\Request\Store\ImportFileRequest;
+use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
+use OneToMany\LlmSdk\Request\SearchStore\ImportSearchStoreFileRequest;
 use OneToMany\LlmSdk\Response\Store\CreateStoreResponse;
 use OneToMany\LlmSdk\Response\Store\ImportFileResponse;
 
 interface StoresResourceInterface
 {
-    public function create(CreateStoreRequest $request): CreateStoreResponse;
+    public function create(CreateSearchStoreRequest $request): CreateStoreResponse;
 
-    public function importFile(ImportFileRequest $request): ImportFileResponse;
+    public function importFile(ImportSearchStoreFileRequest $request): ImportFileResponse;
 }
