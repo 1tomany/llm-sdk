@@ -10,11 +10,11 @@ final readonly class FileUri
 {
     /**
      * @param non-empty-string $uri
-     * @param non-empty-lowercase-string $format
+     * @param ?non-empty-lowercase-string $format
      */
     public function __construct(
         private string $uri,
-        private string $format,
+        private ?string $format = null,
         private Role $role = Role::User,
     ) {
     }
@@ -28,9 +28,9 @@ final readonly class FileUri
     }
 
     /**
-     * @return non-empty-lowercase-string
+     * @return ?non-empty-lowercase-string
      */
-    public function getFormat(): string
+    public function getFormat(): ?string
     {
         return $this->format;
     }
@@ -53,7 +53,7 @@ final readonly class FileUri
     /**
      * @return array{
      *   uri: non-empty-string,
-     *   format: non-empty-lowercase-string,
+     *   format: ?non-empty-lowercase-string,
      *   role: non-empty-lowercase-string,
      * }
      */
