@@ -14,6 +14,6 @@ final class CreateSearchStoreRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The search store name cannot be empty.');
 
-        new CreateSearchStoreRequest(Vendor::Mock, '  ', null);
+        new CreateSearchStoreRequest(Vendor::Mock, '  ');
     }
 }
