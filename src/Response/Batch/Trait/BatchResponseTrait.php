@@ -1,26 +1,13 @@
 <?php
 
-namespace OneToMany\LlmSdk\Response\Batch;
+namespace OneToMany\LlmSdk\Response\Batch\Trait;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Response\Trait\HasModelTrait;
 
-abstract readonly class AbstractBatchResponse implements \JsonSerializable
+trait BatchResponseTrait
 {
     use HasModelTrait;
-
-    /**
-     * @param non-empty-string $uri
-     * @param non-empty-string $status
-     * @param ?non-empty-string $file
-     */
-    public function __construct(
-        private Model $model,
-        private string $uri,
-        private string $status,
-        private ?string $file = null,
-    ) {
-    }
 
     /**
      * @return non-empty-string
