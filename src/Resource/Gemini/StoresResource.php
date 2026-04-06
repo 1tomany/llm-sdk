@@ -10,7 +10,7 @@ use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store\ImportFile;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\Document\Document;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\FileSearchStore;
 use OneToMany\LlmSdk\Response\SearchStore\CreateSearchStoreResponse;
-use OneToMany\LlmSdk\Response\SearchStore\ImportFileResponse;
+use OneToMany\LlmSdk\Response\SearchStore\ImportUploadedFileResponse;
 
 use function sprintf;
 
@@ -42,7 +42,7 @@ final readonly class StoresResource extends BaseResource implements StoresResour
     /**
      * @see OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface
      */
-    public function importFile(ImportUploadedFileRequest $request): ImportFileResponse
+    public function importFile(ImportUploadedFileRequest $request): ImportUploadedFileResponse
     {
         $importFile = new ImportFile($request->getFileUri()->getUri());
 
@@ -57,6 +57,6 @@ final readonly class StoresResource extends BaseResource implements StoresResour
 
         $object = $this->doDenormalize($response, Document::class);
 
-        return new ImportFileResponse($request->getVendor(), $object->name);
+        return new ImportUploadedFileResponse($request->getVendor(), $object->name);
     }
 }
