@@ -10,11 +10,13 @@ use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface;
 use OneToMany\LlmSdk\Resource\Gemini\BatchesResource;
 use OneToMany\LlmSdk\Resource\Gemini\EmbeddingsResource;
 use OneToMany\LlmSdk\Resource\Gemini\FilesResource;
 use OneToMany\LlmSdk\Resource\Gemini\OutputsResource;
 use OneToMany\LlmSdk\Resource\Gemini\QueriesResource;
+use OneToMany\LlmSdk\Resource\Gemini\SearchStoresResource;
 
 final class GeminiClient extends BaseClient implements ClientInterface
 {
@@ -82,5 +84,15 @@ final class GeminiClient extends BaseClient implements ClientInterface
         $this->queries ??= new QueriesResource($this->httpClient, $this->serializer, $this->getApiKey(), $this->getApiVersion());
 
         return $this->queries;
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
+    public function searchStores(): SearchStoresResourceInterface
+    {
+        $this->searchStores ??= new SearchStoresResource($this->httpClient, $this->serializer, $this->getApiKey(), $this->getApiVersion());
+
+        return $this->searchStores;
     }
 }

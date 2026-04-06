@@ -2,8 +2,9 @@
 
 namespace OneToMany\LlmSdk\Request\Query;
 
+use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Request\BaseRequest;
+use OneToMany\LlmSdk\Request\Trait\UsesModelTrait;
 use OneToMany\LlmSdk\Request\Type\Enum\Role;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 use OneToMany\LlmSdk\Request\Type\Query\Dimensions;
@@ -14,8 +15,10 @@ use function is_string;
 use function sprintf;
 use function trim;
 
-class CompileQueryRequest extends BaseRequest
+class CompileQueryRequest
 {
+    use UsesModelTrait;
+
     /**
      * @var list<FileUri>
      */
@@ -41,24 +44,32 @@ class CompileQueryRequest extends BaseRequest
      */
     private ?Dimensions $dimensions = null;
 
+    public function __construct(
+        string|Model $model,
+    ) {
+        $this->usingModel($model);
+    }
+
     /**
      * @param ?non-empty-lowercase-string $format
      */
-    public function withFile(string|FileUri|null $file, ?string $format): static
-    {
-        if (is_string($file)) {
-            $file = trim($file);
+    public function withFileUri(
+        string|FileUri|null $fileUri,
+        ?string $format = null,
+    ): static {
+        if (is_string($fileUri)) {
+            $fileUri = trim($fileUri);
         }
 
-        if (!$file || !$format) {
+        if (!$fileUri || !$format) {
             return $this;
         }
 
-        if (!$file instanceof FileUri) {
-            $file = new FileUri($file, $format);
+        if (!$fileUri instanceof FileUri) {
+            $fileUri = new FileUri($fileUri, $format);
         }
 
-        $this->files[] = $file;
+        $this->files[] = $fileUri;
 
         return $this;
     }

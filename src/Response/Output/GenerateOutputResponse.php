@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface;
 use OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Response\BaseResponse;
+use OneToMany\LlmSdk\Response\Trait\HasModelTrait;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 
 use function json_decode;
@@ -15,8 +15,10 @@ use function trim;
 
 use const JSON_THROW_ON_ERROR;
 
-final readonly class GenerateOutputResponse extends BaseResponse implements \JsonSerializable, QueryResponseInterface
+final readonly class GenerateOutputResponse implements \JsonSerializable, QueryResponseInterface
 {
+    use HasModelTrait;
+
     /**
      * @param ?non-empty-string $uri
      * @param array<string, mixed> $response
@@ -24,7 +26,7 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
      * @param ?non-empty-string $error
      */
     public function __construct(
-        string|Model $model,
+        private Model $model,
         private ?string $uri,
         private array $response,
         private ?string $output = null,
@@ -32,7 +34,6 @@ final readonly class GenerateOutputResponse extends BaseResponse implements \Jso
         private int|float $runtime = 0,
         private TokenUsage $usage = new TokenUsage(),
     ) {
-        parent::__construct($model);
     }
 
     /**

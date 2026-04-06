@@ -10,6 +10,8 @@ use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface;
+use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\OpenAi\BatchesResource;
 use OneToMany\LlmSdk\Resource\OpenAi\EmbeddingsResource;
 use OneToMany\LlmSdk\Resource\OpenAi\FilesResource;
@@ -74,5 +76,13 @@ final class OpenAiClient extends BaseClient implements ClientInterface
         $this->queries ??= new QueriesResource($this->httpClient, $this->serializer, $this->getApiKey());
 
         return $this->queries;
+    }
+
+    /**
+     * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
+     */
+    public function searchStores(): SearchStoresResourceInterface
+    {
+        throw new RuntimeException('Not implemented!');
     }
 }

@@ -6,16 +6,13 @@ use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
 final readonly class DeleteFileResponse implements \JsonSerializable
 {
-    private Vendor $vendor;
-
     /**
      * @param non-empty-string $uri
      */
     public function __construct(
-        string|Vendor $vendor,
+        private Vendor $vendor,
         private string $uri,
     ) {
-        $this->vendor = Vendor::create($vendor);
     }
 
     public function getVendor(): Vendor

@@ -2,7 +2,6 @@
 
 use OneToMany\LlmSdk\Action\File\UploadFileAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
-use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 
@@ -10,17 +9,20 @@ use OneToMany\LlmSdk\Request\File\UploadFileRequest;
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
 try {
-    if (!$path = trim($argv[1] ?? '')) {
-        throw new InvalidArgumentException(sprintf('Usage: php %s <path> <vendor>', basename(__FILE__)));
+    $vendor = trim($argv[1] ?? '') ?: 'mock';
+
+    if (!isset($argv[2])) {
+        printf("Usage: php %s <vendor> <file-path> [<purpose>]\n", basename(__FILE__));
+        exit(1);
     }
 
-    $vendor = trim($argv[2] ?? '') ?: 'mock';
-
     // Create a request to upload the file
-    $uploadFileRequest = new UploadFileRequest($vendor, $path)->usingPurpose($argv[3] ?? null);
+    $uploadFileRequest = new UploadFileRequest($vendor, $argv[2])->usingFormat(...[
+        'format' => @mime_content_type($argv[2]) ?: null,
+    ]);
 
-    if ($format = @mime_content_type($path)) {
-        $uploadFileRequest->usingFormat($format);
+    if (null !== $purpose = $argv[3] ?? null) {
+        $uploadFileRequest->usingPurpose($purpose);
     }
 
     // Upload the file to the LLM vendor

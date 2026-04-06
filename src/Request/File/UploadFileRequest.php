@@ -3,7 +3,9 @@
 namespace OneToMany\LlmSdk\Request\File;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Exception\RuntimeException;
+use OneToMany\LlmSdk\Request\Trait\UsesVendorTrait;
 
 use function basename;
 use function filesize;
@@ -14,7 +16,12 @@ use function trim;
 
 class UploadFileRequest
 {
-    private readonly Vendor $vendor;
+    use UsesVendorTrait;
+
+    /**
+     * @var non-empty-string
+     */
+    private string $path;
 
     /**
      * @var ?non-empty-string
@@ -36,20 +43,25 @@ class UploadFileRequest
      */
     private ?string $purpose = null;
 
-    /**
-     * @param non-empty-string $path
-     */
     public function __construct(
         string|Vendor $vendor,
-        private readonly string $path,
+        ?string $path,
     ) {
-        $this->vendor = Vendor::create($vendor);
-        $this->usingName(null);
+        $this->usingVendor($vendor)->atPath($path);
     }
 
-    public function getVendor(): Vendor
+    /**
+     * @throws InvalidArgumentException when the trimmed path is empty
+     */
+    public function atPath(?string $path): static
     {
-        return $this->vendor;
+        if (!$path = trim((string) $path)) {
+            throw new InvalidArgumentException('The path cannot be empty.');
+        }
+
+        $this->path = $path;
+
+        return $this->usingName(null);
     }
 
     /**

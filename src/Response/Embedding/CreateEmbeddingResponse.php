@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Contract\Response\Query\QueryResponseInterface;
 use OneToMany\LlmSdk\Contract\Response\Usage\TokenUsageInterface;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Response\BaseResponse;
+use OneToMany\LlmSdk\Response\Trait\HasModelTrait;
 use OneToMany\LlmSdk\Response\Usage\TokenUsage;
 
 use function array_map;
@@ -16,8 +16,10 @@ use function json_encode;
 use function max;
 use function sqrt;
 
-final readonly class CreateEmbeddingResponse extends BaseResponse implements \JsonSerializable, QueryResponseInterface
+final readonly class CreateEmbeddingResponse implements \JsonSerializable, QueryResponseInterface
 {
+    use HasModelTrait;
+
     private float $l2Norm;
 
     /**
@@ -28,15 +30,13 @@ final readonly class CreateEmbeddingResponse extends BaseResponse implements \Js
      * @throws InvalidArgumentException when the embedding vector is empty
      */
     public function __construct(
-        string|Model $model,
+        private Model $model,
         private ?string $uri,
         private array $embedding,
         private ?string $error = null,
         private int|float $runtime = 0,
         private TokenUsage $usage = new TokenUsage(),
     ) {
-        parent::__construct($model);
-
         if ([] === $embedding) {
             throw new InvalidArgumentException('The embedding vector cannot be empty.');
         }

@@ -4,24 +4,25 @@ namespace OneToMany\LlmSdk\Response\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Request\Query\ProcessQueryRequest;
-use OneToMany\LlmSdk\Response\BaseResponse;
+use OneToMany\LlmSdk\Response\Trait\HasModelTrait;
 
 use function hash;
 use function implode;
 use function json_encode;
 
-final readonly class CompileQueryResponse extends BaseResponse
+final readonly class CompileQueryResponse
 {
+    use HasModelTrait;
+
     /**
      * @param non-empty-string $url
      * @param array<string, mixed> $request
      */
     public function __construct(
-        string|Model $model,
+        private Model $model,
         private string $url,
         private array $request,
     ) {
-        parent::__construct($model);
     }
 
     /**

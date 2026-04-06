@@ -3,18 +3,25 @@
 namespace OneToMany\LlmSdk\Request\Batch;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
-use OneToMany\LlmSdk\Request\BaseRequest;
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
+use OneToMany\LlmSdk\Request\Trait\UsesModelTrait;
 
-class ReadBatchRequest extends BaseRequest
+use function trim;
+
+class ReadBatchRequest
 {
+    use UsesModelTrait;
+
     /**
-     * @param non-empty-string $uri
+     * @var non-empty-string
      */
+    private string $uri;
+
     public function __construct(
-        string|Model|null $model,
-        private readonly string $uri,
+        string|Model $model,
+        ?string $uri,
     ) {
-        parent::__construct($model);
+        $this->usingModel($model)->usingUri($uri);
     }
 
     /**
@@ -23,5 +30,19 @@ class ReadBatchRequest extends BaseRequest
     public function getUri(): string
     {
         return $this->uri;
+    }
+
+    /**
+     * @throws InvalidArgumentException when the trimmed batch URI is empty
+     */
+    public function usingUri(?string $uri): static
+    {
+        if (!$uri = trim((string) $uri)) {
+            throw new InvalidArgumentException('The batch URI cannot be empty.');
+        }
+
+        $this->uri = $uri;
+
+        return $this;
     }
 }

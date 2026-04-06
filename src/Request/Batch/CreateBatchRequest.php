@@ -4,39 +4,30 @@ namespace OneToMany\LlmSdk\Request\Batch;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Exception\RuntimeException;
-use OneToMany\LlmSdk\Request\BaseRequest;
+use OneToMany\LlmSdk\Request\Trait\UsesModelTrait;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 
-use function is_string;
 use function trim;
 
-class CreateBatchRequest extends BaseRequest
+class CreateBatchRequest
 {
+    use UsesModelTrait;
+
     /**
      * @var non-empty-string
      */
-    private readonly string $name;
-    private ?FileUri $fileUri = null;
+    private string $name;
+    private FileUri $fileUri;
 
-    /**
-     * @param non-empty-string $name
-     *
-     * @throws InvalidArgumentException when the trimmed name is empty
-     */
     public function __construct(
-        string|Model|null $model,
-        string $name,
-        ?string $file = null,
+        string|Model $model,
+        ?string $name,
+        string|FileUri|null $fileUri,
     ) {
-        parent::__construct($model);
-
-        if (!$name = trim($name)) {
-            throw new InvalidArgumentException('The name cannot be empty.');
-        }
-
-        $this->name = $name;
-        $this->usingFile($file);
+        $this
+            ->usingModel($model)
+            ->usingName($name)
+            ->usingFileUri($fileUri);
     }
 
     /**
@@ -48,32 +39,32 @@ class CreateBatchRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the trimmed file is empty
+     * @throws InvalidArgumentException when the trimmed batch name is empty
      */
-    public function usingFile(string|FileUri|null $fileUri): static
+    public function usingName(?string $name): static
     {
-        if (null === $fileUri) {
-            $this->fileUri = null;
-        } else {
-            if (is_string($fileUri)) {
-                if (!$fileUri = trim($fileUri)) {
-                    throw new InvalidArgumentException('The file cannot be empty.');
-                }
-
-                $fileUri = new FileUri($fileUri, 'application/jsonl');
-            }
-
-            $this->fileUri = $fileUri;
+        if (!$name = trim((string) $name)) {
+            throw new InvalidArgumentException('The batch name cannot be empty.');
         }
+
+        $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @throws RuntimeException when the file is missing
-     */
     public function getFileUri(): FileUri
     {
-        return $this->fileUri ?? throw new RuntimeException('The file is missing.');
+        return $this->fileUri;
+    }
+
+    public function usingFileUri(string|FileUri|null $fileUri): static
+    {
+        if ($fileUri instanceof FileUri) {
+            $fileUri = $fileUri->getUri();
+        }
+
+        $this->fileUri = FileUri::create($fileUri, 'application/json');
+
+        return $this;
     }
 }

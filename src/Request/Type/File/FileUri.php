@@ -2,21 +2,43 @@
 
 namespace OneToMany\LlmSdk\Request\Type\File;
 
+use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Type\Enum\Role;
 
 use function in_array;
+use function strtolower;
+use function trim;
 
 final readonly class FileUri
 {
     /**
      * @param non-empty-string $uri
-     * @param non-empty-lowercase-string $format
+     * @param ?non-empty-lowercase-string $format
      */
     public function __construct(
         private string $uri,
-        private string $format,
+        private ?string $format = null,
         private Role $role = Role::User,
     ) {
+    }
+
+    /**
+     * @throws InvalidArgumentException when the trimmed file URI is empty
+     */
+    public static function create(
+        string|self|null $uri,
+        ?string $format = null,
+        Role $role = Role::User,
+    ): self {
+        if (!$uri instanceof self) {
+            if (!$uri = trim((string) $uri)) {
+                throw new InvalidArgumentException('The file URI cannot be empty.');
+            }
+
+            $uri = new FileUri($uri, $format ? strtolower($format) : null, $role);
+        }
+
+        return $uri;
     }
 
     /**
@@ -28,9 +50,9 @@ final readonly class FileUri
     }
 
     /**
-     * @return non-empty-lowercase-string
+     * @return ?non-empty-lowercase-string
      */
-    public function getFormat(): string
+    public function getFormat(): ?string
     {
         return $this->format;
     }
@@ -53,7 +75,7 @@ final readonly class FileUri
     /**
      * @return array{
      *   uri: non-empty-string,
-     *   format: non-empty-lowercase-string,
+     *   format: ?non-empty-lowercase-string,
      *   role: non-empty-lowercase-string,
      * }
      */

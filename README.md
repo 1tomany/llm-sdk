@@ -46,24 +46,28 @@ This library allows you to compile a query before sending it to the model for tw
 1. You can log/analyze the request payload before sending it to the model.
 2. You can compile individual requests for batching.
 
-| Feature        | Anthropic | Gemini | Mock | OpenAI |
-| -------------- | :-------: | :----: | :--: | :----: |
-| **Batches**    |           |        |      |        |
-| Create         |    ❌     |   ✅   |  ✅  |   ✅   |
-| Read           |    ❌     |   ✅   |  ✅  |   ✅   |
-| Cancel         |    ❌     |   ❌   |  ❌  |   ❌   |
-| **Embeddings** |           |        |      |        |
-| Create         |    ❌     |   ✅   |  ✅  |   ✅   |
-| **Files**      |           |        |      |        |
-| Upload         |    ✅     |   ✅   |  ✅  |   ✅   |
-| Read           |    ❌     |   ❌   |  ❌  |   ❌   |
-| List           |    ❌     |   ❌   |  ❌  |   ❌   |
-| Download       |    ❌     |   ❌   |  ❌  |   ❌   |
-| Delete         |    ✅     |   ✅   |  ✅  |   ✅   |
-| **Outputs**    |           |        |      |        |
-| Generate       |    ❌     |   ✅   |  ✅  |   ✅   |
-| **Queries**    |           |        |      |        |
-| Compile        |    ❌     |   ✅   |  ✅  |   ✅   |
+| Feature          | Anthropic | Gemini | Mock | OpenAI |
+| ---------------- | :-------: | :----: | :--: | :----: |
+| **Batches**      |           |        |      |        |
+| Create           |    ❌     |   ✅   |  ✅  |   ✅   |
+| Read             |    ❌     |   ✅   |  ✅  |   ✅   |
+| Cancel           |    ❌     |   ❌   |  ❌  |   ❌   |
+| **Embeddings**   |           |        |      |        |
+| Create           |    ❌     |   ✅   |  ✅  |   ✅   |
+| **Files**        |           |        |      |        |
+| Upload           |    ✅     |   ✅   |  ✅  |   ✅   |
+| Read             |    ❌     |   ❌   |  ❌  |   ❌   |
+| List             |    ❌     |   ❌   |  ❌  |   ❌   |
+| Download         |    ❌     |   ❌   |  ❌  |   ❌   |
+| Delete           |    ✅     |   ✅   |  ✅  |   ✅   |
+| **Outputs**      |           |        |      |        |
+| Generate         |    ❌     |   ✅   |  ✅  |   ✅   |
+| **Queries**      |           |        |      |        |
+| Compile          |    ❌     |   ✅   |  ✅  |   ✅   |
+| **SearchStores** |           |        |      |        |
+| Create           |    ❌     |   ✅   |  ❌  |   ❌   |
+| Read             |    ❌     |   ✅   |  ❌  |   ❌   |
+| ImportFile       |    ❌     |   ✅   |  ❌  |   ❌   |
 
 ## Credits
 
