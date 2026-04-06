@@ -4,7 +4,6 @@ namespace OneToMany\LlmSdk\Request\Batch;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Request\Trait\UsesModelTrait;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
 
