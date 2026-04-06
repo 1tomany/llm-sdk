@@ -7,7 +7,7 @@ use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
-use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -20,7 +20,7 @@ class BaseClient
     protected ?FilesResourceInterface $files = null;
     protected ?OutputsResourceInterface $outputs = null;
     protected ?QueriesResourceInterface $queries = null;
-    protected ?StoresResourceInterface $stores = null;
+    protected ?SearchStoresResourceInterface $searchStores = null;
 
     /**
      * @param non-empty-string $apiKey

@@ -10,13 +10,13 @@ use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
-use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface;
 use OneToMany\LlmSdk\Resource\Gemini\BatchesResource;
 use OneToMany\LlmSdk\Resource\Gemini\EmbeddingsResource;
 use OneToMany\LlmSdk\Resource\Gemini\FilesResource;
 use OneToMany\LlmSdk\Resource\Gemini\OutputsResource;
 use OneToMany\LlmSdk\Resource\Gemini\QueriesResource;
-use OneToMany\LlmSdk\Resource\Gemini\StoresResource;
+use OneToMany\LlmSdk\Resource\Gemini\SearchStoresResource;
 
 final class GeminiClient extends BaseClient implements ClientInterface
 {
@@ -89,10 +89,10 @@ final class GeminiClient extends BaseClient implements ClientInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
-    public function stores(): StoresResourceInterface
+    public function searchStores(): SearchStoresResourceInterface
     {
-        $this->stores ??= new StoresResource($this->httpClient, $this->serializer, $this->getApiKey(), $this->getApiVersion());
+        $this->searchStores ??= new SearchStoresResource($this->httpClient, $this->serializer, $this->getApiKey(), $this->getApiVersion());
 
-        return $this->stores;
+        return $this->searchStores;
     }
 }

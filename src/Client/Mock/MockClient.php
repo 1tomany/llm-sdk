@@ -9,7 +9,7 @@ use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
-use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface;
 use OneToMany\LlmSdk\Exception\RuntimeException;
 use OneToMany\LlmSdk\Resource\Mock\BatchesResource;
 use OneToMany\LlmSdk\Resource\Mock\EmbeddingsResource;
@@ -79,7 +79,7 @@ final class MockClient implements ClientInterface
     /**
      * @see OneToMany\LlmSdk\Contract\Client\ClientInterface
      */
-    public function stores(): StoresResourceInterface
+    public function searchStores(): SearchStoresResourceInterface
     {
         throw new RuntimeException('Not implemented!');
     }

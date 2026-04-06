@@ -14,6 +14,6 @@ final readonly class CreateSearchStoreAction extends BaseAction implements Creat
      */
     public function act(CreateSearchStoreRequest $request): CreateSearchStoreResponse
     {
-        return $this->createClient($request->getVendor())->stores()->create($request);
+        return $this->createClient($request->getVendor())->searchStores()->create($request);
     }
 }

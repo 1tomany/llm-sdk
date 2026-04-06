@@ -14,6 +14,6 @@ final readonly class ImportUploadedFileAction extends BaseAction implements Impo
      */
     public function act(ImportUploadedFileRequest $request): ImportUploadedFileResponse
     {
-        return $this->createClient($request->getVendor())->stores()->importFile($request);
+        return $this->createClient($request->getVendor())->searchStores()->importFile($request);
     }
 }

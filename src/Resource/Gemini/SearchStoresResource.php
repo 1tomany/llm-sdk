@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini;
 
-use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface;
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store\CreateStore;
@@ -14,10 +14,10 @@ use OneToMany\LlmSdk\Response\SearchStore\ImportUploadedFileResponse;
 
 use function sprintf;
 
-final readonly class StoresResource extends BaseResource implements StoresResourceInterface
+final readonly class SearchStoresResource extends BaseResource implements SearchStoresResourceInterface
 {
     /**
-     * @see OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface
      */
     public function create(CreateSearchStoreRequest $request): CreateSearchStoreResponse
     {
@@ -40,7 +40,7 @@ final readonly class StoresResource extends BaseResource implements StoresResour
     }
 
     /**
-     * @see OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface
+     * @see OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface
      */
     public function importFile(ImportUploadedFileRequest $request): ImportUploadedFileResponse
     {

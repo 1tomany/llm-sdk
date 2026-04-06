@@ -8,7 +8,7 @@ use OneToMany\LlmSdk\Contract\Resource\EmbeddingsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\FilesResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\OutputsResourceInterface;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
-use OneToMany\LlmSdk\Contract\Resource\StoresResourceInterface;
+use OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface;
 
 interface ClientInterface
 {
@@ -24,5 +24,5 @@ interface ClientInterface
 
     public function queries(): QueriesResourceInterface;
 
-    public function stores(): StoresResourceInterface;
+    public function searchStores(): SearchStoresResourceInterface;
 }

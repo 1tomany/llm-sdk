@@ -7,7 +7,7 @@ use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
 use OneToMany\LlmSdk\Response\SearchStore\CreateSearchStoreResponse;
 use OneToMany\LlmSdk\Response\SearchStore\ImportUploadedFileResponse;
 
-interface StoresResourceInterface
+interface SearchStoresResourceInterface
 {
     public function create(CreateSearchStoreRequest $request): CreateSearchStoreResponse;
 
