@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Request\Store;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Request\FileSearchStore;
 
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Trait\ExtractFileNameTrait;
 
