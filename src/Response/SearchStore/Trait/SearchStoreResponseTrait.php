@@ -1,22 +1,11 @@
 <?php
 
-namespace OneToMany\LlmSdk\Response\SearchStore;
+namespace OneToMany\LlmSdk\Response\SearchStore\Trait;
 
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 
-abstract readonly class AbstractSearchStoreResponse implements \JsonSerializable
+trait SearchStoreResponseTrait
 {
-    /**
-     * @param non-empty-string $uri
-     * @param non-negative-int $size
-     */
-    public function __construct(
-        private Vendor $vendor,
-        private string $uri,
-        private int $size,
-    ) {
-    }
-
     public function getVendor(): Vendor
     {
         return $this->vendor;
