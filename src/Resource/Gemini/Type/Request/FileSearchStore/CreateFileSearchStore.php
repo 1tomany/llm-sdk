@@ -2,7 +2,7 @@
 
 namespace OneToMany\LlmSdk\Resource\Gemini\Type\Request\FileSearchStore;
 
-final readonly class CreateStore
+final readonly class CreateFileSearchStore
 {
     /**
      * @param non-empty-string $name

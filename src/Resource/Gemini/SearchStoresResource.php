@@ -5,10 +5,10 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 use OneToMany\LlmSdk\Contract\Resource\SearchStoresResourceInterface;
 use OneToMany\LlmSdk\Request\SearchStore\CreateSearchStoreRequest;
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Request\FileSearchStore\CreateStore;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Request\FileSearchStore\CreateFileSearchStore;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Request\FileSearchStore\ImportFile;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\Document\Document;
 use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\FileSearchStore;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\ImportFileOperation;
 use OneToMany\LlmSdk\Response\SearchStore\CreateSearchStoreResponse;
 use OneToMany\LlmSdk\Response\SearchStore\ImportUploadedFileResponse;
 
@@ -21,7 +21,7 @@ final readonly class SearchStoresResource extends BaseResource implements Search
      */
     public function create(CreateSearchStoreRequest $request): CreateSearchStoreResponse
     {
-        $createStore = new CreateStore(...[
+        $createFileSearchStore = new CreateFileSearchStore(...[
             'name' => $request->getName(),
         ]);
 
@@ -30,7 +30,7 @@ final readonly class SearchStoresResource extends BaseResource implements Search
         $response = $this->doPostRequest($url, [
             'headers' => $this->buildHeaders(),
             'json' => [
-                ...$createStore->toArray(),
+                ...$createFileSearchStore->toArray(),
             ],
         ]);
 
@@ -55,7 +55,7 @@ final readonly class SearchStoresResource extends BaseResource implements Search
             ],
         ]);
 
-        $object = $this->doDenormalize($response, Document::class);
+        $object = $this->doDenormalize($response, ImportFileOperation::class);
 
         return new ImportUploadedFileResponse($request->getVendor(), $object->name);
     }

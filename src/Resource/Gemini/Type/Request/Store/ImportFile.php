@@ -16,8 +16,9 @@ final readonly class ImportFile
     /**
      * @param non-empty-string $fileUri
      */
-    public function __construct(?string $fileUri)
-    {
+    public function __construct(
+        ?string $fileUri,
+    ) {
         $this->fileName = $this->extractFileNameFromFileUri($fileUri);
     }
 

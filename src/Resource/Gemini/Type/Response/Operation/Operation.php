@@ -1,14 +1,15 @@
 <?php
 
-namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\FileSearchStore\Document;
+namespace OneToMany\LlmSdk\Resource\Gemini\Type\Response\Operation;
 
-final readonly class Document
+readonly class Operation
 {
     /**
      * @param non-empty-string $name
      */
     public function __construct(
         public string $name,
+        public bool $done = false,
     ) {
     }
 }

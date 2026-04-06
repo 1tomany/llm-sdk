@@ -20,7 +20,7 @@ final readonly class CreateBatch
         public string $name,
         ?string $fileUri,
     ) {
-        $this->fileName = $this->extractFileName($fileUri);
+        $this->fileName = $this->extractFileNameFromFileUri($fileUri);
     }
 
     /**

@@ -16,7 +16,7 @@ trait ExtractFileNameTrait
      *
      * @throws InvalidArgumentException when a file name could not be extracted from the file URI
      */
-    private function extractFileName(?string $fileUri): string
+    private function extractFileNameFromFileUri(?string $fileUri): string
     {
         $fileUriBits = explode('/', trim((string) $fileUri));
 
