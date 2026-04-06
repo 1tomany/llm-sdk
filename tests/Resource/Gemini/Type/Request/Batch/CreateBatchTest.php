@@ -7,29 +7,14 @@ use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Batch\CreateBatch;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-use function parse_url;
-
-use const PHP_URL_PATH;
-
 final class CreateBatchTest extends TestCase
 {
-    public function testConstructorRequiresFileUriToContainPathComponent(): void
-    {
-        $fileUri = 'https://googleapis.com';
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The file URI "'.$fileUri.'" does not contain a path component.');
-
-        new CreateBatch('TestBatch', $fileUri);
-    }
-
     public function testConstructorRequiresFileUriToContainFileId(): void
     {
         $fileUri = 'https://googleapis.com/';
-        $urlPath = parse_url($fileUri, PHP_URL_PATH);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The path "'.$urlPath.'" does not contain a file ID.');
+        $this->expectExceptionMessage('A file name could not be extracted from the file URI "'.$fileUri.'".');
 
         new CreateBatch('TestBatch', $fileUri);
     }
