@@ -23,9 +23,12 @@ You can learn how to use this library by reviewing the examples below while I'm 
 
 ### Examples
 
+- [`examples/embeddings/create.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/embeddings/create.php) Creates an embedding vector from a prompt sent to an LLEM (large language embedding model)
 - [`examples/files/upload.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/upload.php) Uploads a file to an LLM vendor
 - [`examples/files/deletes.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/delete.php) Deletes a file from an LLM vendor
-- [`examples/embeddings/create.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/embeddings/create.php) Creates an embedding vector from a prompt sent to an LLEM (large language embedding model)
+- [`examples/search-stores/create.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/create.php) Creates a search store for RAG support
+- [`examples/search-stores/import-file.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/import-file.php) Imports an uploaded file to an existing search store
+- [`examples/search-stores/read.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/read.php) Displays information about an existing search store
 - [`examples/outputs/generate.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/outputs/generate.php) Generates output from a prompt sent to an LLM
 
 ## Supported platforms
@@ -46,28 +49,28 @@ This library allows you to compile a query before sending it to the model for tw
 1. You can log/analyze the request payload before sending it to the model.
 2. You can compile individual requests for batching.
 
-| Feature          | Anthropic | Gemini | Mock | OpenAI |
-| ---------------- | :-------: | :----: | :--: | :----: |
-| **Batches**      |           |        |      |        |
-| Create           |    ❌     |   ✅   |  ✅  |   ✅   |
-| Read             |    ❌     |   ✅   |  ✅  |   ✅   |
-| Cancel           |    ❌     |   ❌   |  ❌  |   ❌   |
-| **Embeddings**   |           |        |      |        |
-| Create           |    ❌     |   ✅   |  ✅  |   ✅   |
-| **Files**        |           |        |      |        |
-| Upload           |    ✅     |   ✅   |  ✅  |   ✅   |
-| Read             |    ❌     |   ❌   |  ❌  |   ❌   |
-| List             |    ❌     |   ❌   |  ❌  |   ❌   |
-| Download         |    ❌     |   ❌   |  ❌  |   ❌   |
-| Delete           |    ✅     |   ✅   |  ✅  |   ✅   |
-| **Outputs**      |           |        |      |        |
-| Generate         |    ❌     |   ✅   |  ✅  |   ✅   |
-| **Queries**      |           |        |      |        |
-| Compile          |    ❌     |   ✅   |  ✅  |   ✅   |
-| **SearchStores** |           |        |      |        |
-| Create           |    ❌     |   ✅   |  ❌  |   ❌   |
-| Read             |    ❌     |   ✅   |  ❌  |   ❌   |
-| ImportFile       |    ❌     |   ✅   |  ❌  |   ❌   |
+| Feature           | Anthropic | Gemini | Mock | OpenAI |
+| ----------------- | :-------: | :----: | :--: | :----: |
+| **Batches**       |           |        |      |        |
+| Create            |    ❌     |   ✅   |  ✅  |   ✅   |
+| Read              |    ❌     |   ✅   |  ✅  |   ✅   |
+| Cancel            |    ❌     |   ❌   |  ❌  |   ❌   |
+| **Embeddings**    |           |        |      |        |
+| Create            |    ❌     |   ✅   |  ✅  |   ✅   |
+| **Files**         |           |        |      |        |
+| Upload            |    ✅     |   ✅   |  ✅  |   ✅   |
+| Read              |    ❌     |   ❌   |  ❌  |   ❌   |
+| List              |    ❌     |   ❌   |  ❌  |   ❌   |
+| Download          |    ❌     |   ❌   |  ❌  |   ❌   |
+| Delete            |    ✅     |   ✅   |  ✅  |   ✅   |
+| **Outputs**       |           |        |      |        |
+| Generate          |    ❌     |   ✅   |  ✅  |   ✅   |
+| **Queries**       |           |        |      |        |
+| Compile           |    ❌     |   ✅   |  ✅  |   ✅   |
+| **Search Stores** |           |        |      |        |
+| Create            |    ❌     |   ✅   |  ❌  |   ❌   |
+| Read              |    ❌     |   ✅   |  ❌  |   ❌   |
+| ImportFile        |    ❌     |   ✅   |  ❌  |   ❌   |
 
 ## Credits
 
