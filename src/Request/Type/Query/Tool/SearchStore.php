@@ -5,6 +5,8 @@ namespace OneToMany\LlmSdk\Request\Type\Query\Tool;
 use OneToMany\LlmSdk\Contract\Request\Type\Query\Tool\ToolInterface;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 
+use function trim;
+
 final readonly class SearchStore implements ToolInterface
 {
     /**
@@ -22,7 +24,7 @@ final readonly class SearchStore implements ToolInterface
         string|self|null $uri,
     ): self {
         if (!$uri instanceof self) {
-            if (!$uri = \trim((string) $uri)) {
+            if (!$uri = trim((string) $uri)) {
                 throw new InvalidArgumentException('The search store URI cannot be empty.');
             }
 
