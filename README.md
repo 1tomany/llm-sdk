@@ -30,7 +30,7 @@ Review the examples below to get an idea of how the library works.
 #### Files
 
 - [`examples/files/upload.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/upload.php) Uploads a file to an LLM vendor
-- [`examples/files/deletes.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/delete.php) Deletes a file from an LLM vendor
+- [`examples/files/delete.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/delete.php) Deletes a file from an LLM vendor
 
 #### Outputs
 
