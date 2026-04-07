@@ -40,7 +40,7 @@ Review the examples below to get an idea of how the library works.
 
 - [`examples/search-stores/create.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/create.php) Creates a search store for RAG outputs
 - [`examples/search-stores/read.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/read.php) Displays information about a search store
-- [`examples/search-stores/search.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/searches.php) Searches a store with a given prompt
+- [`examples/search-stores/search.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/search.php) Searches a store with a given prompt
 - [`examples/search-stores/files/import.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/files/import.php) Imports an uploaded file to a search store
 
 ## Supported platforms
