@@ -1,22 +1,24 @@
 <?php
 
-namespace OneToMany\LlmSdk\Tests\Resource\Gemini\Type\Request\Batch;
+namespace OneToMany\LlmSdk\Tests\Resource\Gemini\Type\Request\Trait;
 
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
-use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Batch\CreateBatch;
+use OneToMany\LlmSdk\Resource\Gemini\Type\Request\Trait\ExtractFileNameTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-final class CreateBatchTest extends TestCase
+final class ExtractFileNameTraitTest extends TestCase
 {
-    public function testConstructorRequiresFileUriToContainFileId(): void
+    use ExtractFileNameTrait;
+
+    public function testExtractFileNameFromFileUriRequiresFileUriToContainFileName(): void
     {
         $fileUri = 'https://googleapis.com/';
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('A file name could not be extracted from the file URI "'.$fileUri.'".');
 
-        new CreateBatch('TestBatch', $fileUri);
+        $this->extractFileNameFromFileUri($fileUri);
     }
 
     /**
@@ -26,7 +28,7 @@ final class CreateBatchTest extends TestCase
     #[DataProvider('providerFileUriAndFileName')]
     public function testConstructorGeneratesFileName(string $fileUri, string $fileName): void
     {
-        $this->assertEquals($fileName, new CreateBatch('TestBatch', $fileUri)->fileName);
+        $this->assertEquals($fileName, $this->extractFileNameFromFileUri($fileUri));
     }
 
     /**
