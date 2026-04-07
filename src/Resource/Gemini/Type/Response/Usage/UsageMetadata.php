@@ -25,7 +25,14 @@ final class UsageMetadata
     /**
      * @var non-negative-int
      */
+    public int $inputTokenCount {
+        get => $this->promptTokenCount + $this->toolUsePromptTokenCount;
+    }
+
+    /**
+     * @var non-negative-int
+     */
     public int $outputTokenCount {
-        get => $this->candidatesTokenCount + $this->toolUsePromptTokenCount + $this->thoughtsTokenCount;
+        get => $this->candidatesTokenCount + $this->thoughtsTokenCount;
     }
 }
