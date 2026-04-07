@@ -1,7 +1,6 @@
 <?php
 
 use OneToMany\LlmSdk\Action\Output\GenerateOutputAction;
-use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
@@ -18,16 +17,14 @@ try {
         exit(1);
     }
 
+    // Compile a query to use an existing search store
     $compileQueryRequest = new CompileQueryRequest($model)->withPrompt($argv[3])->withTool(...[
         'tool' => SearchStore::create($argv[2]),
     ]);
 
-    $response = new CompileQueryAction($clientFactory)->act(...[
-        'request' => $compileQueryRequest,
-    ]);
-
+    // Compile the query and send it to the LLM server
     $response = new GenerateOutputAction($clientFactory)->act(...[
-        'request' => $response->toProcessQueryRequest(),
+        'request' => $compileQueryRequest,
     ]);
 } catch (LlmSdkExceptionInterface $e) {
     $response = $e;

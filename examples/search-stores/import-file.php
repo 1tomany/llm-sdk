@@ -16,7 +16,7 @@ try {
         exit(1);
     }
 
-    // Import the uploaded file to the search store
+    // Import an uploaded file to the search store
     $response = new ImportUploadedFileAction($clientFactory)->act(...[
         'request' => new ImportUploadedFileRequest($vendor, $argv[2], $argv[3]),
     ]);

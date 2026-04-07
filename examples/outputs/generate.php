@@ -1,7 +1,6 @@
 <?php
 
 use OneToMany\LlmSdk\Action\Output\GenerateOutputAction;
-use OneToMany\LlmSdk\Action\Query\CompileQueryAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
@@ -14,17 +13,12 @@ $model = trim($argv[1] ?? '') ?: 'mock';
 try {
     $prompt = trim($argv[2] ?? '') ?: 'Write a short summary of the history of PHP.';
 
-    // Build a request of individual query components
+    // Compile a query comprised of individual components
     $compileQueryRequest = new CompileQueryRequest($model)->withPrompt($prompt);
 
-    // Compile the query into a request that can be sent to the LLM
-    $response = new CompileQueryAction($clientFactory)->act(...[
-        'request' => $compileQueryRequest,
-    ]);
-
-    // Send the compiled request payload to the LLM server
+    // Compile the query and send it to the LLM server
     $response = new GenerateOutputAction($clientFactory)->act(...[
-        'request' => $response->toProcessQueryRequest(),
+        'request' => $compileQueryRequest,
     ]);
 } catch (LlmSdkExceptionInterface $e) {
     $response = $e;
