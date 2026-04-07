@@ -19,17 +19,29 @@ There are two ways to use this library:
 
 **Note:** A [Symfony bundle](https://github.com/1tomany/llm-sdk-bundle) is available if you wish to integrate this library into your Symfony applications with autowiring and configuration support.
 
-You can learn how to use this library by reviewing the examples below while I'm working on thoroughly documenting it.
-
 ### Examples
 
+Review the examples below to get an idea of how the library works.
+
+#### Embeddings
+
 - [`examples/embeddings/create.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/embeddings/create.php) Creates an embedding vector from a prompt sent to an LLEM (large language embedding model)
+
+#### Files
+
 - [`examples/files/upload.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/upload.php) Uploads a file to an LLM vendor
 - [`examples/files/deletes.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/files/delete.php) Deletes a file from an LLM vendor
+
+#### Outputs
+
+- [`examples/outputs/generate.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/outputs/generate.php) Generates output from a prompt sent to an LLM
+
+#### Search Stores
+
 - [`examples/search-stores/create.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/create.php) Creates a search store for RAG support
 - [`examples/search-stores/import-file.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/import-file.php) Imports an uploaded file to an existing search store
 - [`examples/search-stores/read.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/read.php) Displays information about an existing search store
-- [`examples/outputs/generate.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/outputs/generate.php) Generates output from a prompt sent to an LLM
+- [`examples/search-stores/search.php`](https://github.com/1tomany/llm-sdk/blob/master/examples/search-stores/searches.php) Searches an existing search store with a given prompt
 
 ## Supported platforms
 
@@ -70,6 +82,7 @@ This library allows you to compile a query before sending it to the model for tw
 | **Search Stores** |           |        |      |        |
 | Create            |    ❌     |   ✅   |  ❌  |   ❌   |
 | Read              |    ❌     |   ✅   |  ❌  |   ❌   |
+| Search            |    ❌     |   ✅   |  ❌  |   ❌   |
 | ImportFile        |    ❌     |   ✅   |  ❌  |   ❌   |
 
 ## Credits
