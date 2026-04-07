@@ -5,6 +5,7 @@ namespace OneToMany\LlmSdk\Resource\Gemini;
 use OneToMany\LlmSdk\Contract\Resource\QueriesResourceInterface;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
 use OneToMany\LlmSdk\Request\Type\File\FileUri;
+use OneToMany\LlmSdk\Request\Type\Query\Tool\SearchStore;
 use OneToMany\LlmSdk\Response\Query\CompileQueryResponse;
 
 use function sprintf;
@@ -41,6 +42,23 @@ final readonly class QueriesResource extends BaseResource implements QueriesReso
             $requestContent[$contentKey]['parts'][] = [
                 'text' => $prompt->getText(),
             ];
+        }
+
+        // Tool Inputs
+        foreach ($request->getTools() as $tool) {
+            if (!isset($requestContent['tools'])) {
+                $requestContent['tools'] = [];
+            }
+
+            if ($tool instanceof SearchStore) {
+                $requestContent['tools'][] = [
+                    'fileSearch' => [
+                        'fileSearchStoreNames' => [
+                            $tool->getUri(),
+                        ],
+                    ],
+                ];
+            }
         }
 
         // Instructions Input

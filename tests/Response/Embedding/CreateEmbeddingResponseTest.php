@@ -19,8 +19,6 @@ final class CreateEmbeddingResponseTest extends TestCase
 {
     public function testInvokingCreateEmbeddingResponseReturnsEmbedding(): void
     {
-        $faker = \Faker\Factory::create();
-
         $response = new CreateEmbeddingResponse(Model::Mock, null, [
             M_PI, M_EULER, M_2_SQRTPI,
         ]);

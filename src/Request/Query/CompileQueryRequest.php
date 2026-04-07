@@ -3,6 +3,7 @@
 namespace OneToMany\LlmSdk\Request\Query;
 
 use OneToMany\LlmSdk\Contract\Enum\Model;
+use OneToMany\LlmSdk\Contract\Request\Type\Query\Tool\ToolInterface;
 use OneToMany\LlmSdk\Exception\InvalidArgumentException;
 use OneToMany\LlmSdk\Request\Trait\UsesModelTrait;
 use OneToMany\LlmSdk\Request\Type\Enum\Role;
@@ -28,6 +29,11 @@ class CompileQueryRequest
      * @var list<Prompt>
      */
     private array $prompts = [];
+
+    /**
+     * @var list<ToolInterface>
+     */
+    private array $tools = [];
 
     /**
      * A system prompt or instructions.
@@ -142,6 +148,21 @@ class CompileQueryRequest
     public function getInstructions(): ?Prompt
     {
         return $this->instructions;
+    }
+
+    public function withTool(ToolInterface $tool): static
+    {
+        $this->tools[] = $tool;
+
+        return $this;
+    }
+
+    /**
+     * @return list<ToolInterface>
+     */
+    public function getTools(): array
+    {
+        return $this->tools;
     }
 
     /**

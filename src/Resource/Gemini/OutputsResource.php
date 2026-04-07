@@ -32,6 +32,6 @@ final readonly class OutputsResource extends BaseResource implements OutputsReso
             $timer->stop();
         }
 
-        return new GenerateOutputResponse($request->getModel(), $object->responseId, $response, $object->getOutput(), null, $timer->getDuration(), new TokenUsage($object->usageMetadata->promptTokenCount, $object->usageMetadata->cachedContentTokenCount, $object->usageMetadata->outputTokenCount));
+        return new GenerateOutputResponse($request->getModel(), $object->responseId, $response, $object->getOutput(), null, $timer->getDuration(), new TokenUsage($object->usageMetadata->inputTokenCount, $object->usageMetadata->cachedContentTokenCount, $object->usageMetadata->outputTokenCount));
     }
 }

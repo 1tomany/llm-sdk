@@ -5,7 +5,7 @@ namespace OneToMany\LlmSdk\Response\SearchStore;
 use OneToMany\LlmSdk\Contract\Enum\Vendor;
 use OneToMany\LlmSdk\Response\SearchStore\Trait\SearchStoreResponseTrait;
 
-final readonly class CreateSearchStoreResponse
+final readonly class CreateSearchStoreResponse implements \JsonSerializable
 {
     use SearchStoreResponseTrait;
 

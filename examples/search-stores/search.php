@@ -4,17 +4,23 @@ use OneToMany\LlmSdk\Action\Output\GenerateOutputAction;
 use OneToMany\LlmSdk\Contract\Exception\ExceptionInterface as LlmSdkExceptionInterface;
 use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\Query\CompileQueryRequest;
+use OneToMany\LlmSdk\Request\Type\Query\Tool\SearchStore;
 
 /** @var ClientFactory $clientFactory */
 $clientFactory = require dirname(__DIR__).'/bootstrap.php';
 
-$model = trim($argv[1] ?? '') ?: 'mock';
-
 try {
-    $prompt = trim($argv[2] ?? '') ?: 'Write a short summary of the history of PHP.';
+    $model = trim($argv[1] ?? '') ?: 'mock';
 
-    // Compile a query comprised of individual components
-    $compileQueryRequest = new CompileQueryRequest($model)->withPrompt($prompt);
+    if (empty($argv[2] ?? null) || empty($argv[3] ?? null)) {
+        printf("Usage: php %s <model> <search-store-uri> <prompt>\n", basename(__FILE__));
+        exit(1);
+    }
+
+    // Compile a query to use an existing search store
+    $compileQueryRequest = new CompileQueryRequest($model)->withPrompt($argv[3])->withTool(...[
+        'tool' => SearchStore::create($argv[2]),
+    ]);
 
     // Compile the query and send it to the LLM server
     $response = new GenerateOutputAction($clientFactory)->act(...[

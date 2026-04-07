@@ -6,7 +6,7 @@ use OneToMany\LlmSdk\Factory\ClientFactory;
 use OneToMany\LlmSdk\Request\SearchStore\ImportUploadedFileRequest;
 
 /** @var ClientFactory $clientFactory */
-$clientFactory = require dirname(__DIR__).'/bootstrap.php';
+$clientFactory = require dirname(__DIR__).'/../bootstrap.php';
 
 try {
     $vendor = trim($argv[1] ?? '') ?: 'mock';
@@ -16,7 +16,7 @@ try {
         exit(1);
     }
 
-    // Import the uploaded file to the search store
+    // Import an uploaded file to the search store
     $response = new ImportUploadedFileAction($clientFactory)->act(...[
         'request' => new ImportUploadedFileRequest($vendor, $argv[2], $argv[3]),
     ]);
