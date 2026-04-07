@@ -19,7 +19,7 @@ try {
     }
 
     $compileQueryRequest = new CompileQueryRequest($model)->withPrompt($argv[3])->withTool(...[
-        'tool' => new SearchStore($argv[2]),
+        'tool' => SearchStore::create($argv[2]),
     ]);
 
     $response = new CompileQueryAction($clientFactory)->act(...[
