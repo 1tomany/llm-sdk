@@ -18,6 +18,7 @@ enum Model: string
     case ClaudeHaiku45 = 'claude-haiku-4-5';
 
     // Gemini
+    case Gemini35Flash = 'gemini-3.5-flash';
     case Gemini31ProPreview = 'gemini-3.1-pro-preview';
     case Gemini31FlashLitePreview = 'gemini-3.1-flash-lite-preview';
     case Gemini3ProPreview = 'gemini-3-pro-preview';
@@ -35,10 +36,12 @@ enum Model: string
     case MockEmbedding = 'mock-embedding';
 
     // OpenAI
-    case Gpt54Pro = 'gpt-5.4-pro';
+    case Gpt55 = 'gpt-5.5';
     case Gpt54 = 'gpt-5.4';
-    case Gpt52Pro = 'gpt-5.2-pro';
+    case Gpt54Pro = 'gpt-5.4-pro';
+    case Gpt54Mini = 'gpt-5.4-mini';
     case Gpt52 = 'gpt-5.2';
+    case Gpt52Pro = 'gpt-5.2-pro';
     case Gpt51 = 'gpt-5.1';
     case Gpt5Pro = 'gpt-5-pro';
     case Gpt5 = 'gpt-5';
@@ -89,32 +92,19 @@ enum Model: string
     {
         $id = match ($this) {
             // Anthropic
-            self::ClaudeOpus46 => 'claude-opus-4-6',
             self::ClaudeSonnet45 => 'claude-sonnet-4-5-20250929',
             self::ClaudeHaiku45 => 'claude-haiku-4-5-20251001',
 
             // Gemini
-            self::Gemini31ProPreview => 'gemini-3.1-pro-preview',
-            self::Gemini31FlashLitePreview => 'gemini-3.1-flash-lite-preview',
-            self::Gemini3ProPreview => 'gemini-3-pro-preview',
-            self::Gemini3FlashPreview => 'gemini-3-flash-preview',
-            self::Gemini25Pro => 'gemini-2.5-pro',
-            self::Gemini25Flash => 'gemini-2.5-flash',
             self::Gemini25FlashPreview => 'gemini-2.5-flash-preview-09-2025',
-            self::Gemini25FlashLite => 'gemini-2.5-flash-lite',
-            self::Gemini25FlashLitePreview => 'gemini-2.5-flash-lite-preview-09-2025',
-            self::GeminiEmbedding2Preview => 'gemini-embedding-2-preview',
-            self::GeminiEmbedding001 => 'gemini-embedding-001',
-
-            // Mock
-            self::Mock => 'mock',
-            self::MockEmbedding => 'mock-embedding',
 
             // OpenAI
-            self::Gpt54Pro => 'gpt-5.4-pro-2026-03-05',
+            self::Gpt55 => 'gpt-5.5-2026-04-23',
             self::Gpt54 => 'gpt-5.4-2026-03-05',
-            self::Gpt52Pro => 'gpt-5.2-pro-2025-12-11',
+            self::Gpt54Mini => 'gpt-5.4-mini-2026-03-17',
+            self::Gpt54Pro => 'gpt-5.4-pro-2026-03-05',
             self::Gpt52 => 'gpt-5.2-2025-12-11',
+            self::Gpt52Pro => 'gpt-5.2-pro-2025-12-11',
             self::Gpt51 => 'gpt-5.1-2025-11-13',
             self::Gpt5Pro => 'gpt-5-pro-2025-10-06',
             self::Gpt5 => 'gpt-5-2025-08-07',
@@ -124,6 +114,9 @@ enum Model: string
             self::GptEmbeddingAda002 => 'text-embedding-ada-002',
             self::GptEmbedding3Small => 'text-embedding-3-small',
             self::GptEmbedding3Large => 'text-embedding-3-large',
+
+            // Default
+            default => $this->value,
         };
 
         return $id;
@@ -138,6 +131,7 @@ enum Model: string
             self::ClaudeHaiku45 => Vendor::Anthropic,
 
             // Gemini
+            self::Gemini35Flash => Vendor::Gemini,
             self::Gemini31ProPreview => Vendor::Gemini,
             self::Gemini31FlashLitePreview => Vendor::Gemini,
             self::Gemini3ProPreview => Vendor::Gemini,
@@ -155,10 +149,12 @@ enum Model: string
             self::MockEmbedding => Vendor::Mock,
 
             // OpenAI
-            self::Gpt54Pro => Vendor::OpenAI,
+            self::Gpt55 => Vendor::OpenAI,
             self::Gpt54 => Vendor::OpenAI,
-            self::Gpt52Pro => Vendor::OpenAI,
+            self::Gpt54Mini => Vendor::OpenAI,
+            self::Gpt54Pro => Vendor::OpenAI,
             self::Gpt52 => Vendor::OpenAI,
+            self::Gpt52Pro => Vendor::OpenAI,
             self::Gpt51 => Vendor::OpenAI,
             self::Gpt5Pro => Vendor::OpenAI,
             self::Gpt5 => Vendor::OpenAI,
