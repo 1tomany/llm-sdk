@@ -2,10 +2,10 @@
 
 namespace OneToMany\LlmSdk\Contract\Action\File;
 
-use OneToMany\LlmSdk\Request\File\UploadFileRequest;
-use OneToMany\LlmSdk\Response\File\UploadFileResponse;
+use OneToMany\LlmSdk\Transfer\Input\File\UploadFileInput;
+use OneToMany\LlmSdk\Transfer\Output\File\FileOutput;
 
 interface UploadFileActionInterface
 {
-    public function act(UploadFileRequest $request): UploadFileResponse;
+    public function act(UploadFileInput $input): FileOutput;
 }
