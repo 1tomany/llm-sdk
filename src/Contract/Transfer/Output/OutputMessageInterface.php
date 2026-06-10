@@ -20,5 +20,5 @@ interface OutputMessageInterface
     /**
      * @return R
      */
-    public function getRecord(): RecordInterface;
+    public function __invoke(): RecordInterface;
 }
