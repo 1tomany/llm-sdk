@@ -2,6 +2,7 @@
 
 namespace OneToMany\LlmSdk\Client\Gemini;
 
+use OneToMany\LlmSdk\Client\Exception\HttpTransportException;
 use OneToMany\LlmSdk\Client\Gemini\Request\File\UploadFileRequest;
 use OneToMany\LlmSdk\Client\Gemini\Response\Error\ErrorResponse;
 use OneToMany\LlmSdk\Client\Gemini\Response\File\UploadFileResponse;
@@ -52,24 +53,24 @@ final readonly class GeminiClient implements FileClientInterface
             'uploadFileInput' => $uploadFileInput,
         ]);
 
+        $url = $this->buildUrl($uploadFileRequest->url);
+
+        // @see https://ai.google.dev/gemini-api/docs/files
+        $response = $this->httpClient->request('POST', $url, [
+            'headers' => $uploadFileRequest->getHeaders() + [
+                'x-goog-api-key' => $this->apiKey,
+            ],
+            'json' => $uploadFileRequest->getJson(),
+        ]);
+
         try {
-            $url = $this->buildUrl($uploadFileRequest->url);
-
-            // @see https://ai.google.dev/gemini-api/docs/files
-            $response = $this->httpClient->request('POST', $url, [
-                'headers' => $uploadFileRequest->getHeaders() + [
-                    'x-goog-api-key' => $this->apiKey,
-                ],
-                'json' => $uploadFileRequest->getJson(),
-            ]);
-
             if (200 !== $response->getStatusCode()) {
                 $this->handleResponseError($response);
             }
 
             $headers = $response->getHeaders(false);
         } catch (HttpClientExceptionInterface $e) {
-            throw new RuntimeException(\sprintf('The %s server failed to generate a resumable upload URL.', $uploadFileInput->vendor->getName()), previous: $e);
+            throw new HttpTransportException($response, $e);
         }
 
         if (empty($uploadUrl = $headers['x-goog-upload-url'][0] ?? null)) {
@@ -91,7 +92,7 @@ final readonly class GeminiClient implements FileClientInterface
         $uploadChunkSize = max(1, $uploadChunkSize ?? (8 * 1024 * 1024));
 
         try {
-            $response = null;
+            // $response = null;
 
             while ($fileChunk = fread($fileHandle, $uploadChunkSize)) {
                 $uploadChunkSize = strlen($fileChunk);
