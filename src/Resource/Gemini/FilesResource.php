@@ -69,6 +69,8 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         // Ensure the file can be opened
         $fileHandle = $request->openFile();
 
+        $uploadOffset = 0;
+
         // Set the chunk size to the amount preferred by the server
         if (is_numeric($headers[self::HEADER_CHUNK_SIZE][0] ?? null)) {
             $uploadChunkSize = (int) $headers[self::HEADER_CHUNK_SIZE][0];
@@ -78,8 +80,6 @@ final readonly class FilesResource extends BaseResource implements FilesResource
         $uploadChunkSize = max(1, $uploadChunkSize ?? self::DEFAULT_CHUNK_SIZE);
 
         try {
-            $uploadOffset = 0;
-
             /** @var non-empty-string $uploadUrl */
             $uploadUrl = $headers[self::HEADER_UPLOAD_URL][0];
 

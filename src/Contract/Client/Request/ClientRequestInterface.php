@@ -23,6 +23,11 @@ interface ClientRequestInterface
     public string $responseType { get; }
 
     /**
+     * @return array<non-empty-string, int|string>
+     */
+    public function getHeaders(): array;
+
+    /**
      * @return ?array<non-empty-string, mixed>
      */
     public function getBody(): ?array;
